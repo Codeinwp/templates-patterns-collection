@@ -1,0 +1,36 @@
+{
+  "name": "templates-patterns-collection",
+  "version": "0.0.1",
+  "description": "ThemeIsle Templates and Patterns Collection",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Codeinwp/templates-patterns-collection.git"
+  },
+  "keywords": [
+    "wordpress-plugin"
+  ],
+  "textdomain": "templates-patterns-collection",
+  "category": "plugins",
+  "author": "Themeisle <friends@themeisle.com>",
+  "license": "GPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/Codeinwp/templates-patterns-collection/issues"
+  },
+  "scripts": {
+    "phpcs": "phpcs --standard=phpcs.xml",
+    "build:makepot": "rm -rf dist/ && docker run --rm --user root --volume \"$(pwd):/var/www/html/templates-patterns-collection\" wordpress:cli wp i18n make-pot ./templates-patterns-collection/ ./templates-patterns-collection/languages/templates-patterns-collection.pot --allow-root",
+    "release": "npx semantic-release --dry-run",
+    "readme": "grunt wp_readme_to_markdown:main"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/exec": "^5.0.0",
+    "@semantic-release/git": "^9.0.0",
+    "conventional-changelog-simple-preset": "^1.0.14",
+    "grunt": "^1.2.1",
+    "grunt-version": "^2.0.0",
+    "grunt-wp-readme-to-markdown": "^2.0.1",
+    "replace-in-file": "^6.1.0",
+    "semantic-release": "^17.0.8"
+  }
+}
