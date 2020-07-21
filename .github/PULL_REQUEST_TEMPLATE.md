@@ -1,18 +1,6 @@
 ### Summary
 <!-- Please describe the changes you made. -->
 
-### Will affect visual aspect of the product
-<!-- Will eyepatch be affected? -->
-### Will affect visual aspect of the product
-<!-- Will eyepatch be affected? -->
-YES/NO
-
-### Screenshots <!-- if applicable -->
-
-YES/NO
-
-### Screenshots <!-- if applicable -->
-
 ### Test instructions
 <!-- Describe how this pull request can be tested. -->
 
