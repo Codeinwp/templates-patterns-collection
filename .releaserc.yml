@@ -19,6 +19,7 @@ plugins:
         - package-lock.json
         - readme.txt
         - README.md
-        - neve-pro-addon.php
+        - templates-patterns-collection.php
+        - includes/Main.php
         - package.json
   - - "@semantic-release/github"
