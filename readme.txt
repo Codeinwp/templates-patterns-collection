@@ -8,13 +8,15 @@ Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-A cloud based service 100+ templates and starter sites for Neve theme.
+A cloud based service with 100+ templates and starter sites for Neve theme.
 
 == Description ==
 
 = TEMPLATE SERVICE FOR ELEMENTOR, BEAVER BUILDER, BRIZY AND GUTENBERG, DIVI and THRIVE =
 
 A cloud based templates library which enables you to create ready-made website in no time.
+
+No account is required to access the cloud library and the template files are imported from api.themeisle.com servers.
 
 == Frequently Asked Questions ==
 
