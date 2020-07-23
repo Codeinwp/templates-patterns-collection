@@ -8,7 +8,7 @@
 **License:** GPLv3  
 **License URI:** https://www.gnu.org/licenses/gpl-3.0.en.html  
 
-A cloud based service 100+ templates and starter sites for Neve theme.
+A cloud based service with 100+ templates and starter sites for Neve theme.
 
 ## Description ##
 
@@ -16,9 +16,18 @@ A cloud based service 100+ templates and starter sites for Neve theme.
 
 A cloud based templates library which enables you to create ready-made website in no time.
 
+No account is required to access the cloud library and the template files are imported from api.themeisle.com servers.
+
 ## Frequently Asked Questions ##
 
 ## Changelog ##
+
+##### [Version 1.0.3](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.2...v1.0.3) (2020-07-23)
+
+> Things are getting better every day. 🚀
+
+
+
 
 ##### [Version 1.0.2](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.1...v1.0.2) (2020-07-23)
 
