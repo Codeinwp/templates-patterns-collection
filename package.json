@@ -20,6 +20,7 @@
     "phpcs": "phpcs --standard=phpcs.xml",
     "build:makepot": "rm -rf dist/ && docker run --rm --user root --volume \"$(pwd):/var/www/html/templates-patterns-collection\" wordpress:cli wp i18n make-pot ./templates-patterns-collection/ ./templates-patterns-collection/languages/templates-patterns-collection.pot --allow-root",
     "release": "npx semantic-release",
+    "dist": "bash ./bin/dist.sh",
     "readme": "grunt wp_readme_to_markdown:main"
   },
   "devDependencies": {
