@@ -75,7 +75,7 @@ class Sites_Listing {
 	private function get_sites() {
 		$cache = get_transient( $this->transient_key );
 
-		if ( $cache === false ) {
+		if ( $cache !== false ) {
 			$response = $cache;
 		} else {
 			$response = wp_remote_get( esc_url( self::API ) );
