@@ -1,3 +1,11 @@
+##### [Version 1.0.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.3...v1.0.4) (2020-07-24)
+
+Fetch starter sites remotely
+
+##### [Version 1.0.3](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.2...v1.0.3) (2020-07-23)
+
+> Things are getting better every day. 🚀
+
 ##### [Version 1.0.2](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.1...v1.0.2) (2020-07-23)
 
 > Things are getting better every day. 🚀

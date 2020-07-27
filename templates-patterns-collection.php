@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Templates Patterns Collection
  * Description:       This plugin is an add-on to Neve WordPress theme which offers access to Templates and Block Patterns library service to be used with the theme.
- * Version:           1.0.2
+ * Version:           1.0.4
  * Author:            ThemeIsle
  * Author URI:        https://themeisle.com
  * License:           GPLv3
