@@ -17,7 +17,7 @@ A cloud based service with 100+ templates and starter sites for Neve theme.
 
 A cloud based templates library which enables you to create ready-made website in no time.
 
-All templates can be previewed on (demosites.io)[https://demosites.io/], their import into your site is facilitated by this plugin.
+All templates can be previewed on [demosites.io](https://demosites.io/), their import into your site is facilitated by this plugin.
 
 The plugin is relying on the service behind api.themeisle.com for accessing the template collection list and their individual structure on import.
 
@@ -26,6 +26,13 @@ No account is required to access the service template collection and the privacy
 ## Frequently Asked Questions ##
 
 ## Changelog ##
+
+##### [Version 1.0.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.5...v1.0.6) (2020-07-27)
+
+> Things are getting better every day. 🚀
+
+
+
 
 ##### [Version 1.0.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.4...v1.0.5) (2020-07-27)
 
