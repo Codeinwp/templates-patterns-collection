@@ -1,3 +1,7 @@
+##### [Version 1.0.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.7...v1.0.8) (2020-07-29)
+
+> Things are getting better every day. 🚀
+
 ##### [Version 1.0.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.6...v1.0.7) (2020-07-29)
 
 chore: adds SVN deployment workflow
