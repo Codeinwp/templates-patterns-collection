@@ -15,7 +15,7 @@ class Sites_Listing {
 	/**
 	 * Sites Listing API URL
 	 */
-	const API = 'https://demosites.io/wp-json/demosites-api/sites';
+	const API = 'https://api.themeisle.com/sites/wp-json/demosites-api/sites';
 
 	/**
 	 * Key of transient where we save the sites list.

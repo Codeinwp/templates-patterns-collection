@@ -38,3 +38,4 @@ package-lock.json
 phpmd.xml
 webpack.config.js
 assets/vue
+.wordpress-org
