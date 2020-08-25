@@ -87,6 +87,7 @@ class Admin {
 
 		foreach ( $sites as $builder => $sites_for_builder ) {
 			foreach ( $sites_for_builder as $slug => $data ) {
+				$sites[ $builder ][ $slug ]['slug'] = $slug;
 				if ( ! isset( $data['upsell'] ) || $data['upsell'] !== true ) {
 					continue;
 				}
