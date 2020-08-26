@@ -125,8 +125,6 @@ class Sites_Listing {
 			}
 		}
 
-		$response = $this->shuffle_sites_array( $response );
-
 		set_transient( $this->transient_key, $response, 12 * HOUR_IN_SECONDS );
 
 		return $response;
@@ -140,64 +138,6 @@ class Sites_Listing {
 	private function get_ti_demo_content_support_data() {
 		$this->reorder_starter_sites();
 		return apply_filters( 'neve_filter_onboarding_sites', $this->onboarding_config );
-	}
-
-	/**
-	 * Shuffle available sites to change display order.
-	 *
-	 * @param array $sites sites array.
-	 *
-	 * @return array
-	 */
-	private function shuffle_sites_array( $sites ) {
-		$fixed      = array(
-			'elementor'      => array(
-				'neve-web-agency' => true,
-				'neve-main'       => true,
-			),
-			'beaver builder' => array(
-				'neve-beaver-web-agency' => true,
-				'neve-beaver-onboarding' => true,
-			),
-			'gutenberg'      => array(
-				'neve-web-agency-gutenberg' => true,
-				'neve-main-gutenberg'       => true,
-			),
-			'brizy'          => array( 'neve-brizy-main' => true ),
-		);
-		$normalized = array();
-		foreach ( $sites as $editor => $sites_for_editor ) {
-			$normalized[ $editor ] = isset( $fixed[ $editor ] ) ? $fixed[ $editor ] : array();
-			$sites_for_editor      = $this->shuffle_associative_array( $sites_for_editor );
-			foreach ( $sites_for_editor as $site_slug => $site_data ) {
-				if ( isset( $normalized[ $editor ][ $site_slug ] ) ) {
-					$normalized[ $editor ][ $site_slug ] = $site_data;
-					unset( $sites_for_editor[ $site_slug ] );
-				}
-			}
-			$normalized[ $editor ] = array_merge( $normalized[ $editor ], $sites_for_editor );
-		}
-
-		return $normalized;
-	}
-
-	/**
-	 * Shuffle associative array.
-	 *
-	 * @param array $array associative array.
-	 *
-	 * @return array
-	 */
-	private function shuffle_associative_array( $array ) {
-		$keys     = array_keys( $array );
-		$shuffled = array();
-
-		shuffle( $keys );
-		foreach ( $keys as $key ) {
-			$shuffled[ $key ] = $array[ $key ];
-		}
-
-		return $shuffled;
 	}
 
 	/**
@@ -258,5 +198,4 @@ class Sites_Listing {
 		);
 		return ! isset( $category_mapping[ $category ] ) || $category_mapping[ $category ] < 2;
 	}
-
 }

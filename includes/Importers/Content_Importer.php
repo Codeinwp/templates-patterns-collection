@@ -81,6 +81,10 @@ class Content_Importer {
 			);
 		}
 
+		if ( ! isset( $body['demoSlug'] ) ) {
+			$body['demoSlug'] = 'neve';
+		}
+
 		set_time_limit( 0 );
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 		require_once( ABSPATH . 'wp-admin/includes/image.php' );
