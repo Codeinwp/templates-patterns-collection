@@ -2,7 +2,7 @@
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** neve, templates, patterns, blocks, starter, sites, demo, content, import  
 **Requires at least:** 4.7  
-**Tested up to:** 5.4  
+**Tested up to:** 5.5  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
 **License:** GPLv3  
@@ -27,9 +27,18 @@ No account is required to access the service template collection and the privacy
 
 ## Changelog ##
 
+##### [Version 1.0.9](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.8...v1.0.9) (2020-08-26)
+
+* Improve ordering
+* Fix notices on import
+
+
+
+
 ##### Version 1.0.8
 
 * Initial production ready release
+
 
 
 
