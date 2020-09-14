@@ -30,12 +30,6 @@ class Main {
 	 */
 	const STORAGE_TRANSIENT = 'themeisle_sites_library_data';
 	/**
-	 * Onboarding Path Relative to theme dir.
-	 *
-	 * @var string Onboarding root path.
-	 */
-	const OBOARDING_PATH = '/vendor/codeinwp/themeisle-onboarding';
-	/**
 	 * Main
 	 *
 	 * @var Main
@@ -54,17 +48,6 @@ class Main {
 	 * @var Sites_Listing
 	 */
 	private $sites_listing = null;
-
-	/**
-	 * Method to return path to child class in a Reflective Way.
-	 *
-	 * @return string
-	 * @since   1.0.0
-	 * @access  public
-	 */
-	static public function get_dir() {
-		return apply_filters( 'themeisle_site_import_uri', trailingslashit( get_template_directory_uri() ) . self::OBOARDING_PATH );
-	}
 
 	/**
 	 * Instantiate the class.
