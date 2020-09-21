@@ -71,6 +71,9 @@ function ti_tpc_run() {
 		define( 'TI_ONBOARDING_DISABLED', false );
 	}
 
+	define( 'TIOB_URL', plugin_dir_url( __FILE__ ) );
+	define( 'TIOB_PATH', dirname( __FILE__ ) . '/' );
+
 	$autoload_path = __DIR__ . '/vendor/autoload.php';
 	if ( is_file( $autoload_path ) ) {
 		require_once $autoload_path;

@@ -150,8 +150,8 @@ class Admin {
 
 		$options = array(
 			'theme_name'          => ! empty( $data[ $old_theme ]['theme_name'] ) ? esc_html( $data[ $old_theme ]['theme_name'] ) : '',
-			'screenshot'          => get_template_directory_uri() . Main::OBOARDING_PATH . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.png',
-			'template'            => get_template_directory() . Main::OBOARDING_PATH . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.json',
+			'screenshot'          => TIOB_URL . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.png',
+			'template'            => TIOB_PATH . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.json',
 			'template_name'       => $data[ $old_theme ]['template'],
 			'heading'             => $data[ $old_theme ]['heading'],
 			'description'         => $data[ $old_theme ]['description'],
