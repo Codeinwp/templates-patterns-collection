@@ -19,6 +19,10 @@
   "scripts": {
     "phpcs": "phpcs --standard=phpcs.xml",
     "build:makepot": "rm -rf dist/ && docker run --rm --user root --volume \"$(pwd):/var/www/html/templates-patterns-collection\" wordpress:cli wp i18n make-pot ./templates-patterns-collection/ ./templates-patterns-collection/languages/templates-patterns-collection.pot --allow-root",
+    "build:js": "wp-scripts build assets/src/app.js --output-path=assets/build",
+    "build": "npm-run-all build:*",
+    "watch:js": "wp-scripts start assets/src/app.js --output-path=assets/build",
+    "dev": "npm-run-all watch:*",
     "release": "npx semantic-release",
     "dist": "bash ./bin/dist.sh",
     "readme": "grunt wp_readme_to_markdown:main"
@@ -27,11 +31,19 @@
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/exec": "^5.0.0",
     "@semantic-release/git": "^9.0.0",
+    "@wordpress/eslint-plugin": "^7.2.1",
+    "@wordpress/scripts": "^12.2.1",
     "conventional-changelog-simple-preset": "^1.0.14",
     "grunt": "^1.2.1",
     "grunt-version": "^2.0.0",
     "grunt-wp-readme-to-markdown": "^2.0.1",
+    "npm-run-all": "^4.1.5",
     "replace-in-file": "^6.1.0",
     "semantic-release": "^17.0.8"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "fuse.js": "^6.4.1",
+    "react-visibility-sensor": "^5.1.1"
   }
 }

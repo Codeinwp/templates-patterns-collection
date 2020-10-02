@@ -63,10 +63,6 @@ function ti_tpc_load_textdomain() {
 add_action( 'init', 'ti_tpc_run' );
 
 function ti_tpc_run() {
-	if ( ! defined( 'NEVE_VERSION' ) ) {
-		return;
-	}
-
 	if ( ! defined( 'TI_ONBOARDING_DISABLED' ) ) {
 		define( 'TI_ONBOARDING_DISABLED', false );
 	}
@@ -82,6 +78,8 @@ function ti_tpc_run() {
 	if ( class_exists( 'WP_CLI' ) ) {
 		require_once 'includes/WP_Cli.php';
 	}
+
+	\TIOB\Main::instance();
 }
 
 

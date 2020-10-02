@@ -100,9 +100,6 @@ class Main {
 	 * @return void
 	 */
 	private function setup_sites_listing() {
-		if ( ! defined( 'NEVE_VERSION' ) ) {
-			return;
-		}
 		$this->sites_listing = new Sites_Listing();
 		$this->sites_listing->init();
 	}
