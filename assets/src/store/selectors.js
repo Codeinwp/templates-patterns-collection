@@ -7,4 +7,6 @@ export default {
 	getPreviewStatus: ( state ) => state.previewStatus,
 	getImportModalStatus: ( state ) => state.importModalStatus,
 	getOnboardingStatus: ( state ) => state.isOnboarding,
+	getThemeAction: ( state ) => state.themeAction,
+	getInstallModalStatus: ( state ) => state.installModalStatus,
 };

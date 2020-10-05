@@ -1,17 +1,45 @@
 import { Button, Dashicon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { withDispatch } from '@wordpress/data';
+import { withDispatch, withSelect } from '@wordpress/data';
+import { compose } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
 
-const StarterSiteCard = ( { data, setSite, setPreview, setModal } ) => {
+const StarterSiteCard = ( {
+	data,
+	setSite,
+	setPreview,
+	setModal,
+	themeStatus,
+	setInstallModal,
+} ) => {
 	const { upsell } = data;
 	const [ actionsClass, setActionClass ] = useState( '' );
+
 	const showActions = () => {
 		setActionClass( 'visible' );
 	};
 	const hideActions = () => {
 		setActionClass( '' );
 	};
+
+	const launchImport = ( e ) => {
+		e.preventDefault();
+		setSite( data );
+
+		if ( themeStatus ) {
+			setInstallModal( true );
+
+			return false;
+		}
+		setModal( true );
+	};
+
+	const launchPreview = ( e ) => {
+		e.preventDefault();
+		setSite( data );
+		setPreview( true );
+	};
+
 	return (
 		<div
 			onMouseEnter={ showActions }
@@ -19,29 +47,12 @@ const StarterSiteCard = ( { data, setSite, setPreview, setModal } ) => {
 			className="card starter-site-card"
 		>
 			<div className="top">
-				{ /*<div className="fav">
-                    <Button icon="star-filled"/>
-                </div>*/ }
 				<div className={ 'actions ' + actionsClass }>
-					<Button
-						className="preview"
-						onClick={ ( e ) => {
-							e.preventDefault();
-							setSite( data );
-							setPreview( true );
-						} }
-					>
+					<Button className="preview" onClick={ launchPreview }>
 						{ __( 'Preview', 'neve' ) }
 					</Button>
 					{ ! upsell && (
-						<Button
-							className="import"
-							onClick={ ( e ) => {
-								e.preventDefault();
-								setSite( data );
-								setModal( true );
-							} }
-						>
+						<Button className="import" onClick={ launchImport }>
 							{ __( 'Import', 'neve' ) }
 						</Button>
 					) }
@@ -68,13 +79,26 @@ const StarterSiteCard = ( { data, setSite, setPreview, setModal } ) => {
 	);
 };
 
-export default withDispatch( ( dispatch ) => {
-	const { setCurrentSite, setPreviewStatus, setImportModalStatus } = dispatch(
-		'neve-onboarding'
-	);
-	return {
-		setSite: ( data ) => setCurrentSite( data ),
-		setPreview: ( status ) => setPreviewStatus( status ),
-		setModal: ( status ) => setImportModalStatus( status ),
-	};
-} )( StarterSiteCard );
+export default compose(
+	withSelect( ( select ) => {
+		const { getThemeAction } = select( 'neve-onboarding' );
+
+		return {
+			themeStatus: getThemeAction().action || false,
+		};
+	} ),
+	withDispatch( ( dispatch ) => {
+		const {
+			setCurrentSite,
+			setPreviewStatus,
+			setImportModalStatus,
+			setInstallModalStatus,
+		} = dispatch( 'neve-onboarding' );
+		return {
+			setSite: ( data ) => setCurrentSite( data ),
+			setPreview: ( status ) => setPreviewStatus( status ),
+			setModal: ( status ) => setImportModalStatus( status ),
+			setInstallModal: ( status ) => setInstallModalStatus( status ),
+		};
+	} )
+)( StarterSiteCard );

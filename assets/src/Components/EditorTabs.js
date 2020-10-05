@@ -36,7 +36,7 @@ const EditorTabs = ( {
 								className="editor-icon"
 								src={
 									tiobDash.assets +
-									'editor-icons/' +
+									'img/' +
 									EDITOR_MAP[ key ].icon
 								}
 								alt={ __( 'Builder Logo', 'neve' ) }

@@ -1,0 +1,28 @@
+@media (min-width: #{$tablet}) {
+	@include ob-starter-site-card--tablet();
+	@include ob-editor-tabs--tablet();
+	@include ob-header--tablet();
+}
+
+@media (min-width: #{$laptop}) {
+	@include general--laptop();
+	@include ob-starter-site-card--laptop();
+	@include ob-general--laptop();
+	@include ob-editor-tabs--laptop();
+	@include ob-editor-selector--laptop();
+	@include ob-header--laptop();
+	@include ob-search--laptop();
+}
+
+
+@media (min-width: #{$desktop}) {
+	@include general--desktop();
+	@include ob-editor-tabs--desktop();
+}
+
+
+@media (min-width: #{$desktop-large}) {
+	@include general--desktop-large();
+	@include card--desktop-large();
+	@include ob-editor-tabs--desktop-large();
+}

@@ -2,6 +2,7 @@ import Search from './Search';
 import StarterSiteCard from './StarterSiteCard';
 import PreviewFrame from './PreviewFrame';
 import ImportModal from './ImportModal';
+import InstallModal from './InstallModal';
 import Migration from './Migration';
 import VizSensor from 'react-visibility-sensor';
 import Fuse from 'fuse.js/dist/fuse.min';
@@ -24,10 +25,12 @@ const Onboarding = ( {
 	isOnboarding,
 	cancelOnboarding,
 	getSites,
+	installModal,
 } ) => {
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ maxShown, setMaxShown ] = useState( 9 );
 	const { sites = {}, migration } = getSites;
+	const [ sticky, setSticky ] = useState( false );
 
 	if ( 1 > sites.length ) {
 		return (
@@ -39,7 +42,10 @@ const Onboarding = ( {
 					) }
 					{ isOnboarding && (
 						<Button
-							style={ { display: 'block', margin: '20px auto' } }
+							style={ {
+								display: 'block',
+								margin: '20px auto',
+							} }
 							isPrimary
 							onClick={ cancelOnboarding }
 						>
@@ -244,40 +250,83 @@ const Onboarding = ( {
 	return (
 		<Fragment>
 			<div className="ob">
+				{ sticky && ! isOnboarding && (
+					<div className="sticky-nav">
+						<div className="container sticky-nav-content">
+							<img
+								src={ `${ tiobDash.assets }img/logo.svg` }
+								alt="Logo"
+							/>
+							<Search
+								count={ counted.categories }
+								categories={ CATEGORIES }
+								onSearch={ ( query ) => {
+									setSearchQuery( query );
+									setMaxShown( 9 );
+								} }
+								query={ searchQuery }
+							/>
+							<EditorSelector
+								isSmall
+								count={ counted.builders }
+								EDITOR_MAP={ EDITOR_MAP }
+							/>
+						</div>
+					</div>
+				) }
 				{ renderMigration() }
 				<div className="ob-head">
 					<h2>
-						{ __(
-							'Ready to use pre-built websites with 1-click installation',
-							'neve'
-						) }
+						<img
+							src={ `${ tiobDash.assets }img/logo.svg` }
+							alt="Logo"
+						/>
+						<span>
+							{ __(
+								'Ready to use pre-built websites with 1-click installation',
+								'neve'
+							) }
+						</span>
 					</h2>
-					{/*<p>{ tiobDash.strings.starterSitesTabDescription }</p>*/}
+					<p>{ tiobDash.strings.starterSitesTabDescription }</p>
 					{ isOnboarding && (
 						<Button isPrimary onClick={ cancelOnboarding }>
 							{ __( 'Keep the Current Layout', 'neve' ) }
 						</Button>
 					) }
 				</div>
+
 				<div className="ob-body">
-					<EditorSelector
-						count={ counted.builders }
-						EDITOR_MAP={ EDITOR_MAP }
-					/>
-					<Search
-						count={ counted.categories }
-						categories={ CATEGORIES }
-						onSearch={ ( query ) => {
-							setSearchQuery( query );
-							setMaxShown( 9 );
+					<VizSensor
+						onChange={ ( isVisible ) => {
+							if ( ! isVisible ) {
+								setSticky( true );
+							} else {
+								setSticky( false );
+							}
 						} }
-						query={ searchQuery }
-					/>
-					<EditorTabs
-						EDITOR_MAP={ EDITOR_MAP }
-						onlyProSites={ onlyProBuilders }
-						count={ counted.builders }
-					/>
+					>
+						<div>
+							<EditorSelector
+								count={ counted.builders }
+								EDITOR_MAP={ EDITOR_MAP }
+							/>
+							<Search
+								count={ counted.categories }
+								categories={ CATEGORIES }
+								onSearch={ ( query ) => {
+									setSearchQuery( query );
+									setMaxShown( 9 );
+								} }
+								query={ searchQuery }
+							/>
+							<EditorTabs
+								EDITOR_MAP={ EDITOR_MAP }
+								onlyProSites={ onlyProBuilders }
+								count={ counted.builders }
+							/>
+						</div>
+					</VizSensor>
 					{ 0 === getFilteredSites().length ? (
 						<div className="no-results">
 							<p>
@@ -334,6 +383,7 @@ const Onboarding = ( {
 				/>
 			) }
 			{ importModal && currentSiteData && <ImportModal /> }
+			{ installModal && <InstallModal /> }
 		</Fragment>
 	);
 };
@@ -361,6 +411,7 @@ export default compose(
 			getImportModalStatus,
 			getOnboardingStatus,
 			getSites,
+			getInstallModalStatus,
 		} = select( 'neve-onboarding' );
 		return {
 			editor: getCurrentEditor(),
@@ -368,6 +419,7 @@ export default compose(
 			previewOpen: getPreviewStatus(),
 			currentSiteData: getCurrentSite(),
 			importModal: getImportModalStatus(),
+			installModal: getInstallModalStatus(),
 			isOnboarding: getOnboardingStatus(),
 			getSites: getSites(),
 		};

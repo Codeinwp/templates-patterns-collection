@@ -45,10 +45,27 @@ export default {
 			payload: { importModalStatus },
 		};
 	},
+	setInstallModalStatus( installModalStatus ) {
+		if ( installModalStatus ) {
+			document.body.classList.add( 'ob-overflow-off' );
+		} else {
+			document.body.classList.remove( 'ob-overflow-off' );
+		}
+		return {
+			type: 'SET_INSTALL_MODAL_STATUS',
+			payload: { installModalStatus },
+		};
+	},
 	setOnboardingState( state ) {
 		return {
 			type: 'SET_ONBOARDING',
 			payload: { state },
+		};
+	},
+	setThemeAction( themeActions ) {
+		return {
+			type: 'SET_THEME_ACTIONS',
+			payload: { themeActions },
 		};
 	},
 };

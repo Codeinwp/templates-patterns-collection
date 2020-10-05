@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { Button, Dashicon, Popover } from '@wordpress/components';
@@ -10,23 +11,25 @@ const EditorSelector = ( {
 	editor,
 	setCurrentEditor,
 	sites,
+	isSmall,
 } ) => {
 	const [ open, setOpen ] = useState( false );
 	const editorsOrderedFromAPI = Object.keys( sites );
 	const toggleDropdown = () => setOpen( ! open );
+	const wrapClasses = classnames( [
+		'ob-dropdown',
+		'editor-selector',
+		{ small: isSmall },
+	] );
 	return (
-		<div className="ob-dropdown editor-selector">
+		<div className={ wrapClasses }>
 			<Button onClick={ toggleDropdown } className="select ob-dropdown">
 				<img
 					className="editor-icon"
-					src={
-						tiobDash.assets +
-						'editor-icons/' +
-						EDITOR_MAP[ editor ].icon
-					}
+					src={ tiobDash.assets + 'img/' + EDITOR_MAP[ editor ].icon }
 					alt={ __( 'Builder Logo', 'neve' ) }
 				/>
-				<span>{ EDITOR_MAP[ editor ].niceName }</span>
+				{ ! isSmall && <span>{ EDITOR_MAP[ editor ].niceName }</span> }
 				<span className="count">{ count[ editor ] }</span>
 				<Dashicon
 					size={ 14 }
@@ -58,7 +61,7 @@ const EditorSelector = ( {
 													className="editor-icon"
 													src={
 														tiobDash.assets +
-														'editor-icons/' +
+														'img/' +
 														EDITOR_MAP[ key ].icon
 													}
 													alt={ __(

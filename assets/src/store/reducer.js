@@ -1,5 +1,5 @@
 /* global tiobDash  */
-const { onboarding } = tiobDash;
+const { onboarding, themeAction } = tiobDash;
 
 const firstEditor =
 	'undefined' !== typeof onboarding.sites &&
@@ -15,10 +15,12 @@ const initialState = {
 	category: 'all',
 	previewStatus: false,
 	importModalStatus: false,
+	installModalStatus: false,
 	currentSite: null,
 	importing: false,
 	isOnboarding: onboarding.onboarding || false,
 	migrationData: null,
+	themeAction,
 };
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
@@ -59,11 +61,23 @@ export default ( state = initialState, action ) => {
 				...state,
 				importModalStatus,
 			};
+		case 'SET_INSTALL_MODAL_STATUS':
+			const { installModalStatus } = action.payload;
+			return {
+				...state,
+				installModalStatus,
+			};
 		case 'SET_ONBOARDING':
 			const { status } = action.payload;
 			return {
 				...state,
 				isOnboarding: status,
+			};
+		case 'SET_THEME_ACTIONS':
+			const { themeActions } = action.payload;
+			return {
+				...state,
+				themeAction: themeActions,
 			};
 	}
 	return state;

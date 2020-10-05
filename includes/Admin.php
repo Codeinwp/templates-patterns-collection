@@ -57,13 +57,13 @@ class Admin {
             return;
         }
 
-        $dependencies = [ 'react', 'react-dom', 'wp-i18n', 'wp-api', 'wp-api-fetch', 'wp-components', 'wp-element', 'updates' ];
+        $dependencies = (include TIOB_PATH . 'assets/build/app.asset.php');
 
-        wp_register_style( 'tiob', TIOB_URL . '/assets/build/style-app.css', [ 'wp-components' ], NEVE_VERSION );
+        wp_register_style( 'tiob', TIOB_URL . '/assets/build/style-app.css', [ 'wp-components' ], $dependencies[ 'version' ] );
         wp_style_add_data( 'tiob', 'rtl', 'replace' );
         wp_enqueue_style( 'tiob' );
 
-        wp_register_script( 'tiob', TIOB_URL . '/assets/build/app.js', $dependencies, NEVE_VERSION, true );
+        wp_register_script( 'tiob', TIOB_URL . '/assets/build/app.js', array_merge( $dependencies[ 'dependencies' ], [ 'updates' ] ), $dependencies[ 'version' ], true );
         wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
         wp_enqueue_script( 'tiob' );
     }
@@ -297,11 +297,45 @@ class Admin {
      * @return array
      */
     private function get_localization() {
+        $theme = wp_get_theme();
+        $theme_name = apply_filters( 'ti_wl_theme_name', $theme->__get( 'Name' ) );
         return [
             'nonce'         => wp_create_nonce( 'wp_rest' ),
+            'assets'        => TIOB_URL . '/assets/',
             'upgradeURL'    => esc_url( apply_filters( 'neve_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/neve/upgrade/?utm_medium=aboutneve&utm_source=freevspro&utm_campaign=neve' ) ),
+            'strings'       => [
+                /* translators: %s - Theme name */
+                'starterSitesTabDescription' => sprintf( __( 'With %s, you can choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'neve' ), wp_kses_post( $theme_name ) ),
+            ],
             'onboarding'    => [],
             'hasFileSystem' => WP_Filesystem(),
+            'wpNonce'       => wp_create_nonce(),
+            'themesURL'     => admin_url( 'themes.php' ),
+            'themeAction'   => $this->get_theme_action(),
+        ];
+    }
+
+    /**
+     * Gets theme action.
+     */
+    private function get_theme_action() {
+        if ( defined( 'NEVE_VERSION' ) ) {
+            return false;
+        }
+
+        $themes = wp_get_themes();
+        foreach ( $themes as $theme_slug => $args ) {
+            $theme = wp_get_theme( $theme_slug );
+            if ( $theme->get( 'TextDomain' ) === 'neve' ) {
+                return [
+                    'action' => 'activate',
+                    'slug'   => $theme_slug
+                ];
+            }
+        }
+        return [
+            'action' => 'install',
+            'slug'   => 'neve',
         ];
     }
 }

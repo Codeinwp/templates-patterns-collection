@@ -85,7 +85,7 @@ const Search = ( {
 		<div className="header-form">
 			<div className="search">
 				<img
-					src={ tiobDash.assets + '/search.svg' }
+					src={ tiobDash.assets + '/img/search.svg' }
 					alt={ __( 'Search Icon' ) }
 				/>
 				<input

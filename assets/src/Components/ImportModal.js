@@ -18,7 +18,7 @@ import { Button, Dashicon, ToggleControl, Modal } from '@wordpress/components';
 import { useState, useEffect, Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
-const ImportModal = ( { setModal, editor, siteData, license } ) => {
+const ImportModal = ( { setModal, editor, siteData } ) => {
 	const [ general, setGeneral ] = useState( {
 		content: true,
 		customizer: true,
@@ -35,13 +35,13 @@ const ImportModal = ( { setModal, editor, siteData, license } ) => {
 	const [ error, setError ] = useState( null );
 	const [ importData, setImportData ] = useState( null );
 	const [ fetching, setFetching ] = useState( true );
-
+	const { license } = tiobDash;
 	useEffect( function getImportData() {
 		const fetchAddress = siteData.remote_url || siteData.url;
 		const url = new URL(
 			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
 		);
-		url.searchParams.append( 'license', license.key || 'free' );
+		url.searchParams.append( 'license', license ? license.key : 'free' );
 		get( url, true, false )
 			.then( ( response ) => {
 				if ( ! response.ok ) {
@@ -550,14 +550,12 @@ const ImportModal = ( { setModal, editor, siteData, license } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getLicense } = select( 'neve-dashboard' );
 		const { getCurrentEditor, getCurrentSite } = select(
 			'neve-onboarding'
 		);
 		return {
 			editor: getCurrentEditor(),
 			siteData: getCurrentSite(),
-			license: getLicense(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
