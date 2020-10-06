@@ -253,10 +253,12 @@ const Onboarding = ( {
 				{ sticky && ! isOnboarding && (
 					<div className="sticky-nav">
 						<div className="container sticky-nav-content">
-							<img
-								src={ `${ tiobDash.assets }img/logo.svg` }
-								alt="Logo"
-							/>
+							{ ! tiobDash.brandedTheme && (
+								<img
+									src={ `${ tiobDash.assets }img/logo.svg` }
+									alt="Logo"
+								/>
+							) }
 							<Search
 								count={ counted.categories }
 								categories={ CATEGORIES }
@@ -277,10 +279,12 @@ const Onboarding = ( {
 				{ renderMigration() }
 				<div className="ob-head">
 					<h2>
-						<img
-							src={ `${ tiobDash.assets }img/logo.svg` }
-							alt="Logo"
-						/>
+						{ ! tiobDash.brandedTheme && (
+							<img
+								src={ `${ tiobDash.assets }img/logo.svg` }
+								alt="Logo"
+							/>
+						) }
 						<span>
 							{ __(
 								'Ready to use pre-built websites with 1-click installation',

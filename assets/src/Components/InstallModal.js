@@ -13,8 +13,8 @@ const InstallModal = ( {
 	themeData,
 	setThemeAction,
 } ) => {
-	const { action, slug } = themeData;
-	const { themesURL, wpNonce } = tiobDash;
+	const { action, slug, nonce } = themeData;
+	const { themesURL, brandedTheme } = tiobDash;
 	const [ installing, setInstalling ] = useState( false );
 	const [ error, setError ] = useState( null );
 	const handleDismiss = () => {
@@ -58,7 +58,7 @@ const InstallModal = ( {
 
 	const handleActivate = () => {
 		setInstalling( 'activating' );
-		const url = `${ themesURL }?action=activate&stylesheet=${ slug }&_wpnonce=${ wpNonce }`;
+		const url = `${ themesURL }?action=activate&stylesheet=${ slug }&_wpnonce=${ nonce }`;
 		get( url, true ).then( ( response ) => {
 			if ( response.status !== 200 ) {
 				handleError(
@@ -67,6 +67,8 @@ const InstallModal = ( {
 						'templates-patterns-collection'
 					)
 				);
+				setInstalling( false );
+				return false;
 			}
 			setInstalling( false );
 			setInstallModal( false );
@@ -87,11 +89,13 @@ const InstallModal = ( {
 			isDismissible={ ! installing }
 		>
 			<div className="modal-body" style={ { textAlign: 'center' } }>
-				<img
-					style={ { width: 75 } }
-					src={ `${ tiobDash.assets }/img/logo.svg` }
-					alt={ __( 'Logo', 'templates-patterns-collection' ) }
-				/>
+				{ ! brandedTheme && (
+					<img
+						style={ { width: 75 } }
+						src={ `${ tiobDash.assets }/img/logo.svg` }
+						alt={ __( 'Logo', 'templates-patterns-collection' ) }
+					/>
+				) }
 				{ error && (
 					<div className="well error" style={ { margin: '20px 0' } }>
 						{ error }
@@ -113,7 +117,7 @@ const InstallModal = ( {
 				className="modal-footer"
 				style={ { justifyContent: 'center' } }
 			>
-				<div className="actions">
+				<div className="actions" style={ { display: 'flex' } }>
 					{ ! error && (
 						<Button
 							dismiss={ error }

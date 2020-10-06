@@ -11,8 +11,34 @@ const PreviewFrame = ( {
 	setSite,
 	setPreview,
 	setModal,
+	themeStatus,
+	setInstallModal,
 } ) => {
 	const { isRTL } = tiobDash;
+
+	const handleImport = ( e ) => {
+		e.preventDefault();
+		if ( themeStatus ) {
+			setInstallModal( true );
+
+			return false;
+		}
+		setModal( true );
+	};
+	const handleNext = ( e ) => {
+		e.preventDefault();
+		setSite( next );
+	};
+	const handlePrev = ( e ) => {
+		e.preventDefault();
+		setSite( prev );
+	};
+	const handleClose = ( e ) => {
+		e.preventDefault();
+		setPreview( false );
+		setSite( null );
+	};
+
 	return (
 		<div className="ob-preview">
 			<div className="preview">
@@ -24,11 +50,7 @@ const PreviewFrame = ( {
 			<div className="bottom-bar">
 				<div className="navigator">
 					<Button
-						onClick={ ( e ) => {
-							e.preventDefault();
-							setPreview( false );
-							setSite( null );
-						} }
+						onClick={ handleClose }
 						className="close"
 						label={ __( 'Close', 'neve' ) }
 						icon="no"
@@ -36,10 +58,7 @@ const PreviewFrame = ( {
 
 					{ prev && (
 						<Button
-							onClick={ ( e ) => {
-								e.preventDefault();
-								setSite( prev );
-							} }
+							onClick={ handlePrev }
 							className="prev"
 							label={ __( 'Previous', 'neve' ) }
 							icon={
@@ -50,10 +69,7 @@ const PreviewFrame = ( {
 
 					{ next && (
 						<Button
-							onClick={ ( e ) => {
-								e.preventDefault();
-								setSite( next );
-							} }
+							onClick={ handleNext }
 							className="next"
 							label={ __( 'Next', 'neve' ) }
 							icon={
@@ -77,10 +93,7 @@ const PreviewFrame = ( {
 						<Button
 							className="import"
 							isPrimary
-							onClick={ ( e ) => {
-								e.preventDefault();
-								setModal( true );
-							} }
+							onClick={ handleImport }
 						>
 							{ __( 'Import', 'neve' ) }
 						</Button>
@@ -93,9 +106,10 @@ const PreviewFrame = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentSite } = select( 'neve-onboarding' );
+		const { getCurrentSite, getThemeAction } = select( 'neve-onboarding' );
 		return {
 			siteData: getCurrentSite(),
+			themeStatus: getThemeAction().action || false,
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
@@ -103,11 +117,13 @@ export default compose(
 			setCurrentSite,
 			setPreviewStatus,
 			setImportModalStatus,
+			setInstallModalStatus,
 		} = dispatch( 'neve-onboarding' );
 		return {
 			setSite: ( data ) => setCurrentSite( data ),
 			setPreview: ( status ) => setPreviewStatus( status ),
 			setModal: ( status ) => setImportModalStatus( status ),
+			setInstallModal: ( status ) => setInstallModalStatus( status ),
 		};
 	} )
 )( PreviewFrame );

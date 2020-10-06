@@ -7,9 +7,9 @@ import ImportModalError from './ImportModalError';
 import { __ } from '@wordpress/i18n';
 import { Dashicon, Button, Modal } from '@wordpress/components';
 import { useState, Fragment } from '@wordpress/element';
-import { withDispatch } from '@wordpress/data';
 
-const Migration = ( { data, setToast } ) => {
+const Migration = ( { data } ) => {
+	const setToast = ( string ) => console.log( string );
 	const [ dismissed, setDismissed ] = useState( false );
 	const [ modalOpen, setModalOpen ] = useState( false );
 	const [ migrating, setMigrating ] = useState( false );
@@ -239,13 +239,4 @@ const Migration = ( { data, setToast } ) => {
 		</div>
 	);
 };
-export default withDispatch( ( dispatch ) => {
-	const { setToast } = dispatch( 'neve-dashboard' );
-	return {
-		setToast: ( message ) => {
-			setToast( message );
-		},
-	};
-} )( Migration );
-
-// export default Migration;
+export default Migration;
