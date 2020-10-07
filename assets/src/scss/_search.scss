@@ -34,8 +34,10 @@
 			font-size: 14px;
 			margin: 0;
 
-			> svg {
+			> svg, .dashicon {
 				margin-left: auto;
+				display: flex;
+				align-items: center;
 			}
 		}
 
