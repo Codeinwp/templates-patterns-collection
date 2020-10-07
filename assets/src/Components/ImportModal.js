@@ -48,7 +48,7 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 					setError( {
 						message: __(
 							'Something went wrong while loading the site data. Please refresh the page and try again.',
-							'neve'
+							'templates-patterns-collection'
 						),
 						code: 'ti__ob_failed_fetch_response',
 					} );
@@ -84,7 +84,7 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 				setError( {
 					message: __(
 						'Something went wrong while loading the site data. Please refresh the page and try again.',
-						'neve'
+						'templates-patterns-collection'
 					),
 					code: 'ti__ob_failed_fetch_catch',
 				} );
@@ -153,21 +153,21 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 	const renderOptions = () => {
 		const map = {
 			content: {
-				title: __( 'Content', 'neve' ),
+				title: __( 'Content', 'templates-patterns-collection' ),
 				icon: 'admin-post',
 			},
 			customizer: {
-				title: __( 'Customizer', 'neve' ),
+				title: __( 'Customizer', 'templates-patterns-collection' ),
 				icon: 'admin-customizer',
 			},
 			widgets: {
-				title: __( 'Widgets', 'neve' ),
+				title: __( 'Widgets', 'templates-patterns-collection' ),
 				icon: 'admin-generic',
 			},
 		};
 		return (
 			<div className="options general">
-				<h3>{ __( 'General', 'neve' ) }:</h3>
+				<h3>{ __( 'General', 'templates-patterns-collection' ) }:</h3>
 				<ul>
 					{ Object.keys( map ).map( ( id, index ) => {
 						return (
@@ -208,7 +208,7 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 
 		return (
 			<div className="options plugins">
-				<h3>{ __( 'Plugins', 'neve' ) }:</h3>
+				<h3>{ __( 'Plugins', 'templates-patterns-collection' ) }:</h3>
 				<ul>
 					{ Object.keys( allPlugins ).map( ( slug, index ) => {
 						return (
@@ -366,19 +366,19 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 		const map = {
 			plugins: __(
 				'Something went wrong while installing the necessary plugins.',
-				'neve'
+				'templates-patterns-collection'
 			),
 			content: __(
 				'Something went wrong while importing the website content.',
-				'neve'
+				'templates-patterns-collection'
 			),
 			customizer: __(
 				'Something went wrong while updating the customizer settings.',
-				'neve'
+				'templates-patterns-collection'
 			),
 			widgets: __(
 				'Something went wrong while importing the widgets.',
-				'neve'
+				'templates-patterns-collection'
 			),
 		};
 
@@ -485,7 +485,7 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 										<p className="import-result">
 											{ __(
 												'Content was successfully imported. Enjoy your new site!',
-												'neve'
+												'templates-patterns-collection'
 											) }
 										</p>
 										<hr />
@@ -499,7 +499,10 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 							{ 'done' !== currentStep ? (
 								<Fragment>
 									<Button isSecondary onClick={ closeModal }>
-										{ __( 'Close', 'neve' ) }
+										{ __(
+											'Close',
+											'templates-patterns-collection'
+										) }
 									</Button>
 									{ ! error && (
 										<Button
@@ -513,7 +516,10 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 												runImport();
 											} }
 										>
-											{ __( 'Import', 'neve' ) }
+											{ __(
+												'Import',
+												'templates-patterns-collection'
+											) }
 										</Button>
 									) }
 								</Fragment>
@@ -526,17 +532,23 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 									>
 										{ __(
 											'Back to Sites Library',
-											'neve'
+											'templates-patterns-collection'
 										) }
 									</Button>
 									<Button
 										isSecondary
 										href={ tiobDash.onboarding.homeUrl }
 									>
-										{ __( 'View Website', 'neve' ) }
+										{ __(
+											'View Website',
+											'templates-patterns-collection'
+										) }
 									</Button>
 									<Button isPrimary href={ editLink }>
-										{ __( 'Add your own content', 'neve' ) }
+										{ __(
+											'Add your own content',
+											'templates-patterns-collection'
+										) }
 									</Button>
 								</Fragment>
 							) }

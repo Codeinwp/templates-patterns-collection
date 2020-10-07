@@ -49,11 +49,11 @@ const StarterSiteCard = ( {
 			<div className="top">
 				<div className={ 'actions ' + actionsClass }>
 					<Button className="preview" onClick={ launchPreview }>
-						{ __( 'Preview', 'neve' ) }
+						{ __( 'Preview', 'templates-patterns-collection' ) }
 					</Button>
 					{ ! upsell && (
 						<Button className="import" onClick={ launchImport }>
-							{ __( 'Import', 'neve' ) }
+							{ __( 'Import', 'templates-patterns-collection' ) }
 						</Button>
 					) }
 				</div>
@@ -71,7 +71,9 @@ const StarterSiteCard = ( {
 				{ upsell && (
 					<span className="pro-badge">
 						<Dashicon icon="lock" size={ 15 } />
-						<span>{ __( 'Premium', 'neve' ) }</span>
+						<span>
+							{ __( 'Premium', 'templates-patterns-collection' ) }
+						</span>
 					</span>
 				) }
 			</div>

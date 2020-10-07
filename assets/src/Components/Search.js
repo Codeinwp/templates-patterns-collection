@@ -95,7 +95,10 @@ const Search = ( {
 					type="search"
 					value={ query }
 					placeholder={
-						__( 'Search for a starter site', 'neve' ) + '...'
+						__(
+							'Search for a starter site',
+							'templates-patterns-collection'
+						) + '...'
 					}
 				/>
 				{ renderCategoriesDropdown() }

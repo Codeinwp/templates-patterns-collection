@@ -20,7 +20,7 @@ const ImportModalNote = ( { data, externalInstalled } ) => {
 								'To import this demo you have to install the following plugins',
 								'neve'
 						  )
-						: __( 'Note', 'neve' ) }
+						: __( 'Note', 'templates-patterns-collection' ) }
 					:
 				</span>
 			</h3>

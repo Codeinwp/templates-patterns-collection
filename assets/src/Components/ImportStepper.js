@@ -5,22 +5,25 @@ import { Dashicon } from '@wordpress/components';
 const ImportStepper = ( { currentStep, progress, willDo } ) => {
 	const stepsMap = {
 		plugins: {
-			label: __( 'Installing Plugins', 'neve' ),
+			label: __( 'Installing Plugins', 'templates-patterns-collection' ),
 			status: progress.plugins,
 			willDo: true,
 		},
 		content: {
-			label: __( 'Importing Content', 'neve' ),
+			label: __( 'Importing Content', 'templates-patterns-collection' ),
 			status: progress.content,
 			willDo: willDo.content,
 		},
 		customizer: {
-			label: __( 'Importing Customizer Settings', 'neve' ),
+			label: __(
+				'Importing Customizer Settings',
+				'templates-patterns-collection'
+			),
 			status: progress.customizer,
 			willDo: willDo.customizer,
 		},
 		widgets: {
-			label: __( 'Importing Widgets', 'neve' ),
+			label: __( 'Importing Widgets', 'templates-patterns-collection' ),
 			status: progress.widgets,
 			willDo: willDo.widgets,
 		},

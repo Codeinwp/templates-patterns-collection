@@ -49,7 +49,7 @@ const Onboarding = ( {
 							isPrimary
 							onClick={ cancelOnboarding }
 						>
-							{ __( 'Close', 'neve' ) }
+							{ __( 'Close', 'templates-patterns-collection' ) }
 						</Button>
 					) }
 				</p>
@@ -58,11 +58,11 @@ const Onboarding = ( {
 	}
 
 	const tags = [
-		__( 'Business', 'neve' ),
-		__( 'Ecommerce', 'neve' ),
-		__( 'Fashion', 'neve' ),
-		__( 'Blogging', 'neve' ),
-		__( 'Photography', 'neve' ),
+		__( 'Business', 'templates-patterns-collection' ),
+		__( 'Ecommerce', 'templates-patterns-collection' ),
+		__( 'Fashion', 'templates-patterns-collection' ),
+		__( 'Blogging', 'templates-patterns-collection' ),
+		__( 'Photography', 'templates-patterns-collection' ),
 	];
 
 	const CATEGORIES = {
@@ -295,7 +295,10 @@ const Onboarding = ( {
 					<p>{ tiobDash.strings.starterSitesTabDescription }</p>
 					{ isOnboarding && (
 						<Button isPrimary onClick={ cancelOnboarding }>
-							{ __( 'Keep the Current Layout', 'neve' ) }
+							{ __(
+								'Keep the Current Layout',
+								'templates-patterns-collection'
+							) }
 						</Button>
 					) }
 				</div>
@@ -334,7 +337,11 @@ const Onboarding = ( {
 					{ 0 === getFilteredSites().length ? (
 						<div className="no-results">
 							<p>
-								{ __( 'No results found', 'neve' ) }.{ ' ' }
+								{ __(
+									'No results found',
+									'templates-patterns-collection'
+								) }
+								.{ ' ' }
 								{ __(
 									'You can try a different search or use one of the categories below.',
 									'neve'

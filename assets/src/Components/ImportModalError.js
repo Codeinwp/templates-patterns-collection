@@ -23,11 +23,12 @@ const ImportModalError = ( { message, code } ) => {
 				/>
 				{ code && (
 					<li>
-						{ __( 'Error code', 'neve' ) }: <code>{ code }</code>
+						{ __( 'Error code', 'templates-patterns-collection' ) }:{ ' ' }
+						<code>{ code }</code>
 					</li>
 				) }
 				<li>
-					{ __( 'Error log', 'neve' ) }:{ ' ' }
+					{ __( 'Error log', 'templates-patterns-collection' ) }:{ ' ' }
 					<Button isLink href={ tiobDash.onboarding.logUrl }>
 						{ tiobDash.onboarding.logUrl }
 						<Dashicon icon="external" />

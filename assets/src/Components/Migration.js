@@ -78,7 +78,11 @@ const Migration = ( { data } ) => {
 		return (
 			<Modal
 				className="ob-import-modal migration"
-				title={ __( 'Migrate', 'neve' ) + ' ' + data.theme_name }
+				title={
+					__( 'Migrate', 'templates-patterns-collection' ) +
+					' ' +
+					data.theme_name
+				}
 				onRequestClose={ closeModal }
 				shouldCloseOnClickOutside={ ! migrating }
 				isDismissible={ ! migrating }
@@ -133,7 +137,13 @@ const Migration = ( { data } ) => {
 						{ true === migrating && (
 							<div className="loading">
 								<Dashicon icon="update" size={ 50 } />
-								<h3>{ __( 'Migrating', 'neve' ) }...</h3>
+								<h3>
+									{ __(
+										'Migrating',
+										'templates-patterns-collection'
+									) }
+									...
+								</h3>
 							</div>
 						) }
 					</div>
@@ -148,8 +158,14 @@ const Migration = ( { data } ) => {
 								onClick={ closeModal }
 							>
 								{ 'done' === migrating
-									? __( 'Close', 'neve' )
-									: __( 'Cancel', 'neve' ) }
+									? __(
+											'Close',
+											'templates-patterns-collection'
+									  )
+									: __(
+											'Cancel',
+											'templates-patterns-collection'
+									  ) }
 							</Button>
 							{ ! error && 'done' !== migrating ? (
 								<Button
@@ -158,7 +174,10 @@ const Migration = ( { data } ) => {
 										startMigration();
 									} }
 								>
-									{ __( 'Start Migration', 'neve' ) }
+									{ __(
+										'Start Migration',
+										'templates-patterns-collection'
+									) }
 								</Button>
 							) : (
 								<Fragment>
@@ -166,13 +185,19 @@ const Migration = ( { data } ) => {
 										isSecondary
 										href={ `${ tiobDash.onboarding.homeUrl }/wp-admin/post.php?post=${ frontPageID }&action=elementor` }
 									>
-										{ __( 'Edit Content', 'neve' ) }
+										{ __(
+											'Edit Content',
+											'templates-patterns-collection'
+										) }
 									</Button>
 									<Button
 										isPrimary
 										href={ tiobDash.onboarding.homeUrl }
 									>
-										{ __( 'View Website', 'neve' ) }
+										{ __(
+											'View Website',
+											'templates-patterns-collection'
+										) }
 									</Button>
 								</Fragment>
 							) }
@@ -211,7 +236,9 @@ const Migration = ( { data } ) => {
 						return false;
 					} }
 				>
-					{ __( 'Migrate', 'neve' ) + ' ' + data.theme_name }
+					{ __( 'Migrate', 'templates-patterns-collection' ) +
+						' ' +
+						data.theme_name }
 				</Button>
 				<Button
 					isSecondary
@@ -228,12 +255,17 @@ const Migration = ( { data } ) => {
 								);
 								return false;
 							}
-							setToast( __( 'Dismissed', 'neve' ) );
+							setToast(
+								__(
+									'Dismissed',
+									'templates-patterns-collection'
+								)
+							);
 							setDismissed( true );
 						} );
 					} }
 				>
-					{ __( 'Dismiss', 'neve' ) }
+					{ __( 'Dismiss', 'templates-patterns-collection' ) }
 				</Button>
 			</div>
 		</div>

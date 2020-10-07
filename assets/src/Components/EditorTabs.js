@@ -39,7 +39,10 @@ const EditorTabs = ( {
 									'img/' +
 									EDITOR_MAP[ key ].icon
 								}
-								alt={ __( 'Builder Logo', 'neve' ) }
+								alt={ __(
+									'Builder Logo',
+									'templates-patterns-collection'
+								) }
 							/>
 						</span>
 						<span className="editor">

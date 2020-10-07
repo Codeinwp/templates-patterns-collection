@@ -52,7 +52,7 @@ const PreviewFrame = ( {
 					<Button
 						onClick={ handleClose }
 						className="close"
-						label={ __( 'Close', 'neve' ) }
+						label={ __( 'Close', 'templates-patterns-collection' ) }
 						icon="no"
 					/>
 
@@ -60,7 +60,10 @@ const PreviewFrame = ( {
 						<Button
 							onClick={ handlePrev }
 							className="prev"
-							label={ __( 'Previous', 'neve' ) }
+							label={ __(
+								'Previous',
+								'templates-patterns-collection'
+							) }
 							icon={
 								isRTL ? 'arrow-right-alt2' : 'arrow-left-alt2'
 							}
@@ -71,7 +74,10 @@ const PreviewFrame = ( {
 						<Button
 							onClick={ handleNext }
 							className="next"
-							label={ __( 'Next', 'neve' ) }
+							label={ __(
+								'Next',
+								'templates-patterns-collection'
+							) }
 							icon={
 								isRTL ? 'arrow-left-alt2' : 'arrow-right-alt2'
 							}
@@ -87,7 +93,10 @@ const PreviewFrame = ( {
 								siteData.utmOutboundLink || tiobDash.upgradeURL
 							}
 						>
-							{ __( 'Upgrade and Import', 'neve' ) }
+							{ __(
+								'Upgrade and Import',
+								'templates-patterns-collection'
+							) }
 						</Button>
 					) : (
 						<Button
@@ -95,7 +104,7 @@ const PreviewFrame = ( {
 							isPrimary
 							onClick={ handleImport }
 						>
-							{ __( 'Import', 'neve' ) }
+							{ __( 'Import', 'templates-patterns-collection' ) }
 						</Button>
 					) }
 				</div>

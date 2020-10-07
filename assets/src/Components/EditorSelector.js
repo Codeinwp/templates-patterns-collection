@@ -27,7 +27,10 @@ const EditorSelector = ( {
 				<img
 					className="editor-icon"
 					src={ tiobDash.assets + 'img/' + EDITOR_MAP[ editor ].icon }
-					alt={ __( 'Builder Logo', 'neve' ) }
+					alt={ __(
+						'Builder Logo',
+						'templates-patterns-collection'
+					) }
 				/>
 				{ ! isSmall && <span>{ EDITOR_MAP[ editor ].niceName }</span> }
 				<span className="count">{ count[ editor ] }</span>
@@ -66,7 +69,7 @@ const EditorSelector = ( {
 													}
 													alt={ __(
 														'Builder Logo',
-														'neve'
+														'templates-patterns-collection'
 													) }
 												/>
 												<span>
