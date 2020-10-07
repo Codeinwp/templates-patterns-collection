@@ -16,17 +16,18 @@ done
 
 init_environment(){
 	#Setup core
-	wp --allow-root core update --version=$WP_VERSION
-	wp --allow-root core update-db
+	docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root core update --version=$WP_VERSION
+	docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root core update-db
 	chmod 0777 -R /var/www/html/wp-content/
 }
 
-wp  --allow-root core install --url=http://localhost:8080 --title=SandboxSite --admin_user=admin --admin_password=admin --admin_email=admin@admin.com
+docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root core install --url=http://localhost:8080 --title=SandboxSite --admin_user=admin --admin_password=admin --admin_email=admin@admin.com
+docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root plugin activate templates-patterns-collection
 mkdir -p /var/www/html/wp-content/uploads
 rm -rf /var/www/html/wp-content/plugins/akismet
 
 init_environment
 
-wp --allow-root cache flush
-wp --allow-root rewrite structure /%postname%/
+docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root cache flush
+docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root rewrite structure /%postname%/
 
