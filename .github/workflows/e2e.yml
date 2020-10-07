@@ -1,0 +1,27 @@
+name: E2E Tests
+
+on:
+  pull_request:
+
+env:
+  CYPRESS_LICENSE_KEY: ${{ secrets.CYPRESS_LICENSE_KEY }}
+jobs:
+  e2e:
+    name: E2E Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install testing env
+        run: bash ./bin/e2e-env.sh
+      - name: Run Cypress tests
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+        uses: cypress-io/github-action@v1
+        with:
+          env: host=localhost,port=8080
+          browser: chrome
+          parallel: true
+          headless: true
+          group: e2e
+          record: true
