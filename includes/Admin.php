@@ -327,8 +327,7 @@ class Admin {
 	 * @return array
 	 */
 	private function get_localization() {
-		$theme      = wp_get_theme();
-		$theme_name = apply_filters( 'ti_wl_theme_name', $theme->__get( 'Name' ) );
+		$theme_name = apply_filters( 'ti_wl_theme_name', 'Neve' );
 		return array(
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
 			'assets'        => TIOB_URL . '/assets/',

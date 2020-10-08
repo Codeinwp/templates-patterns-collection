@@ -21,7 +21,7 @@
     "build:makepot": "rm -rf dist/ && docker run --rm --user root --volume \"$(pwd):/var/www/html/templates-patterns-collection\" wordpress:cli wp i18n make-pot ./templates-patterns-collection/ ./templates-patterns-collection/languages/templates-patterns-collection.pot --allow-root",
     "build:js": "wp-scripts build assets/src/app.js --output-path=assets/build",
     "rtlcss": "rtlcss assets/build/style-app.css assets/build/style-app-rtl.css",
-    "build": "npm-run-all build:* rtlcss",
+    "build": "npm-run-all -s build:* rtlcss",
     "watch:js": "wp-scripts start assets/src/app.js --output-path=assets/build",
     "dev": "npm-run-all watch:*",
     "release": "npx semantic-release",
