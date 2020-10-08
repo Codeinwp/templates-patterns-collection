@@ -58,7 +58,15 @@ class Admin {
 			return false;
 		}
 
-		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="display: inline-block; margin-right: 5px; transform: scaleX(-1);">&crarr;</span>' : '';
+		$style = 'display:inline-block;';
+
+		if ( ! is_rtl() ) {
+			$style .= 'transform:scaleX(-1);margin-right:5px;';
+		} else {
+			$style .= 'margin-left:5px;';
+		}
+
+		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="' . esc_attr( $style ) . '">&crarr;</span>' : '';
 		add_theme_page( __( 'Starter Sites', 'templates-patterns-collection' ), $prefix . __( 'Starter Sites', 'templates-patterns-collection' ), 'activate_plugins', $this->page_slug, array( $this, 'render_starter_sites' ) );
 	}
 
