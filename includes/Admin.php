@@ -15,12 +15,87 @@ namespace TIOB;
 class Admin {
 
 	/**
+	 * Admin page slug
+	 *
+	 * @var string
+	 */
+	private $page_slug = 'tiob-starter-sites';
+
+	/**
+	 * White label config
+	 *
+	 * @var array
+	 */
+	private $wl_config = null;
+
+	/**
 	 * Initialize the Admin.
 	 */
 	public function init() {
 		add_filter( 'query_vars', array( $this, 'add_onboarding_query_var' ) );
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
+		add_action( 'admin_menu', array( $this, 'register' ) );
+		add_action( 'admin_menu', array( $this, 'register' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+
+		$white_label_module = get_option( 'nv_pro_white_label_status' );
+		if ( ! empty( $white_label_module ) && (bool) $white_label_module === true ) {
+			$branding = get_option( 'ti_white_label_inputs' );
+			if ( ! empty( $branding ) ) {
+				$this->wl_config = json_decode( $branding, true );
+			}
+		}
+	}
+
+	/**
+	 * Register theme options page.
+	 *
+	 * @return bool|void
+	 */
+	public function register() {
+		if ( isset( $this->wl_config['starter_sites'] ) && (bool) $this->wl_config['starter_sites'] === true ) {
+			return false;
+		}
+
+		$style = 'display:inline-block;';
+
+		if ( ! is_rtl() ) {
+			$style .= 'transform:scaleX(-1);margin-right:5px;';
+		} else {
+			$style .= 'margin-left:5px;';
+		}
+
+		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="' . esc_attr( $style ) . '">&crarr;</span>' : '';
+		add_theme_page( __( 'Starter Sites', 'templates-patterns-collection' ), $prefix . __( 'Starter Sites', 'templates-patterns-collection' ), 'activate_plugins', $this->page_slug, array( $this, 'render_starter_sites' ) );
+	}
+
+	/**
+	 * Render method for the starter sites page.
+	 */
+	public function render_starter_sites() {
+		echo '<div id="tpc-app"/>';
+	}
+
+	public function enqueue() {
+		$screen = get_current_screen();
+		if ( ! isset( $screen->id ) ) {
+			return;
+		}
+
+		if ( $screen->id !== 'appearance_page_' . $this->page_slug ) {
+			return;
+		}
+
+		$dependencies = ( include TIOB_PATH . 'assets/build/app.asset.php' );
+
+		wp_register_style( 'tiob', TIOB_URL . '/assets/build/style-app.css', array( 'wp-components' ), $dependencies['version'] );
+		wp_style_add_data( 'tiob', 'rtl', 'replace' );
+		wp_enqueue_style( 'tiob' );
+
+		wp_register_script( 'tiob', TIOB_URL . '/assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates' ) ), $dependencies['version'], true );
+		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
+		wp_enqueue_script( 'tiob' );
 	}
 
 	/**
@@ -150,8 +225,8 @@ class Admin {
 
 		$options = array(
 			'theme_name'          => ! empty( $data[ $old_theme ]['theme_name'] ) ? esc_html( $data[ $old_theme ]['theme_name'] ) : '',
-			'screenshot'          => get_template_directory_uri() . Main::OBOARDING_PATH . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.png',
-			'template'            => get_template_directory() . Main::OBOARDING_PATH . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.json',
+			'screenshot'          => TIOB_URL . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.png',
+			'template'            => TIOB_PATH . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.json',
 			'template_name'       => $data[ $old_theme ]['template'],
 			'heading'             => $data[ $old_theme ]['heading'],
 			'description'         => $data[ $old_theme ]['description'],
@@ -161,7 +236,7 @@ class Admin {
 		);
 
 		if ( ! empty( $previous_theme_slug ) ) {
-			$options['description'] = __( 'Hi! We\'ve noticed you were using a child theme of Zelle before. To make your transition easier, we can help you keep the same homepage settings you had before but in original Zelle\'s style, by converting it into an Elementor template.', 'neve' );
+			$options['description'] = __( 'Hi! We\'ve noticed you were using a child theme of Zelle before. To make your transition easier, we can help you keep the same homepage settings you had before but in original Zelle\'s style, by converting it into an Elementor template.', 'templates-patterns-collection' );
 		}
 
 		return $options;
@@ -192,57 +267,106 @@ class Admin {
 	 */
 	private function get_strings() {
 		return array(
-			'preview_btn'                 => __( 'Preview', 'neve' ),
-			'import_btn'                  => __( 'Import', 'neve' ),
-			'pro_btn'                     => __( 'Get the PRO version!', 'neve' ),
-			'importing'                   => __( 'Importing', 'neve' ),
-			'cancel_btn'                  => __( 'Cancel', 'neve' ),
-			'loading'                     => __( 'Loading', 'neve' ),
-			'go_to_site'                  => __( 'View Website', 'neve' ),
-			'edit_template'               => __( 'Add your own content', 'neve' ),
-			'back'                        => __( 'Back to Sites Library', 'neve' ),
-			'note'                        => __( 'Note', 'neve' ),
-			'advanced_options'            => __( 'Advanced Options', 'neve' ),
-			'plugins'                     => __( 'Plugins', 'neve' ),
-			'general'                     => __( 'General', 'neve' ),
-			'later'                       => __( 'Keep current layout', 'neve' ),
-			'search'                      => __( 'Search', 'neve' ),
-			'content'                     => __( 'Content', 'neve' ),
-			'customizer'                  => __( 'Customizer', 'neve' ),
-			'widgets'                     => __( 'Widgets', 'neve' ),
-			'backup_disclaimer'           => __( 'We recommend you backup your website content before attempting a full site import.', 'neve' ),
-			'placeholders_disclaimer'     => __( 'Due to copyright issues, some of the demo images will not be imported and will be replaced by placeholder images.', 'neve' ),
-			'placeholders_disclaimer_new' => __( 'Some of the demo images will not be imported and will be replaced by placeholder images.', 'neve' ),
-			'unsplash_gallery_link'       => __( 'Here is our own collection of related images you can use for your site.', 'neve' ),
-			'import_done'                 => __( 'Content was successfully imported. Enjoy your new site!', 'neve' ),
-			'pro_demo'                    => __( 'Available in the PRO version', 'neve' ),
-			'copy_error_code'             => __( 'Copy error code', 'neve' ),
-			'download_error_log'          => __( 'Download error log', 'neve' ),
-			'external_plugins_notice'     => __( 'To import this demo you have to install the following plugins:', 'neve' ),
+			'preview_btn'                 => __( 'Preview', 'templates-patterns-collection' ),
+			'import_btn'                  => __( 'Import', 'templates-patterns-collection' ),
+			'pro_btn'                     => __( 'Get the PRO version!', 'templates-patterns-collection' ),
+			'importing'                   => __( 'Importing', 'templates-patterns-collection' ),
+			'cancel_btn'                  => __( 'Cancel', 'templates-patterns-collection' ),
+			'loading'                     => __( 'Loading', 'templates-patterns-collection' ),
+			'go_to_site'                  => __( 'View Website', 'templates-patterns-collection' ),
+			'edit_template'               => __( 'Add your own content', 'templates-patterns-collection' ),
+			'back'                        => __( 'Back to Sites Library', 'templates-patterns-collection' ),
+			'note'                        => __( 'Note', 'templates-patterns-collection' ),
+			'advanced_options'            => __( 'Advanced Options', 'templates-patterns-collection' ),
+			'plugins'                     => __( 'Plugins', 'templates-patterns-collection' ),
+			'general'                     => __( 'General', 'templates-patterns-collection' ),
+			'later'                       => __( 'Keep current layout', 'templates-patterns-collection' ),
+			'search'                      => __( 'Search', 'templates-patterns-collection' ),
+			'content'                     => __( 'Content', 'templates-patterns-collection' ),
+			'customizer'                  => __( 'Customizer', 'templates-patterns-collection' ),
+			'widgets'                     => __( 'Widgets', 'templates-patterns-collection' ),
+			'backup_disclaimer'           => __( 'We recommend you backup your website content before attempting a full site import.', 'templates-patterns-collection' ),
+			'placeholders_disclaimer'     => __( 'Due to copyright issues, some of the demo images will not be imported and will be replaced by placeholder images.', 'templates-patterns-collection' ),
+			'placeholders_disclaimer_new' => __( 'Some of the demo images will not be imported and will be replaced by placeholder images.', 'templates-patterns-collection' ),
+			'unsplash_gallery_link'       => __( 'Here is our own collection of related images you can use for your site.', 'templates-patterns-collection' ),
+			'import_done'                 => __( 'Content was successfully imported. Enjoy your new site!', 'templates-patterns-collection' ),
+			'pro_demo'                    => __( 'Available in the PRO version', 'templates-patterns-collection' ),
+			'copy_error_code'             => __( 'Copy error code', 'templates-patterns-collection' ),
+			'download_error_log'          => __( 'Download error log', 'templates-patterns-collection' ),
+			'external_plugins_notice'     => __( 'To import this demo you have to install the following plugins:', 'templates-patterns-collection' ),
 			/* translators: 1 - 'here'. */
 			'rest_not_working'            => sprintf(
-				__( 'It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s.', 'neve' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'neve' ) )
+				__( 'It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s.', 'templates-patterns-collection' ),
+				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ) )
 			),
 			/* translators: 1 - 'get in touch'. */
 			'error_report'                => sprintf(
-				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Please %1$s with us with the error code below, so we can help you fix this.', 'neve' ),
-				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'neve' ) )
+				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
+				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
 			/* translators: 1 - 'troubleshooting guide'. */
 			'troubleshooting'             => sprintf(
-				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work.', 'neve' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'neve' ) )
+				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work.', 'templates-patterns-collection' ),
+				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ) )
 			),
 			/* translators: 1 - 'get in touch'. */
 			'support'                     => sprintf(
-				__( 'If none of the solutions in the guide work, please %1$s with us with the error code below, so we can help you fix this.', 'neve' ),
-				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'neve' ) )
+				__( 'If none of the solutions in the guide work, please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
+				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
 			'fsDown'                      => sprintf(
-				__( 'It seems that %s is not available. You can contact your site administrator or hosting provider to help you enable it.', 'neve' ),
+				__( 'It seems that %s is not available. You can contact your site administrator or hosting provider to help you enable it.', 'templates-patterns-collection' ),
 				sprintf( '<code>WP_Filesystem</code>' )
 			),
+		);
+	}
+
+	/**
+	 * Get localization data for the dashboard script.
+	 *
+	 * @return array
+	 */
+	private function get_localization() {
+		$theme_name = apply_filters( 'ti_wl_theme_name', 'Neve' );
+		return array(
+			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'assets'        => TIOB_URL . '/assets/',
+			'upgradeURL'    => esc_url( apply_filters( 'neve_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/neve/upgrade/?utm_medium=aboutneve&utm_source=freevspro&utm_campaign=neve' ) ),
+			'strings'       => array(
+				/* translators: %s - Theme name */
+				'starterSitesTabDescription' => sprintf( __( 'With %s, you can choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ), wp_kses_post( $theme_name ) ),
+			),
+			'onboarding'    => array(),
+			'hasFileSystem' => WP_Filesystem(),
+			'themesURL'     => admin_url( 'themes.php' ),
+			'themeAction'   => $this->get_theme_action(),
+			'brandedTheme'  => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
+		);
+	}
+
+	/**
+	 * Gets theme action.
+	 */
+	private function get_theme_action() {
+		if ( defined( 'NEVE_VERSION' ) ) {
+			return false;
+		}
+
+		$themes = wp_get_themes();
+		foreach ( $themes as $theme_slug => $args ) {
+			$theme = wp_get_theme( $theme_slug );
+			if ( $theme->get( 'TextDomain' ) === 'neve' ) {
+				return array(
+					'action' => 'activate',
+					'slug'   => $theme_slug,
+					'nonce'  => wp_create_nonce( 'switch-theme_' . $theme_slug ),
+				);
+			}
+		}
+		return array(
+			'action' => 'install',
+			'slug'   => 'neve',
+			'nonce'  => wp_create_nonce( 'switch-theme_neve' ),
 		);
 	}
 }

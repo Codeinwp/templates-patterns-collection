@@ -43,8 +43,8 @@ class Sites_Listing {
 					'theme_name'        => 'Zelle Pro',
 					'theme_mod_check'   => 'zelle_frontpage_was_imported',
 					'template'          => 'zelle',
-					'heading'           => __( 'Want to keep using Zelle\'s homepage?', 'neve' ),
-					'description'       => __( 'Hi! We\'ve noticed you were using Zelle before. To make your transition easier, we can help you keep the same beautiful homepage you had before, by converting it into an Elementor template. This option will also import your homepage content.', 'neve' ),
+					'heading'           => __( 'Want to keep using Zelle\'s homepage?', 'templates-patterns-collection' ),
+					'description'       => __( 'Hi! We\'ve noticed you were using Zelle before. To make your transition easier, we can help you keep the same beautiful homepage you had before, by converting it into an Elementor template. This option will also import your homepage content.', 'templates-patterns-collection' ),
 					'mandatory_plugins' => array(
 						'elementor' => 'Elementor Page Builder',
 					),
@@ -53,8 +53,8 @@ class Sites_Listing {
 					'theme_name'        => 'Zelle Lite',
 					'theme_mod_check'   => 'zelle_frontpage_was_imported',
 					'template'          => 'zelle',
-					'heading'           => __( 'Want to keep using Zelle\'s homepage?', 'neve' ),
-					'description'       => __( 'Hi! We\'ve noticed you were using Zelle before. To make your transition easier, we can help you keep the same beautiful homepage you had before, by converting it into an Elementor template. This option will also import your homepage content.', 'neve' ),
+					'heading'           => __( 'Want to keep using Zelle\'s homepage?', 'templates-patterns-collection' ),
+					'description'       => __( 'Hi! We\'ve noticed you were using Zelle before. To make your transition easier, we can help you keep the same beautiful homepage you had before, by converting it into an Elementor template. This option will also import your homepage content.', 'templates-patterns-collection' ),
 					'mandatory_plugins' => array(
 						'elementor' => 'Elementor Page Builder',
 					),

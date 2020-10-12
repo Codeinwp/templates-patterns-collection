@@ -16,7 +16,7 @@ class Main {
 	 *
 	 * @var string Version string.
 	 */
-	const VERSION = '1.0.3';
+	const VERSION = '1.0.10';
 	/**
 	 * Sites Library API URL.
 	 *
@@ -29,12 +29,6 @@ class Main {
 	 * @var string Transient slug.
 	 */
 	const STORAGE_TRANSIENT = 'themeisle_sites_library_data';
-	/**
-	 * Onboarding Path Relative to theme dir.
-	 *
-	 * @var string Onboarding root path.
-	 */
-	const OBOARDING_PATH = '/vendor/codeinwp/themeisle-onboarding';
 	/**
 	 * Main
 	 *
@@ -54,17 +48,6 @@ class Main {
 	 * @var Sites_Listing
 	 */
 	private $sites_listing = null;
-
-	/**
-	 * Method to return path to child class in a Reflective Way.
-	 *
-	 * @return string
-	 * @since   1.0.0
-	 * @access  public
-	 */
-	static public function get_dir() {
-		return apply_filters( 'themeisle_site_import_uri', trailingslashit( get_template_directory_uri() ) . self::OBOARDING_PATH );
-	}
 
 	/**
 	 * Instantiate the class.
@@ -117,9 +100,6 @@ class Main {
 	 * @return void
 	 */
 	private function setup_sites_listing() {
-		if ( ! defined( 'NEVE_VERSION' ) ) {
-			return;
-		}
 		$this->sites_listing = new Sites_Listing();
 		$this->sites_listing->init();
 	}

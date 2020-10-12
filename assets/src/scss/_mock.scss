@@ -1,0 +1,28 @@
+
+@keyframes loading-placeholder {
+	0% {
+		opacity: .1;
+	}
+
+	50% {
+		opacity: .2;
+	}
+
+	100% {
+		opacity: .1;
+	}
+}
+
+@keyframes loading-placeholder-high-opacity {
+	0% {
+		opacity: .7;
+	}
+
+	50% {
+		opacity: .9;
+	}
+
+	100% {
+		opacity: .7;
+	}
+}
