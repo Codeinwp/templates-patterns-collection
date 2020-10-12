@@ -127,10 +127,7 @@ describe( 'Dashboard Page - Onboarding', () => {
 			.scrollTo( 'bottom' )
 			.wait( 100 )
 			.scrollTo( 'bottom' );
-		cy.get( 'button' )
-			.contains( 'Keep the Current Layout' )
-			.should( 'exist' )
-			.click();
+		cy.get( 'button.close-onboarding' ).should( 'exist' ).click();
 		cy.get( '.content-wrap.starter-sites' ).should(
 			'not.have.class',
 			'is-onboarding'
