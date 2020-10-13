@@ -32,7 +32,7 @@ svg.is-loading, button.is-loading svg {
 	animation-duration: 2000ms;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
-	margin-right: 0 ;
+	margin-right: 0;
 }
 
 .col {
@@ -157,12 +157,15 @@ svg.is-loading, button.is-loading svg {
 	background-color: #f1f1f1;
 	z-index: 100000;
 	overflow: auto;
+
 	h2 {
 		display: block;
+
 		img {
 			display: none;
 		}
 	}
+
 	.content {
 		background-color: #fefefe;
 		padding-top: 30px;
@@ -174,11 +177,31 @@ svg.is-loading, button.is-loading svg {
 		flex-direction: column;
 	}
 
-	.ob-head, .ob-migration {
+	.ob-migration {
 		text-align: center;
 
 		h2 {
 			line-height: 1;
+		}
+	}
+
+	.ob-head button {
+		margin: 0 !important;
+	}
+
+	.ob-head {
+		margin: 0 0 20px;
+		display: flex;
+		justify-content: flex-end;
+		align-items: flex-end;
+
+		button.close-onboarding {
+			color: #676767;
+
+			svg {
+				width: 30px;
+				height: 30px;
+			}
 		}
 	}
 }
@@ -197,9 +220,12 @@ svg.is-loading, button.is-loading svg {
 	.content-wrap.is-onboarding {
 		.content {
 			box-shadow: 0 0 10px -5px rgba(0, 0, 0, 0.5);
-			padding: 50px 50px 35px;
+			padding: 35px 40px 35px;
 			border: 1px solid $grey;
 			margin: 40px auto 30px;
+		}
+		.header-form {
+			margin-top: 0;
 		}
 	}
 

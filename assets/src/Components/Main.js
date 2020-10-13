@@ -278,28 +278,34 @@ const Onboarding = ( {
 				) }
 				{ renderMigration() }
 				<div className="ob-head">
-					<h2>
-						{ ! tiobDash.brandedTheme && (
-							<img
-								src={ `${ tiobDash.assets }img/logo.svg` }
-								alt="Logo"
-							/>
-						) }
-						<span>
-							{ __(
-								'Ready to use pre-built websites with 1-click installation',
-								'neve'
-							) }
-						</span>
-					</h2>
-					<p>{ tiobDash.strings.starterSitesTabDescription }</p>
+					{ ! isOnboarding && (
+						<>
+							<h2>
+								{ ! tiobDash.brandedTheme && (
+									<img
+										src={ `${ tiobDash.assets }img/logo.svg` }
+										alt="Logo"
+									/>
+								) }
+								<span>
+									{ __(
+										'Ready to use pre-built websites with 1-click installation',
+										'neve'
+									) }
+								</span>
+							</h2>
+							<p>
+								{ tiobDash.strings.starterSitesTabDescription }
+							</p>
+						</>
+					) }
 					{ isOnboarding && (
-						<Button isPrimary onClick={ cancelOnboarding }>
-							{ __(
-								'Keep the Current Layout',
-								'templates-patterns-collection'
-							) }
-						</Button>
+						<Button
+							className="close-onboarding"
+							isLink
+							icon="no-alt"
+							onClick={ cancelOnboarding }
+						/>
 					) }
 				</div>
 
