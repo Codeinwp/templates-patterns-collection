@@ -1,0 +1,442 @@
+# Copyright (C) 2020 ThemeIsle
+# This file is distributed under the same license as the Templates Patterns Collection plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Templates Patterns Collection 1.0.10\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/templates-patterns-collection\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-10-12T13:19:34+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: templates-patterns-collection\n"
+
+#. Plugin Name of the plugin
+msgid "Templates Patterns Collection"
+msgstr ""
+
+#. Description of the plugin
+msgid "This plugin is an add-on to Neve WordPress theme which offers access to Templates and Block Patterns library service to be used with the theme."
+msgstr ""
+
+#. Author of the plugin
+msgid "ThemeIsle"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://themeisle.com"
+msgstr ""
+
+#: includes/Admin.php:70
+msgid "Starter Sites"
+msgstr ""
+
+#: includes/Admin.php:239
+msgid "Hi! We've noticed you were using a child theme of Zelle before. To make your transition easier, we can help you keep the same homepage settings you had before but in original Zelle's style, by converting it into an Elementor template."
+msgstr ""
+
+#: includes/Admin.php:270
+#: assets/build/app.js:2312
+#: assets/src/Components/StarterSiteCard.js:52
+msgid "Preview"
+msgstr ""
+
+#: includes/Admin.php:271
+#: assets/build/app.js:942
+#: assets/build/app.js:2073
+#: assets/build/app.js:2315
+#: assets/src/Components/ImportModal.js:519
+#: assets/src/Components/PreviewFrame.js:107
+#: assets/src/Components/StarterSiteCard.js:56
+msgid "Import"
+msgstr ""
+
+#: includes/Admin.php:272
+msgid "Get the PRO version!"
+msgstr ""
+
+#: includes/Admin.php:273
+msgid "Importing"
+msgstr ""
+
+#: includes/Admin.php:274
+#: assets/build/app.js:1907
+#: assets/src/Components/Migration.js:165
+msgid "Cancel"
+msgstr ""
+
+#: includes/Admin.php:275
+msgid "Loading"
+msgstr ""
+
+#: includes/Admin.php:276
+#: assets/build/app.js:949
+#: assets/build/app.js:1918
+#: assets/src/Components/ImportModal.js:542
+#: assets/src/Components/Migration.js:197
+msgid "View Website"
+msgstr ""
+
+#: includes/Admin.php:277
+#: assets/build/app.js:952
+#: assets/src/Components/ImportModal.js:548
+msgid "Add your own content"
+msgstr ""
+
+#: includes/Admin.php:278
+#: assets/build/app.js:946
+#: assets/src/Components/ImportModal.js:533
+msgid "Back to Sites Library"
+msgstr ""
+
+#: includes/Admin.php:279
+#: assets/build/app.js:1057
+#: assets/src/Components/ImportModalNote.js:23
+msgid "Note"
+msgstr ""
+
+#: includes/Admin.php:280
+msgid "Advanced Options"
+msgstr ""
+
+#: includes/Admin.php:281
+#: assets/build/app.js:695
+#: assets/src/Components/ImportModal.js:211
+msgid "Plugins"
+msgstr ""
+
+#: includes/Admin.php:282
+#: assets/build/app.js:667
+#: assets/src/Components/ImportModal.js:170
+msgid "General"
+msgstr ""
+
+#: includes/Admin.php:283
+msgid "Keep current layout"
+msgstr ""
+
+#: includes/Admin.php:284
+msgid "Search"
+msgstr ""
+
+#: includes/Admin.php:285
+#: assets/build/app.js:653
+#: assets/src/Components/ImportModal.js:156
+msgid "Content"
+msgstr ""
+
+#: includes/Admin.php:286
+#: assets/build/app.js:657
+#: assets/src/Components/ImportModal.js:160
+msgid "Customizer"
+msgstr ""
+
+#: includes/Admin.php:287
+#: assets/build/app.js:661
+#: assets/src/Components/ImportModal.js:164
+msgid "Widgets"
+msgstr ""
+
+#: includes/Admin.php:288
+msgid "We recommend you backup your website content before attempting a full site import."
+msgstr ""
+
+#: includes/Admin.php:289
+msgid "Due to copyright issues, some of the demo images will not be imported and will be replaced by placeholder images."
+msgstr ""
+
+#: includes/Admin.php:290
+msgid "Some of the demo images will not be imported and will be replaced by placeholder images."
+msgstr ""
+
+#: includes/Admin.php:291
+msgid "Here is our own collection of related images you can use for your site."
+msgstr ""
+
+#: includes/Admin.php:292
+#: assets/build/app.js:930
+#: assets/src/Components/ImportModal.js:486
+msgid "Content was successfully imported. Enjoy your new site!"
+msgstr ""
+
+#: includes/Admin.php:293
+msgid "Available in the PRO version"
+msgstr ""
+
+#: includes/Admin.php:294
+msgid "Copy error code"
+msgstr ""
+
+#: includes/Admin.php:295
+msgid "Download error log"
+msgstr ""
+
+#: includes/Admin.php:296
+msgid "To import this demo you have to install the following plugins:"
+msgstr ""
+
+#: includes/Admin.php:299
+msgid "It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s."
+msgstr ""
+
+#: includes/Admin.php:300
+msgid "here"
+msgstr ""
+
+#: includes/Admin.php:304
+msgid "Hi! It seems there is a configuration issue with your server that's causing the import to fail. Please %1$s with us with the error code below, so we can help you fix this."
+msgstr ""
+
+#: includes/Admin.php:305
+#: includes/Admin.php:315
+msgid "get in touch"
+msgstr ""
+
+#: includes/Admin.php:309
+msgid "Hi! It seems there is a configuration issue with your server that's causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work."
+msgstr ""
+
+#: includes/Admin.php:310
+msgid "troubleshooting guide"
+msgstr ""
+
+#: includes/Admin.php:314
+msgid "If none of the solutions in the guide work, please %1$s with us with the error code below, so we can help you fix this."
+msgstr ""
+
+#: includes/Admin.php:318
+msgid "It seems that %s is not available. You can contact your site administrator or hosting provider to help you enable it."
+msgstr ""
+
+#. translators: %s - Theme name
+#: includes/Admin.php:337
+msgid "With %s, you can choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else."
+msgstr ""
+
+#: includes/Sites_Listing.php:46
+#: includes/Sites_Listing.php:56
+msgid "Want to keep using Zelle's homepage?"
+msgstr ""
+
+#: includes/Sites_Listing.php:47
+#: includes/Sites_Listing.php:57
+msgid "Hi! We've noticed you were using Zelle before. To make your transition easier, we can help you keep the same beautiful homepage you had before, by converting it into an Elementor template. This option will also import your homepage content."
+msgstr ""
+
+#: tests/rest-test.php:59
+msgid "Ready to use pre-built websites with 1-click installation"
+msgstr ""
+
+#: tests/rest-test.php:60
+msgid "With Neve, you can choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else."
+msgstr ""
+
+#: assets/build/app.js:285
+#: assets/build/app.js:314
+#: assets/build/app.js:395
+#: assets/src/Components/EditorSelector.js:30
+#: assets/src/Components/EditorSelector.js:70
+#: assets/src/Components/EditorTabs.js:42
+msgid "Builder Logo"
+msgstr ""
+
+#: assets/build/app.js:559
+#: assets/build/app.js:584
+#: assets/src/Components/ImportModal.js:49
+#: assets/src/Components/ImportModal.js:85
+msgid "Something went wrong while loading the site data. Please refresh the page and try again."
+msgstr ""
+
+#: assets/build/app.js:849
+#: assets/src/Components/ImportModal.js:367
+msgid "Something went wrong while installing the necessary plugins."
+msgstr ""
+
+#: assets/build/app.js:850
+#: assets/src/Components/ImportModal.js:371
+msgid "Something went wrong while importing the website content."
+msgstr ""
+
+#: assets/build/app.js:851
+#: assets/src/Components/ImportModal.js:375
+msgid "Something went wrong while updating the customizer settings."
+msgstr ""
+
+#: assets/build/app.js:852
+#: assets/src/Components/ImportModal.js:379
+msgid "Something went wrong while importing the widgets."
+msgstr ""
+
+#: assets/build/app.js:935
+#: assets/build/app.js:1323
+#: assets/build/app.js:1447
+#: assets/build/app.js:1907
+#: assets/build/app.js:2051
+#: assets/src/Components/ImportModal.js:502
+#: assets/src/Components/InstallModal.js:156
+#: assets/src/Components/Main.js:52
+#: assets/src/Components/Migration.js:161
+#: assets/src/Components/PreviewFrame.js:55
+msgid "Close"
+msgstr ""
+
+#: assets/build/app.js:1011
+#: assets/src/Components/ImportModalError.js:26
+msgid "Error code"
+msgstr ""
+
+#: assets/build/app.js:1011
+#: assets/src/Components/ImportModalError.js:31
+msgid "Error log"
+msgstr ""
+
+#: assets/build/app.js:1099
+#: assets/src/Components/ImportStepper.js:8
+msgid "Installing Plugins"
+msgstr ""
+
+#: assets/build/app.js:1104
+#: assets/src/Components/ImportStepper.js:13
+msgid "Importing Content"
+msgstr ""
+
+#: assets/build/app.js:1109
+#: assets/src/Components/ImportStepper.js:18
+msgid "Importing Customizer Settings"
+msgstr ""
+
+#: assets/build/app.js:1114
+#: assets/src/Components/ImportStepper.js:26
+msgid "Importing Widgets"
+msgstr ""
+
+#. translators: %s: Error message.
+#: assets/build/app.js:1236
+#: assets/src/Components/InstallModal.js:29
+msgid "An error has ocurred: %s"
+msgstr ""
+
+#: assets/build/app.js:1253
+#: assets/src/Components/InstallModal.js:50
+msgid "Could not install theme."
+msgstr ""
+
+#: assets/build/app.js:1263
+#: assets/src/Components/InstallModal.js:65
+msgid "Could not activate theme."
+msgstr ""
+
+#: assets/build/app.js:1277
+#: assets/src/Components/InstallModal.js:83
+msgid "Install and Activate Neve"
+msgstr ""
+
+#: assets/build/app.js:1291
+#: assets/src/Components/InstallModal.js:96
+msgid "Logo"
+msgstr ""
+
+#: assets/build/app.js:1302
+#: assets/src/Components/InstallModal.js:110
+msgid "In order to import the starter site, Neve theme has to be installed and activated. Click the button below to install and activate Neve"
+msgstr ""
+
+#: assets/build/app.js:1319
+#: assets/src/Components/InstallModal.js:141
+msgid "Install and Activate"
+msgstr ""
+
+#: assets/build/app.js:1319
+#: assets/src/Components/InstallModal.js:145
+msgid "Activate"
+msgstr ""
+
+#: assets/build/app.js:1450
+#: assets/src/Components/Main.js:61
+msgid "Business"
+msgstr ""
+
+#: assets/build/app.js:1450
+#: assets/src/Components/Main.js:62
+msgid "Ecommerce"
+msgstr ""
+
+#: assets/build/app.js:1450
+#: assets/src/Components/Main.js:63
+msgid "Fashion"
+msgstr ""
+
+#: assets/build/app.js:1450
+#: assets/src/Components/Main.js:64
+msgid "Blogging"
+msgstr ""
+
+#: assets/build/app.js:1450
+#: assets/src/Components/Main.js:65
+msgid "Photography"
+msgstr ""
+
+#: assets/build/app.js:1685
+#: assets/src/Components/Main.js:346
+msgid "No results found"
+msgstr ""
+
+#: assets/build/app.js:1878
+#: assets/build/app.js:1944
+#: assets/src/Components/Migration.js:82
+#: assets/src/Components/Migration.js:239
+msgid "Migrate"
+msgstr ""
+
+#: assets/build/app.js:1900
+#: assets/src/Components/Migration.js:141
+msgid "Migrating"
+msgstr ""
+
+#: assets/build/app.js:1912
+#: assets/src/Components/Migration.js:177
+msgid "Start Migration"
+msgstr ""
+
+#: assets/build/app.js:1915
+#: assets/src/Components/Migration.js:188
+msgid "Edit Content"
+msgstr ""
+
+#: assets/build/app.js:1955
+#: assets/src/Components/Migration.js:259
+msgid "Dismissed"
+msgstr ""
+
+#: assets/build/app.js:1959
+#: assets/src/Components/Migration.js:268
+msgid "Dismiss"
+msgstr ""
+
+#: assets/build/app.js:2056
+#: assets/src/Components/PreviewFrame.js:63
+msgid "Previous"
+msgstr ""
+
+#: assets/build/app.js:2061
+#: assets/src/Components/PreviewFrame.js:77
+msgid "Next"
+msgstr ""
+
+#: assets/build/app.js:2069
+#: assets/src/Components/PreviewFrame.js:96
+msgid "Upgrade and Import"
+msgstr ""
+
+#: assets/build/app.js:2208
+#: assets/src/Components/Search.js:98
+msgid "Search for a starter site"
+msgstr ""
+
+#: assets/build/app.js:2329
+#: assets/src/Components/StarterSiteCard.js:75
+msgid "Premium"
+msgstr ""

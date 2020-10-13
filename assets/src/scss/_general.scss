@@ -1,0 +1,299 @@
+#wpcontent {
+	padding-left: 0 !important;
+}
+
+#wpbody-content > {
+	.error, .info, .notice {
+		display: none !important;
+	}
+}
+
+.ob-overflow-off {
+	overflow: hidden !important;
+}
+
+@media screen and (min-width: #{$tablet}) {
+	.ob-import-modal {
+		width: 630px !important;
+	}
+}
+
+.container {
+	padding: 0 15px;
+
+	&.content {
+		padding-top: 20px;
+		position: relative;
+	}
+}
+
+svg.is-loading, button.is-loading svg {
+	animation-name: spin;
+	animation-duration: 2000ms;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+	margin-right: 0;
+}
+
+.col {
+	width: 100%;
+}
+
+@-webkit-keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@mixin general--laptop() {
+	.container {
+		padding: 0 20px;
+	}
+
+	.content {
+		display: flex;
+	}
+
+	.main {
+		flex-grow: 1;
+	}
+
+	.col {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+@mixin general--desktop() {
+	.container {
+		margin: 0 auto;
+	}
+	.col {
+		width: 50%;
+
+		&:not(:last-child) {
+			margin-right: 20px;
+		}
+	}
+	.main {
+		flex-grow: 1;
+	}
+	.content {
+		display: flex;
+		padding-top: 30px;
+	}
+	.columns {
+		display: flex;
+		flex-direction: row;
+	}
+}
+
+@mixin general--desktop-large() {
+	.container {
+		padding: 0 50px;
+		max-width: 1300px;
+	}
+	.col {
+		&:not(:last-child) {
+			margin-right: 30px;
+		}
+	}
+}
+
+.columns.starter-sites {
+	position: relative;
+	display: flex;
+	flex-grow: 1;
+}
+
+.ss-background {
+	opacity: .25;
+	z-index: -1;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	display: block;
+	background-size: cover;
+	background-position: center center;
+	left: 0;
+	right: 0;
+	height: calc(100vh - 300px);
+	flex-grow: 1;
+}
+
+.unavailable-starter-sites {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	padding: 50px 30px;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+
+	h1 {
+		line-height: 1.6;
+	}
+}
+
+/*==============*/
+.content-wrap.is-onboarding {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: #f1f1f1;
+	z-index: 100000;
+	overflow: auto;
+
+	h2 {
+		display: block;
+
+		img {
+			display: none;
+		}
+	}
+
+	.content {
+		background-color: #fefefe;
+		padding-top: 30px;
+	}
+
+	.ob {
+		display: flex;
+		min-height: 100vh;
+		flex-direction: column;
+	}
+
+	.ob-migration {
+		text-align: center;
+
+		h2 {
+			line-height: 1;
+		}
+	}
+
+	.ob-head button {
+		margin: 0 !important;
+	}
+
+	.ob-head {
+		margin: 0 0 20px;
+		display: flex;
+		justify-content: flex-end;
+		align-items: flex-end;
+
+		button.close-onboarding {
+			color: #676767;
+
+			svg {
+				width: 30px;
+				height: 30px;
+			}
+		}
+	}
+}
+
+.ob {
+	width: 100%;
+}
+
+.ob-sites {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+@mixin ob-general--laptop() {
+	.content-wrap.is-onboarding {
+		.content {
+			box-shadow: 0 0 10px -5px rgba(0, 0, 0, 0.5);
+			padding: 35px 40px 35px;
+			border: 1px solid $grey;
+			margin: 40px auto 30px;
+		}
+		.header-form {
+			margin-top: 0;
+		}
+	}
+
+	.ob-sites {
+		margin-top: 30px;
+	}
+
+	.ob-head {
+		margin-top: 50px;
+	}
+}
+
+
+.no-results {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin: 30px 0;
+
+	p {
+		font-size: 16px;
+
+		span {
+			color: $blue;
+			font-weight: 600;
+		}
+	}
+
+	.tags {
+		margin-top: 10px;
+		justify-content: center;
+		display: flex;
+		flex-wrap: wrap;
+
+		.tag {
+			margin: 10px 20px;
+			line-height: normal;
+			height: auto;
+			font-weight: 600;
+			padding: 10px 15px;
+			color: #fff;
+			transition: all .3s ease;
+
+			&:hover {
+				background-color: darken($blue, 0.5);
+			}
+		}
+	}
+}
+
+.pro-badge {
+	background-color: $success;
+	height: auto;
+	color: #fff;
+	font-weight: 600;
+	text-transform: uppercase;
+	padding: 5px 10px;
+	margin-left: auto;
+	border-radius: 999px;
+	line-height: normal;
+	display: flex;
+	align-items: center;
+
+	svg {
+		margin-right: 3px;
+	}
+}
+
+
+
