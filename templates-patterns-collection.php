@@ -81,5 +81,4 @@ function ti_tpc_run() {
 	}
 }
 
-
-
+require_once __DIR__ . '/block-editor.php';
