@@ -13,13 +13,17 @@ function ti_tpc_register_block() {
 		time()
 	);
 
-	wp_localize_script( 'ti-tpc-block', 'tiTpc', array(
-		'endpoint' => TPC_TEMPLATES_CLOUD_ENDPOINT,
-		'params'   => array(
-			'site_url'   => get_site_url(),
-			'license_id' => apply_filters( 'product_neve_license_key', 'free' )
+	wp_localize_script(
+		'ti-tpc-block',
+		'tiTpc',
+		array(
+			'endpoint' => TPC_TEMPLATES_CLOUD_ENDPOINT,
+			'params'   => array(
+				'site_url'   => get_site_url(),
+				'license_id' => apply_filters( 'product_neve_license_key', 'free' )
+			)
 		)
-	) );
+	);
 
 	wp_register_style(
 		'ti-tpc-block',
@@ -28,10 +32,13 @@ function ti_tpc_register_block() {
 		time()
 	);
 
-	register_block_type( 'themeisle-blocks/templates-cloud', array(
-		'editor_script' => 'ti-tpc-block',
-		'editor_style' => 'ti-tpc-block',
-	) );
+	register_block_type(
+		'themeisle-blocks/templates-cloud',
+		array(
+			'editor_script' => 'ti-tpc-block',
+			'editor_style' => 'ti-tpc-block',
+		) 
+	);
 }
 
 add_action( 'init', 'ti_tpc_register_block' );
