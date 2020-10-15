@@ -1,0 +1,83 @@
+/**
+ * WordPress dependencies
+ */
+const { __ } = wp.i18n;
+
+const {
+	Button,
+	ButtonGroup,
+	Placeholder,
+	Spinner
+} = wp.components;
+
+const { useSelect } = wp.data;
+
+/**
+ * Internal dependencies
+ */
+import { fetchTemplates } from './../data/templates-cloud/index.js';
+
+import ListItem from './list-item.js';
+
+const Library = ({
+	isFetching,
+	importBlocks
+}) => {
+	const { items, currentPage, totalPages } = useSelect( select => select( 'tpc/block-editor' ).getLibrary() );
+
+	const pages = [];
+
+	const Pagination = () => {
+		for ( let i = 0; i < totalPages; i++ ) {
+			const isCurrent = i === currentPage;
+
+			pages.push(
+				<Button
+					isPrimary={ isCurrent }
+					disabled={ isCurrent }
+					onClick={ () => fetchTemplates(
+						{
+							'per_page': 10,
+							page: i
+						}
+					) }
+				>
+					{ i + 1 }
+				</Button>
+			);
+		}
+
+		return pages;
+	};
+
+	if ( isFetching ) {
+		return <Placeholder><Spinner/></Placeholder>;
+	}
+
+	if ( ! Boolean( items.length ) ) {
+		return (
+			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table">
+				{ __( 'No templates available. Add a new one?' ) }
+			</div>
+		);
+	}
+
+	return (
+		<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table">
+			{ items.map( item => (
+				<ListItem
+					item={ item }
+					importBlocks={ importBlocks }
+				/>
+			) ) }
+
+			{ 1 < totalPages && (
+				<ButtonGroup className="wp-block-themeisle-blocks-templates-cloud__modal-content__pagination">
+					<Pagination/>
+				</ButtonGroup>
+			) }
+		</div>
+	);
+};
+
+export default Library;

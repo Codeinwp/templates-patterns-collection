@@ -17,7 +17,10 @@ const {
 	updateLibrary
 } = dispatch( 'tpc/block-editor' );
 
-export const fetchTemplates = async params => {
+export const fetchTemplates = async( params = {
+	'per_page': 10,
+	page: 0
+}) => {
 	setFetching( true );
 
 	const url = stringifyUrl({
@@ -29,18 +32,27 @@ export const fetchTemplates = async params => {
 		}
 	});
 
+	let response;
 	let templates = [];
 
 	try {
-		templates = await apiFetch({ url, method: 'GET' });
-		updateLibrary( templates );
+		response = await apiFetch({
+			url,
+			method: 'GET',
+			parse: false
+		});
+
+		if ( response.ok ) {
+			templates = await response.json();
+			const totalPages = response.headers.get( 'x-wp-totalpages' );
+			const currentPage = params.page;
+			updateLibrary( templates, currentPage, totalPages );
+		}
 	} catch ( error ) {
 		throw new Error( error.message );
 	}
 
 	setFetching( false );
-
-	return templates;
 };
 
 export const importTemplate = async template => {

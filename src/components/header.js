@@ -42,18 +42,15 @@ const TABS = {
 const Header = ({
 	closeModal
 }) => {
-	const {
-		updateCurrentTab,
-		updateTemplates
-	} = useDispatch( 'tpc/block-editor' );
+	const { updateCurrentTab } = useDispatch( 'tpc/block-editor' );
 
-	const currentTab = useSelect( select => select( 'tpc/block-editor' ).getCurrentTab() );
 	const isFetching = useSelect( select => select( 'tpc/block-editor' ).isFetching() );
+	const isPreview = useSelect( select => select( 'tpc/block-editor' ).isPreview() );
+	const currentTab = useSelect( select => select( 'tpc/block-editor' ).getCurrentTab() );
 
 	const syncLibrary = async() => {
 		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-		const response = await fetchTemplates();
-		return updateTemplates( response );
+		return fetchTemplates();
 	};
 
 	return (
@@ -82,11 +79,12 @@ const Header = ({
 			</div>
 
 			<div className="wp-block-themeisle-blocks-templates-cloud__modal-header__right">
-				{ 'library' === currentTab && (
+				{ ( 'library' === currentTab && ! isPreview ) && (
 					<ButtonGroup>
 						<Button
 							label={ __( 'Re-sync Library' ) }
 							icon={ update }
+							disabled={ isFetching }
 							className={ classnames(
 								'is-sync',
 								{

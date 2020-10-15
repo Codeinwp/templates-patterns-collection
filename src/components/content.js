@@ -1,11 +1,6 @@
 /**
  * WordPress dependencies
  */
-const {
-	Placeholder,
-	Spinner
-} = wp.components;
-
 const {	useSelect } = wp.data;
 
 const { useEffect } = wp.element;
@@ -15,35 +10,37 @@ const { useEffect } = wp.element;
  */
 import { fetchTemplates } from './../data/templates-cloud/index.js';
 
-import ListItem from './list-item.js';
+import Preview from './preview.js';
+
+import Library from './library.js';
 
 const Content = ({
 	importBlocks
 }) => {
-	const templates = useSelect( select => select( 'tpc/block-editor' ).getTemplates() ) || [];
 	const isFetching = useSelect( select => select( 'tpc/block-editor' ).isFetching() );
+	const isPreview = useSelect( select => select( 'tpc/block-editor' ).isPreview() );
+	const currentTab = useSelect( select => select( 'tpc/block-editor' ).getCurrentTab() );
 
-	useEffect( async() => await fetchTemplates(), []);
+	useEffect( () => {
+		fetchTemplates();
+	}, []);
 
-	if ( isFetching ) {
+	if ( isPreview ) {
 		return (
-			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content">
-				<Placeholder><Spinner/></Placeholder>
-			</div>
+			<Preview
+				isFetching={ isFetching }
+				importBlocks={ importBlocks }
+			/>
 		);
 	}
 
 	return (
 		<div className="wp-block-themeisle-blocks-templates-cloud__modal-content">
-			{ Boolean( templates.length ) && (
-				<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table">
-					{ templates.map( template => (
-						<ListItem
-							template={ template }
-							importBlocks={ importBlocks }
-						/>
-					) ) }
-				</div>
+			{ ( 'library' === currentTab ) && (
+				<Library
+					isFetching={ isFetching }
+					importBlocks={ importBlocks }
+				/>
 			) }
 		</div>
 	);

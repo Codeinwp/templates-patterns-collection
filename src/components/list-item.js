@@ -2,7 +2,8 @@
  * External dependencies
  */
 import {
-	cloudUpload,
+
+	// cloudUpload,
 	edit,
 	group,
 	page,
@@ -19,6 +20,8 @@ const {
 	Icon
 } = wp.components;
 
+const { useDispatch } = wp.data;
+
 const { useState } = wp.element;
 
 /**
@@ -31,15 +34,20 @@ import {
 } from './../data/templates-cloud/index.js';
 
 const ListItem = ({
-	template,
+	item,
 	importBlocks
 }) => {
+	const {
+		togglePreview,
+		setPreviewData
+	} = useDispatch( 'tpc/block-editor' );
+
 	const [ isLoading, setLoading ] = useState( false );
 
 	const importItem = async() => {
 		setLoading( ! isLoading );
 		try {
-			const data = await importTemplate( template.template_id );
+			const data = await importTemplate( item.template_id );
 
 			if ( data.__file && data.content && 'wp_export' === data.__file ) {
 				importBlocks( data.content );
@@ -56,17 +64,25 @@ const ListItem = ({
 		}
 
 		try {
-			await deleteTemplate( template.template_id );
+			await deleteTemplate( item.template_id );
 		} catch ( error ) {
 			console.log( error );
 		}
+	};
+
+	const importPreview = async() => {
+		togglePreview();
+		setPreviewData({
+			type: 'library',
+			item
+		});
 	};
 
 	return (
 		<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row">
 			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__title">
 				<Icon icon={ page } />
-				{ template.template_name }
+				{ item.template_name }
 			</div>
 
 			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__controls">
@@ -80,7 +96,7 @@ const ListItem = ({
 				<Button
 					label={ __( 'Duplicate' ) }
 					icon={ group }
-					onClick={ () => duplicateTemplate( template.template_id ) }
+					onClick={ () => duplicateTemplate( item.template_id ) }
 				/>
 
 				<Button
@@ -89,18 +105,18 @@ const ListItem = ({
 					onClick={ deleteItem }
 				/>
 
-				<Button
+				{/* <Button
 					label={ __( 'Sync' ) }
 					icon={ cloudUpload }
 					onClick={ () => console.log( 'Upload to cloud.' ) }
-				/>
+				/> */}
 			</div>
 
 			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__actions">
 				<Button
 					isSecondary
 					isLarge
-					onClick={ () => console.log( 'Upload to cloud.' ) }
+					onClick={ importPreview }
 				>
 					{ __( 'Preview' ) }
 				</Button>
@@ -109,6 +125,7 @@ const ListItem = ({
 					isPrimary
 					isLarge
 					isBusy={ isLoading }
+					disabled={ isLoading }
 					onClick={ importItem }
 				>
 					{ __( 'Import' ) }
