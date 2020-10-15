@@ -20,8 +20,8 @@ function ti_tpc_register_block() {
 			'endpoint' => TPC_TEMPLATES_CLOUD_ENDPOINT,
 			'params'   => array(
 				'site_url'   => get_site_url(),
-				'license_id' => apply_filters( 'product_neve_license_key', 'free' )
-			)
+				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+			),
 		)
 	);
 
@@ -36,8 +36,8 @@ function ti_tpc_register_block() {
 		'themeisle-blocks/templates-cloud',
 		array(
 			'editor_script' => 'ti-tpc-block',
-			'editor_style' => 'ti-tpc-block',
-		) 
+			'editor_style'  => 'ti-tpc-block',
+		),
 	);
 }
 
