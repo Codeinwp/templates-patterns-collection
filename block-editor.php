@@ -37,7 +37,7 @@ function ti_tpc_register_block() {
 		array(
 			'editor_script' => 'ti-tpc-block',
 			'editor_style'  => 'ti-tpc-block',
-		),
+		)
 	);
 }
 
