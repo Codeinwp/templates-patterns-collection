@@ -33,7 +33,7 @@ function ti_tpc_register_block() {
 	);
 
 	register_block_type(
-		'themeisle-blocks/templates-cloud',
+		'ti-tpc/templates-cloud',
 		array(
 			'editor_script' => 'ti-tpc-block',
 			'editor_style'  => 'ti-tpc-block',

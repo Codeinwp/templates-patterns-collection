@@ -110,6 +110,8 @@ export const importTemplate = async template => {
 		}
 	});
 
+	let content = {};
+
 	try {
 		const response = await apiFetch({
 			url,
@@ -118,7 +120,7 @@ export const importTemplate = async template => {
 		});
 
 		if ( response.ok ) {
-			const content = await response.json();
+			content = await response.json();
 
 			if ( content.message ) {
 				return createErrorNotice( content.message );
@@ -129,6 +131,8 @@ export const importTemplate = async template => {
 			createErrorNotice( error.message );
 		}
 	}
+
+	return content;
 };
 
 export const duplicateTemplate = async template => {
