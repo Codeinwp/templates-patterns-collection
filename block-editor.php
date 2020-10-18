@@ -9,7 +9,7 @@ function ti_tpc_register_block() {
 	wp_register_script(
 		'ti-tpc-block',
 		plugins_url( 'build/index.js', __FILE__ ),
-		array( 'wp-i18n', 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-compose', 'wp-data', 'wp-element', 'wp-primitives' ),
+		array( 'wp-i18n', 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-compose', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-plugins', 'wp-primitives' ),
 		time()
 	);
 
