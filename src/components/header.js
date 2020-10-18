@@ -30,7 +30,6 @@ const {
  * Internal dependencies
  */
 import icon from './../icon.js';
-
 import { fetchTemplates } from './../data/templates-cloud/index.js';
 
 const TABS = {
@@ -42,7 +41,10 @@ const TABS = {
 const Header = ({
 	closeModal
 }) => {
-	const { updateCurrentTab } = useDispatch( 'tpc/block-editor' );
+	const {
+		setFetching,
+		updateCurrentTab
+	} = useDispatch( 'tpc/block-editor' );
 
 	const isFetching = useSelect( select => select( 'tpc/block-editor' ).isFetching() );
 	const isPreview = useSelect( select => select( 'tpc/block-editor' ).isPreview() );
@@ -50,7 +52,9 @@ const Header = ({
 
 	const syncLibrary = async() => {
 		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-		return fetchTemplates();
+		setFetching( true );
+		await fetchTemplates();
+		setFetching( false );
 	};
 
 	return (

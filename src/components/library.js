@@ -10,22 +10,37 @@ const {
 	Spinner
 } = wp.components;
 
-const { useSelect } = wp.data;
+const {
+	useDispatch,
+	useSelect
+} = wp.data;
 
 /**
  * Internal dependencies
  */
 import { fetchTemplates } from './../data/templates-cloud/index.js';
-
 import ListItem from './list-item.js';
 
 const Library = ({
 	isFetching,
 	importBlocks
 }) => {
+	const { setFetching } = useDispatch( 'tpc/block-editor' );
+
 	const { items, currentPage, totalPages } = useSelect( select => select( 'tpc/block-editor' ).getLibrary() );
 
 	const pages = [];
+
+	const changePage = async index => {
+		setFetching( true );
+		await fetchTemplates(
+			{
+				'per_page': 10,
+				page: index
+			}
+		);
+		setFetching( false );
+	};
 
 	const Pagination = () => {
 		for ( let i = 0; i < totalPages; i++ ) {
@@ -35,12 +50,7 @@ const Library = ({
 				<Button
 					isPrimary={ isCurrent }
 					disabled={ isCurrent }
-					onClick={ () => fetchTemplates(
-						{
-							'per_page': 10,
-							page: i
-						}
-					) }
+					onClick={ changePage }
 				>
 					{ i + 1 }
 				</Button>

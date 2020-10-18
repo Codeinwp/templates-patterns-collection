@@ -12,17 +12,25 @@ const { apiFetch } = wp;
 
 const { dispatch } = wp.data;
 
-const {
-	setFetching,
-	updateLibrary
-} = dispatch( 'tpc/block-editor' );
+const { updateLibrary } = dispatch( 'tpc/block-editor' );
+
+const { createNotice } = dispatch( 'core/notices' );
+
+const createErrorNotice = message => {
+	createNotice(
+		'warning',
+		message,
+		{
+			context: 'themeisle-blocks/notices/templates-cloud',
+			isDismissible: true
+		}
+	);
+};
 
 export const fetchTemplates = async( params = {
 	'per_page': 10,
 	page: 0
 }) => {
-	setFetching( true );
-
 	const url = stringifyUrl({
 		url: tiTpc.endpoint,
 		query: {
@@ -32,27 +40,65 @@ export const fetchTemplates = async( params = {
 		}
 	});
 
-	let response;
-	let templates = [];
-
 	try {
-		response = await apiFetch({
+		const response = await apiFetch({
 			url,
 			method: 'GET',
 			parse: false
 		});
 
 		if ( response.ok ) {
-			templates = await response.json();
+			const templates = await response.json();
+
+			if ( templates.message ) {
+				return createErrorNotice( templates.message );
+			}
+
 			const totalPages = response.headers.get( 'x-wp-totalpages' );
 			const currentPage = params.page;
 			updateLibrary( templates, currentPage, totalPages );
 		}
 	} catch ( error ) {
-		throw new Error( error.message );
+		if ( error.message ) {
+			createErrorNotice( error.message );
+		}
 	}
+};
 
-	setFetching( false );
+export const updateTemplate = async( params ) => {
+	const url = stringifyUrl({
+		url: tiTpc.endpoint + params.template_id,
+		query: {
+			cache: window.localStorage.getItem( 'tpcCacheBuster' ),
+			...window.tiTpc.params,
+			...params
+		}
+	});
+
+	try {
+		const response = await apiFetch({
+			url,
+			method: 'POST',
+			data: params,
+			parse: false
+		});
+
+		if ( response.ok ) {
+			const content = await response.json();
+
+			if ( content.message ) {
+				return createErrorNotice( content.message );
+			}
+		}
+
+		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
+		await fetchTemplates();
+	} catch ( error ) {
+		if ( error.message ) {
+			createErrorNotice( error.message );
+		}
+	}
 };
 
 export const importTemplate = async template => {
@@ -64,20 +110,28 @@ export const importTemplate = async template => {
 		}
 	});
 
-	let content;
-
 	try {
-		content = await apiFetch({ url, method: 'GET' });
-	} catch ( error ) {
-		throw new Error( error.message );
-	}
+		const response = await apiFetch({
+			url,
+			method: 'GET',
+			parse: false
+		});
 
-	return content;
+		if ( response.ok ) {
+			const content = await response.json();
+
+			if ( content.message ) {
+				return createErrorNotice( content.message );
+			}
+		}
+	} catch ( error ) {
+		if ( error.message ) {
+			createErrorNotice( error.message );
+		}
+	}
 };
 
 export const duplicateTemplate = async template => {
-	setFetching( true );
-
 	const url = stringifyUrl({
 		url: tiTpc.endpoint + template + '/clone',
 		query: {
@@ -86,26 +140,33 @@ export const duplicateTemplate = async template => {
 		}
 	});
 
-	let content;
-
 	try {
-		setFetching( true );
-		content = await apiFetch({ url, method: 'POST' });
+		const response = await apiFetch({
+			url,
+			method: 'POST',
+			parse: false
+		});
+
+		if ( response.ok ) {
+			const content = await response.json();
+
+			if ( content.message ) {
+				return createErrorNotice( content.message );
+			}
+		}
+
 		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
 		await fetchTemplates();
 	} catch ( error ) {
-		throw new Error( error.message );
+		if ( error.message ) {
+			createErrorNotice( error.message );
+		}
 	}
-
-	setFetching( false );
-
-	return content;
 };
 
 
 export const deleteTemplate = async template => {
-	setFetching( true );
-
 	const url = stringifyUrl({
 		url: tiTpc.endpoint + template,
 		query: {
@@ -115,18 +176,23 @@ export const deleteTemplate = async template => {
 		}
 	});
 
-	let content;
-
 	try {
-		setFetching( true );
-		content = await apiFetch({ url, method: 'POST' });
+		const response = await apiFetch({ url, method: 'POST' });
+
+		if ( response.ok ) {
+			const content = await response.json();
+
+			if ( content.message ) {
+				return createErrorNotice( content.message );
+			}
+		}
+
 		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
 		await fetchTemplates();
 	} catch ( error ) {
-		throw new Error( error.message );
+		if ( error.message ) {
+			createErrorNotice( error.message );
+		}
 	}
-
-	setFetching( false );
-
-	return content;
 };

@@ -1,8 +1,6 @@
 /**
  * WordPress dependencies
  */
-// const { __ } = wp.i18n;
-
 const { parse } = wp.blocks;
 
 const { Modal } = wp.components;

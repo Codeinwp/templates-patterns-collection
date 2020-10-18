@@ -4,9 +4,9 @@
 const { registerStore } = wp.data;
 
 const DEFAULT_STATE = {
-	isFetching: false,
+	isFetching: true,
 	isPreview: false,
-	tab: 'templates',
+	tab: 'library',
 	templates: [],
 	patterns: [],
 	library: {

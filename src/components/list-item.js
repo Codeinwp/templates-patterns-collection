@@ -4,11 +4,15 @@
 import {
 
 	// cloudUpload,
+	check,
 	edit,
 	group,
 	page,
-	trash
+	trash,
+	update
 } from '@wordpress/icons';
+
+import classnames from 'classnames';
 
 /**
  * WordPress dependencies
@@ -17,7 +21,8 @@ const { __ } = wp.i18n;
 
 const {
 	Button,
-	Icon
+	Icon,
+	TextControl
 } = wp.components;
 
 const { useDispatch } = wp.data;
@@ -28,6 +33,7 @@ const { useState } = wp.element;
  * Internal dependencies
  */
 import {
+	updateTemplate,
 	deleteTemplate,
 	duplicateTemplate,
 	importTemplate
@@ -43,19 +49,33 @@ const ListItem = ({
 	} = useDispatch( 'tpc/block-editor' );
 
 	const [ isLoading, setLoading ] = useState( false );
+	const [ isEditing, setEditing ] = useState( false );
+	const [ itemName, setItemName ] = useState( item.template_name );
 
 	const importItem = async() => {
-		setLoading( ! isLoading );
-		try {
-			const data = await importTemplate( item.template_id );
+		setLoading( 'importing' );
+		const data = await importTemplate( item.template_id );
 
-			if ( data.__file && data.content && 'wp_export' === data.__file ) {
-				importBlocks( data.content );
-			}
-		} catch ( error ) {
-			console.log( error );
+		if ( data.__file && data.content && 'wp_export' === data.__file ) {
+			importBlocks( data.content );
 		}
-		setLoading( ! isLoading );
+		setLoading( false );
+	};
+
+	const updateItem = async() => {
+		setLoading( 'updating' );
+		await updateTemplate({
+			'template_id': item.template_id,
+			'template_name': itemName || item.template_name
+		});
+		setLoading( false );
+		setEditing( ! isEditing );
+	};
+
+	const duplicateItem = async() => {
+		setLoading( 'duplicating' );
+		await duplicateTemplate( item.template_id );
+		setLoading( false );
 	};
 
 	const deleteItem = async() => {
@@ -63,11 +83,9 @@ const ListItem = ({
 			return false;
 		}
 
-		try {
-			await deleteTemplate( item.template_id );
-		} catch ( error ) {
-			console.log( error );
-		}
+		setLoading( 'deleting' );
+		await deleteTemplate( item.template_id );
+		setLoading( false );
 	};
 
 	const importPreview = async() => {
@@ -79,29 +97,56 @@ const ListItem = ({
 	};
 
 	return (
-		<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row">
+		<div
+			key={ item.template_id }
+			className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row"
+		>
 			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__title">
 				<Icon icon={ page } />
-				{ item.template_name }
+				{ isEditing ? (
+					<TextControl
+						label={ __( 'Template Name' ) }
+						hideLabelFromVision
+						value={ itemName }
+						onChange={ setItemName }
+					/>
+				) : item.template_name  }
 			</div>
 
 			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__controls">
 				<Button
-					label={ __( 'Edit' ) }
-					icon={ edit }
-					isDisabled
-					onClick={ () => console.log( 'Edit action.' ) }
+					label={ isEditing ? __( 'Update' ) : __( 'Edit' ) }
+					icon={ isEditing ? ( 'updating' === isLoading ? update : check ) : edit }
+					disabled={ false !== isLoading }
+					className={ classnames(
+						{
+							'is-loading': 'updating' === isLoading
+						}
+					) }
+					onClick={ isEditing ? updateItem : () => setEditing( ! isEditing ) }
 				/>
 
 				<Button
 					label={ __( 'Duplicate' ) }
-					icon={ group }
-					onClick={ () => duplicateTemplate( item.template_id ) }
+					icon={ 'duplicating' === isLoading ? update : group }
+					disabled={ false !== isLoading }
+					className={ classnames(
+						{
+							'is-loading': 'duplicating' === isLoading
+						}
+					) }
+					onClick={ duplicateItem }
 				/>
 
 				<Button
 					label={ __( 'Delete' ) }
-					icon={ trash }
+					icon={ 'deleting' === isLoading ? update : trash }
+					disabled={ false !== isLoading }
+					className={ classnames(
+						{
+							'is-loading': 'deleting' === isLoading
+						}
+					) }
 					onClick={ deleteItem }
 				/>
 
@@ -116,6 +161,7 @@ const ListItem = ({
 				<Button
 					isSecondary
 					isLarge
+					disabled={ false !== isLoading }
 					onClick={ importPreview }
 				>
 					{ __( 'Preview' ) }
@@ -124,8 +170,8 @@ const ListItem = ({
 				<Button
 					isPrimary
 					isLarge
-					isBusy={ isLoading }
-					disabled={ isLoading }
+					isBusy={ 'importing' === isLoading }
+					disabled={ false !== isLoading }
 					onClick={ importItem }
 				>
 					{ __( 'Import' ) }

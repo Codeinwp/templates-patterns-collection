@@ -58,21 +58,23 @@ const Preview = ({
 	const { item } = useSelect( select => select( 'tpc/block-editor' ).getPreview() );
 
 	useEffect( () => {
-		importContent();
+		init();
 	}, []);
 
 	const [ content, setContent ] = useState( '' );
 
+	const init = async() => {
+		setFetching( true );
+		await importContent();
+		setFetching( false );
+	};
+
 	const importContent = async() => {
 		setFetching( true );
-		try {
-			const data = await importTemplate( item.template_id );
+		const data = await importTemplate( item.template_id );
 
-			if ( data.__file && data.content && 'wp_export' === data.__file ) {
-				setContent( data.content );
-			}
-		} catch ( error ) {
-			console.log( error );
+		if ( data.__file && data.content && 'wp_export' === data.__file ) {
+			setContent( data.content );
 		}
 		setFetching( false );
 	};
