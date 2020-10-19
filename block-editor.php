@@ -48,12 +48,12 @@ function ti_tpc_register_post_meta() {
 		'post',
 		'_template_sync',
 		array(
-			'show_in_rest' => true,
-			'single'       => true,
-			'type'         => 'boolean',
+			'show_in_rest'  => true,
+			'single'        => true,
+			'type'          => 'boolean',
 			'auth_callback' => function() {
 				return current_user_can( 'edit_posts' );
-			}
+			},
 		)
 	);
 
@@ -61,14 +61,14 @@ function ti_tpc_register_post_meta() {
 		'post',
 		'_template_id',
 		array(
-			'show_in_rest' => true,
-			'single'       => true,
-			'type'         => 'string',
+			'show_in_rest'  => true,
+			'single'        => true,
+			'type'          => 'string',
 			'auth_callback' => function() {
 				return current_user_can( 'edit_posts' );
-			}
+			},
 		)
 	);
 }
 
-add_action( 'init','ti_tpc_register_post_meta' );
+add_action( 'init', 'ti_tpc_register_post_meta' );
