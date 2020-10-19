@@ -34,5 +34,6 @@ registerBlockType( 'ti-tpc/templates-cloud', {
 });
 
 registerPlugin( 'ti-tpc', {
-	render: Exporter
+	render: Exporter,
+	icon
 });

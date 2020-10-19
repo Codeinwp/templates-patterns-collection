@@ -66,14 +66,14 @@ const Library = ({
 
 	if ( ! Boolean( items.length ) ) {
 		return (
-			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table">
+			<div className="wp-block-ti-tpc-templates-cloud__modal-content__table">
 				{ __( 'No templates available. Add a new one?' ) }
 			</div>
 		);
 	}
 
 	return (
-		<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table">
+		<div className="wp-block-ti-tpc-templates-cloud__modal-content__table">
 			{ items.map( item => (
 				<ListItem
 					item={ item }
@@ -82,7 +82,7 @@ const Library = ({
 			) ) }
 
 			{ 1 < totalPages && (
-				<ButtonGroup className="wp-block-themeisle-blocks-templates-cloud__modal-content__pagination">
+				<ButtonGroup className="wp-block-ti-tpc-templates-cloud__modal-content__pagination">
 					<Pagination/>
 				</ButtonGroup>
 			) }

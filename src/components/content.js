@@ -47,7 +47,7 @@ const Content = ({
 	}
 
 	return (
-		<div className="wp-block-themeisle-blocks-templates-cloud__modal-content">
+		<div className="wp-block-ti-tpc-templates-cloud__modal-content">
 			<Notices/>
 
 			{ ( 'library' === currentTab ) ? (

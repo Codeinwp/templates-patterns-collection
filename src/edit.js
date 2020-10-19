@@ -31,7 +31,7 @@ const Edit = ({
 			shouldCloseOnEsc={ false }
 			shouldCloseOnClickOutside={ false }
 			isDismissible={ false }
-			overlayClassName="wp-block-themeisle-blocks-templates-cloud__modal"
+			overlayClassName="wp-block-ti-tpc-templates-cloud__modal"
 		>
 			<Header
 				closeModal={ closeModal }

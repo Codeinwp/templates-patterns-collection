@@ -58,19 +58,19 @@ const Header = ({
 	};
 
 	return (
-		<div className="wp-block-themeisle-blocks-templates-cloud__modal-header">
-			<div className="wp-block-themeisle-blocks-templates-cloud__modal-header__left">
+		<div className="wp-block-ti-tpc-templates-cloud__modal-header">
+			<div className="wp-block-ti-tpc-templates-cloud__modal-header__left">
 				<Icon
 					icon={ icon }
 				/>
 			</div>
 
-			<div className="wp-block-themeisle-blocks-templates-cloud__modal-header__center">
+			<div className="wp-block-ti-tpc-templates-cloud__modal-header__center">
 				{ Object.keys( TABS ).map( i => (
 					<Button
 						onClick={ () => updateCurrentTab( i ) }
 						className={ classnames(
-							'wp-block-themeisle-blocks-templates-cloud__modal-header__tabs',
+							'wp-block-ti-tpc-templates-cloud__modal-header__tabs',
 							{
 								'is-active': i === currentTab
 							}
@@ -82,7 +82,7 @@ const Header = ({
 				) ) }
 			</div>
 
-			<div className="wp-block-themeisle-blocks-templates-cloud__modal-header__right">
+			<div className="wp-block-ti-tpc-templates-cloud__modal-header__right">
 				{ ( 'library' === currentTab && ! isPreview ) && (
 					<ButtonGroup>
 						<Button

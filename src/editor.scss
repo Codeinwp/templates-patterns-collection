@@ -1,4 +1,4 @@
-.wp-block-themeisle-blocks-templates-cloud__modal {
+.wp-block-ti-tpc-templates-cloud__modal {
 	.components-modal__frame {
 		width: 100%;
 
@@ -9,28 +9,28 @@
 				display: none;
 			}
 
-			.wp-block-themeisle-blocks-templates-cloud__modal-header {
+			.wp-block-ti-tpc-templates-cloud__modal-header {
 				display: flex;
 				border-bottom: 1px solid #E0E0E0;
 
-				.wp-block-themeisle-blocks-templates-cloud__modal-header__left {
+				.wp-block-ti-tpc-templates-cloud__modal-header__left {
 					display: flex;
 					flex-basis: 20%;
 					justify-content: flex-start;
 
-					.wp-block-themeisle-blocks-templates-cloud__icon {
+					.wp-block-ti-tpc-templates-cloud__icon {
 						width: 60px;
 						height: 60px;
 						padding: 10px;
 					}
 				}
 
-				.wp-block-themeisle-blocks-templates-cloud__modal-header__center {
+				.wp-block-ti-tpc-templates-cloud__modal-header__center {
 					display: flex;
 					flex-basis: 60%;
 					justify-content: center;
 
-					.wp-block-themeisle-blocks-templates-cloud__modal-header__tabs {
+					.wp-block-ti-tpc-templates-cloud__modal-header__tabs {
 						height: 60px;
 						font-size: 14px;
 						color: #616161;
@@ -45,7 +45,7 @@
 					}
 				}
 
-				.wp-block-themeisle-blocks-templates-cloud__modal-header__right {
+				.wp-block-ti-tpc-templates-cloud__modal-header__right {
 					display: flex;
 					flex-basis: 20%;
 					justify-content: flex-end;
@@ -110,19 +110,19 @@
 				}
 			}
 
-			.wp-block-themeisle-blocks-templates-cloud__modal-content {
+			.wp-block-ti-tpc-templates-cloud__modal-content {
 				background: #F1F1F1;
 				padding: 20px 40px;
 
-				.wp-block-themeisle-blocks-templates-cloud__modal-content__notices {
+				.wp-block-ti-tpc-templates-cloud__modal-content__notices {
 					.components-notice {
 						margin: 0 0 20px 0;
 						padding: 10px;
 					}
 				}
 
-				.wp-block-themeisle-blocks-templates-cloud__modal-content__table {
-					.wp-block-themeisle-blocks-templates-cloud__modal-content__table_row {
+				.wp-block-ti-tpc-templates-cloud__modal-content__table {
+					.wp-block-ti-tpc-templates-cloud__modal-content__table_row {
 						display: flex;
 						height: 60px;
 						width: 100%;
@@ -143,7 +143,7 @@
 							fill: #B9B9B9;
 						}
 
-						.wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__title {
+						.wp-block-ti-tpc-templates-cloud__modal-content__table_row__title {
 							display: flex;
 							align-items: center;
 							flex-basis: 35%;
@@ -153,14 +153,14 @@
 							}
 						}
 
-						.wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__controls {
+						.wp-block-ti-tpc-templates-cloud__modal-content__table_row__controls {
 							display: flex;
 							justify-content: space-evenly;
 							align-items: center;
 							flex-basis: 30%;
 						}
 
-						.wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__actions {
+						.wp-block-ti-tpc-templates-cloud__modal-content__table_row__actions {
 							display: flex;
 							justify-content: flex-end;
 							flex-basis: 35%;
@@ -176,7 +176,7 @@
 					}
 				}
 
-				.wp-block-themeisle-blocks-templates-cloud__modal-content__pagination {
+				.wp-block-ti-tpc-templates-cloud__modal-content__pagination {
 					padding-top: 20px;
 
 					.components-button {
@@ -198,12 +198,12 @@
 					}
 				}
 
-				.wp-block-themeisle-blocks-templates-cloud__modal-content__preview-header {
+				.wp-block-ti-tpc-templates-cloud__modal-content__preview-header {
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
 
-					.wp-block-themeisle-blocks-templates-cloud__modal-content__preview-header__right {
+					.wp-block-ti-tpc-templates-cloud__modal-content__preview-header__right {
 						.components-button {
 							&:last-child {
 								margin-left: 10px;
@@ -212,7 +212,7 @@
 					}
 				}
 
-				.wp-block-themeisle-blocks-templates-cloud__modal-content__preview-content {
+				.wp-block-ti-tpc-templates-cloud__modal-content__preview-content {
 					margin: 20px 0;
 
 					.block-editor-block-preview__container {
@@ -246,8 +246,14 @@
 	}
 }
 
+.ti-tpc-components-panel {
+	.components-button {
+		margin: 20px 0;
+	}
+}
+
 @media ( max-width:1439px ) {
-	.wp-block-themeisle-blocks-templates-cloud__modal {
+	.wp-block-ti-tpc-templates-cloud__modal {
 		.components-modal__frame {
 			max-width: 990px;
 		}
@@ -255,7 +261,7 @@
 }
 
 @media ( min-width:1440px ) {
-	.wp-block-themeisle-blocks-templates-cloud__modal {
+	.wp-block-ti-tpc-templates-cloud__modal {
 		.components-modal__frame {
 			max-width: 1200px;
 		}

@@ -42,3 +42,33 @@ function ti_tpc_register_block() {
 }
 
 add_action( 'init', 'ti_tpc_register_block' );
+
+function ti_tpc_register_post_meta() {
+	register_post_meta(
+		'post',
+		'_template_sync',
+		array(
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'boolean',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			}
+		)
+	);
+
+	register_post_meta(
+		'post',
+		'_template_id',
+		array(
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'string',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			}
+		)
+	);
+}
+
+add_action( 'init','ti_tpc_register_post_meta' );

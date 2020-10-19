@@ -85,13 +85,13 @@ const Preview = ({
 	};
 
 	return (
-		<div className="wp-block-themeisle-blocks-templates-cloud__modal-content">
-			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__preview-header">
-				<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__preview-header__left">
+		<div className="wp-block-ti-tpc-templates-cloud__modal-content">
+			<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-header">
+				<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-header__left">
 					{ item.template_name || __( 'Template' ) }
 				</div>
 
-				<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__preview-header__right">
+				<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-header__right">
 					<Button
 						isSecondary
 						isLarge
@@ -115,7 +115,7 @@ const Preview = ({
 			{ isFetching ? (
 				<Placeholder><Spinner/></Placeholder>
 			) : (
-				<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__preview-content">
+				<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-content">
 					<BlockPreview
 						blocks={ parse( content ) }
 						viewportWidth={ viewportWidth }

@@ -99,9 +99,9 @@ const ListItem = ({
 	return (
 		<div
 			key={ item.template_id }
-			className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row"
+			className="wp-block-ti-tpc-templates-cloud__modal-content__table_row"
 		>
-			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__title">
+			<div className="wp-block-ti-tpc-templates-cloud__modal-content__table_row__title">
 				<Icon icon={ page } />
 				{ isEditing ? (
 					<TextControl
@@ -113,7 +113,7 @@ const ListItem = ({
 				) : item.template_name  }
 			</div>
 
-			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__controls">
+			<div className="wp-block-ti-tpc-templates-cloud__modal-content__table_row__controls">
 				<Button
 					label={ isEditing ? __( 'Update' ) : __( 'Edit' ) }
 					icon={ isEditing ? ( 'updating' === isLoading ? update : check ) : edit }
@@ -157,7 +157,7 @@ const ListItem = ({
 				/> */}
 			</div>
 
-			<div className="wp-block-themeisle-blocks-templates-cloud__modal-content__table_row__actions">
+			<div className="wp-block-ti-tpc-templates-cloud__modal-content__table_row__actions">
 				<Button
 					isSecondary
 					isLarge
