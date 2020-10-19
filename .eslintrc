@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "env": {
         "browser": true,
         "es6": true
@@ -44,3 +45,8 @@
         "react/jsx-uses-vars": "error"
     }
 }
+=======
+	"extends": [ "plugin:@wordpress/eslint-plugin/recommended" ],
+	"ignorePatterns": ["**/vendor/**"]
+}
+>>>>>>> development

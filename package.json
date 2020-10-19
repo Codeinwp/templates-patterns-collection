@@ -1,6 +1,6 @@
 {
   "name": "templates-patterns-collection",
-  "version": "1.0.3",
+  "version": "1.0.10",
   "description": "ThemeIsle Templates and Patterns Collection",
   "repository": {
     "type": "git",
@@ -19,48 +19,37 @@
   "scripts": {
     "phpcs": "phpcs --standard=phpcs.xml",
     "build:makepot": "rm -rf dist/ && docker run --rm --user root --volume \"$(pwd):/var/www/html/templates-patterns-collection\" wordpress:cli wp i18n make-pot ./templates-patterns-collection/ ./templates-patterns-collection/languages/templates-patterns-collection.pot --allow-root",
-    "build:editor": "cross-env BABEL_ENV=default NODE_ENV=production webpack",
-    "dev": "cross-env BABEL_ENV=default NODE_ENV=development webpack --watch",
+    "build:js": "wp-scripts build assets/src/app.js --output-path=assets/build",
+    "rtlcss": "rtlcss assets/build/style-app.css assets/build/style-app-rtl.css",
+    "build": "npm-run-all -s build:* rtlcss",
+    "watch:js": "wp-scripts start assets/src/app.js --output-path=assets/build",
+    "dev": "npm-run-all watch:*",
     "release": "npx semantic-release",
     "dist": "bash ./bin/dist.sh",
-    "readme": "grunt wp_readme_to_markdown:main"
+    "readme": "grunt wp_readme_to_markdown:main",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run --record --key df2abc71-7260-409f-b6fb-088ce88117e3"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/plugin-transform-async-to-generator": "^7.10.4",
-    "@babel/plugin-transform-react-jsx": "^7.10.4",
-    "@babel/preset-env": "^7.11.5",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/exec": "^5.0.0",
     "@semantic-release/git": "^9.0.0",
-    "autoprefixer": "^9.8.6",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.1.0",
+    "@wordpress/eslint-plugin": "^7.2.1",
+    "@wordpress/scripts": "^12.2.1",
     "conventional-changelog-simple-preset": "^1.0.14",
-    "cross-env": "^7.0.2",
-    "css-loader": "^4.3.0",
-    "eslint": "^7.11.0",
-    "eslint-config-wordpress": "^2.0.0",
-    "eslint-loader": "^4.0.2",
-    "eslint-plugin-react": "^7.21.4",
+    "cypress": "^5.3.0",
     "grunt": "^1.2.1",
     "grunt-version": "^2.0.0",
     "grunt-wp-readme-to-markdown": "^2.0.1",
-    "mini-css-extract-plugin": "^1.0.0",
-    "node-sass": "^4.14.1",
-    "postcss-loader": "^4.0.1",
+    "npm-run-all": "^4.1.5",
     "replace-in-file": "^6.1.0",
-    "sass-loader": "^10.0.3",
+    "rtlcss": "^2.6.0",
     "semantic-release": "^17.0.8",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "whatwg-fetch": "^3.4.1"
   },
   "dependencies": {
-    "@wordpress/icons": "^2.7.0",
     "classnames": "^2.2.6",
-    "query-string": "^6.13.5",
-    "uuid": "^8.3.1"
+    "fuse.js": "^6.4.1",
+    "react-visibility-sensor": "^5.1.1"
   }
 }

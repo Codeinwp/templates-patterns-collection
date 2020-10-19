@@ -1,0 +1,78 @@
+.sticky-nav {
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	right: 0;
+	top: 0;
+	background: #f1f1f1;
+	padding: 15px 0;
+	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+
+	@media (min-width: 601px) {
+		margin-top: 46px;
+	}
+
+	@media (min-width: 783px) {
+		margin-top: 32px;
+		left: 160px;
+		.auto-fold & {
+			left: 32px;
+		}
+	}
+
+	@media (min-width: 961px) {
+		left: 160px !important;
+		.folded & {
+			left: 32px !important;
+		}
+	}
+}
+
+.sticky-nav-content {
+	display: flex;
+
+	> img {
+		display: none;
+		margin-right: 20px;
+
+		@media (min-width: #{$laptop}) {
+			display: block;
+		}
+	}
+
+	.header-form {
+		margin: 0;
+		flex-grow: 1;
+		max-width: 60%;
+
+		@media (min-width: #{$tablet}) {
+			max-width: 100%;
+		}
+	}
+
+	.ob-dropdown.editor-selector.small {
+		width: auto;
+		margin-left: 15px;
+		display: flex;
+		align-items: center;
+
+		> button > .count {
+			margin-left: 12px;
+		}
+	}
+
+	button, input {
+		border-radius: 6px;
+	}
+
+	input {
+		max-width: 100%;
+		font-weight: 500;
+
+		&::placeholder {
+			color: #b7b7b7;
+		}
+	}
+}
+
+
