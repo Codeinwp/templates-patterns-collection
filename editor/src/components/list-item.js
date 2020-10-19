@@ -2,14 +2,13 @@
  * External dependencies
  */
 import {
-
 	// cloudUpload,
 	check,
 	edit,
 	group,
 	page,
 	trash,
-	update
+	update,
 } from '@wordpress/icons';
 
 import classnames from 'classnames';
@@ -19,11 +18,7 @@ import classnames from 'classnames';
  */
 const { __ } = wp.i18n;
 
-const {
-	Button,
-	Icon,
-	TextControl
-} = wp.components;
+const { Button, Icon, TextControl } = wp.components;
 
 const { useDispatch } = wp.data;
 
@@ -36,23 +31,17 @@ import {
 	updateTemplate,
 	deleteTemplate,
 	duplicateTemplate,
-	importTemplate
+	importTemplate,
 } from './../data/templates-cloud/index.js';
 
-const ListItem = ({
-	item,
-	importBlocks
-}) => {
-	const {
-		togglePreview,
-		setPreviewData
-	} = useDispatch( 'tpc/block-editor' );
+const ListItem = ( { item, importBlocks } ) => {
+	const { togglePreview, setPreviewData } = useDispatch( 'tpc/block-editor' );
 
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isEditing, setEditing ] = useState( false );
 	const [ itemName, setItemName ] = useState( item.template_name );
 
-	const importItem = async() => {
+	const importItem = async () => {
 		setLoading( 'importing' );
 		const data = await importTemplate( item.template_id );
 
@@ -62,24 +51,28 @@ const ListItem = ({
 		setLoading( false );
 	};
 
-	const updateItem = async() => {
+	const updateItem = async () => {
 		setLoading( 'updating' );
-		await updateTemplate({
-			'template_id': item.template_id,
-			'template_name': itemName || item.template_name
-		});
+		await updateTemplate( {
+			template_id: item.template_id,
+			template_name: itemName || item.template_name,
+		} );
 		setLoading( false );
 		setEditing( ! isEditing );
 	};
 
-	const duplicateItem = async() => {
+	const duplicateItem = async () => {
 		setLoading( 'duplicating' );
 		await duplicateTemplate( item.template_id );
 		setLoading( false );
 	};
 
-	const deleteItem = async() => {
-		if ( ! confirm( __( 'Are you sure you want to delete this template?' ) ) ) {
+	const deleteItem = async () => {
+		if (
+			! window.confirm(
+				__( 'Are you sure you want to delete this template?' )
+			)
+		) {
 			return false;
 		}
 
@@ -88,12 +81,12 @@ const ListItem = ({
 		setLoading( false );
 	};
 
-	const importPreview = async() => {
+	const importPreview = async () => {
 		togglePreview();
-		setPreviewData({
+		setPreviewData( {
 			type: 'library',
-			item
-		});
+			item,
+		} );
 	};
 
 	return (
@@ -110,31 +103,37 @@ const ListItem = ({
 						value={ itemName }
 						onChange={ setItemName }
 					/>
-				) : item.template_name  }
+				) : (
+					item.template_name
+				) }
 			</div>
 
 			<div className="wp-block-ti-tpc-templates-cloud__modal-content__table_row__controls">
 				<Button
 					label={ isEditing ? __( 'Update' ) : __( 'Edit' ) }
-					icon={ isEditing ? ( 'updating' === isLoading ? update : check ) : edit }
+					icon={
+						isEditing
+							? 'updating' === isLoading
+								? update
+								: check
+							: edit
+					}
 					disabled={ false !== isLoading }
-					className={ classnames(
-						{
-							'is-loading': 'updating' === isLoading
-						}
-					) }
-					onClick={ isEditing ? updateItem : () => setEditing( ! isEditing ) }
+					className={ classnames( {
+						'is-loading': 'updating' === isLoading,
+					} ) }
+					onClick={
+						isEditing ? updateItem : () => setEditing( ! isEditing )
+					}
 				/>
 
 				<Button
 					label={ __( 'Duplicate' ) }
 					icon={ 'duplicating' === isLoading ? update : group }
 					disabled={ false !== isLoading }
-					className={ classnames(
-						{
-							'is-loading': 'duplicating' === isLoading
-						}
-					) }
+					className={ classnames( {
+						'is-loading': 'duplicating' === isLoading,
+					} ) }
 					onClick={ duplicateItem }
 				/>
 
@@ -142,19 +141,17 @@ const ListItem = ({
 					label={ __( 'Delete' ) }
 					icon={ 'deleting' === isLoading ? update : trash }
 					disabled={ false !== isLoading }
-					className={ classnames(
-						{
-							'is-loading': 'deleting' === isLoading
-						}
-					) }
+					className={ classnames( {
+						'is-loading': 'deleting' === isLoading,
+					} ) }
 					onClick={ deleteItem }
 				/>
 
-				{/* <Button
+				{ /* <Button
 					label={ __( 'Sync' ) }
 					icon={ cloudUpload }
 					onClick={ () => console.log( 'Upload to cloud.' ) }
-				/> */}
+				/> */ }
 			</div>
 
 			<div className="wp-block-ti-tpc-templates-cloud__modal-content__table_row__actions">

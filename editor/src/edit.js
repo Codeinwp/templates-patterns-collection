@@ -13,17 +13,13 @@ const { useDispatch } = wp.data;
 import Header from './components/header.js';
 import Content from './components/content.js';
 
-const Edit = ({
-	clientId
-}) => {
-	const {
-		removeBlock,
-		replaceBlocks
-	} = useDispatch( 'core/block-editor' );
+const Edit = ( { clientId } ) => {
+	const { removeBlock, replaceBlocks } = useDispatch( 'core/block-editor' );
 
 	const closeModal = () => removeBlock( clientId );
 
-	const importBlocks = content => replaceBlocks( clientId, parse( content ) );
+	const importBlocks = ( content ) =>
+		replaceBlocks( clientId, parse( content ) );
 
 	return (
 		<Modal
@@ -33,13 +29,9 @@ const Edit = ({
 			isDismissible={ false }
 			overlayClassName="wp-block-ti-tpc-templates-cloud__modal"
 		>
-			<Header
-				closeModal={ closeModal }
-			/>
+			<Header closeModal={ closeModal } />
 
-			<Content
-				importBlocks={ importBlocks }
-			/>
+			<Content importBlocks={ importBlocks } />
 		</Modal>
 	);
 };

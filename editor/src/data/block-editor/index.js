@@ -12,12 +12,12 @@ const DEFAULT_STATE = {
 	library: {
 		items: [],
 		currentPage: 0,
-		totalPages: 0
+		totalPages: 0,
 	},
 	preview: {
 		type: 'templates',
-		item: {}
-	}
+		item: {},
+	},
 };
 
 registerStore( 'tpc/block-editor', {
@@ -25,14 +25,14 @@ registerStore( 'tpc/block-editor', {
 		if ( 'SET_FETCHING' === action.type ) {
 			return {
 				...state,
-				isFetching: action.isFetching
+				isFetching: action.isFetching,
 			};
 		}
 
 		if ( 'TOGGLE_PREVIEW' === action.type ) {
 			return {
 				...state,
-				isPreview: ! state.isPreview
+				isPreview: ! state.isPreview,
 			};
 		}
 
@@ -43,21 +43,21 @@ registerStore( 'tpc/block-editor', {
 
 			return {
 				...state,
-				tab: action.tab
+				tab: action.tab,
 			};
 		}
 
 		if ( 'UPDATE_TEMPLATES' === action.type ) {
 			return {
 				...state,
-				templates: action.items
+				templates: action.items,
 			};
 		}
 
 		if ( 'UPDATE_PATTERNS' === action.type ) {
 			return {
 				...state,
-				patterns: action.items
+				patterns: action.items,
 			};
 		}
 
@@ -67,15 +67,15 @@ registerStore( 'tpc/block-editor', {
 				library: {
 					items: action.items,
 					currentPage: Number( action.currentPage ),
-					totalPages: Number( action.totalPages )
-				}
+					totalPages: Number( action.totalPages ),
+				},
 			};
 		}
 
 		if ( 'SET_PREVIEW_DATA' === action.type ) {
 			return {
 				...state,
-				preview: action.preview
+				preview: action.preview,
 			};
 		}
 
@@ -109,42 +109,42 @@ registerStore( 'tpc/block-editor', {
 
 		getPreview( state ) {
 			return state.preview;
-		}
+		},
 	},
 
 	actions: {
 		setFetching( isFetching ) {
 			return {
 				type: 'SET_FETCHING',
-				isFetching
+				isFetching,
 			};
 		},
 
 		togglePreview( isPreview ) {
 			return {
 				type: 'TOGGLE_PREVIEW',
-				isPreview
+				isPreview,
 			};
 		},
 
 		updateCurrentTab( tab ) {
 			return {
 				type: 'UPDATE_CURRENT_TAB',
-				tab
+				tab,
 			};
 		},
 
 		updateTemplates( items ) {
 			return {
 				type: 'UPDATE_TEMPLATES',
-				items
+				items,
 			};
 		},
 
 		updatePatterns( items ) {
 			return {
 				type: 'UPDATE_PATTERNS',
-				items
+				items,
 			};
 		},
 
@@ -153,15 +153,15 @@ registerStore( 'tpc/block-editor', {
 				type: 'UPDATE_LIBRARY',
 				items,
 				currentPage,
-				totalPages
+				totalPages,
 			};
 		},
 
 		setPreviewData( preview ) {
 			return {
 				type: 'SET_PREVIEW_DATA',
-				preview
+				preview,
 			};
-		}
-	}
-});
+		},
+	},
+} );

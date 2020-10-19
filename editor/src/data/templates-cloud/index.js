@@ -16,36 +16,34 @@ const { updateLibrary } = dispatch( 'tpc/block-editor' );
 
 const { createNotice } = dispatch( 'core/notices' );
 
-const createErrorNotice = message => {
-	createNotice(
-		'warning',
-		message,
-		{
-			context: 'themeisle-blocks/notices/templates-cloud',
-			isDismissible: true
-		}
-	);
+const createErrorNotice = ( message ) => {
+	createNotice( 'warning', message, {
+		context: 'themeisle-blocks/notices/templates-cloud',
+		isDismissible: true,
+	} );
 };
 
-export const fetchTemplates = async( params = {
-	'per_page': 10,
-	page: 0
-}) => {
-	const url = stringifyUrl({
-		url: tiTpc.endpoint,
+export const fetchTemplates = async (
+	params = {
+		per_page: 10,
+		page: 0,
+	}
+) => {
+	const url = stringifyUrl( {
+		url: window.tiTpc.endpoint,
 		query: {
 			cache: window.localStorage.getItem( 'tpcCacheBuster' ),
 			...window.tiTpc.params,
-			...params
-		}
-	});
+			...params,
+		},
+	} );
 
 	try {
-		const response = await apiFetch({
+		const response = await apiFetch( {
 			url,
 			method: 'GET',
-			parse: false
-		});
+			parse: false,
+		} );
 
 		if ( response.ok ) {
 			const templates = await response.json();
@@ -65,23 +63,23 @@ export const fetchTemplates = async( params = {
 	}
 };
 
-export const updateTemplate = async( params ) => {
-	const url = stringifyUrl({
-		url: tiTpc.endpoint + params.template_id,
+export const updateTemplate = async ( params ) => {
+	const url = stringifyUrl( {
+		url: window.tiTpc.endpoint + params.template_id,
 		query: {
 			cache: window.localStorage.getItem( 'tpcCacheBuster' ),
 			...window.tiTpc.params,
-			...params
-		}
-	});
+			...params,
+		},
+	} );
 
 	try {
-		const response = await apiFetch({
+		const response = await apiFetch( {
 			url,
 			method: 'POST',
 			data: params,
-			parse: false
-		});
+			parse: false,
+		} );
 
 		if ( response.ok ) {
 			const content = await response.json();
@@ -101,23 +99,23 @@ export const updateTemplate = async( params ) => {
 	}
 };
 
-export const importTemplate = async template => {
-	const url = stringifyUrl({
-		url: tiTpc.endpoint + template + '/import',
+export const importTemplate = async ( template ) => {
+	const url = stringifyUrl( {
+		url: window.tiTpc.endpoint + template + '/import',
 		query: {
 			cache: window.localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params
-		}
-	});
+			...window.tiTpc.params,
+		},
+	} );
 
 	let content = {};
 
 	try {
-		const response = await apiFetch({
+		const response = await apiFetch( {
 			url,
 			method: 'GET',
-			parse: false
-		});
+			parse: false,
+		} );
 
 		if ( response.ok ) {
 			content = await response.json();
@@ -135,21 +133,21 @@ export const importTemplate = async template => {
 	return content;
 };
 
-export const duplicateTemplate = async template => {
-	const url = stringifyUrl({
-		url: tiTpc.endpoint + template + '/clone',
+export const duplicateTemplate = async ( template ) => {
+	const url = stringifyUrl( {
+		url: window.tiTpc.endpoint + template + '/clone',
 		query: {
 			cache: window.localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params
-		}
-	});
+			...window.tiTpc.params,
+		},
+	} );
 
 	try {
-		const response = await apiFetch({
+		const response = await apiFetch( {
 			url,
 			method: 'POST',
-			parse: false
-		});
+			parse: false,
+		} );
 
 		if ( response.ok ) {
 			const content = await response.json();
@@ -169,19 +167,18 @@ export const duplicateTemplate = async template => {
 	}
 };
 
-
-export const deleteTemplate = async template => {
-	const url = stringifyUrl({
-		url: tiTpc.endpoint + template,
+export const deleteTemplate = async ( template ) => {
+	const url = stringifyUrl( {
+		url: window.tiTpc.endpoint + template,
 		query: {
 			cache: window.localStorage.getItem( 'tpcCacheBuster' ),
 			_method: 'DELETE',
-			...window.tiTpc.params
-		}
-	});
+			...window.tiTpc.params,
+		},
+	} );
 
 	try {
-		const response = await apiFetch({ url, method: 'POST' });
+		const response = await apiFetch( { url, method: 'POST' } );
 
 		if ( response.ok ) {
 			const content = await response.json();

@@ -20,9 +20,11 @@
     "phpcs": "phpcs --standard=phpcs.xml",
     "build:makepot": "rm -rf dist/ && docker run --rm --user root --volume \"$(pwd):/var/www/html/templates-patterns-collection\" wordpress:cli wp i18n make-pot ./templates-patterns-collection/ ./templates-patterns-collection/languages/templates-patterns-collection.pot --allow-root",
     "build:js": "wp-scripts build assets/src/app.js --output-path=assets/build",
+    "build:editor": "wp-scripts build editor/src/index.js --output-path=editor/build",
     "rtlcss": "rtlcss assets/build/style-app.css assets/build/style-app-rtl.css",
     "build": "npm-run-all -s build:* rtlcss",
     "watch:js": "wp-scripts start assets/src/app.js --output-path=assets/build",
+    "watch:editor": "wp-scripts start editor/src/index.js --output-path=editor/build",
     "dev": "npm-run-all watch:*",
     "release": "npx semantic-release",
     "dist": "bash ./bin/dist.sh",
@@ -48,8 +50,11 @@
     "whatwg-fetch": "^3.4.1"
   },
   "dependencies": {
+    "@wordpress/icons": "^2.7.0",
     "classnames": "^2.2.6",
     "fuse.js": "^6.4.1",
-    "react-visibility-sensor": "^5.1.1"
+    "query-string": "^6.13.6",
+    "react-visibility-sensor": "^5.1.1",
+    "uuid": "^8.3.1"
   }
 }

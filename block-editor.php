@@ -8,7 +8,7 @@ define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-clo
 function ti_tpc_register_block() {
 	wp_register_script(
 		'ti-tpc-block',
-		plugins_url( 'build/index.js', __FILE__ ),
+		plugins_url( 'editor/build/index.js', __FILE__ ),
 		array( 'wp-i18n', 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-compose', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-plugins', 'wp-primitives' ),
 		time()
 	);
@@ -27,7 +27,7 @@ function ti_tpc_register_block() {
 
 	wp_register_style(
 		'ti-tpc-block',
-		plugins_url( 'build/editor.css', __FILE__ ),
+		plugins_url( 'editor/build/index.css', __FILE__ ),
 		array(),
 		time()
 	);

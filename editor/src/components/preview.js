@@ -7,33 +7,20 @@ const { parse } = wp.blocks;
 
 const { BlockPreview } = wp.blockEditor;
 
-const {
-	Button,
-	Placeholder,
-	Spinner
-} = wp.components;
+const { Button, Placeholder, Spinner } = wp.components;
 
 const { useViewportMatch } = wp.compose;
 
-const {
-	useDispatch,
-	useSelect
-} = wp.data;
+const { useDispatch, useSelect } = wp.data;
 
-const {
-	useEffect,
-	useState
-} = wp.element;
+const { useEffect, useState } = wp.element;
 
 /**
  * Internal dependencies
  */
 import { importTemplate } from './../data/templates-cloud/index.js';
 
-const Preview = ({
-	isFetching,
-	importBlocks
-}) => {
+const Preview = ( { isFetching, importBlocks } ) => {
 	const isLarger = useViewportMatch( 'large', '>=' );
 	const isLarge = useViewportMatch( 'large', '<=' );
 	const isSmall = useViewportMatch( 'small', '>=' );
@@ -50,26 +37,25 @@ const Preview = ({
 		viewportWidth = 600;
 	}
 
-	const {
-		setFetching,
-		togglePreview
-	} = useDispatch( 'tpc/block-editor' );
+	const { setFetching, togglePreview } = useDispatch( 'tpc/block-editor' );
 
-	const { item } = useSelect( select => select( 'tpc/block-editor' ).getPreview() );
+	const { item } = useSelect( ( select ) =>
+		select( 'tpc/block-editor' ).getPreview()
+	);
 
 	useEffect( () => {
 		init();
-	}, []);
+	}, [] );
 
 	const [ content, setContent ] = useState( '' );
 
-	const init = async() => {
+	const init = async () => {
 		setFetching( true );
 		await importContent();
 		setFetching( false );
 	};
 
-	const importContent = async() => {
+	const importContent = async () => {
 		setFetching( true );
 		const data = await importTemplate( item.template_id );
 
@@ -92,11 +78,7 @@ const Preview = ({
 				</div>
 
 				<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-header__right">
-					<Button
-						isSecondary
-						isLarge
-						onClick={ togglePreview }
-					>
+					<Button isSecondary isLarge onClick={ togglePreview }>
 						{ __( 'Close Preview' ) }
 					</Button>
 
@@ -113,7 +95,9 @@ const Preview = ({
 			</div>
 
 			{ isFetching ? (
-				<Placeholder><Spinner/></Placeholder>
+				<Placeholder>
+					<Spinner />
+				</Placeholder>
 			) : (
 				<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-content">
 					<BlockPreview

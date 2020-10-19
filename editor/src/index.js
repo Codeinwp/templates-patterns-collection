@@ -18,22 +18,20 @@ import edit from './edit.js';
 
 registerBlockType( 'ti-tpc/templates-cloud', {
 	title: __( 'Templates Cloud' ),
-	description: __( 'A cloud based templates library which enables you to create ready-made website in no time.' ),
+	description: __(
+		'A cloud based templates library which enables you to create ready-made website in no time.'
+	),
 	icon,
 	category: 'design',
-	keywords: [
-		'templates cloud',
-		'patterns',
-		'template library'
-	],
+	keywords: [ 'templates cloud', 'patterns', 'template library' ],
 	supports: {
-		html: false
+		html: false,
 	},
 	edit,
-	save: () => null
-});
+	save: () => null,
+} );
 
 registerPlugin( 'ti-tpc', {
 	render: Exporter,
-	icon
-});
+	icon,
+} );

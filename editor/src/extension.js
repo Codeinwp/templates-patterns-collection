@@ -21,25 +21,18 @@ const {
 	Modal,
 	PanelBody,
 	TextControl,
-	ToggleControl
+	ToggleControl,
 } = wp.components;
 
-const {
-	useDispatch,
-	useSelect
-} = wp.data;
+const { useDispatch, useSelect } = wp.data;
 
 const {
 	PluginBlockSettingsMenuItem,
 	PluginSidebar,
-	PluginSidebarMoreMenuItem
+	PluginSidebarMoreMenuItem,
 } = wp.editPost;
 
-const {
-	Fragment,
-	useState,
-	useEffect
-} = wp.element;
+const { Fragment, useState, useEffect } = wp.element;
 
 /**
  * Internal dependencies.
@@ -51,118 +44,121 @@ const Exporter = () => {
 	const [ isLoading, setLoading ] = useState( false );
 	const [ title, setTitle ] = useState( '' );
 
-	const {
-		createErrorNotice,
-		createSuccessNotice
-	} = useDispatch( 'core/notices' );
+	const { createErrorNotice, createSuccessNotice } = useDispatch(
+		'core/notices'
+	);
 
 	const { editPost } = useDispatch( 'core/editor' );
 
 	const content = useSelect( ( select ) => {
-		const { getSelectedBlockCount, getSelectedBlock, getMultiSelectedBlocks } = select( 'core/block-editor' );
-		const blocks = 1 === getSelectedBlockCount() ? getSelectedBlock() : getMultiSelectedBlocks();
+		const {
+			getSelectedBlockCount,
+			getSelectedBlock,
+			getMultiSelectedBlocks,
+		} = select( 'core/block-editor' );
+		const blocks =
+			1 === getSelectedBlockCount()
+				? getSelectedBlock()
+				: getMultiSelectedBlocks();
 
 		return serialize( blocks );
-	}, []);
+	}, [] );
 
 	const editorContent = useSelect( ( select ) => {
 		const { getBlocks } = select( 'core/block-editor' );
 		const blocks = getBlocks();
 
 		return serialize( blocks );
-	}, []);
+	}, [] );
 
 	const {
 		meta,
 		postTitle,
-		meta: {
-			_template_sync,
-			_template_id
-		}
-	} = useSelect( ( select ) => ({
+		meta: { _template_sync, _template_id },
+	} = useSelect( ( select ) => ( {
 		meta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {},
-		postTitle: select( 'core/editor' ).getEditedPostAttribute( 'title' ) || __( 'Template' )
-	}) );
+		postTitle:
+			select( 'core/editor' ).getEditedPostAttribute( 'title' ) ||
+			__( 'Template' ),
+	} ) );
 
-	const isSavingPost = useSelect( ( select, { forceIsSaving }) => {
-		const {
-			isSavingPost,
-			isPublishingPost,
-			isAutosavingPost
-		} = select( 'core/editor' );
+	const isPostSaving = useSelect( ( select, { forceIsSaving } ) => {
+		const { isSavingPost, isPublishingPost, isAutosavingPost } = select(
+			'core/editor'
+		);
 
 		const isSaving = forceIsSaving || isSavingPost();
 		const isAutoSaving = isAutosavingPost();
 		const isPublishing = isPublishingPost();
 
 		return ( isPublishing || isSaving ) && ! isAutoSaving;
-	});
+	} );
 
 	const [ templateSync, setTemplateSync ] = useState( _template_sync );
 	const [ templateID, setTemplateID ] = useState( _template_id );
 
 	useEffect( () => {
-		editPost({
+		editPost( {
 			meta: {
 				...meta,
 				_template_sync: templateSync,
-				_template_id: templateID
-			}
-		});
-	}, [ templateSync, templateID ]);
+				_template_id: templateID,
+			},
+		} );
+	}, [ templateSync, templateID ] );
 
 	useEffect( () => {
-		if ( isSavingPost && templateSync ) {
+		if ( isPostSaving && templateSync ) {
 			onSavePage();
 		}
-	}, [ isSavingPost, templateSync ]);
+	}, [ isPostSaving, templateSync ] );
 
-	const onSave = async() => {
+	const onSave = async () => {
 		setLoading( true );
 
 		const data = {
 			__file: 'wp_export',
 			version: 2,
-			content
+			content,
 		};
 
-		const url = stringifyUrl({
-			url: tiTpc.endpoint,
+		const url = stringifyUrl( {
+			url: window.tiTpc.endpoint,
 			query: {
 				...window.tiTpc.params,
-				'template_name': title,
-				'template_type': 'gutenberg'
-			}
-		});
+				template_name: title,
+				template_type: 'gutenberg',
+			},
+		} );
 
 		try {
-			const response = await apiFetch({
+			const response = await apiFetch( {
 				url,
 				method: 'POST',
 				data,
-				parse: false
-			});
+				parse: false,
+			} );
 
 			if ( response.ok ) {
-				const content = await response.json();
+				const res = await response.json();
 
-				if ( content.message ) {
-					createErrorNotice( content.message, {
-						type: 'snackbar'
-					});
+				if ( res.message ) {
+					createErrorNotice( res.message, {
+						type: 'snackbar',
+					} );
 				} else {
 					window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
 					createSuccessNotice( __( 'Template saved.' ), {
-						type: 'snackbar'
-					});
+						type: 'snackbar',
+					} );
 				}
 			}
 		} catch ( error ) {
 			if ( error.message ) {
 				createErrorNotice( error.message, {
-					type: 'snackbar'
-				});
+					type: 'snackbar',
+				} );
 			}
 		}
 
@@ -171,68 +167,68 @@ const Exporter = () => {
 		setTitle( '' );
 	};
 
-	const onSavePage = async() => {
+	const onSavePage = async () => {
 		setLoading( true );
 
 		const data = {
 			__file: 'wp_export',
 			version: 2,
-			content: editorContent
+			content: editorContent,
 		};
 
 		let url;
 
 		if ( templateID ) {
-			url = stringifyUrl({
-				url: tiTpc.endpoint + templateID,
+			url = stringifyUrl( {
+				url: window.tiTpc.endpoint + templateID,
 				query: {
 					...window.tiTpc.params,
-					'template_name': postTitle
-				}
-			});
+					template_name: postTitle,
+				},
+			} );
 		} else {
-			url = stringifyUrl({
-				url: tiTpc.endpoint,
+			url = stringifyUrl( {
+				url: window.tiTpc.endpoint,
 				query: {
 					...window.tiTpc.params,
-					'template_name': postTitle,
-					'template_type': 'gutenberg'
-				}
-			});
+					template_name: postTitle,
+					template_type: 'gutenberg',
+				},
+			} );
 		}
 
 		try {
-			const response = await apiFetch({
+			const response = await apiFetch( {
 				url,
 				method: 'POST',
 				data,
-				parse: false
-			});
+				parse: false,
+			} );
 
 			if ( response.ok ) {
-				const content = await response.json();
+				const res = await response.json();
 
-				if ( content.message ) {
-					createErrorNotice( content.message, {
-						type: 'snackbar'
-					});
+				if ( res.message ) {
+					createErrorNotice( res.message, {
+						type: 'snackbar',
+					} );
 				} else {
-					if ( content.template_id ) {
-						setTemplateID( content.template_id );
+					if ( res.template_id ) {
+						setTemplateID( res.template_id );
 					}
 
 					window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
 					createSuccessNotice( __( 'Template saved.' ), {
-						type: 'snackbar'
-					});
+						type: 'snackbar',
+					} );
 				}
 			}
 		} catch ( error ) {
 			if ( error.message ) {
 				createErrorNotice( error.message, {
-					type: 'snackbar'
-				});
+					type: 'snackbar',
+				} );
 			}
 		}
 
@@ -260,7 +256,9 @@ const Exporter = () => {
 				className="ti-tpc-components-panel"
 			>
 				<PanelBody>
-					{ __( 'Save this page as a template in your Templates Cloud library.' ) }
+					{ __(
+						'Save this page as a template in your Templates Cloud library.'
+					) }
 
 					<Button
 						isPrimary
