@@ -81,5 +81,3 @@ function ti_tpc_run() {
 
 	\TIOB\Main::instance();
 }
-
-require_once __DIR__ . '/block-editor.php';

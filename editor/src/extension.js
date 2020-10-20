@@ -74,7 +74,7 @@ const Exporter = () => {
 	const {
 		meta,
 		postTitle,
-		meta: { _template_sync, _template_id },
+		meta: { _ti_tpc_template_sync, _ti_tpc_template_id },
 	} = useSelect( ( select ) => ( {
 		meta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {},
 		postTitle:
@@ -94,15 +94,15 @@ const Exporter = () => {
 		return ( isPublishing || isSaving ) && ! isAutoSaving;
 	} );
 
-	const [ templateSync, setTemplateSync ] = useState( _template_sync );
-	const [ templateID, setTemplateID ] = useState( _template_id );
+	const [ templateSync, setTemplateSync ] = useState( _ti_tpc_template_sync );
+	const [ templateID, setTemplateID ] = useState( _ti_tpc_template_id );
 
 	useEffect( () => {
 		editPost( {
 			meta: {
 				...meta,
-				_template_sync: templateSync,
-				_template_id: templateID,
+				_ti_tpc_template_sync: templateSync,
+				_ti_tpc_template_id: templateID,
 			},
 		} );
 	}, [ templateSync, templateID ] );
