@@ -34,7 +34,7 @@ class Editor {
 			array( 'wp-i18n', 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-compose', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-plugins', 'wp-primitives' ),
 			time()
 		);
-	
+
 		wp_localize_script(
 			'ti-tpc-block',
 			'tiTpc',
@@ -46,14 +46,14 @@ class Editor {
 				),
 			)
 		);
-	
+
 		wp_register_style(
 			'ti-tpc-block',
 			TIOB_URL . 'editor/build/index.css',
 			array(),
 			time()
 		);
-	
+
 		register_block_type(
 			'ti-tpc/templates-cloud',
 			array(
@@ -79,7 +79,7 @@ class Editor {
 				},
 			)
 		);
-	
+
 		register_post_meta(
 			'post',
 			'_ti_tpc_template_id',
