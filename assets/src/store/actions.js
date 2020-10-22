@@ -68,4 +68,10 @@ export default {
 			payload: { themeActions },
 		};
 	},
+	setCurrentTab( currentTab ) {
+		return {
+			type: 'SET_CURRENT_TAB',
+			payload: { currentTab },
+		};
+	},
 };

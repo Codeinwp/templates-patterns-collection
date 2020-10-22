@@ -48,11 +48,16 @@ const StarterSiteCard = ( {
 		>
 			<div className="top">
 				<div className={ 'actions ' + actionsClass }>
-					<Button className="preview" onClick={ launchPreview }>
+					<Button isSecondary isLarge onClick={ launchPreview }>
 						{ __( 'Preview', 'templates-patterns-collection' ) }
 					</Button>
 					{ ! upsell && (
-						<Button className="import" onClick={ launchImport }>
+						<Button
+							isPrimary
+							isLarge
+							className="import"
+							onClick={ launchImport }
+						>
 							{ __( 'Import', 'templates-patterns-collection' ) }
 						</Button>
 					) }

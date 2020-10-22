@@ -334,13 +334,18 @@ class Admin {
 			'upgradeURL'    => esc_url( apply_filters( 'neve_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/neve/upgrade/?utm_medium=aboutneve&utm_source=freevspro&utm_campaign=neve' ) ),
 			'strings'       => array(
 				/* translators: %s - Theme name */
-				'starterSitesTabDescription' => sprintf( __( 'With %s, you can choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ), wp_kses_post( $theme_name ) ),
+				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
 			),
 			'onboarding'    => array(),
 			'hasFileSystem' => WP_Filesystem(),
 			'themesURL'     => admin_url( 'themes.php' ),
 			'themeAction'   => $this->get_theme_action(),
 			'brandedTheme'  => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
+			'endpoint' => TPC_TEMPLATES_CLOUD_ENDPOINT,
+			'params'   => array(
+				'site_url'   => get_site_url(),
+				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+			),
 		);
 	}
 

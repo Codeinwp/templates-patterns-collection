@@ -48,42 +48,30 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		flex-direction: column;
 		position: absolute;
 		opacity: 0;
 		transition: .3s ease;
 
-		button {
-			background-color: $blue;
-			color: #fff;
+		.components-button {
+			margin: 5px 0;
+			width: 100px;
+			height: 40px;
 			font-weight: 600;
-			line-height: normal;
-			height: auto;
-			padding: 8px 15px;
-			transition: all .3s ease;
+			justify-content: center;
 
-			&:hover {
-				box-shadow: none;
-				background-color: darken($blue, 10);
-			}
-
-			&.preview {
-				background-color: $light-blue;
-
-				&:hover {
-					background-color: darken($light-blue, 10);
-				}
-			}
-
-			&:last-child {
-				margin-left: 10px;
+			&.is-secondary {
+				color: #fff;
+				border: 2px solid #fff;
 			}
 		}
 	}
 
 	.image {
-		height: 335px;
+		height: 350px;
 		background-size: cover;
-		background-position: top center;
+		background-repeat: no-repeat;
+		background-position: center;
 		background-color: transparentize($dark-grey, .75);
 	}
 
@@ -107,27 +95,56 @@
 	}
 }
 
-@mixin ob-starter-site-card--tablet {
-	.card.starter-site-card {
-		max-width: 49%;
+.list-item__table {
+	.list-item__table_row {
+		display: flex;
+		height: 60px;
+		align-items: center;
+		padding: 0 25px;
+		background: #fff;
+		border-top: 1px solid rgba(0, 0, 0, 0.11);
+		border-right: 1px solid rgba(0, 0, 0, 0.11);
+		border-left: 1px solid rgba(0, 0, 0, 0.11);
 
-		&:not(:nth-child(2n)) {
-			margin-right: 2%;
-		}
-	}
-}
-
-@mixin ob-starter-site-card--laptop {
-	.card.starter-site-card {
-		max-width: 32%;
-		margin: 0 0 30px ;
-
-		&:not(:nth-child(2n)) {
-			margin-right: 0;
+		&:last-child {
+			border-bottom: 1px solid rgba(0, 0, 0, 0.11);
 		}
 
-		&:not(:nth-child(3n)) {
-			margin-right: 2%;
+		svg {
+			height: 24px;
+			margin-right: 10px;
+			fill: #B9B9B9;
+		}
+
+		.list-item__table_row__title {
+			display: flex;
+			align-items: center;
+			flex-basis: 35%;
+
+			.components-base-control__field {
+				margin: 0;
+			}
+		}
+
+		.list-item__table_row__controls {
+			display: flex;
+			justify-content: space-evenly;
+			align-items: center;
+			flex-basis: 30%;
+		}
+
+		.list-item__table_row__actions {
+			display: flex;
+			justify-content: flex-end;
+			flex-basis: 35%;
+
+			.components-button {
+				padding: 6px 30px;
+
+				&.is-primary {
+					margin-left: 10px;
+				}
+			}
 		}
 	}
 }

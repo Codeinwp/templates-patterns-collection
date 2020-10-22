@@ -9,4 +9,5 @@ export default {
 	getOnboardingStatus: ( state ) => state.isOnboarding,
 	getThemeAction: ( state ) => state.themeAction,
 	getInstallModalStatus: ( state ) => state.installModalStatus,
+	getCurrentTab: ( state ) => state.currentTab,
 };

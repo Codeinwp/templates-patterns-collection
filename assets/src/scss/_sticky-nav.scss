@@ -30,8 +30,10 @@
 
 .sticky-nav-content {
 	display: flex;
+	max-width: 1300px;
 
-	> img {
+	> img,
+	> .ob-logo {
 		display: none;
 		margin-right: 20px;
 

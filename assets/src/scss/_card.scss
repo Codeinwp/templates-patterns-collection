@@ -6,6 +6,7 @@
   border: 1px solid $grey;
   flex-direction: column;
   padding: 30px 40px;
+  margin: 0;
   align-self: flex-start;
   flex-grow: 0;
 
@@ -45,21 +46,13 @@
     margin: 15px 0 25px;
   }
 }
-
-@mixin card--laptop() {
-  .card {
-    margin: 0 0 20px;
-  }
-}
 @mixin card--desktop() {
   .card {
 	padding: 20px 30px;
-	margin: 0 0 20px;
   }
 }
 @mixin card--desktop-large() {
   .card {
 	padding: 30px 40px;
-	margin: 0 0 30px;
   }
 }

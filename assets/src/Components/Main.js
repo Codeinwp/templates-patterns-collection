@@ -8,9 +8,12 @@ import VizSensor from 'react-visibility-sensor';
 import Fuse from 'fuse.js/dist/fuse.min';
 import EditorTabs from './EditorTabs';
 import EditorSelector from './EditorSelector';
+import Logo from './Icon';
+import Library from './Library';
 
+import classnames from 'classnames';
 import { useState, Fragment } from '@wordpress/element';
-import { Button } from '@wordpress/components';
+import { Button, Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -26,11 +29,14 @@ const Onboarding = ( {
 	cancelOnboarding,
 	getSites,
 	installModal,
+	currentTab,
+	setCurrentTab,
 } ) => {
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ maxShown, setMaxShown ] = useState( 9 );
 	const { sites = {}, migration } = getSites;
 	const [ sticky, setSticky ] = useState( false );
+	const [ library, setLibrary ] = useState( [] );
 
 	if ( 1 > sites.length ) {
 		return (
@@ -253,11 +259,8 @@ const Onboarding = ( {
 				{ sticky && ! isOnboarding && (
 					<div className="sticky-nav">
 						<div className="container sticky-nav-content">
-							{ ! tiobDash.brandedTheme && (
-								<img
-									src={ `${ tiobDash.assets }img/logo.svg` }
-									alt="Logo"
-								/>
+							{ ! window.tiobDash.brandedTheme && (
+								<Icon icon={ Logo } size={ 32 } />
 							) }
 							<Search
 								count={ counted.categories }
@@ -280,23 +283,38 @@ const Onboarding = ( {
 				<div className="ob-head">
 					{ ! isOnboarding && (
 						<>
-							<h2>
-								{ ! tiobDash.brandedTheme && (
-									<img
-										src={ `${ tiobDash.assets }img/logo.svg` }
-										alt="Logo"
-									/>
-								) }
-								<span>
-									{ __(
-										'Ready to use pre-built websites with 1-click installation',
-										'neve'
+							<div className="header-container">
+								<h2>
+									{ ! window.tiobDash.brandedTheme && (
+										<Icon icon={ Logo } />
 									) }
-								</span>
-							</h2>
-							<p>
-								{ tiobDash.strings.starterSitesTabDescription }
-							</p>
+									<span>
+										{ __( 'Templates Cloud', 'neve' ) }
+									</span>
+								</h2>
+
+								<div className="header-nav">
+									<Button
+										isTertiary
+										isPressed={ 'templates' === currentTab }
+										onClick={ () =>
+											setCurrentTab( 'templates' )
+										}
+									>
+										{ __( 'Page Templates', 'neve' ) }
+									</Button>
+
+									<Button
+										isTertiary
+										isPressed={ 'library' === currentTab }
+										onClick={ () =>
+											setCurrentTab( 'library' )
+										}
+									>
+										{ __( 'My Library', 'neve' ) }
+									</Button>
+								</div>
+							</div>
 						</>
 					) }
 					{ isOnboarding && (
@@ -320,26 +338,40 @@ const Onboarding = ( {
 						} }
 					>
 						<div>
-							<EditorSelector
-								count={ counted.builders }
-								EDITOR_MAP={ EDITOR_MAP }
-							/>
-							<Search
-								count={ counted.categories }
-								categories={ CATEGORIES }
-								onSearch={ ( query ) => {
-									setSearchQuery( query );
-									setMaxShown( 9 );
-								} }
-								query={ searchQuery }
-							/>
-							<EditorTabs
-								EDITOR_MAP={ EDITOR_MAP }
-								onlyProSites={ onlyProBuilders }
-								count={ counted.builders }
-							/>
+							<p className="instructions">
+								{
+									window.tiobDash.strings
+										.starterSitesTabDescription
+								}
+							</p>
+
+							{ 'templates' === currentTab && (
+								<Fragment>
+									<EditorSelector
+										count={ counted.builders }
+										EDITOR_MAP={ EDITOR_MAP }
+									/>
+
+									<Search
+										count={ counted.categories }
+										categories={ CATEGORIES }
+										onSearch={ ( query ) => {
+											setSearchQuery( query );
+											setMaxShown( 9 );
+										} }
+										query={ searchQuery }
+									/>
+
+									<EditorTabs
+										EDITOR_MAP={ EDITOR_MAP }
+										onlyProSites={ onlyProBuilders }
+										count={ counted.builders }
+									/>
+								</Fragment>
+							) }
 						</div>
 					</VizSensor>
+
 					{ 0 === getFilteredSites().length ? (
 						<div className="no-results">
 							<p>
@@ -373,7 +405,20 @@ const Onboarding = ( {
 							</div>
 						</div>
 					) : (
-						<div className="ob-sites">{ renderSites() }</div>
+						<div
+							className={ classnames( 'ob-sites', {
+								'is-grid': 'library' !== currentTab,
+							} ) }
+						>
+							{ 'templates' === currentTab ? (
+								renderSites()
+							) : (
+								<Library
+									library={ library }
+									setLibrary={ setLibrary }
+								/>
+							) }
+						</div>
 					) }
 					<VizSensor
 						onChange={ ( isVisible ) => {
@@ -407,9 +452,11 @@ const Onboarding = ( {
 
 export default compose(
 	withDispatch( ( dispatch ) => {
-		const { setOnboardingState, setCurrentCategory } = dispatch(
-			'neve-onboarding'
-		);
+		const {
+			setOnboardingState,
+			setCurrentCategory,
+			setCurrentTab,
+		} = dispatch( 'neve-onboarding' );
 		return {
 			cancelOnboarding: () => {
 				setOnboardingState( false );
@@ -417,6 +464,7 @@ export default compose(
 			resetCategory: () => {
 				setCurrentCategory( 'all' );
 			},
+			setCurrentTab,
 		};
 	} ),
 	withSelect( ( select ) => {
@@ -429,6 +477,7 @@ export default compose(
 			getOnboardingStatus,
 			getSites,
 			getInstallModalStatus,
+			getCurrentTab,
 		} = select( 'neve-onboarding' );
 		return {
 			editor: getCurrentEditor(),
@@ -439,6 +488,7 @@ export default compose(
 			installModal: getInstallModalStatus(),
 			isOnboarding: getOnboardingStatus(),
 			getSites: getSites(),
+			currentTab: getCurrentTab(),
 		};
 	} )
 )( Onboarding );

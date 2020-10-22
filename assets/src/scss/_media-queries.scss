@@ -1,12 +1,11 @@
 @media (min-width: #{$tablet}) {
-	@include ob-starter-site-card--tablet();
+	@include ob-general--tablet();
 	@include ob-editor-tabs--tablet();
 	@include ob-header--tablet();
 }
 
 @media (min-width: #{$laptop}) {
 	@include general--laptop();
-	@include ob-starter-site-card--laptop();
 	@include ob-general--laptop();
 	@include ob-editor-tabs--laptop();
 	@include ob-editor-selector--laptop();

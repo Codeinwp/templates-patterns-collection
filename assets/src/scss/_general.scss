@@ -22,8 +22,7 @@
 	padding: 0 15px;
 
 	&.content {
-		padding-top: 20px;
-		position: relative;
+		padding: 0;
 	}
 }
 
@@ -101,10 +100,6 @@ svg.is-loading, button.is-loading svg {
 }
 
 @mixin general--desktop-large() {
-	.container {
-		padding: 0 50px;
-		max-width: 1300px;
-	}
 	.col {
 		&:not(:last-child) {
 			margin-right: 30px;
@@ -208,12 +203,82 @@ svg.is-loading, button.is-loading svg {
 
 .ob {
 	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.ob-head {
+		background: #ffffff;
+		width: 100%;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		display: flex;
+		justify-content: center;
+
+		.header-container {
+			display: flex;
+			flex-basis: 100%;
+			max-width: 1300px;
+
+			h2 {
+				flex-basis: 40%;
+			}
+
+			.header-nav {
+				flex-basis: 60%;
+				display: flex;
+				justify-content: flex-end;
+				align-items: center;
+
+				.components-button {
+					font-size: 18px;
+					font-weight: 600;
+					color: #282828;
+					margin-left: 25px;
+
+					&:hover {
+						box-shadow: none;
+					}
+
+					&:first-child {
+						margin-left: 0;
+					}
+
+					&.is-pressed {
+						color: #0073AA;
+						background: transparent;
+					}
+				}
+			}
+		}
+	}
+
+	.ob-body {
+		max-width: 1300px;
+		padding: 0 20px;
+	
+		.instructions {
+			font-size: 22px;
+			margin: 20px 0;
+			color: #282828;
+		}
+	}
+}
+
+.ob-logo {
+	width: 50px;
+	margin-right: 20px;
 }
 
 .ob-sites {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
+	margin-top: 30px;
+
+	&.is-grid {
+		display: grid;
+		grid-template-columns: calc( 25% - 15px ) calc( 25% - 15px ) calc( 25% - 15px ) calc( 25% - 15px );
+		grid-column-gap: 20px;
+		grid-row-gap: 20px;
+	}
 }
 
 @mixin ob-general--laptop() {
@@ -228,16 +293,20 @@ svg.is-loading, button.is-loading svg {
 			margin-top: 0;
 		}
 	}
-
 	.ob-sites {
-		margin-top: 30px;
-	}
-
-	.ob-head {
-		margin-top: 50px;
+		&.is-grid {
+			grid-template-columns: calc( 25% - 15px ) calc( 25% - 15px ) calc( 25% - 15px ) calc( 25% - 15px );
+		}
 	}
 }
 
+@mixin ob-general--tablet() {
+	.ob-sites {
+		&.is-grid {
+			grid-template-columns: calc( 33% - 10px ) calc( 33% - 10px ) calc( 33% - 10px );
+		}
+	}
+}
 
 .no-results {
 	display: flex;

@@ -21,7 +21,7 @@
 	}
 }
 
-.ob-head >, .ob-migration > {
+.ob-head > .header-container >, .ob-migration > {
 	h2 {
 		font-size: 21px;
 		color: $black;
@@ -64,7 +64,7 @@
 }
 
 @mixin ob-header--tablet {
-	.ob-head >, .ob-migration > {
+	.ob-head > .header-container >, .ob-migration > {
 		h2 {
 			font-size: 30px;
 		}
@@ -80,6 +80,6 @@
 
 @mixin ob-header--laptop {
 	.header-form {
-		margin-top: 50px;
+		margin-top: 25px;
 	}
 }
