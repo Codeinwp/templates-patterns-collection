@@ -61,10 +61,10 @@ function ti_tpc_plugins_page_notice() {
  */
 function ti_tpc_flush_premalinks() {
 	$flash_rules = get_transient( 'ti_tpc_should_flush_permalinks' );
-	if ( $flash_rules !== 'yes' ){
+	if ( $flash_rules !== 'yes' ) {
 		return false;
 	}
-	
+
 	flush_rewrite_rules();
 	delete_transient( 'ti_tpc_should_flush_permalinks' );
 	return true;
