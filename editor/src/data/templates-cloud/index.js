@@ -25,7 +25,7 @@ const createErrorNotice = ( message ) => {
 
 export const fetchTemplates = async (
 	params = {
-		per_page: 10,
+		per_page: 12,
 		page: 0,
 	}
 ) => {

@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 const { __ } = wp.i18n;
@@ -7,10 +12,13 @@ const { Button, ButtonGroup, Placeholder, Spinner } = wp.components;
 
 const { useDispatch, useSelect } = wp.data;
 
+const { Fragment, useState } = wp.element;
+
 /**
  * Internal dependencies
  */
 import { fetchTemplates } from './../data/templates-cloud/index.js';
+import Filters from './filters.js';
 import ListItem from './list-item.js';
 
 const Library = ( { isFetching, importBlocks } ) => {
@@ -20,12 +28,14 @@ const Library = ( { isFetching, importBlocks } ) => {
 		select( 'tpc/block-editor' ).getLibrary()
 	);
 
+	const [ layout, setLayout ] = useState( 'grid' );
+
 	const pages = [];
 
 	const changePage = async ( index ) => {
 		setFetching( true );
 		await fetchTemplates( {
-			per_page: 10,
+			per_page: 12,
 			page: index,
 		} );
 		setFetching( false );
@@ -39,7 +49,7 @@ const Library = ( { isFetching, importBlocks } ) => {
 				<Button
 					isPrimary={ isCurrent }
 					disabled={ isCurrent }
-					onClick={ changePage }
+					onClick={ () => changePage( i ) }
 				>
 					{ i + 1 }
 				</Button>
@@ -66,21 +76,33 @@ const Library = ( { isFetching, importBlocks } ) => {
 	}
 
 	return (
-		<div className="wp-block-ti-tpc-templates-cloud__modal-content__table">
-			{ items.map( ( item ) => (
-				<ListItem
-					key={ item.template_id }
-					item={ item }
-					importBlocks={ importBlocks }
-				/>
-			) ) }
+		<Fragment>
+			<Filters layout={ layout } setLayout={ setLayout } />
+
+			<div
+				className={ classnames(
+					'wp-block-ti-tpc-templates-cloud__modal-content__table',
+					{
+						'is-grid': 'grid' === layout,
+					}
+				) }
+			>
+				{ items.map( ( item ) => (
+					<ListItem
+						key={ item.template_id }
+						layout={ layout }
+						item={ item }
+						importBlocks={ importBlocks }
+					/>
+				) ) }
+			</div>
 
 			{ 1 < totalPages && (
 				<ButtonGroup className="wp-block-ti-tpc-templates-cloud__modal-content__pagination">
 					<Pagination />
 				</ButtonGroup>
 			) }
-		</div>
+		</Fragment>
 	);
 };
 

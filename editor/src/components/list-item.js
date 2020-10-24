@@ -18,7 +18,7 @@ import classnames from 'classnames';
  */
 const { __ } = wp.i18n;
 
-const { Button, Icon, TextControl } = wp.components;
+const { Button, Icon, Popover, TextControl } = wp.components;
 
 const { useDispatch } = wp.data;
 
@@ -34,7 +34,7 @@ import {
 	importTemplate,
 } from './../data/templates-cloud/index.js';
 
-const ListItem = ( { item, importBlocks } ) => {
+const ListItem = ( { layout, item, importBlocks } ) => {
 	const { togglePreview, setPreviewData } = useDispatch( 'tpc/block-editor' );
 
 	const [ isLoading, setLoading ] = useState( false );
@@ -88,6 +88,118 @@ const ListItem = ( { item, importBlocks } ) => {
 			item,
 		} );
 	};
+
+	if ( 'grid' === layout ) {
+		return (
+			<div
+				key={ item.template_id }
+				className="wp-block-ti-tpc-templates-cloud__modal-content__table_grid"
+			>
+				<div
+					className={ classnames(
+						'wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview',
+						{ 'is-loading': isEditing || false !== isLoading }
+					) }
+				>
+					<div className="wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions">
+						<Button
+							isSecondary
+							isLarge
+							disabled={ false !== isLoading }
+							onClick={ importPreview }
+						>
+							{ __( 'Preview' ) }
+						</Button>
+
+						<Button
+							isPrimary
+							isLarge
+							isBusy={ 'importing' === isLoading }
+							disabled={ false !== isLoading }
+							onClick={ importItem }
+						>
+							{ __( 'Import' ) }
+						</Button>
+
+						<div className="wp-block-ti-tpc-templates-cloud__modal-content__table__grid__preview_controls">
+							<Button
+								label={ __( 'Edit' ) }
+								icon={
+									'updating' === isLoading ? update : edit
+								}
+								disabled={ isEditing || false !== isLoading }
+								className={ classnames( {
+									'is-loading': 'updating' === isLoading,
+								} ) }
+								onClick={ () => setEditing( ! isEditing ) }
+							>
+								{ isEditing && (
+									<Popover
+										onFocusOutside={ () =>
+											setEditing( ! isEditing )
+										}
+										className="wp-block-ti-tpc-templates-cloud__preview_controls__popver"
+									>
+										<div className="wp-block-ti-tpc-templates-cloud__preview_controls__popver_content">
+											<TextControl
+												label={ __( 'Template Name' ) }
+												value={ itemName }
+												onChange={ setItemName }
+											/>
+
+											<Button
+												label={ __( 'Update' ) }
+												icon={
+													'updating' === isLoading
+														? update
+														: check
+												}
+												disabled={ false !== isLoading }
+												className={ classnames( {
+													'is-loading':
+														'updating' ===
+														isLoading,
+												} ) }
+												onClick={ updateItem }
+											/>
+										</div>
+									</Popover>
+								) }
+							</Button>
+
+							<Button
+								label={ __( 'Duplicate' ) }
+								icon={
+									'duplicating' === isLoading ? update : group
+								}
+								disabled={ false !== isLoading }
+								className={ classnames( {
+									'is-loading': 'duplicating' === isLoading,
+								} ) }
+								onClick={ duplicateItem }
+							/>
+
+							<Button
+								label={ __( 'Delete' ) }
+								icon={
+									'deleting' === isLoading ? update : trash
+								}
+								disabled={ false !== isLoading }
+								className={ classnames( {
+									'is-loading': 'deleting' === isLoading,
+								} ) }
+								onClick={ deleteItem }
+							/>
+						</div>
+					</div>
+				</div>
+
+				<div className="wp-block-ti-tpc-templates-cloud__modal-content__table_grid__footer">
+					<p>{ item.template_name }</p>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div
