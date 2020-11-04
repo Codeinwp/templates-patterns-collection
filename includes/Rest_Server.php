@@ -145,7 +145,10 @@ class Rest_Server {
 	 */
 	public function run_xml_importer( WP_REST_Request $request ) {
 		$content_importer = new Content_Importer();
-		return $content_importer->import_remote_xml( $request );
+		$import           = $content_importer->import_remote_xml( $request );
+		set_transient( 'ti_tpc_should_flush_permalinks', 'yes', 12 * HOUR_IN_SECONDS );
+
+		return $import;
 	}
 
 	/**
