@@ -25,7 +25,7 @@
     "build": "npm-run-all -s build:* rtlcss",
     "watch:js": "wp-scripts start assets/src/app.js --output-path=assets/build",
     "watch:editor": "wp-scripts start editor/src/index.js --output-path=editor/build",
-    "dev": "npm-run-all watch:*",
+    "dev": "npm-run-all --parallel watch:*",
     "release": "npx semantic-release",
     "dist": "bash ./bin/dist.sh",
     "readme": "grunt wp_readme_to_markdown:main",

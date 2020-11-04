@@ -1,11 +1,9 @@
 /**
  * WordPress dependencies
  */
-const { __ } = wp.i18n;
-
-const { registerBlockType } = wp.blocks;
-
-const { registerPlugin } = wp.plugins;
+import { __ } from '@wordpress/i18n';
+import { registerBlockType } from '@wordpress/blocks';
+import { registerPlugin } from '@wordpress/plugins';
 
 /**
  * Internal dependencies

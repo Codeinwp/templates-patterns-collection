@@ -197,3 +197,13 @@ export const deleteTemplate = async ( template ) => {
 		}
 	}
 };
+
+export const publishTemplate = async (
+	template,
+	category,
+	featuredImageURL
+) => {
+	console.log( template );
+	console.log( category );
+	console.log( featuredImageURL );
+};

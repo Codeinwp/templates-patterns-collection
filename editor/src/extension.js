@@ -1,38 +1,27 @@
 /* eslint-disable camelcase */
-/**
- * External dependencies
- */
 import { stringifyUrl } from 'query-string';
-
 import { v4 as uuidv4 } from 'uuid';
-
-/**
- * WordPress dependencies.
- */
-const { __ } = wp.i18n;
-
-const { apiFetch } = wp;
-
-const { serialize } = wp.blocks;
-
-const {
+import { __ } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
+import { serialize } from '@wordpress/blocks';
+import {
 	Button,
 	Icon,
 	Modal,
 	PanelBody,
 	TextControl,
 	ToggleControl,
-} = wp.components;
+} from '@wordpress/components';
 
-const { useDispatch, useSelect } = wp.data;
+import { useDispatch, useSelect } from '@wordpress/data';
 
-const {
+import {
 	PluginBlockSettingsMenuItem,
 	PluginSidebar,
 	PluginSidebarMoreMenuItem,
-} = wp.editPost;
+} from '@wordpress/edit-post';
 
-const { Fragment, useState, useEffect } = wp.element;
+import { Fragment, useState, useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies.
@@ -43,6 +32,7 @@ const Exporter = () => {
 	const [ isOpen, setOpen ] = useState( false );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ title, setTitle ] = useState( '' );
+	const { canPredefine } = window.tiTpc;
 
 	const { createErrorNotice, createSuccessNotice } = useDispatch(
 		'core/notices'
@@ -74,7 +64,12 @@ const Exporter = () => {
 	const {
 		meta,
 		postTitle,
-		meta: { _ti_tpc_template_sync, _ti_tpc_template_id },
+		meta: {
+			_ti_tpc_template_sync,
+			_ti_tpc_template_id,
+			_ti_tpc_screenshot_url,
+			_ti_tpc_category,
+		},
 	} = useSelect( ( select ) => ( {
 		meta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {},
 		postTitle:
@@ -96,6 +91,10 @@ const Exporter = () => {
 
 	const [ templateSync, setTemplateSync ] = useState( _ti_tpc_template_sync );
 	const [ templateID, setTemplateID ] = useState( _ti_tpc_template_id );
+	const [ category, setCategory ] = useState( _ti_tpc_category );
+	const [ screenshotURL, setScreenshotURL ] = useState(
+		_ti_tpc_screenshot_url
+	);
 
 	useEffect( () => {
 		editPost( {
@@ -103,9 +102,11 @@ const Exporter = () => {
 				...meta,
 				_ti_tpc_template_sync: templateSync,
 				_ti_tpc_template_id: templateID,
+				_ti_tpc_screenshot_url: screenshotURL,
+				_ti_tpc_category: category,
 			},
 		} );
-	}, [ templateSync, templateID ] );
+	}, [ templateSync, templateID, screenshotURL, category ] );
 
 	useEffect( () => {
 		if ( isPostSaving && templateSync ) {
@@ -262,7 +263,6 @@ const Exporter = () => {
 
 					<Button
 						isPrimary
-						isLarge
 						isBusy={ isLoading }
 						disabled={ isLoading }
 						onClick={ onSavePage }
@@ -276,6 +276,24 @@ const Exporter = () => {
 						onChange={ () => setTemplateSync( ! templateSync ) }
 					/>
 				</PanelBody>
+				{ canPredefine && (
+					<PanelBody>
+						{ __( 'Publish Settings' ) }
+
+						<TextControl
+							label={ __( 'Screenshot URL' ) }
+							// value={ '' }
+							type="url"
+							onChange={ setScreenshotURL }
+						/>
+						<TextControl
+							label={ __( 'Category' ) }
+							// value={ '' }
+							type="url"
+							onChange={ setCategory }
+						/>
+					</PanelBody>
+				) }
 			</PluginSidebar>
 
 			{ isOpen && (
