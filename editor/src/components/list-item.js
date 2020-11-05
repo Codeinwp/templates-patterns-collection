@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import classnames from 'classnames';
 
 /**
@@ -14,7 +15,7 @@ import {
 } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import { Button, Icon, Popover, TextControl } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect, dispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
 /**
@@ -25,7 +26,6 @@ import {
 	deleteTemplate,
 	duplicateTemplate,
 	importTemplate,
-	publishTemplate,
 } from './../data/templates-cloud/index.js';
 
 const ListItem = ( { layout, item, importBlocks } ) => {
@@ -33,11 +33,6 @@ const ListItem = ( { layout, item, importBlocks } ) => {
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isEditing, setEditing ] = useState( false );
 	const [ itemName, setItemName ] = useState( item.template_name );
-	const { canPredefine } = window.tiTpc;
-
-	const { meta } = useSelect( ( select ) => ( {
-		meta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ),
-	} ) );
 
 	const importItem = async () => {
 		setLoading( 'importing' );
@@ -87,12 +82,7 @@ const ListItem = ( { layout, item, importBlocks } ) => {
 		} );
 	};
 
-	const onPublish = async () => {
-		setLoading( 'publishing' );
-		console.log( meta );
-		// await publishTemplate( item.template_id, 'general', 'https://' );
-		setLoading( false );
-	};
+	const style = { backgroundImage: `url(${ item.template_thumbnail })` };
 
 	if ( 'grid' === layout ) {
 		return (
@@ -101,30 +91,15 @@ const ListItem = ( { layout, item, importBlocks } ) => {
 				className="wp-block-ti-tpc-templates-cloud__modal-content__table_grid"
 			>
 				<div
+					style={ style }
 					className={ classnames(
 						'wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview',
 						{ 'is-loading': isEditing || false !== isLoading }
 					) }
 				>
 					<div className="wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions">
-						{ canPredefine && (
-							<Button
-								isSecondary
-								isLarge
-								onClick={ onPublish }
-								disabled={ false !== isLoading }
-								className={ classnames( {
-									'is-loading': 'publishing' === isLoading,
-								} ) }
-							>
-								{ 'publishing' === isLoading
-									? __( 'Publishing' )
-									: __( 'Publish' ) }
-							</Button>
-						) }
 						<Button
 							isSecondary
-							isLarge
 							disabled={ false !== isLoading }
 							onClick={ importPreview }
 						>
@@ -133,7 +108,6 @@ const ListItem = ( { layout, item, importBlocks } ) => {
 
 						<Button
 							isPrimary
-							isLarge
 							isBusy={ 'importing' === isLoading }
 							disabled={ false !== isLoading }
 							onClick={ importItem }
@@ -287,24 +261,8 @@ const ListItem = ( { layout, item, importBlocks } ) => {
 			</div>
 
 			<div className="wp-block-ti-tpc-templates-cloud__modal-content__table_row__actions">
-				{ canPredefine && (
-					<Button
-						isSecondary
-						isLarge
-						onClick={ onPublish }
-						disabled={ false !== isLoading }
-						className={ classnames( {
-							'is-loading': 'publishing' === isLoading,
-						} ) }
-					>
-						{ 'publishing' === isLoading
-							? __( 'Publishing' )
-							: __( 'Publish' ) }
-					</Button>
-				) }
 				<Button
 					isSecondary
-					isLarge
 					disabled={ false !== isLoading }
 					onClick={ importPreview }
 				>
@@ -313,7 +271,6 @@ const ListItem = ( { layout, item, importBlocks } ) => {
 
 				<Button
 					isPrimary
-					isLarge
 					isBusy={ 'importing' === isLoading }
 					disabled={ false !== isLoading }
 					onClick={ importItem }

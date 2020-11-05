@@ -27,6 +27,9 @@ import { Fragment, useState, useEffect } from '@wordpress/element';
  * Internal dependencies.
  */
 import { iconBlack } from './icon.js';
+import classnames from 'classnames';
+import { publishTemplate } from './data/templates-cloud';
+import Notices from './components/notices';
 
 const Exporter = () => {
 	const [ isOpen, setOpen ] = useState( false );
@@ -38,7 +41,7 @@ const Exporter = () => {
 		'core/notices'
 	);
 
-	const { editPost } = useDispatch( 'core/editor' );
+	const { editPost, savePost } = useDispatch( 'core/editor' );
 
 	const content = useSelect( ( select ) => {
 		const {
@@ -64,14 +67,17 @@ const Exporter = () => {
 	const {
 		meta,
 		postTitle,
+		postId,
 		meta: {
 			_ti_tpc_template_sync,
 			_ti_tpc_template_id,
 			_ti_tpc_screenshot_url,
-			_ti_tpc_category,
+			_ti_tpc_site_slug,
+			_ti_tpc_published,
 		},
 	} = useSelect( ( select ) => ( {
 		meta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {},
+		postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),
 		postTitle:
 			select( 'core/editor' ).getEditedPostAttribute( 'title' ) ||
 			__( 'Template' ),
@@ -91,7 +97,8 @@ const Exporter = () => {
 
 	const [ templateSync, setTemplateSync ] = useState( _ti_tpc_template_sync );
 	const [ templateID, setTemplateID ] = useState( _ti_tpc_template_id );
-	const [ category, setCategory ] = useState( _ti_tpc_category );
+	const [ siteSlug, setSiteSlug ] = useState( _ti_tpc_site_slug );
+	const [ published, setPublished ] = useState( _ti_tpc_published );
 	const [ screenshotURL, setScreenshotURL ] = useState(
 		_ti_tpc_screenshot_url
 	);
@@ -103,10 +110,11 @@ const Exporter = () => {
 				_ti_tpc_template_sync: templateSync,
 				_ti_tpc_template_id: templateID,
 				_ti_tpc_screenshot_url: screenshotURL,
-				_ti_tpc_category: category,
+				_ti_tpc_site_slug: siteSlug,
+				_ti_tpc_published: published,
 			},
 		} );
-	}, [ templateSync, templateID, screenshotURL, category ] );
+	}, [ templateSync, templateID, screenshotURL, siteSlug, published ] );
 
 	useEffect( () => {
 		if ( isPostSaving && templateSync ) {
@@ -170,7 +178,6 @@ const Exporter = () => {
 
 	const onSavePage = async () => {
 		setLoading( true );
-
 		const data = {
 			__file: 'wp_export',
 			version: 2,
@@ -194,6 +201,8 @@ const Exporter = () => {
 					...window.tiTpc.params,
 					template_name: postTitle,
 					template_type: 'gutenberg',
+					template_site_slug: _ti_tpc_site_slug || '',
+					template_thumbnail: _ti_tpc_screenshot_url || '',
 				},
 			} );
 		}
@@ -234,6 +243,48 @@ const Exporter = () => {
 		}
 
 		setLoading( false );
+	};
+
+	const publishButton = () => {
+		if ( ! canPredefine ) {
+			return null;
+		}
+
+		const onPublish = async () => {
+			setLoading( 'publishing' );
+			await publishTemplate(
+				_ti_tpc_template_id,
+				_ti_tpc_site_slug,
+				_ti_tpc_screenshot_url,
+				! _ti_tpc_published
+			).then( ( r ) => {
+				if ( r.success ) {
+					setPublished( ! published );
+					savePost();
+				}
+			} );
+			setLoading( false );
+		};
+
+		return (
+			<Button
+				isSecondary
+				onClick={ onPublish }
+				disabled={ false !== isLoading }
+				className={ classnames( {
+					'is-loading': 'publishing' === isLoading,
+				} ) }
+			>
+				{ published &&
+					( 'publishing' === isLoading
+						? __( 'Unpublishing' )
+						: __( 'Unpublish' ) ) }
+				{ ! published &&
+					( 'publishing' === isLoading
+						? __( 'Publishing' )
+						: __( 'Publish' ) ) }
+			</Button>
+		);
 	};
 
 	return (
@@ -278,20 +329,21 @@ const Exporter = () => {
 				</PanelBody>
 				{ canPredefine && (
 					<PanelBody>
-						{ __( 'Publish Settings' ) }
-
+						<h4>{ __( 'Publish Settings' ) }</h4>
 						<TextControl
 							label={ __( 'Screenshot URL' ) }
-							// value={ '' }
+							value={ screenshotURL }
 							type="url"
 							onChange={ setScreenshotURL }
 						/>
 						<TextControl
-							label={ __( 'Category' ) }
-							// value={ '' }
+							label={ __( 'Site Slug' ) }
+							value={ siteSlug }
 							type="url"
-							onChange={ setCategory }
+							onChange={ setSiteSlug }
 						/>
+						{ publishButton() }
+						<Notices />
 					</PanelBody>
 				) }
 			</PluginSidebar>

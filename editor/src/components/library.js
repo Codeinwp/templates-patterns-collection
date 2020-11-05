@@ -6,27 +6,34 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
-const { __ } = wp.i18n;
-
-const { Button, ButtonGroup, Placeholder, Spinner } = wp.components;
-
-const { useDispatch, useSelect } = wp.data;
-
-const { Fragment, useState } = wp.element;
+import { __ } from '@wordpress/i18n';
+import {
+	Button,
+	ButtonGroup,
+	Placeholder,
+	Spinner,
+} from '@wordpress/components';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { Fragment, useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import { fetchTemplates } from './../data/templates-cloud/index.js';
+import {
+	fetchTemplates,
+	fetchLibrary,
+} from './../data/templates-cloud/index.js';
 import Filters from './filters.js';
 import ListItem from './list-item.js';
 
-const Library = ( { isFetching, importBlocks } ) => {
+const Library = ( {
+	isFetching,
+	importBlocks,
+	items,
+	currentPage,
+	totalPages,
+} ) => {
 	const { setFetching } = useDispatch( 'tpc/block-editor' );
-
-	const { items, currentPage, totalPages } = useSelect( ( select ) =>
-		select( 'tpc/block-editor' ).getLibrary()
-	);
 
 	const [ layout, setLayout ] = useState( 'grid' );
 
@@ -34,8 +41,10 @@ const Library = ( { isFetching, importBlocks } ) => {
 
 	const changePage = async ( index ) => {
 		setFetching( true );
+		await fetchLibrary( {
+			page: index,
+		} );
 		await fetchTemplates( {
-			per_page: 12,
 			page: index,
 		} );
 		setFetching( false );

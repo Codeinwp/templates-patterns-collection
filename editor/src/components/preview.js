@@ -78,13 +78,12 @@ const Preview = ( { isFetching, importBlocks } ) => {
 				</div>
 
 				<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-header__right">
-					<Button isSecondary isLarge onClick={ togglePreview }>
+					<Button isSecondary onClick={ togglePreview }>
 						{ __( 'Close Preview' ) }
 					</Button>
 
 					<Button
 						isPrimary
-						isLarge
 						isBusy={ isFetching }
 						disabled={ isFetching }
 						onClick={ importItem }

@@ -1,26 +1,25 @@
 /**
  * External dependencies
  */
-import { closeSmall, update } from '@wordpress/icons';
-
 import classnames from 'classnames';
-
 import { v4 as uuidv4 } from 'uuid';
 
 /**
  * WordPress dependencies
  */
-const { __ } = wp.i18n;
-
-const { Button, ButtonGroup, Icon } = wp.components;
-
-const { useDispatch, useSelect } = wp.data;
+import { closeSmall, update } from '@wordpress/icons';
+import { __ } from '@wordpress/i18n';
+import { Button, ButtonGroup, Icon } from '@wordpress/components';
+import { useDispatch, useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
 import icon from './../icon.js';
-import { fetchTemplates } from './../data/templates-cloud/index.js';
+import {
+	fetchTemplates,
+	fetchLibrary,
+} from './../data/templates-cloud/index.js';
 
 const TABS = {
 	templates: __( 'Page Templates' ),
@@ -45,6 +44,7 @@ const Header = ( { closeModal } ) => {
 		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 		setFetching( true );
 		await fetchTemplates();
+		await fetchLibrary();
 		setFetching( false );
 	};
 

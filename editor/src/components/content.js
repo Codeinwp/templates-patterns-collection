@@ -1,16 +1,17 @@
 /**
  * WordPress dependencies
  */
-const { __ } = wp.i18n;
-
-const { useDispatch, useSelect } = wp.data;
-
-const { useEffect } = wp.element;
+import { __ } from '@wordpress/i18n';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import { fetchTemplates } from './../data/templates-cloud/index.js';
+import {
+	fetchTemplates,
+	fetchLibrary,
+} from './../data/templates-cloud/index.js';
 import Preview from './preview.js';
 import Library from './library.js';
 import Notices from './notices.js';
@@ -35,8 +36,19 @@ const Content = ( { importBlocks } ) => {
 	const init = async () => {
 		setFetching( true );
 		await fetchTemplates();
+		await fetchLibrary();
 		setFetching( false );
 	};
+
+	const { items = [], currentPage, totalPages } = useSelect( ( select ) => {
+		if ( currentTab === 'library' ) {
+			return select( 'tpc/block-editor' ).getLibrary() || {};
+		}
+
+		if ( currentTab === 'templates' ) {
+			return select( 'tpc/block-editor' ).getTemplates() || {};
+		}
+	} );
 
 	if ( isPreview ) {
 		return (
@@ -47,9 +59,11 @@ const Content = ( { importBlocks } ) => {
 	return (
 		<div className="wp-block-ti-tpc-templates-cloud__modal-content">
 			<Notices />
-
-			{ 'library' === currentTab ? (
+			{ [ 'templates', 'library' ].includes( currentTab ) ? (
 				<Library
+					items={ items }
+					currentPage={ currentPage }
+					totalPages={ totalPages }
 					isFetching={ isFetching }
 					importBlocks={ importBlocks }
 				/>

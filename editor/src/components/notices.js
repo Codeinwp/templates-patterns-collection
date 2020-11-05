@@ -1,9 +1,8 @@
 /**
  * WordPress dependencies
  */
-const { Notice } = wp.components;
-
-const { useDispatch, useSelect } = wp.data;
+import { Notice } from '@wordpress/components';
+import { useDispatch, useSelect } from '@wordpress/data';
 
 const Notices = () => {
 	const notices = useSelect( ( select ) =>

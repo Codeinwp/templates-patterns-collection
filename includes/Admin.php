@@ -341,8 +341,8 @@ class Admin {
 			'themesURL'     => admin_url( 'themes.php' ),
 			'themeAction'   => $this->get_theme_action(),
 			'brandedTheme'  => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
-			'endpoint' => TPC_TEMPLATES_CLOUD_ENDPOINT,
-			'params'   => array(
+			'endpoint'      => TPC_TEMPLATES_CLOUD_ENDPOINT,
+			'params'        => array(
 				'site_url'   => get_site_url(),
 				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 			),

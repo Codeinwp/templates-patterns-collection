@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-const { registerStore } = wp.data;
+import { registerStore } from '@wordpress/data';
 
 const DEFAULT_STATE = {
 	isFetching: true,
@@ -50,7 +50,11 @@ registerStore( 'tpc/block-editor', {
 		if ( 'UPDATE_TEMPLATES' === action.type ) {
 			return {
 				...state,
-				templates: action.items,
+				templates: {
+					items: action.items,
+					currentPage: Number( action.currentPage ),
+					totalPages: Number( action.totalPages ),
+				},
 			};
 		}
 
@@ -134,10 +138,12 @@ registerStore( 'tpc/block-editor', {
 			};
 		},
 
-		updateTemplates( items ) {
+		updateTemplates( items, currentPage, totalPages ) {
 			return {
 				type: 'UPDATE_TEMPLATES',
 				items,
+				currentPage,
+				totalPages,
 			};
 		},
 
@@ -156,7 +162,6 @@ registerStore( 'tpc/block-editor', {
 				totalPages,
 			};
 		},
-
 		setPreviewData( preview ) {
 			return {
 				type: 'SET_PREVIEW_DATA',

@@ -25,11 +25,12 @@ class Editor {
 	 * Initialize the Admin.
 	 */
 	public function init() {
-		define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-cloud/templates/' );
+				define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-cloud/templates/' );
+		//      define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'http://localhost:8081/wp-json/templates-cloud/v1/templates/' );
 
 		add_action( 'init', array( $this, 'register_block' ), 11 );
 		add_action( 'init', array( $this, 'register_post_meta' ), 11 );
-    }
+	}
 
 	/**
 	 * Register editor blocks.
@@ -39,7 +40,7 @@ class Editor {
 		wp_register_script(
 			$this->handle,
 			TIOB_URL . 'editor/build/index.js',
-			$deps['dependencies'],
+			array_merge( $deps['dependencies'], array( 'wp-api' ) ),
 			$deps['version'],
 		);
 
@@ -47,12 +48,12 @@ class Editor {
 			$this->handle,
 			'tiTpc',
 			array(
-				'endpoint' => TPC_TEMPLATES_CLOUD_ENDPOINT,
-				'params'   => array(
+				'endpoint'     => TPC_TEMPLATES_CLOUD_ENDPOINT,
+				'params'       => array(
 					'site_url'   => get_site_url(),
 					'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 				),
-                'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false )
+				'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
 			)
 		);
 
@@ -77,7 +78,7 @@ class Editor {
 	 */
 	public function register_post_meta() {
 		register_post_meta(
-			'post',
+			'',
 			'_ti_tpc_template_sync',
 			array(
 				'show_in_rest'  => true,
@@ -90,7 +91,7 @@ class Editor {
 		);
 
 		register_post_meta(
-			'post',
+			'',
 			'_ti_tpc_template_id',
 			array(
 				'show_in_rest'  => true,
@@ -101,12 +102,12 @@ class Editor {
 				},
 			)
 		);
-        if ( apply_filters( 'ti_tpc_can_predefine', false ) === false ) {
-            return;
-        }
+		if ( apply_filters( 'ti_tpc_can_predefine', false ) === false ) {
+			return;
+		}
 
- 		register_post_meta(
-			'post',
+		register_post_meta(
+			'',
 			'_ti_tpc_screenshot_url',
 			array(
 				'show_in_rest'  => true,
@@ -117,13 +118,25 @@ class Editor {
 				},
 			)
 		);
- 		register_post_meta(
-			'post',
-			'_ti_tpc_category',
+		register_post_meta(
+			'',
+			'_ti_tpc_site_slug',
 			array(
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
+				'auth_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+		register_post_meta(
+			'',
+			'_ti_tpc_published',
+			array(
+				'show_in_rest'  => true,
+				'single'        => true,
+				'type'          => 'boolean',
 				'auth_callback' => function () {
 					return current_user_can( 'edit_posts' );
 				},

@@ -6,7 +6,7 @@
       display: none; }
     .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header {
       display: flex;
-      border-bottom: 1px solid #E0E0E0; }
+      border-bottom: 1px solid #e0e0e0; }
       .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__left {
         display: flex;
         flex-basis: 20%;
@@ -28,7 +28,7 @@
           padding-left: 25px;
           padding-right: 25px; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__center .wp-block-ti-tpc-templates-cloud__modal-header__tabs.is-active {
-            box-shadow: inset 0 0 0 1.5px transparent, inset 0 -4px 0 0 #0073AA; }
+            box-shadow: inset 0 0 0 1.5px transparent, inset 0 -4px 0 0 #0073aa; }
       .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__right {
         display: flex;
         flex-basis: 20%;
@@ -38,7 +38,7 @@
           height: 60px;
           border-left: 1px solid #e6e9ec; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__right .components-button:hover {
-            background: #F1F1F1; }
+            background: #f1f1f1; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__right .components-button svg {
             width: 32px;
             height: 32px;
@@ -51,31 +51,31 @@
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__right .components-button-group .components-button {
             border-left: 0;
             box-shadow: none;
-            background: #F1F1F1;
+            background: #f1f1f1;
             width: 38px;
             height: 38px;
             margin: 5px 10px;
             padding: 5px;
-            border: 1px solid #D9D9D9;
+            border: 1px solid #d9d9d9;
             border-radius: 6px; }
             .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__right .components-button-group .components-button:hover {
-              color: #F1F1F1;
-              background: #0073AA;
+              color: #f1f1f1;
+              background: #0073aa;
               width: auto;
-              border: 1px solid #0073AA; }
-              .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__right .components-button-group .components-button:hover::before {
+              border: 1px solid #0073aa; }
+              .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__right .components-button-group .components-button:hover:before {
                 content: 'Sync';
                 padding: 0 10px;
                 font-weight: 500; }
               .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__right .components-button-group .components-button:hover svg {
-                fill: #F1F1F1; }
+                fill: #f1f1f1; }
             .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-header .wp-block-ti-tpc-templates-cloud__modal-header__right .components-button-group .components-button svg {
               width: 26px;
               height: 26px;
               padding: 0;
-              fill: #0073AA; }
+              fill: #0073aa; }
     .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content {
-      background: #F1F1F1;
+      background: #f1f1f1;
       padding: 20px 40px; }
       .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__notices .components-notice {
         margin: 0 0 20px 0;
@@ -87,9 +87,9 @@
         .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__filters .components-button.is-pressed {
           background: transparent; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__filters .components-button.is-pressed svg {
-            fill: #0073AA; }
+            fill: #0073aa; }
         .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__filters .components-button svg {
-          fill: #D9D9D9; }
+          fill: #d9d9d9; }
       .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table.is-grid {
         display: -ms-grid;
         display: grid;
@@ -110,7 +110,7 @@
         .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_row svg {
           height: 24px;
           margin-right: 10px;
-          fill: #B9B9B9; }
+          fill: #b9b9b9; }
         .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_row .wp-block-ti-tpc-templates-cloud__modal-content__table_row__title {
           display: flex;
           align-items: center;
@@ -138,38 +138,43 @@
           display: flex;
           width: 100%;
           height: 300px;
-          background: #B7C0CC; }
+          background-color: #b7c0cc;
+          background-position: center;
+          background-size: cover; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview:hover {
-            background: #404040; }
+            background-color: #404040; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview.is-loading {
             background: #404040; }
             .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview.is-loading .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions {
               display: flex; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions {
-            display: none;
+            opacity: 0;
+            transition: .3s ease opacity;
             width: 100%;
             height: auto;
             flex-direction: column;
             justify-content: center;
-            align-items: center; }
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex; }
             .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions > .components-button {
               width: 120px;
               justify-content: center;
               margin-bottom: 10px; }
               .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions > .components-button.is-secondary {
-                color: #FFFFFF;
-                box-shadow: inset 0 0 0 2px #FFFFFF; }
+                color: #ffffff;
+                box-shadow: inset 0 0 0 2px #ffffff; }
                 .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions > .components-button.is-secondary:disabled {
                   background: transparent;
                   opacity: 0.5; }
             .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions .wp-block-ti-tpc-templates-cloud__modal-content__table__grid__preview_controls .components-button {
               width: 20px; }
               .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions .wp-block-ti-tpc-templates-cloud__modal-content__table__grid__preview_controls .components-button svg {
-                fill: #FFFFFF; }
+                fill: #ffffff; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview:hover .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions {
-            display: flex; }
+            opacity: 1; }
         .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__footer {
-          background: #FFFFFF;
+          background: #ffffff;
           border-top: 1px solid #ccc;
           padding: 15px; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__table .wp-block-ti-tpc-templates-cloud__modal-content__table_grid .wp-block-ti-tpc-templates-cloud__modal-content__table_grid__footer p {
@@ -182,9 +187,9 @@
           border-radius: 2px;
           box-shadow: none; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__pagination .components-button:focus {
-            box-shadow: inset 0 0 0 1px #fff,0 0 0 1.5px #007cba; }
+            box-shadow: inset 0 0 0 1px #fff, 0 0 0 1.5px #007cba; }
           .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__pagination .components-button:not(.is-primary) {
-            background: #FFFFFF; }
+            background: #ffffff; }
             .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__pagination .components-button:not(.is-primary):focus {
               box-shadow: 0 0 0 1.5px #007cba; }
       .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .wp-block-ti-tpc-templates-cloud__modal-content__preview-header {
@@ -204,6 +209,8 @@
       .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-modal__content .wp-block-ti-tpc-templates-cloud__modal-content .components-placeholder {
         box-shadow: none;
         margin: 20px 0; }
+  .wp-block-ti-tpc-templates-cloud__modal .components-modal__frame .components-spinner {
+    margin: 0 auto; }
 
 .ti-tpc-components-panel .components-button {
   margin: 20px 0; }
