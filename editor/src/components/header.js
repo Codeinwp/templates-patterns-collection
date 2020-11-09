@@ -1,29 +1,17 @@
-/**
- * External dependencies
- */
 import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
-/**
- * WordPress dependencies
- */
 import { closeSmall, update } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import { Button, ButtonGroup, Icon } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 
-/**
- * Internal dependencies
- */
-import icon from './../icon.js';
-import {
-	fetchTemplates,
-	fetchLibrary,
-} from './../data/templates-cloud/index.js';
+import icon from './../icon';
+import { fetchTemplates, fetchLibrary } from './../data/templates-cloud/index';
 
 const TABS = {
 	templates: __( 'Page Templates' ),
-	patterns: __( 'Patterns' ),
+	// patterns: __( 'Patterns' ),
 	library: __( 'My Library' ),
 };
 
@@ -49,29 +37,26 @@ const Header = ( { closeModal } ) => {
 	};
 
 	return (
-		<div className="wp-block-ti-tpc-templates-cloud__modal-header">
-			<div className="wp-block-ti-tpc-templates-cloud__modal-header__left">
+		<div className="modal-header">
+			<div className="left">
 				<Icon icon={ icon } />
 			</div>
 
-			<div className="wp-block-ti-tpc-templates-cloud__modal-header__center">
+			<div className="center">
 				{ Object.keys( TABS ).map( ( i ) => (
 					<Button
 						key={ i }
 						onClick={ () => updateCurrentTab( i ) }
-						className={ classnames(
-							'wp-block-ti-tpc-templates-cloud__modal-header__tabs',
-							{
-								'is-active': i === currentTab,
-							}
-						) }
+						className={ classnames( 'tabs', {
+							'is-active': i === currentTab,
+						} ) }
 					>
 						{ TABS[ i ] }
 					</Button>
 				) ) }
 			</div>
 
-			<div className="wp-block-ti-tpc-templates-cloud__modal-header__right">
+			<div className="right">
 				{ 'library' === currentTab && ! isPreview && (
 					<ButtonGroup>
 						<Button

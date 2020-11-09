@@ -1,19 +1,11 @@
-/**
- * External dependencies
- */
 import { alignJustify, grid } from '@wordpress/icons';
-
-/**
- * WordPress dependencies
- */
-const { __ } = wp.i18n;
-
-const { Button } = wp.components;
+import { __ } from '@wordpress/i18n';
+import { Button } from '@wordpress/components';
 
 const Filters = ( { layout, setLayout } ) => {
 	return (
-		<div className="wp-block-ti-tpc-templates-cloud__modal-content__filters">
-			<div className="wp-block-ti-tpc-templates-cloud__modal-content__filters__display">
+		<div className="filters">
+			<div className="display-filters">
 				<Button
 					label={ __( 'List View' ) }
 					icon={ alignJustify }

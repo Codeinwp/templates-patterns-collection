@@ -14,7 +14,7 @@ const Notices = () => {
 	const { removeNotice } = useDispatch( 'core/notices' );
 
 	return (
-		<div className="wp-block-ti-tpc-templates-cloud__modal-content__notices">
+		<div className="notices">
 			{ notices.map( ( notice ) => (
 				<Notice
 					key={ notice.id }

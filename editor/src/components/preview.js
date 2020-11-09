@@ -1,24 +1,12 @@
-/**
- * WordPress dependencies
- */
-const { __ } = wp.i18n;
-
-const { parse } = wp.blocks;
-
+import { __ } from '@wordpress/i18n';
+import { parse } from '@wordpress/blocks';
+import { Button, Placeholder, Spinner } from '@wordpress/components';
+import { useViewportMatch } from '@wordpress/compose';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { useEffect, useState } from '@wordpress/element';
 const { BlockPreview } = wp.blockEditor;
 
-const { Button, Placeholder, Spinner } = wp.components;
-
-const { useViewportMatch } = wp.compose;
-
-const { useDispatch, useSelect } = wp.data;
-
-const { useEffect, useState } = wp.element;
-
-/**
- * Internal dependencies
- */
-import { importTemplate } from './../data/templates-cloud/index.js';
+import { importTemplate } from './../data/templates-cloud/index';
 
 const Preview = ( { isFetching, importBlocks } ) => {
 	const isLarger = useViewportMatch( 'large', '>=' );
@@ -71,13 +59,13 @@ const Preview = ( { isFetching, importBlocks } ) => {
 	};
 
 	return (
-		<div className="wp-block-ti-tpc-templates-cloud__modal-content">
-			<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-header">
-				<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-header__left">
+		<div className="tpc-modal-content">
+			<div className="preview-header">
+				<div className="left">
 					{ item.template_name || __( 'Template' ) }
 				</div>
 
-				<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-header__right">
+				<div className="right">
 					<Button isSecondary onClick={ togglePreview }>
 						{ __( 'Close Preview' ) }
 					</Button>
@@ -98,7 +86,7 @@ const Preview = ( { isFetching, importBlocks } ) => {
 					<Spinner />
 				</Placeholder>
 			) : (
-				<div className="wp-block-ti-tpc-templates-cloud__modal-content__preview-content">
+				<div className="preview-content">
 					<BlockPreview
 						blocks={ parse( content ) }
 						viewportWidth={ viewportWidth }

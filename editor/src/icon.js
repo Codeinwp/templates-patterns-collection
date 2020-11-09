@@ -11,7 +11,7 @@ const icon = () => {
 			viewBox="0 0 100 100"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
-			className="wp-block-ti-tpc-templates-cloud__icon"
+			className="tpc-template-cloud-icon"
 		>
 			<Path
 				d="M95.0264 100H4.97356C2.22797 100 0 97.772 0 95.0264V4.97356C0 2.22797 2.22797 0 4.97356 0H95.0264C97.772 0 100 2.22797 100 4.97356V95.0264C100 97.772 97.772 100 95.0264 100Z"

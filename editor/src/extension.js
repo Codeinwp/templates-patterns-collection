@@ -1,6 +1,4 @@
 /* eslint-disable camelcase */
-import { stringifyUrl } from 'query-string';
-import { v4 as uuidv4 } from 'uuid';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { serialize } from '@wordpress/blocks';
@@ -12,22 +10,19 @@ import {
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
-
 import { useDispatch, useSelect } from '@wordpress/data';
-
 import {
 	PluginBlockSettingsMenuItem,
 	PluginSidebar,
 	PluginSidebarMoreMenuItem,
 } from '@wordpress/edit-post';
-
 import { Fragment, useState, useEffect } from '@wordpress/element';
 
-/**
- * Internal dependencies.
- */
-import { iconBlack } from './icon.js';
+import { stringifyUrl } from 'query-string';
+import { v4 as uuidv4 } from 'uuid';
 import classnames from 'classnames';
+
+import { iconBlack } from './icon';
 import { publishTemplate } from './data/templates-cloud';
 import Notices from './components/notices';
 
@@ -68,6 +63,7 @@ const Exporter = () => {
 		meta,
 		postTitle,
 		postId,
+		type,
 		meta: {
 			_ti_tpc_template_sync,
 			_ti_tpc_template_id,
@@ -78,6 +74,7 @@ const Exporter = () => {
 	} = useSelect( ( select ) => ( {
 		meta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {},
 		postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),
+		type: select( 'core/editor' ).getEditedPostAttribute( 'type' ),
 		postTitle:
 			select( 'core/editor' ).getEditedPostAttribute( 'title' ) ||
 			__( 'Template' ),
@@ -232,6 +229,8 @@ const Exporter = () => {
 					createSuccessNotice( __( 'Template saved.' ), {
 						type: 'snackbar',
 					} );
+
+					saveMeta();
 				}
 			}
 		} catch ( error ) {
@@ -245,7 +244,7 @@ const Exporter = () => {
 		setLoading( false );
 	};
 
-	const publishButton = () => {
+	const PublishButton = () => {
 		if ( ! canPredefine ) {
 			return null;
 		}
@@ -260,7 +259,15 @@ const Exporter = () => {
 			).then( ( r ) => {
 				if ( r.success ) {
 					setPublished( ! published );
-					savePost();
+					saveMeta();
+					createSuccessNotice(
+						published
+							? __( 'Template Unpublished.' )
+							: __( 'Template Published.' ),
+						{
+							type: 'snackbar',
+						}
+					);
 				}
 			} );
 			setLoading( false );
@@ -285,6 +292,25 @@ const Exporter = () => {
 						: __( 'Publish' ) ) }
 			</Button>
 		);
+	};
+
+	const saveMeta = () => {
+		let post = null;
+
+		if ( type === 'post' ) {
+			post = new wp.api.models.Post( { id: postId } );
+		} else if ( type === 'page' ) {
+			post = new wp.api.models.Page( { id: postId } );
+		}
+
+		post.set( 'meta', {
+			_ti_tpc_template_id: templateID,
+			_ti_tpc_template_sync: templateSync,
+			_ti_tpc_screenshot_url: screenshotURL,
+			_ti_tpc_site_slug: siteSlug,
+			_ti_tpc_published: ! published,
+		} );
+		return post.save();
 	};
 
 	return (
@@ -339,10 +365,13 @@ const Exporter = () => {
 						<TextControl
 							label={ __( 'Site Slug' ) }
 							value={ siteSlug }
+							help={ __(
+								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.'
+							) }
 							type="url"
 							onChange={ setSiteSlug }
 						/>
-						{ publishButton() }
+						<PublishButton />
 						<Notices />
 					</PanelBody>
 				) }

@@ -1,4 +1,9 @@
-.wp-block-ti-tpc-templates-cloud__modal {
+.tpc-template-cloud-icon {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.tpc-template-cloud-modal {
 	.components-modal__frame {
 		width: 100%;
 
@@ -9,28 +14,28 @@
 				display: none;
 			}
 
-			.wp-block-ti-tpc-templates-cloud__modal-header {
+			.modal-header {
 				display: flex;
 				border-bottom: 1px solid #e0e0e0;
 
-				.wp-block-ti-tpc-templates-cloud__modal-header__left {
+				.left {
 					display: flex;
 					flex-basis: 20%;
 					justify-content: flex-start;
 
-					.wp-block-ti-tpc-templates-cloud__icon {
+					.tpc-template-cloud-icon {
 						width: 60px;
 						height: 60px;
 						padding: 10px;
 					}
 				}
 
-				.wp-block-ti-tpc-templates-cloud__modal-header__center {
+				.center {
 					display: flex;
 					flex-basis: 60%;
 					justify-content: center;
 
-					.wp-block-ti-tpc-templates-cloud__modal-header__tabs {
+					.tabs {
 						height: 60px;
 						font-size: 14px;
 						color: #616161;
@@ -45,7 +50,7 @@
 					}
 				}
 
-				.wp-block-ti-tpc-templates-cloud__modal-header__right {
+				.right {
 					display: flex;
 					flex-basis: 20%;
 					justify-content: flex-end;
@@ -111,18 +116,18 @@
 				}
 			}
 
-			.wp-block-ti-tpc-templates-cloud__modal-content {
+			.tpc-modal-content {
 				background: #f1f1f1;
 				padding: 20px 40px;
 
-				.wp-block-ti-tpc-templates-cloud__modal-content__notices {
+				.notices {
 					.components-notice {
 						margin: 0 0 20px 0;
 						padding: 10px;
 					}
 				}
 
-				.wp-block-ti-tpc-templates-cloud__modal-content__filters {
+				.filters {
 					display: flex;
 					justify-content: flex-end;
 					padding-bottom: 20px;
@@ -142,13 +147,13 @@
 					}
 				}
 
-				.wp-block-ti-tpc-templates-cloud__modal-content__table {
+				.table-content {
 					&.is-grid {
 						display: grid;
 						grid-template-columns: 25% 25% 25% 25%;
 					}
 
-					.wp-block-ti-tpc-templates-cloud__modal-content__table_row {
+					.table-row {
 						display: flex;
 						height: 60px;
 						width: 100%;
@@ -169,7 +174,7 @@
 							fill: #b9b9b9;
 						}
 
-						.wp-block-ti-tpc-templates-cloud__modal-content__table_row__title {
+						.row-title {
 							display: flex;
 							align-items: center;
 							flex-basis: 35%;
@@ -179,14 +184,15 @@
 							}
 						}
 
-						.wp-block-ti-tpc-templates-cloud__modal-content__table_row__controls {
+						.row-controls {
 							display: flex;
 							justify-content: space-evenly;
 							align-items: center;
 							flex-basis: 30%;
 						}
 
-						.wp-block-ti-tpc-templates-cloud__modal-content__table_row__actions {
+						.actions {
+							margin-left: auto;
 							display: flex;
 							justify-content: flex-end;
 							flex-basis: 35%;
@@ -201,12 +207,12 @@
 						}
 					}
 
-					.wp-block-ti-tpc-templates-cloud__modal-content__table_grid {
+					.table-grid {
 						border: 1px solid #ccc;
 						margin: 10px;
 						min-height: 350px;
 
-						.wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview {
+						.grid-preview {
 							display: flex;
 							width: 100%;
 							height: 300px;
@@ -221,12 +227,12 @@
 							&.is-loading {
 								background: #404040;
 
-								.wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions {
+								.preview-actions {
 									display: flex;
 								}
 							}
 
-							.wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions {
+							.preview-actions {
 								opacity: 0;
 								transition: .3s ease opacity;
 								width: 100%;
@@ -253,7 +259,7 @@
 									}
 								}
 
-								.wp-block-ti-tpc-templates-cloud__modal-content__table__grid__preview_controls {
+								.preview-controls {
 									.components-button {
 										width: 20px;
 
@@ -265,13 +271,13 @@
 							}
 
 							&:hover {
-								.wp-block-ti-tpc-templates-cloud__modal-content__table_grid__preview_actions {
+								.preview-actions {
 									opacity: 1;
 								}
 							}
 						}
 
-						.wp-block-ti-tpc-templates-cloud__modal-content__table_grid__footer {
+						.card-footer {
 							background: #ffffff;
 							border-top: 1px solid #ccc;
 							padding: 15px;
@@ -284,7 +290,7 @@
 					}
 				}
 
-				.wp-block-ti-tpc-templates-cloud__modal-content__pagination {
+				.pagination {
 					padding-top: 20px;
 
 					.components-button {
@@ -306,12 +312,12 @@
 					}
 				}
 
-				.wp-block-ti-tpc-templates-cloud__modal-content__preview-header {
+				.preview-header {
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
 
-					.wp-block-ti-tpc-templates-cloud__modal-content__preview-header__right {
+					.right {
 						.components-button {
 							&:last-child {
 								margin-left: 10px;
@@ -320,7 +326,7 @@
 					}
 				}
 
-				.wp-block-ti-tpc-templates-cloud__modal-content__preview-content {
+				.preview-content {
 					margin: 20px 0;
 
 					.block-editor-block-preview__container {
@@ -355,11 +361,11 @@
 	}
 }
 
-.wp-block-ti-tpc-templates-cloud__preview_controls__popver {
+.controls-popover {
 	.components-popover__content {
 		padding: 10px;
 
-		.wp-block-ti-tpc-templates-cloud__preview_controls__popver_content {
+		.popover-content {
 			display: flex;
 			justify-content: center;
 			align-items: flex-end;
@@ -390,13 +396,13 @@
 }
 
 @media (max-width: 1439px) {
-	.wp-block-ti-tpc-templates-cloud__modal {
+	.tpc-template-cloud-modal {
 		.components-modal__frame {
 			max-width: 990px;
 
 			.components-modal__content {
-				.wp-block-ti-tpc-templates-cloud__modal-content {
-					.wp-block-ti-tpc-templates-cloud__modal-content__table {
+				.tpc-modal-content {
+					.table-content {
 						&.is-grid {
 							grid-template-columns: 33% 33% 33%;
 						}
@@ -408,7 +414,7 @@
 }
 
 @media (min-width: 1440px) {
-	.wp-block-ti-tpc-templates-cloud__modal {
+	.tpc-template-cloud-modal {
 		.components-modal__frame {
 			max-width: 1200px;
 		}

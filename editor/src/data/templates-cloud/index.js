@@ -1,18 +1,12 @@
-/**
- * External dependencies
- */
 import { stringifyUrl } from 'query-string';
-
 import { v4 as uuidv4 } from 'uuid';
 
-/**
- * WordPress dependencies
- */
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch } from '@wordpress/data';
 
 const { updateLibrary, updateTemplates } = dispatch( 'tpc/block-editor' );
 const { createNotice } = dispatch( 'core/notices' );
+
 const createErrorNotice = ( message ) => {
 	createNotice( 'warning', message, {
 		context: 'themeisle-blocks/notices/templates-cloud',

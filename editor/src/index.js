@@ -1,18 +1,12 @@
-/**
- * WordPress dependencies
- */
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
 
-/**
- * Internal dependencies
- */
 import './editor.scss';
 import './data/index.js';
-import { iconBlack as icon } from './icon.js';
-import Exporter from './extension.js';
-import edit from './edit.js';
+import { iconBlack as icon } from './icon';
+import Exporter from './extension';
+import edit from './edit';
 
 if ( 'free' !== window.tiTpc.params.license_id ) {
 	registerBlockType( 'ti-tpc/templates-cloud', {

@@ -1,17 +1,9 @@
-/**
- * WordPress dependencies
- */
-const { parse } = wp.blocks;
+import { parse } from '@wordpress/blocks';
+import { Modal } from '@wordpress/components';
+import { useDispatch } from '@wordpress/data';
 
-const { Modal } = wp.components;
-
-const { useDispatch } = wp.data;
-
-/**
- * Internal dependencies
- */
-import Header from './components/header.js';
-import Content from './components/content.js';
+import Header from './components/header';
+import Content from './components/content';
 
 const Edit = ( { clientId } ) => {
 	const { removeBlock, replaceBlocks } = useDispatch( 'core/block-editor' );
@@ -27,7 +19,7 @@ const Edit = ( { clientId } ) => {
 			shouldCloseOnEsc={ false }
 			shouldCloseOnClickOutside={ false }
 			isDismissible={ false }
-			overlayClassName="wp-block-ti-tpc-templates-cloud__modal"
+			overlayClassName="tpc-template-cloud-modal"
 		>
 			<Header closeModal={ closeModal } />
 

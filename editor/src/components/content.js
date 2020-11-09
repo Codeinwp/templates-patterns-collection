@@ -1,55 +1,11 @@
-/**
- * WordPress dependencies
- */
 import { __ } from '@wordpress/i18n';
-import { useDispatch, useSelect } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
+import { withSelect } from '@wordpress/data';
 
-/**
- * Internal dependencies
- */
-import {
-	fetchTemplates,
-	fetchLibrary,
-} from './../data/templates-cloud/index.js';
-import Preview from './preview.js';
-import Library from './library.js';
-import Notices from './notices.js';
+import Preview from './preview';
+import TemplatesContent from './templates-content';
+import Notices from './notices';
 
-const Content = ( { importBlocks } ) => {
-	const { setFetching } = useDispatch( 'tpc/block-editor' );
-
-	const isFetching = useSelect( ( select ) =>
-		select( 'tpc/block-editor' ).isFetching()
-	);
-	const isPreview = useSelect( ( select ) =>
-		select( 'tpc/block-editor' ).isPreview()
-	);
-	const currentTab = useSelect( ( select ) =>
-		select( 'tpc/block-editor' ).getCurrentTab()
-	);
-
-	useEffect( () => {
-		init();
-	}, [] );
-
-	const init = async () => {
-		setFetching( true );
-		await fetchTemplates();
-		await fetchLibrary();
-		setFetching( false );
-	};
-
-	const { items = [], currentPage, totalPages } = useSelect( ( select ) => {
-		if ( currentTab === 'library' ) {
-			return select( 'tpc/block-editor' ).getLibrary() || {};
-		}
-
-		if ( currentTab === 'templates' ) {
-			return select( 'tpc/block-editor' ).getTemplates() || {};
-		}
-	} );
-
+const Content = ( { importBlocks, isPreview, currentTab, isFetching } ) => {
 	if ( isPreview ) {
 		return (
 			<Preview isFetching={ isFetching } importBlocks={ importBlocks } />
@@ -57,23 +13,30 @@ const Content = ( { importBlocks } ) => {
 	}
 
 	return (
-		<div className="wp-block-ti-tpc-templates-cloud__modal-content">
+		<div className="tpc-modal-content">
 			<Notices />
-			{ [ 'templates', 'library' ].includes( currentTab ) ? (
-				<Library
-					items={ items }
-					currentPage={ currentPage }
-					totalPages={ totalPages }
+			{ [ 'templates', 'library' ].includes( currentTab ) && (
+				<TemplatesContent
 					isFetching={ isFetching }
+					isGeneral={ currentTab === 'templates' }
 					importBlocks={ importBlocks }
 				/>
-			) : (
+			) }
+			{ currentTab === 'patterns' &&
 				__(
 					'We are still working on this. Please check back later. Thank you!'
-				)
-			) }
+				) }
 		</div>
 	);
 };
 
-export default Content;
+export default withSelect( ( select ) => {
+	const { isPreview, isFetching, getCurrentTab } = select(
+		'tpc/block-editor'
+	);
+	return {
+		isPreview: isPreview(),
+		isFetching: isFetching(),
+		currentTab: getCurrentTab(),
+	};
+} )( Content );
