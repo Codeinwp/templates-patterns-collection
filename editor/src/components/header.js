@@ -9,14 +9,17 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import icon from './../icon';
 import { fetchTemplates, fetchLibrary } from './../data/templates-cloud/index';
 
-const TABS = {
-	templates: __( 'Page Templates' ),
-	// patterns: __( 'Patterns' ),
-	library: __( 'My Library' ),
-};
-
 const Header = ( { closeModal } ) => {
 	const { setFetching, updateCurrentTab } = useDispatch( 'tpc/block-editor' );
+
+	const TABS = {
+		templates: __( 'Page Templates' ),
+		// patterns: __( 'Patterns' ),
+	};
+
+	if ( parseInt( tiTpc.tier ) === 3 ) {
+		TABS.library = __( 'My Library' );
+	}
 
 	const isFetching = useSelect( ( select ) =>
 		select( 'tpc/block-editor' ).isFetching()

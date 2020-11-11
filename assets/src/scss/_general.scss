@@ -208,10 +208,10 @@ svg.is-loading, button.is-loading svg {
 	align-items: center;
 
 	.ob-head {
+		box-sizing: border-box;
+		padding: 20px;
 		background: #ffffff;
 		width: 100%;
-		padding-top: 20px;
-		padding-bottom: 20px;
 		display: flex;
 		justify-content: center;
 
@@ -254,8 +254,10 @@ svg.is-loading, button.is-loading svg {
 	}
 
 	.ob-body {
+		width: 100%;
 		max-width: 1300px;
 		padding: 0 20px;
+		box-sizing: border-box;
 
 		.instructions {
 			font-size: 22px;
@@ -275,7 +277,7 @@ svg.is-loading, button.is-loading svg {
 
 	&.is-grid {
 		display: grid;
-		grid-template-columns: calc( 25% - 15px ) calc( 25% - 15px ) calc( 25% - 15px ) calc( 25% - 15px );
+		grid-template-columns: 1fr;
 		grid-column-gap: 20px;
 		grid-row-gap: 20px;
 	}
@@ -295,7 +297,7 @@ svg.is-loading, button.is-loading svg {
 	}
 	.ob-sites {
 		&.is-grid {
-			grid-template-columns: calc( 25% - 15px ) calc( 25% - 15px ) calc( 25% - 15px ) calc( 25% - 15px );
+			grid-template-columns: 1fr 1fr 1fr;
 		}
 	}
 }
@@ -303,7 +305,7 @@ svg.is-loading, button.is-loading svg {
 @mixin ob-general--tablet() {
 	.ob-sites {
 		&.is-grid {
-			grid-template-columns: calc( 33% - 10px ) calc( 33% - 10px ) calc( 33% - 10px );
+			grid-template-columns: 1fr 1fr;
 		}
 	}
 }

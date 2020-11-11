@@ -64,6 +64,7 @@ const Exporter = () => {
 		postTitle,
 		postId,
 		type,
+		link,
 		meta: {
 			_ti_tpc_template_sync,
 			_ti_tpc_template_id,
@@ -75,6 +76,7 @@ const Exporter = () => {
 		meta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {},
 		postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),
 		type: select( 'core/editor' ).getEditedPostAttribute( 'type' ),
+		link: select( 'core/editor' ).getEditedPostAttribute( 'link' ),
 		postTitle:
 			select( 'core/editor' ).getEditedPostAttribute( 'title' ) ||
 			__( 'Template' ),
@@ -255,7 +257,8 @@ const Exporter = () => {
 				_ti_tpc_template_id,
 				_ti_tpc_site_slug,
 				_ti_tpc_screenshot_url,
-				! _ti_tpc_published
+				! _ti_tpc_published,
+				link
 			).then( ( r ) => {
 				if ( r.success ) {
 					setPublished( ! published );

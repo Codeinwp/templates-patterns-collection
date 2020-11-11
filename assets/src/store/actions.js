@@ -74,4 +74,10 @@ export default {
 			payload: { currentTab },
 		};
 	},
+	setFetching( fetching ) {
+		return {
+			type: 'SET_FETCHING',
+			payload: { fetching },
+		};
+	},
 };

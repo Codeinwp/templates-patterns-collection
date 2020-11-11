@@ -1,58 +1,92 @@
-/* eslint-disable camelcase */
-import classnames from 'classnames';
+import { check, edit, group, page, trash, update } from '@wordpress/icons';
 
-import {
-	// cloudUpload,
-	check,
-	edit,
-	group,
-	page,
-	trash,
-	update,
-} from '@wordpress/icons';
+import classnames from 'classnames';
+import { stringifyUrl } from 'query-string';
+import { v4 as uuidv4 } from 'uuid';
+
+import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
-import { Button, Icon, Popover, TextControl } from '@wordpress/components';
+import { Button, Popover, Icon, TextControl } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
-import {
-	updateTemplate,
-	deleteTemplate,
-	duplicateTemplate,
-	importTemplate,
-	fetchLibrary,
-} from './../data/templates-cloud/index';
+const ListItem = ( { item, loadTemplates, userTemplate, grid } ) => {
+	// const { togglePreview, setPreviewData } = useDispatch( 'tpc/block-editor' );
 
-const ListItem = ( { layout, item, importBlocks, deletable } ) => {
-	const { togglePreview, setPreviewData } = useDispatch( 'tpc/block-editor' );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isEditing, setEditing ] = useState( false );
 	const [ itemName, setItemName ] = useState( item.template_name );
 
-	const importItem = async () => {
-		setLoading( 'importing' );
-		const data = await importTemplate( item.template_id );
+	// const importItem = async () => {
+	// 	setLoading( 'importing' );
+	// 	const data = await importTemplate( item.template_id );
 
-		if ( data.__file && data.content && 'wp_export' === data.__file ) {
-			importBlocks( data.content );
-		}
-		setLoading( false );
-	};
+	// 	if ( data.__file && data.content && 'wp_export' === data.__file ) {
+	// 		importBlocks( data.content );
+	// 	}
+	// 	setLoading( false );
+	// };
 
 	const updateItem = async () => {
 		setLoading( 'updating' );
-		await updateTemplate( {
-			template_id: item.template_id,
-			template_name: itemName || item.template_name,
+
+		const url = stringifyUrl( {
+			url: window.tiobDash.endpoint + item.template_id,
+			query: {
+				cache: window.localStorage.getItem( 'tpcCacheBuster' ),
+				...window.tiobDash.params,
+			},
 		} );
-		await fetchLibrary();
+
+		try {
+			await apiFetch( {
+				url,
+				method: 'POST',
+				data: {
+					template_id: item.template_id,
+					template_name: itemName || item.template_name,
+				},
+			} );
+
+			window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
+			await loadTemplates();
+		} catch ( error ) {
+			if ( error.message ) {
+				console.log( error.message );
+			}
+		}
+
 		setLoading( false );
 		setEditing( ! isEditing );
 	};
 
 	const duplicateItem = async () => {
 		setLoading( 'duplicating' );
-		await duplicateTemplate( item.template_id );
+
+		const url = stringifyUrl( {
+			url: window.tiobDash.endpoint + item.template_id + '/clone',
+			query: {
+				cache: window.localStorage.getItem( 'tpcCacheBuster' ),
+				...window.tiobDash.params,
+			},
+		} );
+
+		try {
+			await apiFetch( {
+				url,
+				method: 'POST',
+			} );
+
+			window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
+			await loadTemplates();
+		} catch ( error ) {
+			if ( error.message ) {
+				console.log( error.message );
+			}
+		}
+
 		setLoading( false );
 	};
 
@@ -66,19 +100,38 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 		}
 
 		setLoading( 'deleting' );
-		await deleteTemplate( item.template_id );
+
+		const url = stringifyUrl( {
+			url: window.tiobDash.endpoint + item.template_id,
+			query: {
+				cache: window.localStorage.getItem( 'tpcCacheBuster' ),
+				_method: 'DELETE',
+				...window.tiobDash.params,
+			},
+		} );
+
+		try {
+			await apiFetch( { url, method: 'POST' } );
+			window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
+			await loadTemplates();
+		} catch ( error ) {
+			if ( error.message ) {
+				console.log( error.message );
+			}
+		}
+
 		setLoading( false );
 	};
 
-	const importPreview = async () => {
-		togglePreview();
-		setPreviewData( {
-			type: 'library',
-			item,
-		} );
-	};
-
-	if ( 'grid' === layout ) {
+	// const importPreview = async () => {
+	// 	togglePreview();
+	// 	setPreviewData( {
+	// 		type: 'library',
+	// 		item,
+	// 	} );
+	// };
+	if ( grid ) {
 		const style = { backgroundImage: `url(${ item.template_thumbnail })` };
 
 		return (
@@ -90,24 +143,25 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 					} ) }
 				>
 					<div className="preview-actions">
-						<Button
-							isSecondary
-							disabled={ false !== isLoading }
-							onClick={ importPreview }
-						>
-							{ __( 'Preview' ) }
-						</Button>
-
+						{ ! userTemplate && (
+							<Button
+								isSecondary
+								disabled={ false !== isLoading }
+								// onClick={ importPreview }
+							>
+								{ __( 'Preview' ) }
+							</Button>
+						) }
 						<Button
 							isPrimary
 							isBusy={ 'importing' === isLoading }
 							disabled={ false !== isLoading }
-							onClick={ importItem }
+							// onClick={ importItem }
 						>
 							{ __( 'Import' ) }
 						</Button>
 
-						{ deletable && (
+						{ userTemplate && (
 							<div className="preview-controls">
 								<Button
 									label={ __( 'Edit' ) }
@@ -121,44 +175,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 										'is-loading': 'updating' === isLoading,
 									} ) }
 									onClick={ () => setEditing( ! isEditing ) }
-								>
-									{ isEditing && (
-										<Popover
-											onFocusOutside={ () =>
-												setEditing( ! isEditing )
-											}
-											className="controls-popover"
-										>
-											<div className="popover-content">
-												<TextControl
-													label={ __(
-														'Template Name'
-													) }
-													value={ itemName }
-													onChange={ setItemName }
-												/>
-
-												<Button
-													label={ __( 'Update' ) }
-													icon={
-														'updating' === isLoading
-															? update
-															: check
-													}
-													disabled={
-														false !== isLoading
-													}
-													className={ classnames( {
-														'is-loading':
-															'updating' ===
-															isLoading,
-													} ) }
-													onClick={ updateItem }
-												/>
-											</div>
-										</Popover>
-									) }
-								</Button>
+								/>
 
 								<Button
 									label={ __( 'Duplicate' ) }
@@ -194,7 +211,28 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 				</div>
 
 				<div className="card-footer">
-					<p>{ item.template_name }</p>
+					{ isEditing ? (
+						<>
+							{ ' ' }
+							<TextControl
+								value={ itemName }
+								onChange={ setItemName }
+							/>
+							<Button
+								label={ __( 'Update' ) }
+								icon={
+									'updating' === isLoading ? update : check
+								}
+								disabled={ false !== isLoading }
+								className={ classnames( {
+									'is-loading': 'updating' === isLoading,
+								} ) }
+								onClick={ updateItem }
+							/>
+						</>
+					) : (
+						<p>{ item.template_name }</p>
+					) }
 				</div>
 			</div>
 		);
@@ -202,7 +240,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 
 	return (
 		<div key={ item.template_id } className="table-row">
-			<div className="row-title">
+			<div className="title">
 				<Icon icon={ page } />
 				{ isEditing ? (
 					<TextControl
@@ -216,8 +254,8 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 				) }
 			</div>
 
-			{ deletable && (
-				<div className="row-controls">
+			{ userTemplate && (
+				<div className="controls">
 					<Button
 						label={ isEditing ? __( 'Update' ) : __( 'Edit' ) }
 						icon={
@@ -257,28 +295,25 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 						} ) }
 						onClick={ deleteItem }
 					/>
-
-					{ /* <Button
-					label={ __( 'Sync' ) }
-					icon={ cloudUpload }
-					onClick={ () => console.log( 'Upload to cloud.' ) }
-				/> */ }
 				</div>
 			) }
+
 			<div className="actions">
-				<Button
-					isSecondary
-					disabled={ false !== isLoading }
-					onClick={ importPreview }
-				>
-					{ __( 'Preview' ) }
-				</Button>
+				{ ! userTemplate && (
+					<Button
+						isSecondary
+						disabled={ false !== isLoading }
+						// onClick={ importPreview }
+					>
+						{ __( 'Preview' ) }
+					</Button>
+				) }
 
 				<Button
 					isPrimary
 					isBusy={ 'importing' === isLoading }
 					disabled={ false !== isLoading }
-					onClick={ importItem }
+					// onClick={ importItem }
 				>
 					{ __( 'Import' ) }
 				</Button>

@@ -10,4 +10,5 @@ export default {
 	getThemeAction: ( state ) => state.themeAction,
 	getInstallModalStatus: ( state ) => state.installModalStatus,
 	getCurrentTab: ( state ) => state.currentTab,
+	getFetching: ( state ) => state.fetching,
 };

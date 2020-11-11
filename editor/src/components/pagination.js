@@ -12,6 +12,7 @@ const Pagination = ( { total, current, onChange } ) => {
 
 		pages.push(
 			<Button
+				key={ `page-${ i }` }
 				isPrimary={ isCurrent }
 				disabled={ isCurrent }
 				onClick={ () => onChange( i ) }

@@ -1,0 +1,21 @@
+.pagination {
+	padding-top: 20px;
+
+	.components-button {
+		margin-right: 10px;
+		border-radius: 2px;
+		box-shadow: none;
+
+		&:focus {
+			box-shadow: inset 0 0 0 1px #fff, 0 0 0 1.5px #007cba;
+		}
+
+		&:not( .is-primary ) {
+			background: #ffffff;
+
+			&:focus {
+				box-shadow: 0 0 0 1.5px #007cba;
+			}
+		}
+	}
+}

@@ -71,7 +71,7 @@
 		height: 350px;
 		background-size: cover;
 		background-repeat: no-repeat;
-		background-position: center;
+		background-position: top center;
 		background-color: transparentize($dark-grey, .75);
 	}
 
@@ -91,60 +91,6 @@
 			font-weight: 700;
 			color: $black;
 			margin: 0;
-		}
-	}
-}
-
-.list-item__table {
-	.list-item__table_row {
-		display: flex;
-		height: 60px;
-		align-items: center;
-		padding: 0 25px;
-		background: #fff;
-		border-top: 1px solid rgba(0, 0, 0, 0.11);
-		border-right: 1px solid rgba(0, 0, 0, 0.11);
-		border-left: 1px solid rgba(0, 0, 0, 0.11);
-
-		&:last-child {
-			border-bottom: 1px solid rgba(0, 0, 0, 0.11);
-		}
-
-		svg {
-			height: 24px;
-			margin-right: 10px;
-			fill: #B9B9B9;
-		}
-
-		.list-item__table_row__title {
-			display: flex;
-			align-items: center;
-			flex-basis: 35%;
-
-			.components-base-control__field {
-				margin: 0;
-			}
-		}
-
-		.list-item__table_row__controls {
-			display: flex;
-			justify-content: space-evenly;
-			align-items: center;
-			flex-basis: 30%;
-		}
-
-		.list-item__table_row__actions {
-			display: flex;
-			justify-content: flex-end;
-			flex-basis: 35%;
-
-			.components-button {
-				padding: 6px 30px;
-
-				&.is-primary {
-					margin-left: 10px;
-				}
-			}
 		}
 	}
 }

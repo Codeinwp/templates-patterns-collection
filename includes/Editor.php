@@ -46,14 +46,16 @@ class Editor {
 		wp_localize_script(
 			$this->handle,
 			'tiTpc',
-			array(
-				'endpoint'     => TPC_TEMPLATES_CLOUD_ENDPOINT,
-				'params'       => array(
-					'site_url'   => get_site_url(),
-					'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
-				),
-				'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
-			)
+            apply_filters( 'ti_tpc_editor_data', array(
+                    'endpoint'     => TPC_TEMPLATES_CLOUD_ENDPOINT,
+                    'params'       => array(
+                        'site_url'   => get_site_url(),
+                        'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+                        'tier'       => -1,
+                    ),
+                    'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
+                )
+            )
 		);
 
 		wp_register_style(

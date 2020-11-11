@@ -237,7 +237,8 @@ export const publishTemplate = async (
 	template,
 	siteSlug,
 	featuredImageURL,
-	publishStatus
+	publishStatus,
+	link
 ) => {
 	const url = stringifyUrl( {
 		url: window.tiTpc.endpoint + template + '/publish',
@@ -247,6 +248,7 @@ export const publishTemplate = async (
 			template_site_slug: siteSlug,
 			template_thumbnail: featuredImageURL,
 			premade: publishStatus ? 'yes' : 'no',
+			link,
 			...window.tiTpc.params,
 		},
 	} );
