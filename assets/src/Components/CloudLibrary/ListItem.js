@@ -1,92 +1,40 @@
+/* eslint-disable camelcase */
+
 import { check, edit, group, page, trash, update } from '@wordpress/icons';
-
-import classnames from 'classnames';
-import { stringifyUrl } from 'query-string';
-import { v4 as uuidv4 } from 'uuid';
-
-import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
-import { Button, Popover, Icon, TextControl } from '@wordpress/components';
-import { useDispatch } from '@wordpress/data';
+import { Button, Icon, TextControl } from '@wordpress/components';
+
 import { useState } from '@wordpress/element';
+import classnames from 'classnames';
 
-const ListItem = ( { item, loadTemplates, userTemplate, grid } ) => {
-	// const { togglePreview, setPreviewData } = useDispatch( 'tpc/block-editor' );
+import { updateTemplate, duplicateTemplate, deleteTemplate } from './common';
 
+const ListItem = ( { item, loadTemplates, userTemplate, grid, onPreview } ) => {
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isEditing, setEditing ] = useState( false );
 	const [ itemName, setItemName ] = useState( item.template_name );
 
-	// const importItem = async () => {
-	// 	setLoading( 'importing' );
-	// 	const data = await importTemplate( item.template_id );
-
-	// 	if ( data.__file && data.content && 'wp_export' === data.__file ) {
-	// 		importBlocks( data.content );
-	// 	}
-	// 	setLoading( false );
-	// };
-
-	const updateItem = async () => {
+	const updateItem = async ( e ) => {
+		e.preventDefault();
+		const { template_id, template_name } = item;
 		setLoading( 'updating' );
-
-		const url = stringifyUrl( {
-			url: window.tiobDash.endpoint + item.template_id,
-			query: {
-				cache: window.localStorage.getItem( 'tpcCacheBuster' ),
-				...window.tiobDash.params,
-			},
-		} );
-
-		try {
-			await apiFetch( {
-				url,
-				method: 'POST',
-				data: {
-					template_id: item.template_id,
-					template_name: itemName || item.template_name,
-				},
-			} );
-
-			window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-
-			await loadTemplates();
-		} catch ( error ) {
-			if ( error.message ) {
-				console.log( error.message );
+		await updateTemplate( template_id, itemName || template_name ).then(
+			( r ) => {
+				if ( r.success ) {
+					setEditing( ! isEditing );
+					setLoading( false );
+				}
 			}
-		}
-
-		setLoading( false );
-		setEditing( ! isEditing );
+		);
 	};
 
 	const duplicateItem = async () => {
 		setLoading( 'duplicating' );
-
-		const url = stringifyUrl( {
-			url: window.tiobDash.endpoint + item.template_id + '/clone',
-			query: {
-				cache: window.localStorage.getItem( 'tpcCacheBuster' ),
-				...window.tiobDash.params,
-			},
-		} );
-
-		try {
-			await apiFetch( {
-				url,
-				method: 'POST',
-			} );
-
-			window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-
-			await loadTemplates();
-		} catch ( error ) {
-			if ( error.message ) {
-				console.log( error.message );
+		await duplicateTemplate( item.template_id ).then( ( r ) => {
+			if ( r.success ) {
+				loadTemplates();
 			}
-		}
-
+		} );
 		setLoading( false );
 	};
 
@@ -100,37 +48,18 @@ const ListItem = ( { item, loadTemplates, userTemplate, grid } ) => {
 		}
 
 		setLoading( 'deleting' );
-
-		const url = stringifyUrl( {
-			url: window.tiobDash.endpoint + item.template_id,
-			query: {
-				cache: window.localStorage.getItem( 'tpcCacheBuster' ),
-				_method: 'DELETE',
-				...window.tiobDash.params,
-			},
-		} );
-
-		try {
-			await apiFetch( { url, method: 'POST' } );
-			window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-
-			await loadTemplates();
-		} catch ( error ) {
-			if ( error.message ) {
-				console.log( error.message );
+		deleteTemplate( item.template_id ).then( ( r ) => {
+			if ( r.success ) {
+				loadTemplates();
 			}
-		}
-
+		} );
 		setLoading( false );
 	};
 
-	// const importPreview = async () => {
-	// 	togglePreview();
-	// 	setPreviewData( {
-	// 		type: 'library',
-	// 		item,
-	// 	} );
-	// };
+	const handlePreview = () => {
+		onPreview( item.link );
+	};
+
 	if ( grid ) {
 		const style = { backgroundImage: `url(${ item.template_thumbnail })` };
 
@@ -143,11 +72,11 @@ const ListItem = ( { item, loadTemplates, userTemplate, grid } ) => {
 					} ) }
 				>
 					<div className="preview-actions">
-						{ ! userTemplate && (
+						{ ! userTemplate && item.link && (
 							<Button
 								isSecondary
 								disabled={ false !== isLoading }
-								// onClick={ importPreview }
+								onClick={ handlePreview }
 							>
 								{ __( 'Preview' ) }
 							</Button>
@@ -212,13 +141,13 @@ const ListItem = ( { item, loadTemplates, userTemplate, grid } ) => {
 
 				<div className="card-footer">
 					{ isEditing ? (
-						<>
-							{ ' ' }
+						<form onSubmit={ updateItem }>
 							<TextControl
 								value={ itemName }
 								onChange={ setItemName }
 							/>
 							<Button
+								type="submit"
 								label={ __( 'Update' ) }
 								icon={
 									'updating' === isLoading ? update : check
@@ -227,11 +156,10 @@ const ListItem = ( { item, loadTemplates, userTemplate, grid } ) => {
 								className={ classnames( {
 									'is-loading': 'updating' === isLoading,
 								} ) }
-								onClick={ updateItem }
 							/>
-						</>
+						</form>
 					) : (
-						<p>{ item.template_name }</p>
+						<p>{ itemName }</p>
 					) }
 				</div>
 			</div>
@@ -299,11 +227,11 @@ const ListItem = ( { item, loadTemplates, userTemplate, grid } ) => {
 			) }
 
 			<div className="actions">
-				{ ! userTemplate && (
+				{ ! userTemplate && item.link && (
 					<Button
 						isSecondary
 						disabled={ false !== isLoading }
-						// onClick={ importPreview }
+						onClick={ handlePreview }
 					>
 						{ __( 'Preview' ) }
 					</Button>

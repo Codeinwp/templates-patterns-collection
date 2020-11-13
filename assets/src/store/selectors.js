@@ -11,4 +11,5 @@ export default {
 	getInstallModalStatus: ( state ) => state.installModalStatus,
 	getCurrentTab: ( state ) => state.currentTab,
 	getFetching: ( state ) => state.fetching,
+	getSingleImport: ( state ) => state.singleTemplateImport,
 };

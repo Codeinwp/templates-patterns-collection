@@ -27,12 +27,6 @@ const TabNavigation = ( {
 		buttons.library = __( 'My Library', 'neve' );
 	}
 
-	const syncLibrary = () => {
-		setFetching( true );
-
-		setFetching( false );
-	};
-
 	return (
 		<div className="header-nav">
 			{ Object.keys( buttons ).map( ( slug ) => {
@@ -47,17 +41,6 @@ const TabNavigation = ( {
 					</Button>
 				);
 			} ) }
-			{ currentTab === 'library' && (
-				<Button
-					label={ __( 'Re-sync Library' ) }
-					icon={ update }
-					disabled={ isFetching }
-					className={ classnames( 'is-sync', {
-						'is-loading': isFetching,
-					} ) }
-					onClick={ syncLibrary }
-				/>
-			) }
 		</div>
 	);
 };

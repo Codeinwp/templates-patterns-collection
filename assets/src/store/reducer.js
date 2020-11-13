@@ -23,6 +23,7 @@ const initialState = {
 	themeAction,
 	currentTab: 'starterSites',
 	fetching: false,
+	singleTemplateImport: null,
 };
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
@@ -84,14 +85,21 @@ export default ( state = initialState, action ) => {
 	case 'SET_CURRENT_TAB':
 			const { currentTab } = action.payload;
 		return {
-			...state,
+				...state,
+				singleTemplateImport: null,
 				currentTab,
 			};
 	case 'SET_FETCHING':
 			const { fetching } = action.payload;
 		return {
-			...state,
+				...state,
 				fetching,
+			};
+	case 'SET_SINGLE_TEMPLATE_IMPORT':
+			const { slug } = action.payload;
+		return {
+			...state,
+			singleTemplateImport: slug,
 			};
 	}
 	return state;

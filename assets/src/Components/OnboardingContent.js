@@ -9,7 +9,6 @@ import Fuse from 'fuse.js/dist/fuse.min';
 
 import StarterSiteCard from './StarterSiteCard';
 import PreviewFrame from './PreviewFrame';
-import ImportModal from './ImportModal';
 import { TAGS } from '../utils/common';
 import Filters from './StarterSites/Filters';
 
@@ -20,7 +19,6 @@ const OnboardingContent = ( {
 	editor,
 	previewOpen,
 	currentSiteData,
-	importModal,
 	isOnboarding,
 	cancelOnboarding,
 } ) => {
@@ -207,7 +205,6 @@ const OnboardingContent = ( {
 					prev={ getSiteNav( true ) }
 				/>
 			) }
-			{ importModal && currentSiteData && <ImportModal /> }
 		</>
 	);
 };

@@ -131,7 +131,7 @@ const Exporter = () => {
 		};
 
 		const url = stringifyUrl( {
-			url: window.tiTpc.endpoint,
+			url: window.tiTpc.endpoint + 'templates',
 			query: {
 				...window.tiTpc.params,
 				template_name: title,
@@ -187,7 +187,7 @@ const Exporter = () => {
 
 		if ( templateID ) {
 			url = stringifyUrl( {
-				url: window.tiTpc.endpoint + templateID,
+				url: window.tiTpc.endpoint + 'templates/' + templateID,
 				query: {
 					...window.tiTpc.params,
 					template_name: postTitle,
@@ -195,7 +195,7 @@ const Exporter = () => {
 			} );
 		} else {
 			url = stringifyUrl( {
-				url: window.tiTpc.endpoint,
+				url: window.tiTpc.endpoint + 'templates',
 				query: {
 					...window.tiTpc.params,
 					template_name: postTitle,

@@ -1,8 +1,9 @@
 /* global tiobDash */
 import { withSelect, withDispatch } from '@wordpress/data';
-import { compose } from '@wordpress/compose';
 import { Button, Dashicon } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { compose } from '@wordpress/compose';
+import { __, isRTL } from '@wordpress/i18n';
+import { close } from '@wordpress/icons';
 
 const PreviewFrame = ( {
 	next,
@@ -14,8 +15,6 @@ const PreviewFrame = ( {
 	themeStatus,
 	setInstallModal,
 } ) => {
-	const { isRTL } = tiobDash;
-
 	const handleImport = ( e ) => {
 		e.preventDefault();
 		if ( themeStatus ) {
@@ -53,7 +52,7 @@ const PreviewFrame = ( {
 						onClick={ handleClose }
 						className="close"
 						label={ __( 'Close', 'templates-patterns-collection' ) }
-						icon="no"
+						icon={ close }
 					/>
 
 					{ prev && (

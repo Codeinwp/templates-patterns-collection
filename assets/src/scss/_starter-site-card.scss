@@ -52,7 +52,9 @@
 		position: absolute;
 		opacity: 0;
 		transition: .3s ease;
-
+		.templates {
+			color: #fff;
+		}
 		.components-button {
 			margin: 5px 0;
 			width: 100px;

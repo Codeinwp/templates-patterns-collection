@@ -2,6 +2,13 @@
 	padding-left: 0 !important;
 }
 
+.content-container {
+	padding: 0 20px;
+	flex-basis: 100%;
+	max-width: 1300px;
+	margin: 0 auto;
+}
+
 #wpbody-content > {
 	.error, .info, .notice {
 		display: none !important;
@@ -255,8 +262,6 @@ svg.is-loading, button.is-loading svg {
 
 	.ob-body {
 		width: 100%;
-		max-width: 1300px;
-		padding: 0 20px;
 		box-sizing: border-box;
 
 		.instructions {

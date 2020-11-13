@@ -1,14 +1,23 @@
-import InstallModal from './InstallModal';
-import Migration from './Migration';
-import Library from './Library';
-import Header from './Header';
-import OnboardingContent from './OnboardingContent';
-
 import { Fragment } from '@wordpress/element';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 
-const Onboarding = ( { getSites, installModal, currentTab } ) => {
+import InstallModal from './InstallModal';
+import Migration from './Migration';
+import Library from './CloudLibrary/Library';
+import ImportModal from './ImportModal';
+import DemoSiteTemplatesImport from './CloudLibrary/DemoSiteTemplatesImport';
+import Header from './Header';
+import OnboardingContent from './OnboardingContent';
+
+const Onboarding = ( {
+	getSites,
+	installModal,
+	currentTab,
+	singleImport,
+	importModal,
+	currentSiteData,
+} ) => {
 	const { migration } = getSites;
 
 	return (
@@ -16,16 +25,25 @@ const Onboarding = ( { getSites, installModal, currentTab } ) => {
 			<div className="ob">
 				{ migration && <Migration data={ migration } /> }
 				<Header />
-
 				<div className="ob-body">
-					{ 'starterSites' === currentTab && <OnboardingContent /> }
-					{ 'library' === currentTab && <Library /> }
-					{ 'pageTemplates' === currentTab && (
-						<Library isGeneral={ true } />
-					) }
+					<div className="content-container">
+						{ 'starterSites' === currentTab &&
+							( singleImport ? (
+								<DemoSiteTemplatesImport
+									slug={ singleImport }
+								/>
+							) : (
+								<OnboardingContent />
+							) ) }
+						{ 'library' === currentTab && <Library /> }
+						{ 'pageTemplates' === currentTab && (
+							<Library isGeneral={ true } />
+						) }
+					</div>
 				</div>
 			</div>
 			{ installModal && <InstallModal /> }
+			{ importModal && currentSiteData && <ImportModal /> }
 		</Fragment>
 	);
 };
@@ -58,6 +76,7 @@ export default compose(
 			getSites,
 			getInstallModalStatus,
 			getCurrentTab,
+			getSingleImport,
 		} = select( 'neve-onboarding' );
 		return {
 			editor: getCurrentEditor(),
@@ -69,6 +88,7 @@ export default compose(
 			isOnboarding: getOnboardingStatus(),
 			getSites: getSites(),
 			currentTab: getCurrentTab(),
+			singleImport: getSingleImport(),
 		};
 	} )
 )( Onboarding );

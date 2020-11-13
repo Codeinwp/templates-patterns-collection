@@ -46,7 +46,6 @@
 	.header-form {
 		margin: 0;
 		flex-grow: 1;
-		max-width: 60%;
 
 		@media (min-width: #{$tablet}) {
 			max-width: 100%;

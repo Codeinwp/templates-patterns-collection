@@ -89,7 +89,6 @@
 }
 
 .cloud-items {
-	padding: 0 20px;
 
 	.components-spinner {
 		margin: 0 auto !important;
@@ -99,7 +98,7 @@
 
 	&.is-grid .table {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr ;
 		grid-column-gap: 20px;
 		grid-row-gap: 20px;
 	}
@@ -180,9 +179,12 @@
 		background: #ffffff;
 		border-top: 1px solid #ccc;
 		padding: 15px;
-		display: flex;
-		align-items: center;
 		flex-grow: 1;
+
+		form {
+			display: flex;
+			align-items: center;
+		}
 
 		.components-base-control {
 			flex-grow: 1;
@@ -200,6 +202,31 @@
 		p {
 			font-weight: 600;
 			margin: 0;
+		}
+	}
+}
+
+@mixin library--tablet {
+	.cloud-items {
+		&.is-grid .table {
+			grid-template-columns: 1fr 1fr;
+
+		}
+	}
+}
+@mixin library--laptop {
+	.cloud-items {
+		&.is-grid .table {
+			grid-template-columns: 1fr 1fr 1fr;
+
+		}
+	}
+}
+@mixin library--desktop {
+	.cloud-items {
+		&.is-grid .table {
+			grid-template-columns: 1fr 1fr 1fr 1fr;
+
 		}
 	}
 }

@@ -80,4 +80,10 @@ export default {
 			payload: { fetching },
 		};
 	},
+	setSingleTemplateImport( slug ) {
+		return {
+			type: 'SET_SINGLE_TEMPLATE_IMPORT',
+			payload: { slug },
+		};
+	},
 };
