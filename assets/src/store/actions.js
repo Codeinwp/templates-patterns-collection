@@ -86,4 +86,10 @@ export default {
 			payload: { slug },
 		};
 	},
+	setTemplateModal( data ) {
+		return {
+			type: 'SET_TEMPLATE_MODAL',
+			payload: { data },
+		};
+	},
 };

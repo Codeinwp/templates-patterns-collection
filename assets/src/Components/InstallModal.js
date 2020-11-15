@@ -12,6 +12,8 @@ const InstallModal = ( {
 	setInstallModal,
 	themeData,
 	setThemeAction,
+	singleImport,
+	showTemplateModal,
 } ) => {
 	const { action, slug, nonce } = themeData;
 	const { themesURL, brandedTheme } = tiobDash;
@@ -73,6 +75,10 @@ const InstallModal = ( {
 			setInstalling( false );
 			setInstallModal( false );
 			setThemeAction( false );
+			if ( singleImport ) {
+				showTemplateModal();
+				return false;
+			}
 			setImportModal( true );
 		} );
 	};
@@ -149,6 +155,7 @@ const InstallModal = ( {
 						</Button>
 					) }
 					<Button
+						style={ { marginLeft: 30 } }
 						isSecondary
 						disabled={ installing }
 						onClick={ handleDismiss }
@@ -163,10 +170,11 @@ const InstallModal = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getThemeAction } = select( 'neve-onboarding' );
+		const { getSingleImport, getThemeAction } = select( 'neve-onboarding' );
 
 		return {
 			themeData: getThemeAction() || false,
+			singleImport: getSingleImport(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
@@ -174,11 +182,13 @@ export default compose(
 			setImportModalStatus,
 			setInstallModalStatus,
 			setThemeAction,
+			setTemplateModal,
 		} = dispatch( 'neve-onboarding' );
 		return {
 			setImportModal: ( status ) => setImportModalStatus( status ),
 			setInstallModal: ( status ) => setInstallModalStatus( status ),
 			setThemeAction: ( status ) => setThemeAction( status ),
+			showTemplateModal: () => setTemplateModal( true ),
 		};
 	} )
 )( InstallModal );

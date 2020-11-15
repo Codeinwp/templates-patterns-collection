@@ -17,6 +17,7 @@ const Library = ( { isGeneral } ) => {
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ currentPage, setCurrentPage ] = useState( 0 );
 	const [ totalPages, setTotalPages ] = useState( 0 );
+	const [ isLoading, setLoading ] = useState( false );
 	const [ previewUrl, setPreviewUrl ] = useState( '' );
 
 	useEffect( () => {
@@ -46,9 +47,7 @@ const Library = ( { isGeneral } ) => {
 		} );
 	};
 
-	const [ isLoading, setLoading ] = useState( false );
-
-	const changePage = async ( index ) => {
+	const handlePageChange = async ( index ) => {
 		setLoading( true );
 		setCurrentPage( index );
 
@@ -74,7 +73,7 @@ const Library = ( { isGeneral } ) => {
 		setLoading( false );
 	};
 
-	const onSearch = () => {
+	const handleSearch = () => {
 		const params = { search: searchQuery };
 		if ( isGeneral ) {
 			params.template_site_slug = 'general';
@@ -91,6 +90,10 @@ const Library = ( { isGeneral } ) => {
 		setPreviewUrl( url );
 	};
 
+	const handleImport = () => {
+		console.log( 'import' );
+	};
+
 	const wrapClasses = classnames( 'cloud-items', { 'is-grid': isGrid } );
 
 	return (
@@ -101,7 +104,7 @@ const Library = ( { isGeneral } ) => {
 					setGrid={ setIsGrid }
 					searchQuery={ searchQuery }
 					setSearchQuery={ setSearchQuery }
-					onSearch={ onSearch }
+					onSearch={ handleSearch }
 				/>
 				{ isLoading && <Spinner /> }
 				{ ! isLoading &&
@@ -115,6 +118,7 @@ const Library = ( { isGeneral } ) => {
 										key={ item.template_id }
 										item={ item }
 										loadTemplates={ loadTemplates }
+										onImport={ handleImport }
 										grid={ isGrid }
 									/>
 								) ) }
@@ -122,7 +126,7 @@ const Library = ( { isGeneral } ) => {
 							<Pagination
 								total={ totalPages }
 								current={ currentPage }
-								onChange={ changePage }
+								onChange={ handlePageChange }
 							/>
 						</>
 					) : (

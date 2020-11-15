@@ -4,7 +4,7 @@ import { __ } from '@wordpress/i18n';
 const PreviewFrame = ( { title, leftButtons, rightButtons, previewUrl } ) => {
 	const iframeTitle = title || __( 'Preview' );
 	return (
-		<div className="ob-preview">
+		<div className="ob-preview single-templates">
 			<div className="preview">
 				<iframe
 					title={ iframeTitle }

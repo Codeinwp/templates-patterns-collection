@@ -110,6 +110,17 @@ class Rest_Server {
 				},
 			)
 		);
+		register_rest_route(
+			Main::API_ROOT,
+			'/import_single_templates',
+			array(
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => array( $this, 'import_templates' ),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
 	}
 
 	/**
@@ -236,5 +247,66 @@ class Rest_Server {
 		set_theme_mod( $params['theme_mod'], 'yes' );
 
 		return new WP_REST_Response( array( 'success' => true ) );
+	}
+
+	/**
+	 * Import Templates.
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_REST_Response
+	 */
+	public function import_templates( WP_REST_Request $request ) {
+		$params   = $request->get_json_params();
+		$imported = array();
+		foreach ( $params as $template ) {
+			$id = $this->insert_single_template( $template );
+
+			if ( $id instanceof \WP_Error ) {
+				return new WP_REST_Response(
+					array(
+						'success' => false,
+						'message' => $id->get_error_message(),
+					)
+				);
+			}
+
+			$imported[] = array(
+				'title' => get_the_title( $id ),
+				'url'   => get_post_permalink( $id ),
+				'edit'  => add_query_arg(
+					array(
+						'post'   => $id,
+						'action' => 'edit',
+					),
+					admin_url( 'post.php' )
+				),
+			);
+		}
+
+		error_log( var_export( $imported, true ) );
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'pages'   => $imported,
+			)
+		);
+	}
+
+	/**
+	 * Insert Single Template
+	 *
+	 * @param $template
+	 * @return int|\WP_Error
+	 */
+	private function insert_single_template( $template ) {
+		return wp_insert_post(
+			array(
+				'post_title'   => wp_strip_all_tags( $template['template_name'] ),
+				'post_content' => wp_kses_post( $template['content'] ),
+				'post_status'  => 'publish',
+				'post_type'    => 'page',
+			)
+		);
 	}
 }

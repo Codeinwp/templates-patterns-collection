@@ -3,7 +3,7 @@ import { withSelect, withDispatch } from '@wordpress/data';
 import { Button, Dashicon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { __, isRTL } from '@wordpress/i18n';
-import { close } from '@wordpress/icons';
+import { close, chevronRight, chevronLeft } from '@wordpress/icons';
 
 const PreviewFrame = ( {
 	next,
@@ -63,9 +63,7 @@ const PreviewFrame = ( {
 								'Previous',
 								'templates-patterns-collection'
 							) }
-							icon={
-								isRTL ? 'arrow-right-alt2' : 'arrow-left-alt2'
-							}
+							icon={ isRTL() ? chevronRight : chevronLeft }
 						/>
 					) }
 
@@ -77,9 +75,7 @@ const PreviewFrame = ( {
 								'Next',
 								'templates-patterns-collection'
 							) }
-							icon={
-								isRTL ? 'arrow-left-alt2' : 'arrow-right-alt2'
-							}
+							icon={ isRTL() ? chevronLeft : chevronRight }
 						/>
 					) }
 				</div>

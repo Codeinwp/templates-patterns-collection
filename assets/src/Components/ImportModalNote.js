@@ -6,25 +6,21 @@ import { __ } from '@wordpress/i18n';
 
 const ImportModalNote = ( { data, externalInstalled } ) => {
 	const external = data.external_plugins || null;
-	const classes = classnames( [
-		'well',
-		{ warning: external && ! externalInstalled },
-	] );
+	const classes = classnames( [ 'well' ] );
 	return (
 		<div className={ classes }>
-			<h3>
-				<Dashicon icon="info" />
-				<span>
-					{ external && ! externalInstalled
-						? __(
-								'To import this demo you have to install the following plugins',
-								'neve'
-						  )
-						: __( 'Note', 'templates-patterns-collection' ) }
-					:
-				</span>
-			</h3>
-			<ol>
+			{ external && ! externalInstalled && (
+				<h3 style={ { marginTop: 15 } }>
+					<Dashicon icon="info" />
+					<span>
+						{ __(
+							'To import this demo you have to install the following plugins',
+							'neve'
+						) }
+					</span>
+				</h3>
+			) }
+			<ul>
 				{ external && ! externalInstalled ? (
 					external.map( ( plugin, index ) => (
 						<li key={ index }>
@@ -49,7 +45,7 @@ const ImportModalNote = ( { data, externalInstalled } ) => {
 						</li>
 					</Fragment>
 				) }
-			</ol>
+			</ul>
 		</div>
 	);
 };

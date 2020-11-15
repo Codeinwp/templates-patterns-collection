@@ -132,19 +132,21 @@ export const fetchBulkData = async ( templates ) => {
 	} );
 
 	try {
-		const response = await apiFetch( { url, method: 'GET' } );
+		const response = await apiFetch( { url, method: 'GET', parse: false } );
 
 		if ( response.ok ) {
+			if ( response.message ) {
+				return { success: false, message: response.message };
+			}
 			const data = await response.json();
 
 			if ( data.message ) {
-				return { success: false, message: templates.message };
+				return { success: false, message: data.message };
 			}
 
 			return { success: true, templates: data };
 		}
 	} catch ( error ) {
-		console.log( error );
 		if ( error.message ) {
 			return { success: false, message: error.message };
 		}

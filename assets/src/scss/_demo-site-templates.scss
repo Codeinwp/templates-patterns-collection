@@ -86,3 +86,28 @@
 	}
 }
 
+// PREVIEW FRAME
+.ob-preview.single-templates {
+	.actions {
+		.components-button {
+			font-weight: 600;
+			font-size: 14px;
+			height: auto;
+			border-radius: 4px;
+
+			&:not(:first-child) {
+				margin-left: 20px;
+			}
+
+			&.is-primary {
+				padding: 10px 30px;
+			}
+
+			&.is-secondary {
+				border: 2px solid;
+				padding: 8px 20px;
+			}
+		}
+	}
+}
+

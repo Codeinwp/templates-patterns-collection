@@ -24,6 +24,7 @@ const initialState = {
 	currentTab: 'starterSites',
 	fetching: false,
 	singleTemplateImport: null,
+	templateModal: null,
 };
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
@@ -100,6 +101,12 @@ export default ( state = initialState, action ) => {
 		return {
 			...state,
 			singleTemplateImport: slug,
+			};
+	case 'SET_TEMPLATE_MODAL':
+			const { data } = action.payload;
+		return {
+			...state,
+			templateModal: data,
 			};
 	}
 	return state;

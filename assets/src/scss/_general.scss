@@ -25,6 +25,12 @@
 	}
 }
 
+@media screen and (min-width: #{$laptop}) {
+	.ob-import-modal {
+		width: 700px !important;
+	}
+}
+
 .container {
 	padding: 0 15px;
 
@@ -240,7 +246,7 @@ svg.is-loading, button.is-loading svg {
 				.components-button {
 					font-size: 18px;
 					font-weight: 600;
-					color: #282828;
+					color: $black;
 					margin-left: 25px;
 
 					&:hover {
@@ -267,7 +273,7 @@ svg.is-loading, button.is-loading svg {
 		.instructions {
 			font-size: 22px;
 			margin: 20px 0;
-			color: #282828;
+			color: $black;
 		}
 	}
 }

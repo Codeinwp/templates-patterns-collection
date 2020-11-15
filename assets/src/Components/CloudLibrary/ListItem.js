@@ -9,7 +9,15 @@ import classnames from 'classnames';
 
 import { updateTemplate, duplicateTemplate, deleteTemplate } from './common';
 
-const ListItem = ( { item, loadTemplates, userTemplate, grid, onPreview } ) => {
+const ListItem = ( {
+	item,
+	loadTemplates,
+	userTemplate,
+	grid,
+	onPreview,
+	onImport,
+	upsell = false,
+} ) => {
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isEditing, setEditing ] = useState( false );
 	const [ itemName, setItemName ] = useState( item.template_name );
@@ -81,14 +89,16 @@ const ListItem = ( { item, loadTemplates, userTemplate, grid, onPreview } ) => {
 								{ __( 'Preview' ) }
 							</Button>
 						) }
-						<Button
-							isPrimary
-							isBusy={ 'importing' === isLoading }
-							disabled={ false !== isLoading }
-							// onClick={ importItem }
-						>
-							{ __( 'Import' ) }
-						</Button>
+						{ ! upsell && (
+							<Button
+								isPrimary
+								isBusy={ 'importing' === isLoading }
+								disabled={ false !== isLoading }
+								onClick={ onImport }
+							>
+								{ __( 'Import' ) }
+							</Button>
+						) }
 
 						{ userTemplate && (
 							<div className="preview-controls">

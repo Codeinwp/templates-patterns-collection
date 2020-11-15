@@ -1,14 +1,15 @@
 /* global tiobDash */
+import { close, chevronLeft, chevronRight } from '@wordpress/icons';
 import { Spinner, Button, Icon } from '@wordpress/components';
 import { withDispatch, withSelect } from '@wordpress/data';
-import { useEffect, useState } from '@wordpress/element';
-import { compose } from '@wordpress/compose';
-import { __ } from '@wordpress/i18n';
+import { Fragment, useEffect, useState } from '@wordpress/element';
+import { __, isRTL } from '@wordpress/i18n';
 
-import { fetchLibrary, fetchBulkData } from './common';
+import { compose } from '@wordpress/compose';
+import { fetchLibrary } from './common';
 import ListItem from './ListItem';
 import PreviewFrame from './PreviewFrame';
-import { close } from '@wordpress/icons';
+import ImportTemplatesModal from './ImportTemplatesModal';
 
 const DemoSiteTemplatesImport = ( {
 	slug,
@@ -18,15 +19,16 @@ const DemoSiteTemplatesImport = ( {
 	themeStatus,
 	site,
 	editor,
+	setTemplateModal,
+	templateModal,
 } ) => {
 	const [ templates, setTemplates ] = useState( [] );
-	const [ loading, setLoading ] = useState( false );
+	const [ loading, setLoading ] = useState( true );
 	const [ previewUrl, setPreviewUrl ] = useState( '' );
 
 	const { title, upsell, utmOutboundLink } = site;
 
 	useEffect( () => {
-		setLoading( true );
 		loadTemplates();
 	}, [] );
 
@@ -37,7 +39,6 @@ const DemoSiteTemplatesImport = ( {
 			premade: true,
 			type: editor,
 		};
-
 		fetchLibrary( true, params ).then( ( r ) => {
 			setTemplates( r.templates || [] );
 			setLoading( false );
@@ -48,12 +49,15 @@ const DemoSiteTemplatesImport = ( {
 		setPreviewUrl( url );
 	};
 
-	const handleBulk = () => {
-		fetchBulkData( templates.map( ( i ) => i.template_id ) ).then(
-			( r ) => {
-				console.log( r );
-			}
-		);
+	const handleBulk = ( e ) => {
+		e.preventDefault();
+
+		if ( themeStatus ) {
+			setInstallModal( true );
+
+			return false;
+		}
+		setTemplateModal( templates.map( ( i ) => i.template_id ) );
 	};
 
 	const launchImport = ( e ) => {
@@ -65,6 +69,45 @@ const DemoSiteTemplatesImport = ( {
 			return false;
 		}
 		setModal( true );
+	};
+
+	const handleSingleImport = ( id ) => {
+		if ( themeStatus ) {
+			setInstallModal( true );
+
+			return false;
+		}
+		console.log( id );
+
+		setTemplateModal( [ id ] );
+	};
+
+	const currentPreviewIndex = templates.findIndex(
+		( item ) => item.link === previewUrl
+	);
+
+	const currentPreviewTemplateId = () => {
+		const currentItem = templates.find(
+			( item ) => item.link === previewUrl
+		);
+
+		return currentItem.template_id;
+	};
+
+	const handlePrevious = () => {
+		let newIndex = currentPreviewIndex - 1;
+		if ( currentPreviewIndex === 0 ) {
+			newIndex = templates.length - 1;
+		}
+		setPreviewUrl( templates[ newIndex ].link );
+	};
+
+	const handleNext = () => {
+		let newIndex = currentPreviewIndex + 1;
+		if ( currentPreviewIndex === templates.length - 1 ) {
+			newIndex = 0;
+		}
+		setPreviewUrl( templates[ newIndex ].link );
 	};
 
 	const Templates = () => {
@@ -80,11 +123,15 @@ const DemoSiteTemplatesImport = ( {
 				<div className="table">
 					{ templates.map( ( item ) => (
 						<ListItem
+							upsell={ upsell }
 							onPreview={ handlePreview }
 							userTemplate={ false }
 							key={ item.template_id }
 							item={ item }
 							loadTemplates={ loadTemplates }
+							onImport={ () =>
+								handleSingleImport( item.template_id )
+							}
 							grid={ true }
 						/>
 					) ) }
@@ -143,7 +190,6 @@ const DemoSiteTemplatesImport = ( {
 							<Button
 								href={ utmOutboundLink || tiobDash.upgradeURL }
 								isSecondary
-								onClick={ launchImport }
 							>
 								{ __( 'Upgrade' ) }
 							</Button>
@@ -156,12 +202,72 @@ const DemoSiteTemplatesImport = ( {
 				<PreviewFrame
 					previewUrl={ previewUrl }
 					leftButtons={
-						<Button
-							icon={ close }
-							onClick={ () => setPreviewUrl( '' ) }
-						/>
+						<>
+							<Button
+								icon={ close }
+								onClick={ () => setPreviewUrl( '' ) }
+								label={ __(
+									'Close',
+									'templates-patterns-collection'
+								) }
+							/>
+							{ templates.length > 1 && (
+								<>
+									<Button
+										icon={
+											isRTL() ? chevronRight : chevronLeft
+										}
+										onClick={ handlePrevious }
+									/>
+									<Button
+										icon={
+											isRTL() ? chevronLeft : chevronRight
+										}
+										onClick={ handleNext }
+									/>
+								</>
+							) }
+						</>
+					}
+					rightButtons={
+						<>
+							{ ! upsell && (
+								<>
+									<Button
+										isSecondary
+										onClick={ launchImport }
+									>
+										{ __( 'Import Starter Site' ) }
+									</Button>
+									<Button
+										isPrimary
+										disabled={ templates.length < 1 }
+										onClick={ () =>
+											handleSingleImport(
+												currentPreviewTemplateId()
+											)
+										}
+									>
+										{ __( 'Import Page' ) }
+									</Button>
+								</>
+							) }
+							{ upsell && (
+								<Button
+									href={
+										utmOutboundLink || tiobDash.upgradeURL
+									}
+									isSecondary
+								>
+									{ __( 'Upgrade' ) }
+								</Button>
+							) }
+						</>
 					}
 				/>
+			) }
+			{ templateModal && ! loading && templates.length > 1 && (
+				<ImportTemplatesModal templatesData={ templates } />
 			) }
 		</div>
 	);
@@ -173,6 +279,7 @@ export default compose(
 			setSingleTemplateImport,
 			setImportModalStatus,
 			setInstallModalStatus,
+			setTemplateModal,
 		} = dispatch( 'neve-onboarding' );
 
 		const cancel = () => {
@@ -183,14 +290,19 @@ export default compose(
 			cancel,
 			setModal: ( status ) => setImportModalStatus( status ),
 			setInstallModal: ( status ) => setInstallModalStatus( status ),
+			setTemplateModal,
 		};
 	} ),
 	withSelect( ( select ) => {
-		const { getThemeAction, getCurrentSite, getCurrentEditor } = select(
-			'neve-onboarding'
-		);
+		const {
+			getTemplateModal,
+			getThemeAction,
+			getCurrentSite,
+			getCurrentEditor,
+		} = select( 'neve-onboarding' );
 
 		return {
+			templateModal: getTemplateModal(),
 			themeStatus: getThemeAction().action || false,
 			site: getCurrentSite(),
 			editor: getCurrentEditor(),

@@ -12,4 +12,5 @@ export default {
 	getCurrentTab: ( state ) => state.currentTab,
 	getFetching: ( state ) => state.fetching,
 	getSingleImport: ( state ) => state.singleTemplateImport,
+	getTemplateModal: ( state ) => state.templateModal,
 };
