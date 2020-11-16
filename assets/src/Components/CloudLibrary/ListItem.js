@@ -250,8 +250,8 @@ const ListItem = ( {
 				<Button
 					isPrimary
 					isBusy={ 'importing' === isLoading }
+					onClick={ onImport }
 					disabled={ false !== isLoading }
-					// onClick={ importItem }
 				>
 					{ __( 'Import' ) }
 				</Button>

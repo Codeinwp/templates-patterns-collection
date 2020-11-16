@@ -2,10 +2,10 @@
 import { close, chevronLeft, chevronRight } from '@wordpress/icons';
 import { Spinner, Button, Icon } from '@wordpress/components';
 import { withDispatch, withSelect } from '@wordpress/data';
-import { Fragment, useEffect, useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __, isRTL } from '@wordpress/i18n';
-
 import { compose } from '@wordpress/compose';
+
 import { fetchLibrary } from './common';
 import ListItem from './ListItem';
 import PreviewFrame from './PreviewFrame';
@@ -25,6 +25,7 @@ const DemoSiteTemplatesImport = ( {
 	const [ templates, setTemplates ] = useState( [] );
 	const [ loading, setLoading ] = useState( true );
 	const [ previewUrl, setPreviewUrl ] = useState( '' );
+	const [ toImport, setToImport ] = useState( [] );
 
 	const { title, upsell, utmOutboundLink } = site;
 
@@ -57,7 +58,19 @@ const DemoSiteTemplatesImport = ( {
 
 			return false;
 		}
-		setTemplateModal( templates.map( ( i ) => i.template_id ) );
+		setToImport( templates );
+		setTemplateModal( true );
+	};
+
+	const handleSingleImport = ( item ) => {
+		if ( themeStatus ) {
+			setInstallModal( true );
+
+			return false;
+		}
+		setToImport( [ item ] );
+
+		setTemplateModal( true );
 	};
 
 	const launchImport = ( e ) => {
@@ -71,28 +84,13 @@ const DemoSiteTemplatesImport = ( {
 		setModal( true );
 	};
 
-	const handleSingleImport = ( id ) => {
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
-		console.log( id );
-
-		setTemplateModal( [ id ] );
-	};
-
 	const currentPreviewIndex = templates.findIndex(
 		( item ) => item.link === previewUrl
 	);
 
-	const currentPreviewTemplateId = () => {
-		const currentItem = templates.find(
-			( item ) => item.link === previewUrl
-		);
-
-		return currentItem.template_id;
-	};
+	const currentPreviewTemplate = templates.find(
+		( item ) => item.link === previewUrl
+	);
 
 	const handlePrevious = () => {
 		let newIndex = currentPreviewIndex - 1;
@@ -129,9 +127,7 @@ const DemoSiteTemplatesImport = ( {
 							key={ item.template_id }
 							item={ item }
 							loadTemplates={ loadTemplates }
-							onImport={ () =>
-								handleSingleImport( item.template_id )
-							}
+							onImport={ () => handleSingleImport( item ) }
 							grid={ true }
 						/>
 					) ) }
@@ -200,6 +196,7 @@ const DemoSiteTemplatesImport = ( {
 			<Templates />
 			{ previewUrl && (
 				<PreviewFrame
+					heading={ currentPreviewTemplate.template_name || null }
 					previewUrl={ previewUrl }
 					leftButtons={
 						<>
@@ -244,7 +241,7 @@ const DemoSiteTemplatesImport = ( {
 										disabled={ templates.length < 1 }
 										onClick={ () =>
 											handleSingleImport(
-												currentPreviewTemplateId()
+												currentPreviewTemplate
 											)
 										}
 									>
@@ -266,8 +263,8 @@ const DemoSiteTemplatesImport = ( {
 					}
 				/>
 			) }
-			{ templateModal && ! loading && templates.length > 1 && (
-				<ImportTemplatesModal templatesData={ templates } />
+			{ templateModal && toImport && ! loading && toImport.length > 0 && (
+				<ImportTemplatesModal templatesData={ toImport } />
 			) }
 		</div>
 	);

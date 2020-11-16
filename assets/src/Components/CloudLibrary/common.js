@@ -63,7 +63,6 @@ export const updateTemplate = async ( id, name ) => {
 				template_name: name,
 			},
 		} );
-
 		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
 		return { success: true };
@@ -88,8 +87,7 @@ export const duplicateTemplate = async ( id ) => {
 			url,
 			method: 'POST',
 		} );
-
-		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
 		return { success: true };
 	} catch ( error ) {
@@ -151,4 +149,38 @@ export const fetchBulkData = async ( templates ) => {
 			return { success: false, message: error.message };
 		}
 	}
+};
+
+export const getUserTemplateData = async ( template ) => {
+	const url = stringifyUrl( {
+		url: `${ tiobDash.endpoint }templates/${ template }/import`,
+		query: {
+			cache: localStorage.getItem( 'tpcCacheBuster' ),
+			...tiobDash.params,
+		},
+	} );
+
+	let content = {};
+
+	try {
+		const response = await apiFetch( {
+			url,
+			method: 'GET',
+			parse: false,
+		} );
+
+		if ( response.ok ) {
+			content = await response.json();
+
+			if ( content.message ) {
+				return { success: false, message: content.message };
+			}
+		}
+	} catch ( error ) {
+		if ( error.message ) {
+			return { success: false, message: error.message };
+		}
+	}
+
+	return { success: true, templates: [ content ] };
 };

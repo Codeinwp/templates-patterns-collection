@@ -1,7 +1,13 @@
 import { Dashicon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-const PreviewFrame = ( { title, leftButtons, rightButtons, previewUrl } ) => {
+const PreviewFrame = ( {
+	title,
+	leftButtons,
+	rightButtons,
+	heading,
+	previewUrl,
+} ) => {
 	const iframeTitle = title || __( 'Preview' );
 	return (
 		<div className="ob-preview single-templates">
@@ -16,8 +22,13 @@ const PreviewFrame = ( { title, leftButtons, rightButtons, previewUrl } ) => {
 				</div>
 			</div>
 			<div className="bottom-bar">
-				<div className="navigator">{ leftButtons }</div>
-				<div className="actions">{ rightButtons }</div>
+				{ leftButtons && (
+					<div className="navigator">{ leftButtons }</div>
+				) }
+				{ heading && <h2 className="heading">{ heading }</h2> }
+				{ rightButtons && (
+					<div className="actions">{ rightButtons }</div>
+				) }
 			</div>
 		</div>
 	);

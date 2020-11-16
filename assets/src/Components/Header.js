@@ -1,22 +1,32 @@
-/* global tiobDash */
+/* global tiobDash, localStorage */
 import { withSelect, withDispatch } from '@wordpress/data';
 import { Button, Icon } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import { update } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 import Logo from './Icon';
 import classnames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 
-const TabNavigation = ( {
-	setCurrentTab,
-	currentTab,
-	isFetching,
-	setFetching,
-} ) => {
+const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
+	const [ isSyncing, setSyncing ] = useState( false );
+
 	const buttons = {
 		starterSites: __( 'Starter Sites', 'neve' ),
 		pageTemplates: __( 'Page Templates', 'neve' ),
+	};
+
+	const sync = () => {
+		setSyncing( true );
+		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+		const nextTab = currentTab;
+		setCurrentTab( null );
+		setTimeout( () => {
+			setCurrentTab( nextTab );
+			setSyncing( false );
+		}, 100 );
 	};
 
 	if (
@@ -41,6 +51,18 @@ const TabNavigation = ( {
 					</Button>
 				);
 			} ) }
+			{ currentTab !== 'starterSites' && (
+				<Button
+					icon={ update }
+					onClick={ sync }
+					label={ __( 'Re-sync Library' ) }
+					className={ classnames( 'is-sync', {
+						'is-loading': isSyncing,
+					} ) }
+					disabled={ isFetching || isSyncing }
+					data-content={ __( 'Sync' ) }
+				/>
+			) }
 		</div>
 	);
 };

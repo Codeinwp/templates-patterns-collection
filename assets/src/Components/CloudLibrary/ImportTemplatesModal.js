@@ -10,7 +10,7 @@ import {
 } from '@wordpress/element';
 
 import { importTemplates } from '../../utils/site-import';
-import { fetchBulkData } from './common';
+import { fetchBulkData, getUserTemplateData } from './common';
 import classnames from 'classnames';
 
 const ImportTemplatesModal = ( {
@@ -21,18 +21,44 @@ const ImportTemplatesModal = ( {
 	setInstallModal,
 	setModal,
 	editor,
+	isUserTemplate = false,
+	generalTemplates = false,
 } ) => {
 	const [ fetching, setFetching ] = useState( true );
 	const [ templates, setTemplates ] = useState( [] );
 	const [ importing, setImporting ] = useState( false );
 	const [ imported, setImported ] = useState( [] );
+	const [ error, setError ] = useState( false );
+
+	const isSingle = templatesData.length === 1;
 
 	useEffect( () => {
-		if ( templatesData ) {
+		if ( isUserTemplate && isSingle ) {
+			getUserTemplateData( templatesData[ 0 ].template_id ).then(
+				( r ) => {
+					if ( ! r.success ) {
+						if ( r.message ) {
+							setError( r.message );
+						} else {
+							setError( true );
+						}
+						setFetching( false );
+					}
+					setTemplates( r.templates );
+					setFetching( false );
+				}
+			);
+		} else {
 			fetchBulkData( templatesData.map( ( i ) => i.template_id ) ).then(
 				( r ) => {
 					if ( ! r.success ) {
-						console.log( r.message );
+						if ( r.message ) {
+							setError( r.message );
+						} else {
+							setError( true );
+						}
+						setFetching( false );
+						return false;
 					}
 					setTemplates( r.templates );
 					setFetching( false );
@@ -120,10 +146,15 @@ const ImportTemplatesModal = ( {
 							) }
 						</h1>
 						<p className="description">
-							{ __(
-								'Templates were successfully imported!',
-								'templates-patterns-collection'
-							) }
+							{ isSingle
+								? __(
+									'Template was successfully imported!',
+									'templates-patterns-collection'
+								  )
+								: __(
+									'Templates were successfully imported!',
+										'templates-patterns-collection'
+								  ) }
 						</p>
 					</div>
 					{ imported && (
@@ -171,21 +202,58 @@ const ImportTemplatesModal = ( {
 		);
 	};
 
+	const Error = () => {
+		return (
+			<>
+				<div className="modal-body">
+					<div className="header">
+						<h1>
+							{ __(
+								'An error occurred!',
+								'templates-patterns-collection'
+							) }
+						</h1>
+						<p className="description">
+							{ error === true
+								? __( 'Please refresh the page and try again.' )
+								: error }
+						</p>
+					</div>
+				</div>
+				<div className="modal-footer">
+					<Button
+						isPrimary
+						className="import"
+						onClick={ () => {
+							setError( false );
+							cancel();
+						} }
+					>
+						{ __( 'Close' ) }
+					</Button>
+				</div>
+			</>
+		);
+	};
+
 	const description = () => {
 		const map = {
 			strong: <strong>{ __( 'does not' ) }</strong>,
 		};
 
-		const text =
-			editor === 'elementor'
-				? __(
-					'All the Elementor templates that are included in this starter site, will be imported in your Elementor Library. This import <strong/> include any plugins or theme settings.',
+		const text = isSingle
+			? sprintf(
+				/* translators: %s  the name of the template */
+				__(
+					'The %s template will be imported as a page into your site. This import <strong/> include any plugins or theme settings.',
 						'templates-patterns-collection'
-				  )
-				: __(
-					'All the templates that are included in this starter site, will be imported as pages. This import <strong/> include any plugins or theme settings.',
-						'templates-patterns-collection'
-				  );
+				),
+				templatesData[ 0 ].template_name
+			  )
+			: __(
+				'All the templates that are included in this starter site, will be imported as pages. This import <strong/> include any plugins or theme settings.',
+				'templates-patterns-collection'
+			  );
 
 		return createInterpolateElement( text, map );
 	};
@@ -194,35 +262,50 @@ const ImportTemplatesModal = ( {
 		if ( fetching ) {
 			return <Mock />;
 		}
+
+		if ( error ) {
+			return <Error />;
+		}
+
 		return (
 			<>
 				<div className="modal-body">
 					<div className="header">
 						<h1>
 							{ sprintf(
-								/* translators: name of starter site */
-								__(
-									'Import all templates from %s',
-									'templates-patterns-collection'
-								),
-								siteData.title
+								isSingle
+									? /* translators: name of starter site */
+									  __(
+										'Import the %s template',
+										'templates-patterns-collection'
+									  )
+									: /* translators: name of template */
+									  __(
+										'Import all templates from %s',
+										'templates-patterns-collection'
+									  ),
+								isSingle
+									? templatesData[ 0 ].template_name
+									: siteData.title
 							) }
 						</h1>
 						<p className="description">{ description() }</p>
 					</div>
 				</div>
 				<div className="modal-footer">
-					<Button
-						className="import-templates"
-						isLink
-						disabled={ importing }
-						onClick={ launchImport }
-					>
-						{ __(
-							'I want to import the entire site',
-							'templates-patterns-collection'
-						) }
-					</Button>
+					{ ! generalTemplates && (
+						<Button
+							className="import-templates"
+							isLink
+							disabled={ importing }
+							onClick={ launchImport }
+						>
+							{ __(
+								'I want to import the entire site',
+								'templates-patterns-collection'
+							) }
+						</Button>
+					) }
 					<Button
 						isPrimary
 						className="import"
@@ -231,7 +314,9 @@ const ImportTemplatesModal = ( {
 					>
 						{ importing
 							? __( 'Importing' ) + '...'
-							: __( 'Import All Pages' ) }
+							: isSingle
+								? __( 'Import' )
+								: __( 'Import All Pages' ) }
 					</Button>
 				</div>
 			</>

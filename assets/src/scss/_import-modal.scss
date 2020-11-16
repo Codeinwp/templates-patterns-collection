@@ -158,7 +158,7 @@ $base-index: 100000;
 }
 
 .ob-import-modal.fetching {
-	pointer-events: none;
+	//pointer-events: none;
 
 	.title {
 		width: 200px;
@@ -184,7 +184,6 @@ $base-index: 100000;
 
 	.well {
 		animation: 1.5s loading-placeholder-high-opacity ease-in-out infinite;
-		opacity: 1;
 		height: inherit !important;
 		background-color: inherit !important;
 
@@ -316,5 +315,25 @@ $base-index: 100000;
 				margin: 0;
 			}
 		}
+	}
+}
+
+.import-done-actions {
+	display: flex;
+	align-items: center;
+	width: 100%;
+
+	.components-button.is-secondary {
+		margin-left: auto;
+		border: 2px solid;
+		padding: 8px 20px;
+		font-weight: 600;
+		font-size: 14px;
+		height: auto;
+		border-radius: 4px;
+	}
+
+	.import {
+		margin-left: 20px !important;
 	}
 }

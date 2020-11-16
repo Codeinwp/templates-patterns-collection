@@ -48,7 +48,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 
 	const { license } = tiobDash;
 
-	useEffect( function getImportData() {
+	useEffect( () => {
 		const fetchAddress = siteData.remote_url || siteData.url;
 		const url = new URL(
 			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
@@ -108,42 +108,43 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		return (
 			<Fragment>
 				<div className="modal-body">
+					<div className="header">
+						<span
+							className="title is-loading"
+							style={ { height: 35, marginBottom: 20 } }
+						/>
+						<p className="description is-loading" />
+						<p className="description is-loading" />
+					</div>
 					<div className="well is-loading">
-						<h3>
-							<div className="mock-icon is-loading" />
-							<span className="is-loading" />
-						</h3>
+						<span
+							className="title is-loading"
+							style={ { height: 20 } }
+						/>
 						<ol>
-							{ [ 1, 2, 3 ].map( ( i ) => (
-								<li key={ i } />
-							) ) }
+							<li />
+							<li />
 						</ol>
 					</div>
-					<hr />
-					<div className="options general">
-						<h3 className="is-loading" />
-						<ul>
-							{ [ 1, 2, 3 ].map( ( i ) => (
-								<li key={ i }>
-									<div className="mock-icon is-loading" />
-									<span className="is-loading" />
-									<div className="toggle is-loading" />
-								</li>
-							) ) }
-						</ul>
-					</div>
-					<hr />
-					<div className="options plugins">
-						<h3 className="is-loading" />
-						<ul>
-							{ [ 1, 2 ].map( ( i ) => (
-								<li key={ i }>
-									<div className="mock-icon is-loading" />
-									<span className="is-loading" />
-									<div className="toggle is-loading" />
-								</li>
-							) ) }
-						</ul>
+
+					<div className="modal-toggles components-panel">
+						{ [ 1, 2 ].map( ( i ) => (
+							<div
+								key={ i }
+								className="components-panel__body options general is-opened"
+							>
+								<span className="title is-loading" />
+								<ul>
+									{ [ 1, 2, 3 ].map( ( i ) => (
+										<li className="option-row" key={ i }>
+											<div className="mock-icon is-loading" />
+											<span className="is-loading" />
+											<div className="toggle is-loading" />
+										</li>
+									) ) }
+								</ul>
+							</div>
+						) ) }
 					</div>
 				</div>
 				<div className="modal-footer">
@@ -584,7 +585,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 									) }
 								</Fragment>
 							) : (
-								<Fragment>
+								<div className="import-done-actions">
 									<Button
 										isLink
 										className="close"
@@ -604,13 +605,17 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 											'templates-patterns-collection'
 										) }
 									</Button>
-									<Button isPrimary href={ editLink }>
+									<Button
+										isPrimary
+										className="import"
+										href={ editLink }
+									>
 										{ __(
 											'Add your own content',
 											'templates-patterns-collection'
 										) }
 									</Button>
-								</Fragment>
+								</div>
 							) }
 						</div>
 					) }

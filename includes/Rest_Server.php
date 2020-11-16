@@ -283,8 +283,6 @@ class Rest_Server {
 			);
 		}
 
-		error_log( var_export( $imported, true ) );
-
 		return new WP_REST_Response(
 			array(
 				'success' => true,
@@ -302,10 +300,11 @@ class Rest_Server {
 	private function insert_single_template( $template ) {
 		return wp_insert_post(
 			array(
-				'post_title'   => wp_strip_all_tags( $template['template_name'] ),
-				'post_content' => wp_kses_post( $template['content'] ),
-				'post_status'  => 'publish',
-				'post_type'    => 'page',
+				'post_title'    => wp_strip_all_tags( $template['template_name'] ),
+				'post_content'  => wp_kses_post( $template['content'] ),
+				'post_status'   => 'publish',
+				'post_type'     => 'page',
+				'page_template' => 'page-templates/template-pagebuilder-full-width.php',
 			)
 		);
 	}

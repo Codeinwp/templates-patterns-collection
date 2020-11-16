@@ -1,18 +1,29 @@
 import classnames from 'classnames';
 
-import { __ } from '@wordpress/i18n';
-import { Spinner, Button } from '@wordpress/components';
-import { close } from '@wordpress/icons';
 import { useEffect, useState, Fragment } from '@wordpress/element';
+import { withDispatch, withSelect } from '@wordpress/data';
+import { Spinner, Button } from '@wordpress/components';
+import { compose } from '@wordpress/compose';
+import { close } from '@wordpress/icons';
+import { __ } from '@wordpress/i18n';
 
 import { fetchLibrary } from './common';
 import ListItem from './ListItem';
 import Filters from './Filters';
 import PreviewFrame from './PreviewFrame';
+import ImportTemplatesModal from './ImportTemplatesModal';
 import Pagination from '../../../../editor/src/components/pagination';
 
-const Library = ( { isGeneral } ) => {
+const Library = ( {
+	isGeneral,
+	setInstallModal,
+	setTemplateModal,
+	templateModal,
+	themeStatus,
+	editor,
+} ) => {
 	const [ library, setLibrary ] = useState( [] );
+	const [ toImport, setToImport ] = useState( [] );
 	const [ isGrid, setIsGrid ] = useState( isGeneral );
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ currentPage, setCurrentPage ] = useState( 0 );
@@ -90,10 +101,17 @@ const Library = ( { isGeneral } ) => {
 		setPreviewUrl( url );
 	};
 
-	const handleImport = () => {
-		console.log( 'import' );
+	const handleImport = ( id ) => {
+		if ( themeStatus ) {
+			setInstallModal( true );
+
+			return false;
+		}
+		setToImport( [ id ] );
+		setTemplateModal( true );
 	};
 
+	const previewedItem = library.find( ( item ) => previewUrl === item.link );
 	const wrapClasses = classnames( 'cloud-items', { 'is-grid': isGrid } );
 
 	return (
@@ -118,7 +136,7 @@ const Library = ( { isGeneral } ) => {
 										key={ item.template_id }
 										item={ item }
 										loadTemplates={ loadTemplates }
-										onImport={ handleImport }
+										onImport={ () => handleImport( item ) }
 										grid={ isGrid }
 									/>
 								) ) }
@@ -135,6 +153,15 @@ const Library = ( { isGeneral } ) => {
 				{ previewUrl && (
 					<PreviewFrame
 						previewUrl={ previewUrl }
+						rightButtons={
+							<Button
+								isPrimary
+								onClick={ () => handleImport( previewedItem ) }
+							>
+								{ __( 'Import Template' ) }
+							</Button>
+						}
+						heading={ previewedItem.template_name }
 						leftButtons={
 							<Button
 								icon={ close }
@@ -144,8 +171,40 @@ const Library = ( { isGeneral } ) => {
 					/>
 				) }
 			</>
+			{ templateModal &&
+				toImport &&
+				! isLoading &&
+				toImport.length > 0 && (
+				<ImportTemplatesModal
+					generalTemplates={ true }
+					isUserTemplate={ ! isGeneral }
+					templatesData={ toImport }
+				/>
+			) }
 		</div>
 	);
 };
 
-export default Library;
+export default compose(
+	withDispatch( ( dispatch ) => {
+		const { setInstallModalStatus, setTemplateModal } = dispatch(
+			'neve-onboarding'
+		);
+
+		return {
+			setInstallModal: ( status ) => setInstallModalStatus( status ),
+			setTemplateModal,
+		};
+	} ),
+	withSelect( ( select ) => {
+		const { getTemplateModal, getThemeAction, getCurrentEditor } = select(
+			'neve-onboarding'
+		);
+
+		return {
+			templateModal: getTemplateModal(),
+			themeStatus: getThemeAction().action || false,
+			editor: getCurrentEditor(),
+		};
+	} )
+)( Library );
