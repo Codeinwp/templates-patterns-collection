@@ -254,7 +254,13 @@ export const publishTemplate = async (
 	} );
 
 	try {
-		const response = await apiFetch( { url, method: 'POST' } );
+		const response = await apiFetch( {
+			url,
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer  ${ tiTpc.bearer || '' } `,
+			},
+		} );
 		if ( response.ok ) {
 			const content = await response.json();
 			if ( content.message ) {

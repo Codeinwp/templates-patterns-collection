@@ -1,11 +1,11 @@
 import classnames from 'classnames';
 
+import { chevronLeft, chevronRight, close } from '@wordpress/icons';
 import { useEffect, useState, Fragment } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Spinner, Button } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
-import { close } from '@wordpress/icons';
-import { __ } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 
 import { fetchLibrary } from './common';
 import ListItem from './ListItem';
@@ -111,8 +111,27 @@ const Library = ( {
 		setTemplateModal( true );
 	};
 
-	const previewedItem = library.find( ( item ) => previewUrl === item.link );
+	const currentPreviewIndex =
+		library && library.findIndex( ( item ) => item.link === previewUrl );
+	const previewedItem =
+		library && library.find( ( item ) => previewUrl === item.link );
 	const wrapClasses = classnames( 'cloud-items', { 'is-grid': isGrid } );
+
+	const handlePrevious = () => {
+		let newIndex = currentPreviewIndex - 1;
+		if ( currentPreviewIndex === 0 ) {
+			newIndex = library.length - 1;
+		}
+		setPreviewUrl( library[ newIndex ].link );
+	};
+
+	const handleNext = () => {
+		let newIndex = currentPreviewIndex + 1;
+		if ( currentPreviewIndex === library.length - 1 ) {
+			newIndex = 0;
+		}
+		setPreviewUrl( library[ newIndex ].link );
+	};
 
 	return (
 		<div className={ wrapClasses }>
@@ -126,7 +145,7 @@ const Library = ( {
 				/>
 				{ isLoading && <Spinner /> }
 				{ ! isLoading &&
-					( library.length > 0 ? (
+					( library && library.length > 0 ? (
 						<>
 							<div className="table">
 								{ library.map( ( item ) => (
@@ -163,10 +182,32 @@ const Library = ( {
 						}
 						heading={ previewedItem.template_name }
 						leftButtons={
-							<Button
-								icon={ close }
-								onClick={ () => setPreviewUrl( '' ) }
-							/>
+							<>
+								<Button
+									icon={ close }
+									onClick={ () => setPreviewUrl( '' ) }
+								/>
+								{ library.length > 1 && (
+									<>
+										<Button
+											icon={
+												isRTL()
+													? chevronRight
+													: chevronLeft
+											}
+											onClick={ handlePrevious }
+										/>
+										<Button
+											icon={
+												isRTL()
+													? chevronLeft
+													: chevronRight
+											}
+											onClick={ handleNext }
+										/>
+									</>
+								) }
+							</>
 						}
 					/>
 				) }

@@ -26,7 +26,6 @@ class Editor {
 	 */
 	public function init() {
 		define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-cloud/' );
-		//      define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'http://localhost:8081/wp-json/templates-cloud/v1/' );
 
 		add_action( 'init', array( $this, 'register_block' ), 11 );
 		add_action( 'init', array( $this, 'register_post_meta' ), 11 );
@@ -54,7 +53,6 @@ class Editor {
 					'params'       => array(
 						'site_url'   => get_site_url(),
 						'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
-						'tier'       => -1,
 					),
 					'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
 				)

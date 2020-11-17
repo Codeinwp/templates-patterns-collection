@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { Button, Dashicon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
@@ -13,7 +15,7 @@ const StarterSiteCard = ( {
 	setInstallModal,
 	setImportingPages,
 } ) => {
-	const { upsell, slug, screenshot, title } = data;
+	const { upsell, slug, screenshot, title, has_templates } = data;
 	const [ actionsClass, setActionClass ] = useState( '' );
 
 	const showActions = () => {
@@ -61,17 +63,22 @@ const StarterSiteCard = ( {
 							{ __( 'Import', 'templates-patterns-collection' ) }
 						</Button>
 					) }
-					<Button
-						isLink
-						className="templates"
-						onClick={ ( e ) => {
-							e.preventDefault();
-							setSite();
-							setImportingPages();
-						} }
-					>
-						{ __( 'View Pages', 'templates-patterns-collection' ) }
-					</Button>
+					{ has_templates && (
+						<Button
+							isLink
+							className="templates"
+							onClick={ ( e ) => {
+								e.preventDefault();
+								setSite();
+								setImportingPages();
+							} }
+						>
+							{ __(
+								'View Pages',
+								'templates-patterns-collection'
+							) }
+						</Button>
+					) }
 				</div>
 				{ screenshot && (
 					<div

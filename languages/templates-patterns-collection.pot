@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-11-16T13:55:07+00:00\n"
+"POT-Creation-Date: 2020-11-17T13:53:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -39,16 +39,16 @@ msgid "Hi! We've noticed you were using a child theme of Zelle before. To make y
 msgstr ""
 
 #: includes/Admin.php:270
-#: assets/build/app.js:4326
-#: assets/src/Components/StarterSiteCard.js:53
+#: assets/build/app.js:4362
+#: assets/src/Components/StarterSiteCard.js:55
 msgid "Preview"
 msgstr ""
 
 #: includes/Admin.php:271
-#: assets/build/app.js:4083
-#: assets/build/app.js:4330
+#: assets/build/app.js:4116
+#: assets/build/app.js:4366
 #: assets/src/Components/PreviewFrame.js:102
-#: assets/src/Components/StarterSiteCard.js:61
+#: assets/src/Components/StarterSiteCard.js:63
 msgid "Import"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgid "Importing"
 msgstr ""
 
 #: includes/Admin.php:274
-#: assets/build/app.js:3657
+#: assets/build/app.js:3690
 #: assets/src/Components/Migration.js:165
 msgid "Cancel"
 msgstr ""
@@ -71,22 +71,22 @@ msgid "Loading"
 msgstr ""
 
 #: includes/Admin.php:276
-#: assets/build/app.js:2972
-#: assets/build/app.js:3668
-#: assets/src/Components/ImportModal.js:602
+#: assets/build/app.js:3004
+#: assets/build/app.js:3701
+#: assets/src/Components/ImportModal.js:603
 #: assets/src/Components/Migration.js:197
 msgid "View Website"
 msgstr ""
 
 #: includes/Admin.php:277
-#: assets/build/app.js:2975
-#: assets/src/Components/ImportModal.js:608
+#: assets/build/app.js:3008
+#: assets/src/Components/ImportModal.js:613
 msgid "Add your own content"
 msgstr ""
 
 #: includes/Admin.php:278
-#: assets/build/app.js:2969
-#: assets/src/Components/ImportModal.js:593
+#: assets/build/app.js:3001
+#: assets/src/Components/ImportModal.js:594
 msgid "Back to Sites Library"
 msgstr ""
 
@@ -99,8 +99,8 @@ msgid "Advanced Options"
 msgstr ""
 
 #: includes/Admin.php:281
-#: assets/build/app.js:2713
-#: assets/src/Components/ImportModal.js:271
+#: assets/build/app.js:2743
+#: assets/src/Components/ImportModal.js:272
 msgid "Plugins"
 msgstr ""
 
@@ -117,20 +117,20 @@ msgid "Search"
 msgstr ""
 
 #: includes/Admin.php:285
-#: assets/build/app.js:2656
-#: assets/src/Components/ImportModal.js:199
+#: assets/build/app.js:2686
+#: assets/src/Components/ImportModal.js:200
 msgid "Content"
 msgstr ""
 
 #: includes/Admin.php:286
-#: assets/build/app.js:2660
-#: assets/src/Components/ImportModal.js:203
+#: assets/build/app.js:2690
+#: assets/src/Components/ImportModal.js:204
 msgid "Customizer"
 msgstr ""
 
 #: includes/Admin.php:287
-#: assets/build/app.js:2664
-#: assets/src/Components/ImportModal.js:207
+#: assets/build/app.js:2694
+#: assets/src/Components/ImportModal.js:208
 msgid "Widgets"
 msgstr ""
 
@@ -151,8 +151,8 @@ msgid "Here is our own collection of related images you can use for your site."
 msgstr ""
 
 #: includes/Admin.php:292
-#: assets/build/app.js:2951
-#: assets/src/Components/ImportModal.js:541
+#: assets/build/app.js:2981
+#: assets/src/Components/ImportModal.js:542
 msgid "Content was successfully imported. Enjoy your new site!"
 msgstr ""
 
@@ -229,17 +229,17 @@ msgid "With Neve, you can choose from multiple unique demos, specially designed 
 msgstr ""
 
 #: assets/build/app.js:425
-#: assets/build/app.js:4352
+#: assets/build/app.js:4388
 #: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:155
-#: assets/src/Components/StarterSiteCard.js:91
+#: assets/src/Components/StarterSiteCard.js:98
 msgid "Premium"
 msgstr ""
 
 #: assets/build/app.js:447
-#: assets/build/app.js:3370
-#: assets/build/app.js:3657
-#: assets/build/app.js:3904
-#: assets/build/app.js:4061
+#: assets/build/app.js:3403
+#: assets/build/app.js:3690
+#: assets/build/app.js:3937
+#: assets/build/app.js:4094
 #: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:206
 #: assets/src/Components/InstallModal.js:163
 #: assets/src/Components/Migration.js:161
@@ -307,222 +307,222 @@ msgstr ""
 msgid "I want to import the entire site"
 msgstr ""
 
-#: assets/build/app.js:2072
-#: assets/build/app.js:2101
-#: assets/build/app.js:2182
+#: assets/build/app.js:2102
+#: assets/build/app.js:2131
+#: assets/build/app.js:2212
 #: assets/src/Components/EditorSelector.js:30
 #: assets/src/Components/EditorSelector.js:70
 #: assets/src/Components/EditorTabs.js:42
 msgid "Builder Logo"
 msgstr ""
 
-#: assets/build/app.js:2544
-#: assets/build/app.js:2569
+#: assets/build/app.js:2574
+#: assets/build/app.js:2599
 #: assets/src/Components/ImportModal.js:61
 #: assets/src/Components/ImportModal.js:97
 msgid "Something went wrong while loading the site data. Please refresh the page and try again."
 msgstr ""
 
 #. translators: name of starter site
-#: assets/build/app.js:2648
-#: assets/src/Components/ImportModal.js:179
+#: assets/build/app.js:2678
+#: assets/src/Components/ImportModal.js:180
 msgid "Import %s as a complete site"
 msgstr ""
 
-#: assets/build/app.js:2650
-#: assets/src/Components/ImportModal.js:187
+#: assets/build/app.js:2680
+#: assets/src/Components/ImportModal.js:188
 msgid "Import the entire site including customizer options, pages, content and plugins."
 msgstr ""
 
-#: assets/build/app.js:2677
-#: assets/src/Components/ImportModal.js:221
+#: assets/build/app.js:2707
+#: assets/src/Components/ImportModal.js:222
 msgid "Import settings"
 msgstr ""
 
-#: assets/build/app.js:2869
-#: assets/src/Components/ImportModal.js:426
+#: assets/build/app.js:2899
+#: assets/src/Components/ImportModal.js:427
 msgid "Something went wrong while installing the necessary plugins."
 msgstr ""
 
-#: assets/build/app.js:2870
-#: assets/src/Components/ImportModal.js:430
+#: assets/build/app.js:2900
+#: assets/src/Components/ImportModal.js:431
 msgid "Something went wrong while importing the website content."
 msgstr ""
 
-#: assets/build/app.js:2871
-#: assets/src/Components/ImportModal.js:434
+#: assets/build/app.js:2901
+#: assets/src/Components/ImportModal.js:435
 msgid "Something went wrong while updating the customizer settings."
 msgstr ""
 
-#: assets/build/app.js:2872
-#: assets/src/Components/ImportModal.js:438
+#: assets/build/app.js:2902
+#: assets/src/Components/ImportModal.js:439
 msgid "Something went wrong while importing the widgets."
 msgstr ""
 
-#: assets/build/app.js:2957
-#: assets/src/Components/ImportModal.js:561
+#: assets/build/app.js:2987
+#: assets/src/Components/ImportModal.js:562
 msgid "I want to import just the templates"
 msgstr ""
 
-#: assets/build/app.js:2965
-#: assets/src/Components/ImportModal.js:579
+#: assets/build/app.js:2995
+#: assets/src/Components/ImportModal.js:580
 msgid "Import entire site"
 msgstr ""
 
-#: assets/build/app.js:3045
+#: assets/build/app.js:3078
 #: assets/src/Components/ImportModalError.js:26
 msgid "Error code"
 msgstr ""
 
-#: assets/build/app.js:3045
+#: assets/build/app.js:3078
 #: assets/src/Components/ImportModalError.js:31
 msgid "Error log"
 msgstr ""
 
-#: assets/build/app.js:3135
+#: assets/build/app.js:3168
 #: assets/src/Components/ImportStepper.js:8
 msgid "Installing Plugins"
 msgstr ""
 
-#: assets/build/app.js:3140
+#: assets/build/app.js:3173
 #: assets/src/Components/ImportStepper.js:13
 msgid "Importing Content"
 msgstr ""
 
-#: assets/build/app.js:3145
+#: assets/build/app.js:3178
 #: assets/src/Components/ImportStepper.js:18
 msgid "Importing Customizer Settings"
 msgstr ""
 
-#: assets/build/app.js:3150
+#: assets/build/app.js:3183
 #: assets/src/Components/ImportStepper.js:26
 msgid "Importing Widgets"
 msgstr ""
 
 #. translators: %s: Error message.
-#: assets/build/app.js:3274
+#: assets/build/app.js:3307
 #: assets/src/Components/InstallModal.js:31
 msgid "An error has ocurred: %s"
 msgstr ""
 
-#: assets/build/app.js:3291
+#: assets/build/app.js:3324
 #: assets/src/Components/InstallModal.js:52
 msgid "Could not install theme."
 msgstr ""
 
-#: assets/build/app.js:3301
+#: assets/build/app.js:3334
 #: assets/src/Components/InstallModal.js:67
 msgid "Could not activate theme."
 msgstr ""
 
-#: assets/build/app.js:3321
+#: assets/build/app.js:3354
 #: assets/src/Components/InstallModal.js:89
 msgid "Install and Activate Neve"
 msgstr ""
 
-#: assets/build/app.js:3335
+#: assets/build/app.js:3368
 #: assets/src/Components/InstallModal.js:102
 msgid "Logo"
 msgstr ""
 
-#: assets/build/app.js:3346
+#: assets/build/app.js:3379
 #: assets/src/Components/InstallModal.js:116
 msgid "In order to import the starter site, Neve theme has to be installed and activated. Click the button below to install and activate Neve"
 msgstr ""
 
-#: assets/build/app.js:3363
+#: assets/build/app.js:3396
 #: assets/src/Components/InstallModal.js:147
 msgid "Install and Activate"
 msgstr ""
 
-#: assets/build/app.js:3363
+#: assets/build/app.js:3396
 #: assets/src/Components/InstallModal.js:151
 msgid "Activate"
 msgstr ""
 
-#: assets/build/app.js:3628
-#: assets/build/app.js:3694
+#: assets/build/app.js:3661
+#: assets/build/app.js:3727
 #: assets/src/Components/Migration.js:82
 #: assets/src/Components/Migration.js:239
 msgid "Migrate"
 msgstr ""
 
-#: assets/build/app.js:3650
+#: assets/build/app.js:3683
 #: assets/src/Components/Migration.js:141
 msgid "Migrating"
 msgstr ""
 
-#: assets/build/app.js:3662
+#: assets/build/app.js:3695
 #: assets/src/Components/Migration.js:177
 msgid "Start Migration"
 msgstr ""
 
-#: assets/build/app.js:3665
+#: assets/build/app.js:3698
 #: assets/src/Components/Migration.js:188
 msgid "Edit Content"
 msgstr ""
 
-#: assets/build/app.js:3705
+#: assets/build/app.js:3738
 #: assets/src/Components/Migration.js:259
 msgid "Dismissed"
 msgstr ""
 
-#: assets/build/app.js:3709
+#: assets/build/app.js:3742
 #: assets/src/Components/Migration.js:268
 msgid "Dismiss"
 msgstr ""
 
-#: assets/build/app.js:3915
+#: assets/build/app.js:3948
 #: assets/src/Components/OnboardingContent.js:172
 msgid "No results found"
 msgstr ""
 
-#: assets/build/app.js:4066
+#: assets/build/app.js:4099
 #: assets/src/Components/PreviewFrame.js:62
 msgid "Previous"
 msgstr ""
 
-#: assets/build/app.js:4071
+#: assets/build/app.js:4104
 #: assets/src/Components/PreviewFrame.js:74
 msgid "Next"
 msgstr ""
 
-#: assets/build/app.js:4079
+#: assets/build/app.js:4112
 #: assets/src/Components/PreviewFrame.js:91
 msgid "Upgrade and Import"
 msgstr ""
 
-#: assets/build/app.js:4218
+#: assets/build/app.js:4251
 #: assets/src/Components/Search.js:98
 msgid "Search for a starter site"
 msgstr ""
 
-#: assets/build/app.js:4338
-#: assets/src/Components/StarterSiteCard.js:73
+#: assets/build/app.js:4374
+#: assets/src/Components/StarterSiteCard.js:76
 msgid "View Pages"
 msgstr ""
 
-#: assets/build/app.js:4948
+#: assets/build/app.js:4984
 #: assets/src/utils/common.js:7
 msgid "Business"
 msgstr ""
 
-#: assets/build/app.js:4948
+#: assets/build/app.js:4984
 #: assets/src/utils/common.js:8
 msgid "Ecommerce"
 msgstr ""
 
-#: assets/build/app.js:4948
+#: assets/build/app.js:4984
 #: assets/src/utils/common.js:9
 msgid "Fashion"
 msgstr ""
 
-#: assets/build/app.js:4948
+#: assets/build/app.js:4984
 #: assets/src/utils/common.js:10
 msgid "Blogging"
 msgstr ""
 
-#: assets/build/app.js:4948
+#: assets/build/app.js:4984
 #: assets/src/utils/common.js:11
 msgid "Photography"
 msgstr ""

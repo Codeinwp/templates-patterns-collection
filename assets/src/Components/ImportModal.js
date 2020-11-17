@@ -148,8 +148,8 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 					</div>
 				</div>
 				<div className="modal-footer">
-					<Button isSecondary className="is-loading" />
-					<Button isPrimary className="is-loading" />
+					<span className="link is-loading" />
+					<Button isPrimary className="import is-loading" />
 				</div>
 			</Fragment>
 		);
