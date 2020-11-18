@@ -522,49 +522,29 @@ var ListItem = function ListItem(_ref) {
       return _ref3.apply(this, arguments);
     };
   }();
+  /*	const duplicateItem = async () => {
+  	setLoading( 'duplicating' );
+  	await duplicateTemplate( item.template_id );
+  	setLoading( false );
+  };*/
 
-  var duplicateItem = /*#__PURE__*/function () {
+
+  var deleteItem = /*#__PURE__*/function () {
     var _ref4 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              setLoading('duplicating');
-              _context3.next = 3;
-              return Object(_data_templates_cloud_index__WEBPACK_IMPORTED_MODULE_9__["duplicateTemplate"])(item.template_id);
-
-            case 3:
-              setLoading(false);
-
-            case 4:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3);
-    }));
-
-    return function duplicateItem() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-
-  var deleteItem = /*#__PURE__*/function () {
-    var _ref5 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
               if (window.confirm(Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__["__"])('Are you sure you want to delete this template?'))) {
-                _context4.next = 2;
+                _context3.next = 2;
                 break;
               }
 
-              return _context4.abrupt("return", false);
+              return _context3.abrupt("return", false);
 
             case 2:
               setLoading('deleting');
-              _context4.next = 5;
+              _context3.next = 5;
               return Object(_data_templates_cloud_index__WEBPACK_IMPORTED_MODULE_9__["deleteTemplate"])(item.template_id);
 
             case 5:
@@ -572,22 +552,22 @@ var ListItem = function ListItem(_ref) {
 
             case 6:
             case "end":
-              return _context4.stop();
+              return _context3.stop();
           }
         }
-      }, _callee4);
+      }, _callee3);
     }));
 
     return function deleteItem() {
-      return _ref5.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
 
   var importPreview = /*#__PURE__*/function () {
-    var _ref6 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+    var _ref5 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context5.prev = _context5.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
               togglePreview();
               setPreviewData({
@@ -597,14 +577,14 @@ var ListItem = function ListItem(_ref) {
 
             case 2:
             case "end":
-              return _context5.stop();
+              return _context4.stop();
           }
         }
-      }, _callee5);
+      }, _callee4);
     }));
 
     return function importPreview() {
-      return _ref6.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
@@ -663,14 +643,6 @@ var ListItem = function ListItem(_ref) {
       }),
       onClick: updateItem
     })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["Button"], {
-      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__["__"])('Duplicate'),
-      icon: 'duplicating' === isLoading ? _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["update"] : _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["group"],
-      disabled: false !== isLoading,
-      className: classnames__WEBPACK_IMPORTED_MODULE_4___default()({
-        'is-loading': 'duplicating' === isLoading
-      }),
-      onClick: duplicateItem
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["Button"], {
       label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__["__"])('Delete'),
       icon: 'deleting' === isLoading ? _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["update"] : _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["trash"],
       disabled: false !== isLoading,
@@ -707,14 +679,6 @@ var ListItem = function ListItem(_ref) {
     onClick: isEditing ? updateItem : function () {
       return setEditing(!isEditing);
     }
-  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["Button"], {
-    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__["__"])('Duplicate'),
-    icon: 'duplicating' === isLoading ? _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["update"] : _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["group"],
-    disabled: false !== isLoading,
-    className: classnames__WEBPACK_IMPORTED_MODULE_4___default()({
-      'is-loading': 'duplicating' === isLoading
-    }),
-    onClick: duplicateItem
   }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["Button"], {
     label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__["__"])('Delete'),
     icon: 'deleting' === isLoading ? _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["update"] : _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["trash"],

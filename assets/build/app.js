@@ -1316,49 +1316,29 @@ var ListItem = function ListItem(_ref) {
       return _ref2.apply(this, arguments);
     };
   }();
+  /*const duplicateItem = async () => {
+  	setLoading( 'duplicating' );
+  	await duplicateTemplate( item.template_id ).then( ( r ) => {
+  		if ( r.success ) {
+  			loadTemplates();
+  		}
+  	} );
+  	setLoading( false );
+  };*/
 
-  var duplicateItem = /*#__PURE__*/function () {
+
+  var deleteItem = /*#__PURE__*/function () {
     var _ref3 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              setLoading('duplicating');
-              _context2.next = 3;
-              return Object(_common__WEBPACK_IMPORTED_MODULE_8__["duplicateTemplate"])(item.template_id).then(function (r) {
-                if (r.success) {
-                  loadTemplates();
-                }
-              });
-
-            case 3:
-              setLoading(false);
-
-            case 4:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-
-    return function duplicateItem() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-
-  var deleteItem = /*#__PURE__*/function () {
-    var _ref4 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
               if (window.confirm(Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('Are you sure you want to delete this template?'))) {
-                _context3.next = 2;
+                _context2.next = 2;
                 break;
               }
 
-              return _context3.abrupt("return", false);
+              return _context2.abrupt("return", false);
 
             case 2:
               setLoading('deleting');
@@ -1371,14 +1351,14 @@ var ListItem = function ListItem(_ref) {
 
             case 5:
             case "end":
-              return _context3.stop();
+              return _context2.stop();
           }
         }
-      }, _callee3);
+      }, _callee2);
     }));
 
     return function deleteItem() {
-      return _ref4.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
 
@@ -1421,14 +1401,6 @@ var ListItem = function ListItem(_ref) {
       onClick: function onClick() {
         return setEditing(!isEditing);
       }
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__["Button"], {
-      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('Duplicate'),
-      icon: 'duplicating' === isLoading ? _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["update"] : _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["group"],
-      disabled: false !== isLoading,
-      className: classnames__WEBPACK_IMPORTED_MODULE_7___default()({
-        'is-loading': 'duplicating' === isLoading
-      }),
-      onClick: duplicateItem
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__["Button"], {
       label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('Delete'),
       icon: 'deleting' === isLoading ? _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["update"] : _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["trash"],
@@ -1479,14 +1451,6 @@ var ListItem = function ListItem(_ref) {
     onClick: isEditing ? updateItem : function () {
       return setEditing(!isEditing);
     }
-  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__["Button"], {
-    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('Duplicate'),
-    icon: 'duplicating' === isLoading ? _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["update"] : _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["group"],
-    disabled: false !== isLoading,
-    className: classnames__WEBPACK_IMPORTED_MODULE_7___default()({
-      'is-loading': 'duplicating' === isLoading
-    }),
-    onClick: duplicateItem
   }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__["Button"], {
     label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('Delete'),
     icon: 'deleting' === isLoading ? _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["update"] : _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["trash"],

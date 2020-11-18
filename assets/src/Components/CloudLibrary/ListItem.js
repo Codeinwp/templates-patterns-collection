@@ -7,7 +7,11 @@ import { Button, Icon, TextControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import classnames from 'classnames';
 
-import { updateTemplate, duplicateTemplate, deleteTemplate } from './common';
+import {
+	updateTemplate,
+	// duplicateTemplate,
+	deleteTemplate,
+} from './common';
 
 const ListItem = ( {
 	item,
@@ -36,7 +40,7 @@ const ListItem = ( {
 		);
 	};
 
-	const duplicateItem = async () => {
+	/*const duplicateItem = async () => {
 		setLoading( 'duplicating' );
 		await duplicateTemplate( item.template_id ).then( ( r ) => {
 			if ( r.success ) {
@@ -44,7 +48,7 @@ const ListItem = ( {
 			}
 		} );
 		setLoading( false );
-	};
+	};*/
 
 	const deleteItem = async () => {
 		if (
@@ -116,7 +120,7 @@ const ListItem = ( {
 									onClick={ () => setEditing( ! isEditing ) }
 								/>
 
-								<Button
+								{ /*<Button
 									label={ __( 'Duplicate' ) }
 									icon={
 										'duplicating' === isLoading
@@ -129,7 +133,7 @@ const ListItem = ( {
 											'duplicating' === isLoading,
 									} ) }
 									onClick={ duplicateItem }
-								/>
+								/>*/ }
 
 								<Button
 									label={ __( 'Delete' ) }
@@ -214,7 +218,7 @@ const ListItem = ( {
 						}
 					/>
 
-					<Button
+					{ /*	<Button
 						label={ __( 'Duplicate' ) }
 						icon={ 'duplicating' === isLoading ? update : group }
 						disabled={ false !== isLoading }
@@ -223,7 +227,7 @@ const ListItem = ( {
 						} ) }
 						onClick={ duplicateItem }
 					/>
-
+					*/ }
 					<Button
 						label={ __( 'Delete' ) }
 						icon={ 'deleting' === isLoading ? update : trash }

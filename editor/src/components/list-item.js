@@ -18,7 +18,7 @@ import { useState } from '@wordpress/element';
 import {
 	updateTemplate,
 	deleteTemplate,
-	duplicateTemplate,
+	// duplicateTemplate,
 	importTemplate,
 	fetchLibrary,
 } from './../data/templates-cloud/index';
@@ -50,11 +50,11 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 		setEditing( ! isEditing );
 	};
 
-	const duplicateItem = async () => {
+	/*	const duplicateItem = async () => {
 		setLoading( 'duplicating' );
 		await duplicateTemplate( item.template_id );
 		setLoading( false );
-	};
+	};*/
 
 	const deleteItem = async () => {
 		if (
@@ -160,7 +160,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 									) }
 								</Button>
 
-								<Button
+								{ /*<Button
 									label={ __( 'Duplicate' ) }
 									icon={
 										'duplicating' === isLoading
@@ -173,7 +173,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 											'duplicating' === isLoading,
 									} ) }
 									onClick={ duplicateItem }
-								/>
+								/>*/ }
 
 								<Button
 									label={ __( 'Delete' ) }
@@ -238,7 +238,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 						}
 					/>
 
-					<Button
+					{ /*<Button
 						label={ __( 'Duplicate' ) }
 						icon={ 'duplicating' === isLoading ? update : group }
 						disabled={ false !== isLoading }
@@ -246,7 +246,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 							'is-loading': 'duplicating' === isLoading,
 						} ) }
 						onClick={ duplicateItem }
-					/>
+					/>*/ }
 
 					<Button
 						label={ __( 'Delete' ) }
