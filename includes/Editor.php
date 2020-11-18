@@ -64,8 +64,9 @@ class Editor {
 			$this->handle,
 			TIOB_URL . 'editor/build/index.css',
 			array(),
-			$deps['version'],
+			$deps['version']
 		);
+
 		wp_style_add_data( $this->handle, 'rtl', 'replace' );
 
 		register_block_type(
