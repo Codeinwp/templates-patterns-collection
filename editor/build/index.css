@@ -261,5 +261,91 @@
   to {
     transform: rotate(1turn); } }
 
+.tpc-preview-wrap-modal {
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  transform: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden; }
+  .tpc-preview-wrap-modal .components-modal__header {
+    display: none; }
+  .tpc-preview-wrap-modal .ob-preview {
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100000;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column; }
+    .tpc-preview-wrap-modal .ob-preview .loading {
+      bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+      color: #646D82; }
+      .tpc-preview-wrap-modal .ob-preview .loading svg {
+        -webkit-animation-name: spin;
+                animation-name: spin;
+        -webkit-animation-duration: 2000ms;
+                animation-duration: 2000ms;
+        -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+                animation-timing-function: linear; }
+    .tpc-preview-wrap-modal .ob-preview .preview {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      flex-grow: 1; }
+      .tpc-preview-wrap-modal .ob-preview .preview iframe {
+        flex-grow: 1;
+        position: relative;
+        z-index: 100001;
+        height: 100%;
+        width: 100%; }
+    .tpc-preview-wrap-modal .ob-preview .bottom-bar {
+      border-top: 1px solid #e1e1e1;
+      display: flex;
+      padding: 15px 30px;
+      align-items: center; }
+      .tpc-preview-wrap-modal .ob-preview .bottom-bar .actions {
+        margin-left: auto; }
+      .tpc-preview-wrap-modal .ob-preview .bottom-bar .heading {
+        margin: 0 0 0 20px; }
+  .tpc-preview-wrap-modal .ob-preview {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0; }
+
+@-webkit-keyframes spin {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
 
 /*# sourceMappingURL=index.css.map*/

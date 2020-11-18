@@ -424,3 +424,52 @@
 		transform: rotate(1turn)
 	}
 }
+
+.tpc-preview-wrap-modal {
+	top: 0 !important;
+	bottom: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	transform: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	max-width: 100%;
+	max-height: 100%;
+	overflow: hidden;
+
+	.components-modal__header {
+		display: none;
+	}
+
+	@import "../../assets/src/scss/vars";
+	@import "../../assets/src/scss/preview";
+
+	.ob-preview {
+		width: 100vw;
+		height: 100vh;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+}
+
+@-webkit-keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}

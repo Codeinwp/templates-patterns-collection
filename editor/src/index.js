@@ -1,7 +1,7 @@
 /* global tiTpc */
 import { __ } from '@wordpress/i18n';
-import { registerBlockType } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
+import { registerBlockType } from '@wordpress/blocks';
 
 import './editor.scss';
 import './data/index.js';

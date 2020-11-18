@@ -6,7 +6,7 @@ import TemplatesContent from './templates-content';
 import Notices from './notices';
 
 const Content = ( { importBlocks, isPreview, currentTab, isFetching } ) => {
-	if ( isPreview ) {
+	if ( isPreview && currentTab === 'library' ) {
 		return (
 			<Preview isFetching={ isFetching } importBlocks={ importBlocks } />
 		);
