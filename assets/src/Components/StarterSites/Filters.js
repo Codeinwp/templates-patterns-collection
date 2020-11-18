@@ -70,28 +70,37 @@ const Filters = ( {
 
 	const counted = getCounts();
 
+	const StickyNav = () => {
+		if ( isOnboarding ) {
+			return null;
+		}
+
+		return (
+			<div className="sticky-nav" style={ stickyNavStyle }>
+				<div className="container sticky-nav-content">
+					{ ! tiobDash.brandedTheme && (
+						<Icon icon={ Logo } size={ 32 } />
+					) }
+					<Search
+						className="in-sticky"
+						count={ counted.categories }
+						categories={ CATEGORIES }
+						onSearch={ setSearchQuery }
+						query={ searchQuery }
+					/>
+					<EditorSelector
+						isSmall
+						count={ counted.builders }
+						EDITOR_MAP={ EDITOR_MAP }
+					/>
+				</div>
+			</div>
+		);
+	};
+
 	return (
 		<>
-			{ ! isOnboarding && (
-				<div className="sticky-nav" style={ stickyNavStyle }>
-					<div className="container sticky-nav-content">
-						{ ! tiobDash.brandedTheme && (
-							<Icon icon={ Logo } size={ 32 } />
-						) }
-						<Search
-							count={ counted.categories }
-							categories={ CATEGORIES }
-							onSearch={ setSearchQuery }
-							query={ searchQuery }
-						/>
-						<EditorSelector
-							isSmall
-							count={ counted.builders }
-							EDITOR_MAP={ EDITOR_MAP }
-						/>
-					</div>
-				</div>
-			) }
+			<StickyNav />
 			<VizSensor
 				onChange={ ( isVisible ) => {
 					if ( ! isVisible ) {

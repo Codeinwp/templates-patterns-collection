@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-11-18T08:05:42+00:00\n"
+"POT-Creation-Date: 2020-11-18T10:11:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -504,7 +504,7 @@ msgid "Upgrade and Import"
 msgstr ""
 
 #: assets/build/app.js:10
-#: assets/src/Components/Search.js:98
+#: assets/src/Components/Search.js:102
 msgid "Search for a starter site"
 msgstr ""
 
