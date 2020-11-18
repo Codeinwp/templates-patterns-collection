@@ -2789,18 +2789,16 @@ var iconBlack = function iconBlack() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/plugins */ "@wordpress/plugins");
-/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./editor/src/editor.scss");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_editor_scss__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _data_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./data/index.js */ "./editor/src/data/index.js");
-/* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./icon */ "./editor/src/icon.js");
-/* harmony import */ var _extension__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./extension */ "./editor/src/extension.js");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./edit */ "./editor/src/edit.js");
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/plugins */ "@wordpress/plugins");
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./editor.scss */ "./editor/src/editor.scss");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_editor_scss__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _data_index_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./data/index.js */ "./editor/src/data/index.js");
+/* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./icon */ "./editor/src/icon.js");
+/* harmony import */ var _extension__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./extension */ "./editor/src/extension.js");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./edit */ "./editor/src/edit.js");
 /* global tiTpc */
 
 
@@ -2810,30 +2808,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-var _select = Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_1__["select"])('core/editor'),
-    getEditedPostAttribute = _select.getEditedPostAttribute;
-
-Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__["registerBlockType"])('ti-tpc/templates-cloud', {
+Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__["registerBlockType"])('ti-tpc/templates-cloud', {
   title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])('Templates Cloud'),
   description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])('A cloud based templates library which enables you to create ready-made website in no time.'),
-  icon: _icon__WEBPACK_IMPORTED_MODULE_6__["iconBlack"],
+  icon: _icon__WEBPACK_IMPORTED_MODULE_5__["iconBlack"],
   category: 'design',
   keywords: ['templates cloud', 'patterns', 'template library'],
   supports: {
     html: false
   },
-  edit: _edit__WEBPACK_IMPORTED_MODULE_8__["default"],
+  edit: _edit__WEBPACK_IMPORTED_MODULE_7__["default"],
   save: function save() {
     return null;
   }
 });
 
 if (parseInt(tiTpc.tier) === 3) {
-  Object(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_2__["registerPlugin"])('ti-tpc', {
-    render: _extension__WEBPACK_IMPORTED_MODULE_7__["default"],
-    icon: _icon__WEBPACK_IMPORTED_MODULE_6__["iconBlack"]
+  Object(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__["registerPlugin"])('ti-tpc', {
+    render: _extension__WEBPACK_IMPORTED_MODULE_6__["default"],
+    icon: _icon__WEBPACK_IMPORTED_MODULE_5__["iconBlack"]
   });
 }
 

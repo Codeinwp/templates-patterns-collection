@@ -188,7 +188,7 @@ const ListItem = ( {
 						onChange={ setItemName }
 					/>
 				) : (
-					item.template_name
+					itemName
 				) }
 			</div>
 

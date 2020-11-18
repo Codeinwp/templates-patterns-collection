@@ -1467,7 +1467,7 @@ var ListItem = function ListItem(_ref) {
     hideLabelFromVision: true,
     value: itemName,
     onChange: setItemName
-  }) : item.template_name), userTemplate && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", {
+  }) : itemName), userTemplate && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", {
     className: "controls"
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__["Button"], {
     label: isEditing ? Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('Update') : Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('Edit'),
