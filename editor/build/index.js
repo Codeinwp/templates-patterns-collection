@@ -2034,6 +2034,9 @@ var Edit = function Edit(_ref) {
       replaceBlocks = _ref.replaceBlocks,
       closePreview = _ref.closePreview;
 
+  var _useDispatch = Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__["useDispatch"])('core/notices'),
+      createErrorNotice = _useDispatch.createErrorNotice;
+
   var _useState = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["useState"])(false),
       _useState2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_2___default()(_useState, 2),
       modalOpen = _useState2[0],
@@ -2058,9 +2061,17 @@ var Edit = function Edit(_ref) {
               _context.next = 3;
               return Object(_data_templates_cloud__WEBPACK_IMPORTED_MODULE_13__["importTemplate"])(previewData.template_id).then(function (r) {
                 if (r.__file && r.content && 'wp_export' === r.__file) {
-                  importBlocks(r.content);
                   closePreview();
+                  setImporting(false);
+                  importBlocks(r.content);
+                  return false;
                 }
+
+                createErrorNotice(Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__["__"])('Something went wrong while importing. Please try again.'), {
+                  type: 'snackbar'
+                });
+                setImporting(false);
+                removeBlock(clientId);
               });
 
             case 3:

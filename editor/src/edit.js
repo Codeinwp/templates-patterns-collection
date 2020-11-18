@@ -1,4 +1,4 @@
-import { withDispatch, withSelect } from '@wordpress/data';
+import { withDispatch, withSelect, useDispatch } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 import { Modal, Button } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
@@ -20,6 +20,8 @@ const Edit = ( {
 	replaceBlocks,
 	closePreview,
 } ) => {
+	const { createErrorNotice } = useDispatch( 'core/notices' );
+
 	const [ modalOpen, setModalOpen ] = useState( false );
 	const [ importing, setImporting ] = useState( false );
 
@@ -31,9 +33,20 @@ const Edit = ( {
 		setImporting( true );
 		await importTemplate( previewData.template_id ).then( ( r ) => {
 			if ( r.__file && r.content && 'wp_export' === r.__file ) {
-				importBlocks( r.content );
 				closePreview();
+				setImporting( false );
+				importBlocks( r.content );
+				return false;
 			}
+
+			createErrorNotice(
+				__( 'Something went wrong while importing. Please try again.' ),
+				{
+					type: 'snackbar',
+				}
+			);
+			setImporting( false );
+			removeBlock( clientId );
 		} );
 	};
 
