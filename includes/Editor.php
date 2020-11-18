@@ -65,6 +65,7 @@ class Editor {
 			array(),
 			$deps['version'],
 		);
+		wp_style_add_data( $this->handle, 'rtl', 'replace' );
 
 		register_block_type(
 			'ti-tpc/templates-cloud',
