@@ -316,6 +316,10 @@ const Exporter = () => {
 		return post.save();
 	};
 
+	if ( ! [ 'post', 'page' ].includes( type ) ) {
+		return null;
+	}
+
 	return (
 		<Fragment>
 			<PluginBlockSettingsMenuItem

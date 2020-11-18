@@ -2620,6 +2620,10 @@ var Exporter = function Exporter() {
     return post.save();
   };
 
+  if (!['post', 'page'].includes(type)) {
+    return null;
+  }
+
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__["createElement"])(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_10__["PluginBlockSettingsMenuItem"], {
     label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('Save as Template'),
     icon: 'none' // We don't want an icon, as new UI of Gutenberg does't have icons for Menu Items, but the component doesn't allow that so we pass an icon which doesn't exist.
