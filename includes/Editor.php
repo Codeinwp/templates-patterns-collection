@@ -35,13 +35,13 @@ class Editor {
 	 * Register editor blocks.
 	 */
 	public function register_block() {
-		$deps        = require( TIOB_PATH . 'editor/build/index.asset.php' );
-		$script_deps = array_merge( $deps['dependencies'], array( 'wp-api' ) );
+		$deps = require( TIOB_PATH . 'editor/build/index.asset.php' );
+
 		wp_register_script(
 			$this->handle,
 			TIOB_URL . 'editor/build/index.js',
-			$script_deps,
-			$deps['version'],
+			array_merge( $deps['dependencies'], array( 'wp-api' ) ),
+			$deps['version']
 		);
 
 		wp_localize_script(
