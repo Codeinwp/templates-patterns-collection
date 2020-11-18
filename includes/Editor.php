@@ -35,11 +35,12 @@ class Editor {
 	 * Register editor blocks.
 	 */
 	public function register_block() {
-		$deps = require( TIOB_PATH . 'editor/build/index.asset.php' );
+		$deps        = require( TIOB_PATH . 'editor/build/index.asset.php' );
+		$script_deps = array_merge( $deps['dependencies'], array( 'wp-api' ) );
 		wp_register_script(
 			$this->handle,
 			TIOB_URL . 'editor/build/index.js',
-			array_merge( $deps['dependencies'], array( 'wp-api' ) ),
+			$script_deps,
 			$deps['version'],
 		);
 
