@@ -214,7 +214,7 @@ describe( 'Importer Works', () => {
 
 		cy.get( '.ob-import-modal' )
 			.find( 'button' )
-			.contains( 'Import' )
+			.contains( 'Import entire site' )
 			.click();
 
 		cy.wait( '@installPlugins' ).then( ( req ) => {

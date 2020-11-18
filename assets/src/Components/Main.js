@@ -23,10 +23,11 @@ const Onboarding = ( {
 	return (
 		<Fragment>
 			<div className="ob">
-				{ migration && <Migration data={ migration } /> }
 				<Header />
 				<div className="ob-body">
 					<div className="content-container">
+						{ migration && <Migration data={ migration } /> }
+
 						{ 'starterSites' === currentTab &&
 							( singleImport ? (
 								<DemoSiteTemplatesImport
