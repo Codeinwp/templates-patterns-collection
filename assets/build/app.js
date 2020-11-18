@@ -1084,6 +1084,7 @@ var Library = function Library(_ref) {
   }();
 
   var handleSearch = function handleSearch() {
+    setLoading(true);
     var params = {
       search: searchQuery
     };
@@ -1096,6 +1097,7 @@ var Library = function Library(_ref) {
     Object(_common__WEBPACK_IMPORTED_MODULE_10__["fetchLibrary"])(isGeneral, params).then(function (r) {
       setLibrary(r.templates);
       setTotalPages(r.total);
+      setLoading(false);
     });
   };
 

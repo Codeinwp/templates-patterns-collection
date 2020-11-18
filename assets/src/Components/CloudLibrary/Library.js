@@ -85,6 +85,7 @@ const Library = ( {
 	};
 
 	const handleSearch = () => {
+		setLoading( true );
 		const params = { search: searchQuery };
 		if ( isGeneral ) {
 			params.template_site_slug = 'general';
@@ -94,6 +95,7 @@ const Library = ( {
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
 			setLibrary( r.templates );
 			setTotalPages( r.total );
+			setLoading( false );
 		} );
 	};
 
