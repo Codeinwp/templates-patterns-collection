@@ -51,6 +51,8 @@ const ListItem = ( {
 	};*/
 
 	const deleteItem = async () => {
+		setLoading( 'deleteing' );
+
 		if (
 			! window.confirm(
 				__( 'Are you sure you want to delete this template?' )
@@ -59,13 +61,12 @@ const ListItem = ( {
 			return false;
 		}
 
-		setLoading( 'deleting' );
 		deleteTemplate( item.template_id ).then( ( r ) => {
 			if ( r.success ) {
 				loadTemplates();
+				setLoading( false );
 			}
 		} );
-		setLoading( false );
 	};
 
 	const handlePreview = () => {
@@ -138,13 +139,13 @@ const ListItem = ( {
 								<Button
 									label={ __( 'Delete' ) }
 									icon={
-										'deleting' === isLoading
+										'deleteing' === isLoading
 											? update
 											: trash
 									}
 									disabled={ false !== isLoading }
 									className={ classnames( {
-										'is-loading': 'deleting' === isLoading,
+										'is-loading': 'deleteing' === isLoading,
 									} ) }
 									onClick={ deleteItem }
 								/>
@@ -230,10 +231,10 @@ const ListItem = ( {
 					*/ }
 					<Button
 						label={ __( 'Delete' ) }
-						icon={ 'deleting' === isLoading ? update : trash }
+						icon={ 'deleteing' === isLoading ? update : trash }
 						disabled={ false !== isLoading }
 						className={ classnames( {
-							'is-loading': 'deleting' === isLoading,
+							'is-loading': 'deleteing' === isLoading,
 						} ) }
 						onClick={ deleteItem }
 					/>

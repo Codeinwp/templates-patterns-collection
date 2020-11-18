@@ -225,7 +225,7 @@ export const deleteTemplate = async ( template ) => {
 
 		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
-		await fetchTemplates();
+		await fetchLibrary();
 	} catch ( error ) {
 		if ( error.message ) {
 			createErrorNotice( error.message );
