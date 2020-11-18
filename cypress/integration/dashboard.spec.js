@@ -204,9 +204,8 @@ describe( 'Importer Works', () => {
 		cy.wait( '@getModalData' ).then( ( req ) => {
 			expect( req.status ).to.equal( 200 );
 		} );
-		cy.get( '.ob-import-modal' )
+		cy.get( '.ob-import-modal .components-modal__header' )
 			.find( 'button' )
-			.contains( 'Close' )
 			.click();
 	} );
 
