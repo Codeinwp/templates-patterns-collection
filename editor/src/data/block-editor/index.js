@@ -34,13 +34,10 @@ registerStore( 'tpc/block-editor', {
 		}
 
 		if ( 'UPDATE_CURRENT_TAB' === action.type ) {
-			if ( state.isPreview ) {
-				return state;
-			}
-
 			return {
 				...state,
 				tab: action.tab,
+				isPreview: false,
 			};
 		}
 
