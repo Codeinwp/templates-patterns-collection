@@ -165,18 +165,10 @@ describe( 'Importer Works', () => {
 			'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*'
 		).as( 'getModalData' );
 
-		cy.route( 'POST', '**!/ti-sites-lib/v1/install_plugins' ).as(
-			'installPlugins'
-		);
-		cy.route( 'POST', '**!/ti-sites-lib/v1/import_content' ).as(
-			'importContent'
-		);
-		cy.route( 'POST', '**!/ti-sites-lib/v1/import_theme_mods' ).as(
-			'importCustomizer'
-		);
-		cy.route( 'POST', '**!/ti-sites-lib/v1/import_widgets' ).as(
-			'importWidgets'
-		);
+		cy.route( 'POST', 'install_plugins' ).as( 'installPlugins' );
+		cy.route( 'POST', 'import_content' ).as( 'importContent' );
+		cy.route( 'POST', 'import_theme_mods' ).as( 'importCustomizer' );
+		cy.route( 'POST', 'import_widgets' ).as( 'importWidgets' );
 	};
 
 	before( () => BEFORE() );
