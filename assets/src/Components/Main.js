@@ -17,6 +17,7 @@ const Onboarding = ( {
 	singleImport,
 	importModal,
 	currentSiteData,
+	isOnboarding,
 } ) => {
 	const { migration } = getSites;
 

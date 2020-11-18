@@ -198,6 +198,7 @@ svg.is-loading, button.is-loading svg {
 	}
 
 	.ob-head {
+		padding: 20px 0 0;
 		margin: 0 0 20px;
 		display: flex;
 		justify-content: flex-end;
@@ -211,6 +212,10 @@ svg.is-loading, button.is-loading svg {
 				height: 30px;
 			}
 		}
+	}
+
+	.content-container {
+		padding: 0;
 	}
 }
 
@@ -297,8 +302,9 @@ svg.is-loading, button.is-loading svg {
 @mixin ob-general--laptop() {
 	.content-wrap.is-onboarding {
 		.content {
+			max-width: 1300px;
+			padding: 15px 40px 35px;
 			box-shadow: 0 0 10px -5px rgba(0, 0, 0, 0.5);
-			padding: 35px 40px 35px;
 			border: 1px solid $grey;
 			margin: 40px auto 30px;
 		}

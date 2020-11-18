@@ -111,9 +111,11 @@ const Filters = ( {
 				} }
 			>
 				<div>
-					<p className="instructions">
-						{ tiobDash.strings.starterSitesTabDescription }
-					</p>
+					{ ! isOnboarding && (
+						<p className="instructions">
+							{ tiobDash.strings.starterSitesTabDescription }
+						</p>
+					) }
 					<EditorSelector
 						count={ counted.builders }
 						EDITOR_MAP={ EDITOR_MAP }
