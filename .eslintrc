@@ -1,4 +1,41 @@
 {
-	"extends": [ "plugin:@wordpress/eslint-plugin/recommended" ],
+    "extends": [ "plugin:@wordpress/eslint-plugin/recommended" ],
+    "parserOptions": {
+        "allowImportExportEverywhere": true,
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-unused-vars": [
+            "error", {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }
+        ],
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
+        "no-alert": 0,
+        "no-nested-ternary": 0
+    },
 	"ignorePatterns": ["**/vendor/**"]
 }

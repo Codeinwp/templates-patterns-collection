@@ -182,6 +182,7 @@ const Migration = ( { data } ) => {
 							) : (
 								<Fragment>
 									<Button
+										style={ { marginLeft: 20 } }
 										isSecondary
 										href={ `${ tiobDash.onboarding.homeUrl }/wp-admin/post.php?post=${ frontPageID }&action=elementor` }
 									>
@@ -213,7 +214,7 @@ const Migration = ( { data } ) => {
 			{ modalOpen && renderModal() }
 			<h2>{ data.heading }</h2>
 			<p>{ data.description }</p>
-			<div className="card starter-site-card">
+			<div className="card starter-site-card" style={ { maxWidth: 330 } }>
 				<div className="top">
 					{ data.screenshot && (
 						<div className="image">

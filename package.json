@@ -1,6 +1,6 @@
 {
   "name": "templates-patterns-collection",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "ThemeIsle Templates and Patterns Collection",
   "repository": {
     "type": "git",
@@ -18,12 +18,15 @@
   },
   "scripts": {
     "phpcs": "phpcs --standard=phpcs.xml",
-    "build:makepot": "rm -rf dist/ && docker run --rm --user root --volume \"$(pwd):/var/www/html/templates-patterns-collection\" wordpress:cli wp i18n make-pot ./templates-patterns-collection/ ./templates-patterns-collection/languages/templates-patterns-collection.pot --allow-root",
+    "build:makepot": "docker run --user root --rm --volume \"$(pwd):/var/www/html/templates-patterns-collection\" wordpress:cli bash -c 'php -d memory_limit=512M \"$(which wp)\" i18n make-pot ./templates-patterns-collection/ ./templates-patterns-collection/languages/templates-patterns-collection.pot --allow-root '",
     "build:js": "wp-scripts build assets/src/app.js --output-path=assets/build",
-    "rtlcss": "rtlcss assets/build/style-app.css assets/build/style-app-rtl.css",
-    "build": "npm-run-all -s build:* rtlcss",
+    "build:editor": "wp-scripts build editor/src/index.js --output-path=editor/build",
+    "rtlcss:app": "rtlcss assets/build/style-app.css assets/build/style-app-rtl.css",
+    "rtlcss:editor": "rtlcss editor/build/index.css editor/build/index-rtl.css",
+    "build": "npm-run-all -s build:* rtlcss:*",
     "watch:js": "wp-scripts start assets/src/app.js --output-path=assets/build",
-    "dev": "npm-run-all watch:*",
+    "watch:editor": "wp-scripts start editor/src/index.js --output-path=editor/build",
+    "dev": "npm-run-all --parallel watch:*",
     "release": "npx semantic-release",
     "dist": "bash ./bin/dist.sh",
     "readme": "grunt wp_readme_to_markdown:main",
@@ -48,8 +51,11 @@
     "whatwg-fetch": "^3.4.1"
   },
   "dependencies": {
+    "@wordpress/icons": "^2.7.0",
     "classnames": "^2.2.6",
     "fuse.js": "^6.4.1",
-    "react-visibility-sensor": "^5.1.1"
+    "query-string": "^6.13.6",
+    "react-visibility-sensor": "^5.1.1",
+    "uuid": "^8.3.1"
   }
 }

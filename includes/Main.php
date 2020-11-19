@@ -16,7 +16,7 @@ class Main {
 	 *
 	 * @var string Version string.
 	 */
-	const VERSION = '1.0.10';
+	const VERSION = '1.0.11';
 	/**
 	 * Sites Library API URL.
 	 *
@@ -41,6 +41,13 @@ class Main {
 	 * @var Admin
 	 */
 	public $admin = null;
+
+	/**
+	 * Editor
+	 *
+	 * @var Editor
+	 */
+	public $editor = null;
 
 	/**
 	 * Sites listing
@@ -72,6 +79,7 @@ class Main {
 	 * @var null
 	 */
 	private function init() {
+		$this->setup_editor();
 		$this->setup_sites_listing();
 
 		if ( ! $this->should_load() ) {
@@ -112,6 +120,17 @@ class Main {
 	private function setup_admin() {
 		$this->admin = new Admin();
 		$this->admin->init();
+	}
+
+
+	/**
+	 * Setup editor functionality.
+	 *
+	 * @return void
+	 */
+	private function setup_editor() {
+		$this->editor = new Editor();
+		$this->editor->init();
 	}
 
 	/**

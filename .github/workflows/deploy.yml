@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@master
       - name: Build
         run: |
-          npm ci
+          yarn install --frozen-lockfile
           composer install --no-dev --prefer-dist --no-progress --no-suggest
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@master

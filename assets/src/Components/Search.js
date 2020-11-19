@@ -3,6 +3,7 @@ import { useState } from '@wordpress/element';
 import { Button, Dashicon, Popover } from '@wordpress/components';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
+import classnames from 'classnames';
 
 const Search = ( {
 	count,
@@ -11,10 +12,11 @@ const Search = ( {
 	category,
 	setCurrentCategory,
 	query,
+	className,
 } ) => {
 	const [ open, setOpen ] = useState( false );
 	const toggleDropdown = () => setOpen( ! open );
-	const renderCategoriesDropdown = () => {
+	const CategoriesDropdown = () => {
 		return (
 			<div className="ob-dropdown categories-selector">
 				<Button
@@ -81,8 +83,10 @@ const Search = ( {
 		);
 	};
 
+	const wrapClasses = classnames( className, 'header-form' );
+
 	return (
-		<div className="header-form">
+		<div className={ wrapClasses }>
 			<div className="search">
 				<img
 					src={ tiobDash.assets + '/img/search.svg' }
@@ -101,7 +105,7 @@ const Search = ( {
 						) + '...'
 					}
 				/>
-				{ renderCategoriesDropdown() }
+				<CategoriesDropdown />
 			</div>
 		</div>
 	);
@@ -109,15 +113,21 @@ const Search = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentCategory } = select( 'neve-onboarding' );
+		const { getCurrentCategory, getSearchQuery } = select(
+			'neve-onboarding'
+		);
 		return {
 			category: getCurrentCategory(),
+			query: getSearchQuery(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { setCurrentCategory } = dispatch( 'neve-onboarding' );
+		const { setCurrentCategory, setSearchQuery } = dispatch(
+			'neve-onboarding'
+		);
 		return {
 			setCurrentCategory: ( category ) => setCurrentCategory( category ),
+			onSearch: ( query ) => setSearchQuery( query ),
 		};
 	} )
 )( Search );

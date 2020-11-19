@@ -68,4 +68,34 @@ export default {
 			payload: { themeActions },
 		};
 	},
+	setCurrentTab( currentTab ) {
+		return {
+			type: 'SET_CURRENT_TAB',
+			payload: { currentTab },
+		};
+	},
+	setFetching( fetching ) {
+		return {
+			type: 'SET_FETCHING',
+			payload: { fetching },
+		};
+	},
+	setSingleTemplateImport( slug ) {
+		return {
+			type: 'SET_SINGLE_TEMPLATE_IMPORT',
+			payload: { slug },
+		};
+	},
+	setTemplateModal( data ) {
+		return {
+			type: 'SET_TEMPLATE_MODAL',
+			payload: { data },
+		};
+	},
+	setSearchQuery( query ) {
+		return {
+			type: 'SET_SEARCH_QUERY',
+			payload: { query },
+		};
+	},
 };

@@ -17,3 +17,7 @@ export const installPlugins = ( pluginArray ) => {
 export const importContent = ( data ) => {
 	return send( onboarding.root + '/import_content', data );
 };
+
+export const importTemplates = ( data ) => {
+	return send( onboarding.root + '/import_single_templates', data );
+};

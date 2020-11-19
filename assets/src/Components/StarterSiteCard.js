@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { Button, Dashicon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
@@ -11,8 +13,9 @@ const StarterSiteCard = ( {
 	setModal,
 	themeStatus,
 	setInstallModal,
+	setImportingPages,
 } ) => {
-	const { upsell } = data;
+	const { upsell, slug, screenshot, title, has_templates } = data;
 	const [ actionsClass, setActionClass ] = useState( '' );
 
 	const showActions = () => {
@@ -24,7 +27,7 @@ const StarterSiteCard = ( {
 
 	const launchImport = ( e ) => {
 		e.preventDefault();
-		setSite( data );
+		setSite();
 
 		if ( themeStatus ) {
 			setInstallModal( true );
@@ -36,7 +39,7 @@ const StarterSiteCard = ( {
 
 	const launchPreview = ( e ) => {
 		e.preventDefault();
-		setSite( data );
+		setSite();
 		setPreview( true );
 	};
 
@@ -48,26 +51,46 @@ const StarterSiteCard = ( {
 		>
 			<div className="top">
 				<div className={ 'actions ' + actionsClass }>
-					<Button className="preview" onClick={ launchPreview }>
+					<Button isSecondary onClick={ launchPreview }>
 						{ __( 'Preview', 'templates-patterns-collection' ) }
 					</Button>
 					{ ! upsell && (
-						<Button className="import" onClick={ launchImport }>
+						<Button
+							isPrimary
+							className="import"
+							onClick={ launchImport }
+						>
 							{ __( 'Import', 'templates-patterns-collection' ) }
 						</Button>
 					) }
+					{ has_templates && (
+						<Button
+							isLink
+							className="templates"
+							onClick={ ( e ) => {
+								e.preventDefault();
+								setSite();
+								setImportingPages();
+							} }
+						>
+							{ __(
+								'View Pages',
+								'templates-patterns-collection'
+							) }
+						</Button>
+					) }
 				</div>
-				{ data.screenshot && (
+				{ screenshot && (
 					<div
 						className="image"
 						style={ {
-							backgroundImage: `url("${ data.screenshot }")`,
+							backgroundImage: `url("${ screenshot }")`,
 						} }
 					/>
 				) }
 			</div>
 			<div className="bottom">
-				<p className="title">{ data.title }</p>
+				<p className="title">{ title }</p>
 				{ upsell && (
 					<span className="pro-badge">
 						<Dashicon icon="lock" size={ 15 } />
@@ -89,18 +112,21 @@ export default compose(
 			themeStatus: getThemeAction().action || false,
 		};
 	} ),
-	withDispatch( ( dispatch ) => {
+	withDispatch( ( dispatch, { data } ) => {
+		const { slug } = data;
 		const {
 			setCurrentSite,
 			setPreviewStatus,
 			setImportModalStatus,
 			setInstallModalStatus,
+			setSingleTemplateImport,
 		} = dispatch( 'neve-onboarding' );
 		return {
-			setSite: ( data ) => setCurrentSite( data ),
+			setSite: () => setCurrentSite( data ),
 			setPreview: ( status ) => setPreviewStatus( status ),
 			setModal: ( status ) => setImportModalStatus( status ),
 			setInstallModal: ( status ) => setInstallModalStatus( status ),
+			setImportingPages: () => setSingleTemplateImport( slug ),
 		};
 	} )
 )( StarterSiteCard );
