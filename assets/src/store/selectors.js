@@ -13,4 +13,5 @@ export default {
 	getFetching: ( state ) => state.fetching,
 	getSingleImport: ( state ) => state.singleTemplateImport,
 	getTemplateModal: ( state ) => state.templateModal,
+	getSearchQuery: ( state ) => state.searchQuery,
 };

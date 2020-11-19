@@ -21,9 +21,10 @@ const OnboardingContent = ( {
 	currentSiteData,
 	isOnboarding,
 	cancelOnboarding,
+	setSearchQuery,
+	searchQuery,
 } ) => {
 	const { sites = {} } = getSites;
-	const [ searchQuery, setSearchQuery ] = useState( '' );
 
 	const getAllSites = () => {
 		const finalData = {};
@@ -161,8 +162,6 @@ const OnboardingContent = ( {
 		<>
 			<Filters
 				getSitesForBuilder={ getSitesForBuilder }
-				setSearchQuery={ setSearchQuery }
-				searchQuery={ searchQuery }
 				filterBySearch={ filterBySearch }
 				filterByCategory={ filterByCategory }
 			/>
@@ -215,6 +214,7 @@ export default compose(
 			setOnboardingState,
 			setCurrentCategory,
 			setCurrentTab,
+			setSearchQuery,
 		} = dispatch( 'neve-onboarding' );
 		return {
 			cancelOnboarding: () => {
@@ -224,6 +224,7 @@ export default compose(
 				setCurrentCategory( 'all' );
 			},
 			setCurrentTab,
+			setSearchQuery,
 		};
 	} ),
 	withSelect( ( select ) => {
@@ -237,6 +238,7 @@ export default compose(
 			getSites,
 			getInstallModalStatus,
 			getCurrentTab,
+			getSearchQuery,
 		} = select( 'neve-onboarding' );
 		return {
 			editor: getCurrentEditor(),
@@ -248,6 +250,7 @@ export default compose(
 			isOnboarding: getOnboardingStatus(),
 			getSites: getSites(),
 			currentTab: getCurrentTab(),
+			searchQuery: getSearchQuery(),
 		};
 	} )
 )( OnboardingContent );

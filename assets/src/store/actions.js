@@ -92,4 +92,10 @@ export default {
 			payload: { data },
 		};
 	},
+	setSearchQuery( query ) {
+		return {
+			type: 'SET_SEARCH_QUERY',
+			payload: { query },
+		};
+	},
 };

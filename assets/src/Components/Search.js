@@ -113,15 +113,21 @@ const Search = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentCategory } = select( 'neve-onboarding' );
+		const { getCurrentCategory, getSearchQuery } = select(
+			'neve-onboarding'
+		);
 		return {
 			category: getCurrentCategory(),
+			query: getSearchQuery(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { setCurrentCategory } = dispatch( 'neve-onboarding' );
+		const { setCurrentCategory, setSearchQuery } = dispatch(
+			'neve-onboarding'
+		);
 		return {
 			setCurrentCategory: ( category ) => setCurrentCategory( category ),
+			onSearch: ( query ) => setSearchQuery( query ),
 		};
 	} )
 )( Search );

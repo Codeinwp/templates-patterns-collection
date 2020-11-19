@@ -20,8 +20,6 @@ const Filters = ( {
 	getSites,
 	category,
 	editor,
-	setSearchQuery,
-	searchQuery,
 } ) => {
 	const [ sticky, setSticky ] = useState( false );
 	const { sites = {}, migration } = getSites;
@@ -70,37 +68,27 @@ const Filters = ( {
 
 	const counted = getCounts();
 
-	const StickyNav = () => {
-		if ( isOnboarding || migration ) {
-			return null;
-		}
-
-		return (
-			<div className="sticky-nav" style={ stickyNavStyle }>
-				<div className="container sticky-nav-content">
-					{ ! tiobDash.brandedTheme && (
-						<Icon icon={ Logo } size={ 32 } />
-					) }
-					<Search
-						className="in-sticky"
-						count={ counted.categories }
-						categories={ CATEGORIES }
-						onSearch={ setSearchQuery }
-						query={ searchQuery }
-					/>
-					<EditorSelector
-						isSmall
-						count={ counted.builders }
-						EDITOR_MAP={ EDITOR_MAP }
-					/>
-				</div>
-			</div>
-		);
-	};
-
 	return (
 		<>
-			<StickyNav />
+			{ ! isOnboarding && ! migration && (
+				<div className="sticky-nav" style={ stickyNavStyle }>
+					<div className="container sticky-nav-content">
+						{ ! tiobDash.brandedTheme && (
+							<Icon icon={ Logo } size={ 32 } />
+						) }
+						<Search
+							className="in-sticky"
+							count={ counted.categories }
+							categories={ CATEGORIES }
+						/>
+						<EditorSelector
+							isSmall
+							count={ counted.builders }
+							EDITOR_MAP={ EDITOR_MAP }
+						/>
+					</div>
+				</div>
+			) }
 			<VizSensor
 				onChange={ ( isVisible ) => {
 					if ( ! isVisible ) {
@@ -124,8 +112,6 @@ const Filters = ( {
 					<Search
 						count={ counted.categories }
 						categories={ CATEGORIES }
-						onSearch={ setSearchQuery }
-						query={ searchQuery }
 					/>
 
 					<EditorTabs

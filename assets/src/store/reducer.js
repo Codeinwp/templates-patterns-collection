@@ -25,6 +25,7 @@ const initialState = {
 	fetching: false,
 	singleTemplateImport: null,
 	templateModal: null,
+	searchQuery: '',
 };
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
@@ -107,6 +108,12 @@ export default ( state = initialState, action ) => {
 		return {
 			...state,
 			templateModal: data,
+			};
+	case 'SET_SEARCH_QUERY':
+			const { query } = action.payload;
+		return {
+			...state,
+			searchQuery: query,
 			};
 	}
 	return state;
