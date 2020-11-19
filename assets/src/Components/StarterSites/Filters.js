@@ -24,7 +24,7 @@ const Filters = ( {
 	searchQuery,
 } ) => {
 	const [ sticky, setSticky ] = useState( false );
-	const { sites = {} } = getSites;
+	const { sites = {}, migration } = getSites;
 	const stickyNavStyle = { top: sticky ? 0 : '-100%' };
 
 	const builders = Object.keys( sites );
@@ -71,7 +71,7 @@ const Filters = ( {
 	const counted = getCounts();
 
 	const StickyNav = () => {
-		if ( isOnboarding ) {
+		if ( isOnboarding || migration ) {
 			return null;
 		}
 
