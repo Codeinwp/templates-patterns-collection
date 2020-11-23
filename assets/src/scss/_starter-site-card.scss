@@ -52,9 +52,11 @@
 		position: absolute;
 		opacity: 0;
 		transition: .3s ease;
+
 		.templates {
 			color: #fff;
 		}
+
 		.components-button {
 			margin: 5px 0;
 			width: 100px;
@@ -94,5 +96,20 @@
 			color: $black;
 			margin: 0;
 		}
+	}
+
+	&.has-templates:after {
+		position: absolute;
+		width: 93%;
+		background-color: #FFFFFF;
+		display: block;
+		height: 10px;
+		content: '';
+		margin: 0 auto;
+		bottom: -7px;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: -1;
+		border: 1px solid #D9D9D9;
 	}
 }

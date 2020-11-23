@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-11-23T11:42:30+00:00\n"
+"POT-Creation-Date: 2020-11-23T11:51:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -39,16 +39,16 @@ msgid "Hi! We've noticed you were using a child theme of Zelle before. To make y
 msgstr ""
 
 #: includes/Admin.php:270
-#: assets/build/app.js:4346
-#: assets/src/Components/StarterSiteCard.js:55
+#: assets/build/app.js:4352
+#: assets/src/Components/StarterSiteCard.js:60
 msgid "Preview"
 msgstr ""
 
 #: includes/Admin.php:271
 #: assets/build/app.js:4089
-#: assets/build/app.js:4350
+#: assets/build/app.js:4356
 #: assets/src/Components/PreviewFrame.js:102
-#: assets/src/Components/StarterSiteCard.js:63
+#: assets/src/Components/StarterSiteCard.js:68
 msgid "Import"
 msgstr ""
 
@@ -229,9 +229,9 @@ msgid "With Neve, you can choose from multiple unique demos, specially designed 
 msgstr ""
 
 #: assets/build/app.js:425
-#: assets/build/app.js:4372
+#: assets/build/app.js:4378
 #: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:155
-#: assets/src/Components/StarterSiteCard.js:98
+#: assets/src/Components/StarterSiteCard.js:103
 msgid "Premium"
 msgstr ""
 
@@ -497,32 +497,32 @@ msgstr ""
 msgid "Search for a starter site"
 msgstr ""
 
-#: assets/build/app.js:4358
-#: assets/src/Components/StarterSiteCard.js:76
+#: assets/build/app.js:4364
+#: assets/src/Components/StarterSiteCard.js:81
 msgid "View Pages"
 msgstr ""
 
-#: assets/build/app.js:4982
+#: assets/build/app.js:4988
 #: assets/src/utils/common.js:7
 msgid "Business"
 msgstr ""
 
-#: assets/build/app.js:4982
+#: assets/build/app.js:4988
 #: assets/src/utils/common.js:8
 msgid "Ecommerce"
 msgstr ""
 
-#: assets/build/app.js:4982
+#: assets/build/app.js:4988
 #: assets/src/utils/common.js:9
 msgid "Fashion"
 msgstr ""
 
-#: assets/build/app.js:4982
+#: assets/build/app.js:4988
 #: assets/src/utils/common.js:10
 msgid "Blogging"
 msgstr ""
 
-#: assets/build/app.js:4982
+#: assets/build/app.js:4988
 #: assets/src/utils/common.js:11
 msgid "Photography"
 msgstr ""

@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
-
-import { Button, Dashicon } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
-import { compose } from '@wordpress/compose';
+import { Button, Dashicon } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { compose } from '@wordpress/compose';
+import { __ } from '@wordpress/i18n';
+
+import classnames from 'classnames';
 
 const StarterSiteCard = ( {
 	data,
@@ -43,11 +44,15 @@ const StarterSiteCard = ( {
 		setPreview( true );
 	};
 
+	const cardClassNames = classnames( 'card starter-site-card', {
+		'has-templates': has_templates,
+	} );
+
 	return (
 		<div
 			onMouseEnter={ showActions }
 			onMouseLeave={ hideActions }
-			className="card starter-site-card"
+			className={ cardClassNames }
 		>
 			<div className="top">
 				<div className={ 'actions ' + actionsClass }>
