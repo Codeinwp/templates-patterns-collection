@@ -200,6 +200,10 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 		);
 	}
 
+	const actionClasses = classnames( 'actions', {
+		'no-controls': ! deletable,
+	} );
+
 	return (
 		<div key={ item.template_id } className="table-row">
 			<div className="row-title">
@@ -270,7 +274,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 				/> */ }
 				</div>
 			) }
-			<div className="actions">
+			<div className={ actionClasses }>
 				<Button
 					isSecondary
 					disabled={ false !== isLoading }

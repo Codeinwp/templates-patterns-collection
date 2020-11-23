@@ -73,6 +73,10 @@ const ListItem = ( {
 		onPreview( item.link );
 	};
 
+	const actionClasses = classnames( 'actions', {
+		'no-controls': ! userTemplate,
+	} );
+
 	if ( grid ) {
 		const style = { backgroundImage: `url(${ item.template_thumbnail })` };
 
@@ -247,7 +251,7 @@ const ListItem = ( {
 				</div>
 			) }
 
-			<div className="actions">
+			<div className={ actionClasses }>
 				{ ! userTemplate && item.link && (
 					<Button
 						isSecondary
