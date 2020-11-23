@@ -236,7 +236,9 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 								? updateItem
 								: () => setEditing( ! isEditing )
 						}
-					/>
+					>
+						{ isEditing ? __( 'Update' ) : __( 'Edit' ) }
+					</Button>
 
 					{ /*<Button
 						label={ __( 'Duplicate' ) }
@@ -256,8 +258,11 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 							'is-loading': 'deleting' === isLoading,
 						} ) }
 						onClick={ deleteItem }
-					/>
-
+					>
+						{ 'deleting' === isLoading
+							? __( 'Deleting' ) + '...'
+							: __( 'Delete' ) }
+					</Button>
 					{ /* <Button
 					label={ __( 'Sync' ) }
 					icon={ cloudUpload }

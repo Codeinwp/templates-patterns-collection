@@ -217,7 +217,9 @@ const ListItem = ( {
 								? updateItem
 								: () => setEditing( ! isEditing )
 						}
-					/>
+					>
+						{ isEditing ? __( 'Update' ) : __( 'Edit' ) }
+					</Button>
 
 					{ /*	<Button
 						label={ __( 'Duplicate' ) }
@@ -237,7 +239,11 @@ const ListItem = ( {
 							'is-loading': 'deleteing' === isLoading,
 						} ) }
 						onClick={ deleteItem }
-					/>
+					>
+						{ 'deleting' === isLoading
+							? __( 'Deleting' ) + '...'
+							: __( 'Delete' ) }
+					</Button>
 				</div>
 			) }
 
