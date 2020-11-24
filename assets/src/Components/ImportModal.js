@@ -12,13 +12,21 @@ import ImportModalNote from './ImportModalNote';
 import classnames from 'classnames';
 import ImportModalError from './ImportModalError';
 
-import { withSelect, withDispatch } from '@wordpress/data';
-import { compose } from '@wordpress/compose';
-import { Button, Dashicon, ToggleControl, Modal } from '@wordpress/components';
 import { useState, useEffect, Fragment } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { withSelect, withDispatch } from '@wordpress/data';
+import { __, sprintf } from '@wordpress/i18n';
+import { compose } from '@wordpress/compose';
+import {
+	Button,
+	Icon,
+	ToggleControl,
+	Modal,
+	Panel,
+	PanelBody,
+	PanelRow,
+} from '@wordpress/components';
 
-const ImportModal = ( { setModal, editor, siteData } ) => {
+const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 	const [ general, setGeneral ] = useState( {
 		content: true,
 		customizer: true,
@@ -35,8 +43,12 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 	const [ error, setError ] = useState( null );
 	const [ importData, setImportData ] = useState( null );
 	const [ fetching, setFetching ] = useState( true );
+	const [ pluginsOpened, setPluginsOpened ] = useState( true );
+	const [ optionsOpened, setOptionsOpened ] = useState( true );
+
 	const { license } = tiobDash;
-	useEffect( function getImportData() {
+
+	useEffect( () => {
 		const fetchAddress = siteData.remote_url || siteData.url;
 		const url = new URL(
 			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
@@ -96,52 +108,53 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 		return (
 			<Fragment>
 				<div className="modal-body">
+					<div className="header">
+						<span
+							className="title is-loading"
+							style={ { height: 35, marginBottom: 20 } }
+						/>
+						<p className="description is-loading" />
+						<p className="description is-loading" />
+					</div>
 					<div className="well is-loading">
-						<h3>
-							<div className="mock-icon is-loading" />
-							<span className="is-loading" />
-						</h3>
+						<span
+							className="title is-loading"
+							style={ { height: 20 } }
+						/>
 						<ol>
-							{ [ 1, 2, 3 ].map( ( i ) => (
-								<li key={ i } />
-							) ) }
+							<li />
+							<li />
 						</ol>
 					</div>
-					<hr />
-					<div className="options general">
-						<h3 className="is-loading" />
-						<ul>
-							{ [ 1, 2, 3 ].map( ( i ) => (
-								<li key={ i }>
-									<div className="mock-icon is-loading" />
-									<span className="is-loading" />
-									<div className="toggle is-loading" />
-								</li>
-							) ) }
-						</ul>
-					</div>
-					<hr />
-					<div className="options plugins">
-						<h3 className="is-loading" />
-						<ul>
-							{ [ 1, 2 ].map( ( i ) => (
-								<li key={ i }>
-									<div className="mock-icon is-loading" />
-									<span className="is-loading" />
-									<div className="toggle is-loading" />
-								</li>
-							) ) }
-						</ul>
+
+					<div className="modal-toggles components-panel">
+						{ [ 1, 2 ].map( ( i ) => (
+							<div
+								key={ i }
+								className="components-panel__body options general is-opened"
+							>
+								<span className="title is-loading" />
+								<ul>
+									{ [ 1, 2, 3 ].map( ( i ) => (
+										<li className="option-row" key={ i }>
+											<div className="mock-icon is-loading" />
+											<span className="is-loading" />
+											<div className="toggle is-loading" />
+										</li>
+									) ) }
+								</ul>
+							</div>
+						) ) }
 					</div>
 				</div>
 				<div className="modal-footer">
-					<Button isSecondary className="is-loading" />
-					<Button isPrimary className="is-loading" />
+					<span className="link is-loading" />
+					<Button isPrimary className="import is-loading" />
 				</div>
 			</Fragment>
 		);
 	};
-	const renderNote = () => {
+	const Note = () => {
 		return (
 			<ImportModalNote
 				data={ importData }
@@ -150,7 +163,38 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 		);
 	};
 
-	const renderOptions = () => {
+	const ModalHead = () => {
+		if ( fetching ) {
+			return (
+				<>
+					<h1 className="is-loading title" />
+					<p className="is-loading description" />
+				</>
+			);
+		}
+		return (
+			<div className="header">
+				<h1>
+					{ sprintf(
+						/* translators: name of starter site */
+						__(
+							'Import %s as a complete site',
+							'templates-patterns-collection'
+						),
+						importData.title
+					) }
+				</h1>
+				<p className="description">
+					{ __(
+						'Import the entire site including customizer options, pages, content and plugins.',
+						'templates-patterns-collection'
+					) }
+				</p>
+			</div>
+		);
+	};
+
+	const Options = () => {
 		const map = {
 			content: {
 				title: __( 'Content', 'templates-patterns-collection' ),
@@ -165,39 +209,49 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 				icon: 'admin-generic',
 			},
 		};
+
+		const toggleOpen = () => {
+			setOptionsOpened( ! optionsOpened );
+		};
+
 		return (
-			<div className="options general">
-				<h3>{ __( 'General', 'templates-patterns-collection' ) }:</h3>
-				<ul>
-					{ Object.keys( map ).map( ( id, index ) => {
-						return (
-							<li key={ index }>
-								<Dashicon
-									className={ classnames( {
-										active: general[ id ],
-									} ) }
-									icon={ map[ id ].icon }
+			<PanelBody
+				onToggle={ toggleOpen }
+				opened={ optionsOpened }
+				className="options general"
+				title={ __(
+					'Import settings',
+					'templates-patterns-collection'
+				) }
+			>
+				{ Object.keys( map ).map( ( id, index ) => {
+					return (
+						<PanelRow className="option-row" key={ index }>
+							<Icon
+								className={ classnames( {
+									active: general[ id ],
+								} ) }
+								icon={ map[ id ].icon }
+							/>
+							<span>{ map[ id ].title }</span>
+							<div className="toggle-wrapper">
+								<ToggleControl
+									checked={ general[ id ] }
+									onChange={ () => {
+										setGeneral( {
+											...general,
+											[ id ]: ! general[ id ],
+										} );
+									} }
 								/>
-								<span>{ map[ id ].title }</span>
-								<div className="toggle-wrapper">
-									<ToggleControl
-										checked={ general[ id ] }
-										onChange={ () => {
-											setGeneral( {
-												...general,
-												[ id ]: ! general[ id ],
-											} );
-										} }
-									/>
-								</div>
-							</li>
-						);
-					} ) }
-				</ul>
-			</div>
+							</div>
+						</PanelRow>
+					);
+				} ) }
+			</PanelBody>
 		);
 	};
-	const renderPlugins = () => {
+	const Plugins = () => {
 		if ( fetching ) {
 			return null;
 		}
@@ -206,44 +260,50 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 			...( importData.mandatory_plugins || {} ),
 		};
 
+		const toggleOpen = () => {
+			setPluginsOpened( ! pluginsOpened );
+		};
+
 		return (
-			<div className="options plugins">
-				<h3>{ __( 'Plugins', 'templates-patterns-collection' ) }:</h3>
-				<ul>
-					{ Object.keys( allPlugins ).map( ( slug, index ) => {
-						return (
-							<li key={ index }>
-								<Dashicon
-									icon="admin-plugins"
-									className={ classnames( {
-										active: pluginOptions[ slug ],
-									} ) }
-								/>
-								<span
-									dangerouslySetInnerHTML={ {
-										__html: allPlugins[ slug ],
-									} }
-								/>
-								{ slug in importData.recommended_plugins && (
-									<div className="toggle-wrapper">
-										<ToggleControl
-											checked={ pluginOptions[ slug ] }
-											onChange={ () => {
-												setPluginOptions( {
-													...pluginOptions,
-													[ slug ]: ! pluginOptions[
-														slug
-													],
-												} );
-											} }
-										/>
-									</div>
-								) }
-							</li>
-						);
-					} ) }
-				</ul>
-			</div>
+			<PanelBody
+				onToggle={ toggleOpen }
+				opened={ pluginsOpened }
+				className="options plugins"
+				title={ __( 'Plugins', 'templates-patterns-collection' ) }
+			>
+				{ Object.keys( allPlugins ).map( ( slug, index ) => {
+					return (
+						<PanelRow className="option-row" key={ index }>
+							<Icon
+								icon="admin-plugins"
+								className={ classnames( {
+									active: pluginOptions[ slug ],
+								} ) }
+							/>
+							<span
+								dangerouslySetInnerHTML={ {
+									__html: allPlugins[ slug ],
+								} }
+							/>
+							{ slug in importData.recommended_plugins && (
+								<div className="toggle-wrapper">
+									<ToggleControl
+										checked={ pluginOptions[ slug ] }
+										onChange={ () => {
+											setPluginOptions( {
+												...pluginOptions,
+												[ slug ]: ! pluginOptions[
+													slug
+												],
+											} );
+										} }
+									/>
+								</div>
+							) }
+						</PanelRow>
+					);
+				} ) }
+			</PanelBody>
 		);
 	};
 
@@ -413,6 +473,8 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 		setModal( false );
 	};
 
+	const runTemplatesImport = () => {};
+
 	const externalPluginsInstalled = siteData.external_plugins
 		? siteData.external_plugins.every( ( value ) => true === value.active )
 		: true;
@@ -432,13 +494,6 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 	return (
 		<Modal
 			className={ classnames( [ 'ob-import-modal', { fetching } ] ) }
-			title={
-				importData && ! fetching ? (
-					importData.title
-				) : (
-					<span className="is-loading title" />
-				)
-			}
 			onRequestClose={ closeModal }
 			shouldCloseOnClickOutside={ ! importing && ! fetching }
 			isDismissible={ ! importing && ! fetching }
@@ -449,23 +504,24 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 				<Fragment>
 					<div className="modal-body">
 						{ ! importing && 'done' !== currentStep && ! error ? (
-							<Fragment>
-								{ renderNote() }
-								<hr />
-								{ renderOptions() }
-								<hr />
-								{ renderPlugins() }
-							</Fragment>
+							<>
+								<ModalHead />
+								<Note />
+								<Panel className="modal-toggles">
+									<Options />
+									<Plugins />
+								</Panel>
+							</>
 						) : (
-							<Fragment>
+							<>
 								{ error && (
-									<Fragment>
+									<>
 										<ImportModalError
 											message={ error.message || null }
 											code={ error.code || null }
 										/>
 										<hr />
-									</Fragment>
+									</>
 								) }
 								{ null !== currentStep && (
 									<ImportStepper
@@ -491,21 +547,26 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 										<hr />
 									</Fragment>
 								) }
-							</Fragment>
+							</>
 						) }
 					</div>
 					{ ! importing && (
 						<div className="modal-footer">
 							{ 'done' !== currentStep ? (
 								<Fragment>
-									<Button isSecondary onClick={ closeModal }>
+									<Button
+										className="import-templates"
+										isLink
+										onClick={ runTemplateImport }
+									>
 										{ __(
-											'Close',
+											'I want to import just the templates',
 											'templates-patterns-collection'
 										) }
 									</Button>
 									{ ! error && (
 										<Button
+											className="import"
 											isPrimary
 											disabled={
 												allOptionsOff ||
@@ -517,14 +578,14 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 											} }
 										>
 											{ __(
-												'Import',
+												'Import entire site',
 												'templates-patterns-collection'
 											) }
 										</Button>
 									) }
 								</Fragment>
 							) : (
-								<Fragment>
+								<div className="import-done-actions">
 									<Button
 										isLink
 										className="close"
@@ -544,13 +605,17 @@ const ImportModal = ( { setModal, editor, siteData } ) => {
 											'templates-patterns-collection'
 										) }
 									</Button>
-									<Button isPrimary href={ editLink }>
+									<Button
+										isPrimary
+										className="import"
+										href={ editLink }
+									>
 										{ __(
 											'Add your own content',
 											'templates-patterns-collection'
 										) }
 									</Button>
-								</Fragment>
+								</div>
 							) }
 						</div>
 					) }
@@ -570,10 +635,22 @@ export default compose(
 			siteData: getCurrentSite(),
 		};
 	} ),
-	withDispatch( ( dispatch ) => {
-		const { setImportModalStatus } = dispatch( 'neve-onboarding' );
+	withDispatch( ( dispatch, { siteData } ) => {
+		const {
+			setTemplateModal,
+			setSingleTemplateImport,
+			setImportModalStatus,
+		} = dispatch( 'neve-onboarding' );
+
+		const runTemplateImport = () => {
+			setSingleTemplateImport( siteData.slug );
+			setTemplateModal( true );
+			setImportModalStatus( false );
+		};
+
 		return {
 			setModal: ( status ) => setImportModalStatus( status ),
+			runTemplateImport,
 		};
 	} )
 )( ImportModal );

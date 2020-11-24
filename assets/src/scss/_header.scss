@@ -1,4 +1,5 @@
 .ob-migration {
+	padding-top: 20px;
 	margin-bottom: 20px;
 
 	.card.starter-site-card {
@@ -21,7 +22,7 @@
 	}
 }
 
-.ob-head >, .ob-migration > {
+.ob-head > .header-container >, .ob-migration > {
 	h2 {
 		font-size: 21px;
 		color: $black;
@@ -29,6 +30,7 @@
 		line-height: 1.6;
 		display: flex;
 		align-items: center;
+
 		> img {
 			margin-right: 20px;
 		}
@@ -64,7 +66,7 @@
 }
 
 @mixin ob-header--tablet {
-	.ob-head >, .ob-migration > {
+	.ob-head > .header-container >, .ob-migration > {
 		h2 {
 			font-size: 30px;
 		}
@@ -80,6 +82,25 @@
 
 @mixin ob-header--laptop {
 	.header-form {
-		margin-top: 50px;
+		margin-top: 25px;
+	}
+}
+
+
+.is-sync {
+	background-color: #f1f1f1;
+	color: #0073aa !important;
+	border-radius: 6px;
+
+	&:before {
+		padding: 10px 5px 10px 15px;
+		content: attr(data-content);
+		margin-right: 5px;
+		font-size: 15px;
+		display: none;
+	}
+
+	&:hover:before {
+		display: block;
 	}
 }

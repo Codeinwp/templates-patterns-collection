@@ -43,6 +43,13 @@ class Main {
 	public $admin = null;
 
 	/**
+	 * Editor
+	 *
+	 * @var Editor
+	 */
+	public $editor = null;
+
+	/**
 	 * Sites listing
 	 *
 	 * @var Sites_Listing
@@ -72,6 +79,7 @@ class Main {
 	 * @var null
 	 */
 	private function init() {
+		$this->setup_editor();
 		$this->setup_sites_listing();
 
 		if ( ! $this->should_load() ) {
@@ -112,6 +120,17 @@ class Main {
 	private function setup_admin() {
 		$this->admin = new Admin();
 		$this->admin->init();
+	}
+
+
+	/**
+	 * Setup editor functionality.
+	 *
+	 * @return void
+	 */
+	private function setup_editor() {
+		$this->editor = new Editor();
+		$this->editor->init();
 	}
 
 	/**

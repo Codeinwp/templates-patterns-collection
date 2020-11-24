@@ -9,4 +9,9 @@ export default {
 	getOnboardingStatus: ( state ) => state.isOnboarding,
 	getThemeAction: ( state ) => state.themeAction,
 	getInstallModalStatus: ( state ) => state.installModalStatus,
+	getCurrentTab: ( state ) => state.currentTab,
+	getFetching: ( state ) => state.fetching,
+	getSingleImport: ( state ) => state.singleTemplateImport,
+	getTemplateModal: ( state ) => state.templateModal,
+	getSearchQuery: ( state ) => state.searchQuery,
 };

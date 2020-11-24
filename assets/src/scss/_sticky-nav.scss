@@ -1,4 +1,5 @@
 .sticky-nav {
+	transition: top .3s ease;
 	position: fixed;
 	z-index: 1000;
 	left: 0;
@@ -30,8 +31,10 @@
 
 .sticky-nav-content {
 	display: flex;
+	max-width: 1300px;
 
-	> img {
+	> img,
+	> .ob-logo {
 		display: none;
 		margin-right: 20px;
 
@@ -43,7 +46,6 @@
 	.header-form {
 		margin: 0;
 		flex-grow: 1;
-		max-width: 60%;
 
 		@media (min-width: #{$tablet}) {
 			max-width: 100%;

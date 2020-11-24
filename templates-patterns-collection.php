@@ -17,6 +17,7 @@
 
 add_action( 'admin_notices', 'ti_tpc_plugins_page_notice' );
 add_action( 'init', 'ti_tpc_load_textdomain' );
+add_action( 'init', 'ti_tpc_flush_premalinks' );
 
 /**
  * Plugins page notice if we don't have neve activated.
@@ -54,6 +55,22 @@ function ti_tpc_plugins_page_notice() {
 }
 
 /**
+ * Flush the permalinks after import
+ *
+ * @return bool
+ */
+function ti_tpc_flush_premalinks() {
+	$flash_rules = get_transient( 'ti_tpc_should_flush_permalinks' );
+	if ( $flash_rules !== 'yes' ) {
+		return false;
+	}
+
+	flush_rewrite_rules();
+	delete_transient( 'ti_tpc_should_flush_permalinks' );
+	return true;
+}
+
+/**
  * Load the localisation file.
  */
 function ti_tpc_load_textdomain() {
@@ -81,6 +98,3 @@ function ti_tpc_run() {
 
 	\TIOB\Main::instance();
 }
-
-
-

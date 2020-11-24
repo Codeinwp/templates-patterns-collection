@@ -34,7 +34,7 @@ describe( 'Dashboard Page - Default', () => {
 	it( 'Preview Works', () => {
 		cy.get( '.starter-site-card' ).first().as( 'firstCard' );
 		cy.get( '@firstCard' ).trigger( 'mouseover' );
-		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 2 );
+		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 3 );
 		cy.get( '@firstCard' ).find( 'button' ).contains( 'Preview' ).click();
 
 		cy.get( '.ob-preview' ).as( 'previewWrap' );
@@ -52,15 +52,20 @@ describe( 'Dashboard Page - Default', () => {
 		cy.get( '.starter-site-card' ).should( 'have.length', 18 );
 		cy.scrollTo( 'top' );
 	} );
+
 	it( 'No Results Search & Tags Functionality', () => {
 		const TAG = 'Photography';
-		cy.get( '.header-form .search input' ).type( '$' );
+		cy.get( '.header-form:not(.in-sticky) .search input' ).type( '$' );
 		cy.get( '.no-results' ).should( 'exist' );
 		cy.get( '.no-results .tag' ).should( 'have.length', 5 );
 		cy.get( '.no-results .tag' ).contains( TAG ).click();
-		cy.get( '.header-form .search input' ).should( 'have.value', TAG );
-		cy.get( '.header-form .search input' ).clear();
+		cy.get( '.header-form:not(.in-sticky) .search input' ).should(
+			'have.value',
+			TAG
+		);
+		cy.get( '.header-form:not(.in-sticky) .search input' ).clear();
 	} );
+
 	it( 'Editor Tabs Functionality', () => {
 		cy.get( '.tab.gutenberg' ).should( 'have.class', 'active' );
 		EDITORS.map( ( editor ) => {
@@ -72,30 +77,33 @@ describe( 'Dashboard Page - Default', () => {
 	} );
 	it( 'Categories Functionality', () => {
 		const ALL = 'All Categories';
-		cy.get( '.categories-selector button' ).as( 'dropdown' );
+		cy.get( '.categories-selector button' ).last().as( 'dropdown' );
 
 		CATEGORIES.map( ( category ) => {
 			if ( category === ALL ) {
 				return;
 			}
-			cy.get( '@dropdown' ).click();
+			cy.get( '@dropdown' ).click( { force: true } );
 			cy.get( '.categories-selector li' ).contains( category ).click();
 			cy.get( '.categories-selector button' ).should(
 				'contain',
 				category
 			);
 		} );
-		cy.get( '@dropdown' ).click();
+		cy.get( '@dropdown' ).click( { force: true } );
 		cy.get( '.categories-selector li' ).contains( ALL ).click();
 		cy.get( '.categories-selector button' ).should( 'contain', ALL );
 	} );
+
 	it( 'Sticky Nav Works', () => {
 		cy.scrollTo( 'top' );
 		const CATEGORY = 'Blog';
-		cy.get( '.sticky-nav' ).should( 'not.exist' );
-		cy.get( '.header-form .search input' ).type( CATEGORY );
-		cy.get( '.categories-selector button' ).click();
-		cy.get( '.categories-selector li' ).contains( CATEGORY ).click();
+		cy.get( '.sticky-nav' ).should( 'exist' );
+		cy.get( '.header-form .search input' ).last().type( CATEGORY );
+		cy.get( '.categories-selector button' ).last().click( { force: true } );
+		cy.get( '.categories-selector li' )
+			.contains( CATEGORY )
+			.click( { force: true } );
 
 		cy.scrollTo( 'bottom' ).wait( 100 ).scrollTo( 'bottom' ).wait( 100 );
 
@@ -157,18 +165,10 @@ describe( 'Importer Works', () => {
 			'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*'
 		).as( 'getModalData' );
 
-		cy.route( 'POST', '**/ti-sites-lib/v1/install_plugins' ).as(
-			'installPlugins'
-		);
-		cy.route( 'POST', '**/ti-sites-lib/v1/import_content' ).as(
-			'importContent'
-		);
-		cy.route( 'POST', '**/ti-sites-lib/v1/import_theme_mods' ).as(
-			'importCustomizer'
-		);
-		cy.route( 'POST', '**/ti-sites-lib/v1/import_widgets' ).as(
-			'importWidgets'
-		);
+		cy.route( 'POST', 'install_plugins' ).as( 'installPlugins' );
+		cy.route( 'POST', 'import_content' ).as( 'importContent' );
+		cy.route( 'POST', 'import_theme_mods' ).as( 'importCustomizer' );
+		cy.route( 'POST', 'import_widgets' ).as( 'importWidgets' );
 	};
 
 	before( () => BEFORE() );
@@ -177,7 +177,7 @@ describe( 'Importer Works', () => {
 		ALIAS_ROUTES();
 		cy.get( '.starter-site-card' ).first().as( 'firstCard' );
 		cy.get( '@firstCard' ).trigger( 'mouseover' );
-		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 2 );
+		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 3 );
 		cy.get( '@firstCard' ).find( 'button' ).contains( 'Import' ).click();
 
 		cy.get( '.ob-import-modal.install-modal' )
@@ -196,9 +196,8 @@ describe( 'Importer Works', () => {
 		cy.wait( '@getModalData' ).then( ( req ) => {
 			expect( req.status ).to.equal( 200 );
 		} );
-		cy.get( '.ob-import-modal' )
+		cy.get( '.ob-import-modal .components-modal__header' )
 			.find( 'button' )
-			.contains( 'Close' )
 			.click();
 	} );
 
@@ -206,7 +205,7 @@ describe( 'Importer Works', () => {
 		ALIAS_ROUTES();
 		cy.get( '.starter-site-card' ).first().as( 'firstCard' );
 		cy.get( '@firstCard' ).trigger( 'mouseover' );
-		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 2 );
+		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 3 );
 		cy.get( '@firstCard' ).find( 'button' ).contains( 'Import' ).click();
 
 		cy.wait( '@getModalData' ).then( ( req ) => {
@@ -215,7 +214,7 @@ describe( 'Importer Works', () => {
 
 		cy.get( '.ob-import-modal' )
 			.find( 'button' )
-			.contains( 'Import' )
+			.contains( 'Import entire site' )
 			.click();
 
 		cy.wait( '@installPlugins' ).then( ( req ) => {
