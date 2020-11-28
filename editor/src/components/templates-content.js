@@ -20,6 +20,32 @@ const TemplatesContent = ( {
 } ) => {
 	const { setFetching } = useDispatch( 'tpc/block-editor' );
 	const [ layout, setLayout ] = useState( 'grid' );
+	const [ sortingOrder, setSortingOrder ] = useState( {
+		templates: 'DESC',
+		library: 'DESC',
+	} );
+
+	const getOrder = () => {
+		if ( isGeneral ) {
+			return sortingOrder.templates;
+		}
+
+		return sortingOrder.library;
+	};
+
+	const setSorting = ( order ) => {
+		if ( isGeneral ) {
+			return setSortingOrder( {
+				...sortingOrder,
+				templates: order,
+			} );
+		}
+
+		return setSortingOrder( {
+			...sortingOrder,
+			library: order,
+		} );
+	};
 
 	const init = async () => {
 		setFetching( true );
@@ -53,6 +79,17 @@ const TemplatesContent = ( {
 		setFetching( false );
 	};
 
+	const changeOrder = async ( order ) => {
+		setFetching( true );
+		if ( isGeneral ) {
+			await fetchTemplates( { order } );
+		} else {
+			await fetchLibrary( { order } );
+		}
+
+		setFetching( false );
+	};
+
 	if ( isFetching ) {
 		return (
 			<Placeholder>
@@ -75,7 +112,13 @@ const TemplatesContent = ( {
 
 	return (
 		<Fragment>
-			<Filters layout={ layout } setLayout={ setLayout } />
+			<Filters
+				layout={ layout }
+				sortingOrder={ getOrder() }
+				setLayout={ setLayout }
+				setSortingOrder={ setSorting }
+				changeOrder={ changeOrder }
+			/>
 
 			<div className={ contentClasses }>
 				{ items.map( ( item ) => (
