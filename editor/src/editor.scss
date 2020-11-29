@@ -129,36 +129,67 @@
 
 				.filters {
 					display: flex;
-					justify-content: flex-end;
 					align-items: center;
 					padding-bottom: 20px;
 
-					.components-button {
-						&.is-pressed {
-							background: transparent;
+					.search-filters {
+						display: flex;
+						flex-basis: 90%;
 
-							svg {
-								fill: #0073aa;
-							}
-						}
-
-						&.filter-input {
-							width: 200px;
+						.filter-search {
+							flex-basis: 75%;
 							height: 50px;
 							display: flex;
 							align-items: center;
-							font-weight: 600;
 							padding: 5px 20px 5px 10px;
 							background: #fff;
 							border: 1px solid #d9d9d9;
+							border-right: 0;
 							color: #616161;
 							box-shadow: none;
 							font-weight: normal;
-							border-radius: 6px;
+							border-radius: 6px 0 0 6px;
 						}
 
-						svg {
-							fill: #d9d9d9;
+						.components-dropdown {
+							flex-basis: 25%;
+
+							.components-button {
+								&.filter-input {
+									width: 200px;
+									height: 50px;
+									display: flex;
+									align-items: center;
+									padding: 5px 20px 5px 10px;
+									background: #fff;
+									border: 1px solid #d9d9d9;
+									border-left: 0;
+									color: #616161;
+									box-shadow: none;
+									font-weight: normal;
+									border-radius: 0 6px 6px 0;
+								}
+							}
+						}
+					}
+
+					.view-filters {
+						display: flex;
+						flex-basis: 10%;
+						justify-content: flex-end;
+
+						.components-button {
+							&.is-pressed {
+								background: transparent;
+	
+								svg {
+									fill: #0073aa;
+								}
+							}
+	
+							svg {
+								fill: #d9d9d9;
+							}
 						}
 					}
 				}

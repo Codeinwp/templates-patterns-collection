@@ -86,28 +86,49 @@
         padding: 10px; }
       .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters {
         display: flex;
-        justify-content: flex-end;
         align-items: center;
         padding-bottom: 20px; }
-        .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .components-button.is-pressed {
-          background: transparent; }
-          .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .components-button.is-pressed svg {
-            fill: #0073aa; }
-        .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .components-button.filter-input {
-          width: 200px;
-          height: 50px;
+        .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .search-filters {
           display: flex;
-          align-items: center;
-          font-weight: 600;
-          padding: 5px 20px 5px 10px;
-          background: #fff;
-          border: 1px solid #d9d9d9;
-          color: #616161;
-          box-shadow: none;
-          font-weight: normal;
-          border-radius: 6px; }
-        .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .components-button svg {
-          fill: #d9d9d9; }
+          flex-basis: 90%; }
+          .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .search-filters .filter-search {
+            flex-basis: 75%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            padding: 5px 20px 5px 10px;
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            border-right: 0;
+            color: #616161;
+            box-shadow: none;
+            font-weight: normal;
+            border-radius: 6px 0 0 6px; }
+          .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .search-filters .components-dropdown {
+            flex-basis: 25%; }
+            .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .search-filters .components-dropdown .components-button.filter-input {
+              width: 200px;
+              height: 50px;
+              display: flex;
+              align-items: center;
+              padding: 5px 20px 5px 10px;
+              background: #fff;
+              border: 1px solid #d9d9d9;
+              border-left: 0;
+              color: #616161;
+              box-shadow: none;
+              font-weight: normal;
+              border-radius: 0 6px 6px 0; }
+        .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .view-filters {
+          display: flex;
+          flex-basis: 10%;
+          justify-content: flex-end; }
+          .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .view-filters .components-button.is-pressed {
+            background: transparent; }
+            .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .view-filters .components-button.is-pressed svg {
+              fill: #0073aa; }
+          .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .filters .view-filters .components-button svg {
+            fill: #d9d9d9; }
       .tpc-template-cloud-modal .components-modal__frame .components-modal__content .tpc-modal-content .table-content.is-grid {
         display: -ms-grid;
         display: grid;

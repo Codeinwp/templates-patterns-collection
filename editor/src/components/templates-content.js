@@ -17,42 +17,26 @@ const TemplatesContent = ( {
 	items,
 	currentPage,
 	totalPages,
+	getOrder,
+	setQuery,
+	getSearchQuery,
+	setSorting,
 } ) => {
 	const { setFetching } = useDispatch( 'tpc/block-editor' );
 	const [ layout, setLayout ] = useState( 'grid' );
-	const [ sortingOrder, setSortingOrder ] = useState( {
-		templates: 'DESC',
-		library: 'DESC',
-	} );
-
-	const getOrder = () => {
-		if ( isGeneral ) {
-			return sortingOrder.templates;
-		}
-
-		return sortingOrder.library;
-	};
-
-	const setSorting = ( order ) => {
-		if ( isGeneral ) {
-			return setSortingOrder( {
-				...sortingOrder,
-				templates: order,
-			} );
-		}
-
-		return setSortingOrder( {
-			...sortingOrder,
-			library: order,
-		} );
-	};
 
 	const init = async () => {
 		setFetching( true );
 		if ( isGeneral ) {
-			await fetchTemplates();
+			await fetchTemplates( {
+				order: getOrder(),
+				search: getSearchQuery(),
+			} );
 		} else {
-			await fetchLibrary();
+			await fetchLibrary( {
+				order: getOrder(),
+				search: getSearchQuery(),
+			} );
 		}
 		setFetching( false );
 	};
@@ -68,11 +52,32 @@ const TemplatesContent = ( {
 		setFetching( true );
 		if ( isGeneral ) {
 			await fetchTemplates( {
+				order: getOrder(),
+				search: getSearchQuery(),
 				page: index,
 			} );
 		} else {
 			await fetchLibrary( {
+				order: getOrder(),
+				search: getSearchQuery(),
 				page: index,
+			} );
+		}
+
+		setFetching( false );
+	};
+
+	const onSearch = async () => {
+		setFetching( true );
+		if ( isGeneral ) {
+			await fetchTemplates( {
+				order: getOrder(),
+				search: getSearchQuery(),
+			} );
+		} else {
+			await fetchLibrary( {
+				order: getOrder(),
+				search: getSearchQuery(),
 			} );
 		}
 
@@ -82,9 +87,15 @@ const TemplatesContent = ( {
 	const changeOrder = async ( order ) => {
 		setFetching( true );
 		if ( isGeneral ) {
-			await fetchTemplates( { order } );
+			await fetchTemplates( {
+				order,
+				search: getSearchQuery(),
+			} );
 		} else {
-			await fetchLibrary( { order } );
+			await fetchLibrary( {
+				order,
+				search: getSearchQuery(),
+			} );
 		}
 
 		setFetching( false );
@@ -92,15 +103,39 @@ const TemplatesContent = ( {
 
 	if ( isFetching ) {
 		return (
-			<Placeholder>
-				<Spinner />
-			</Placeholder>
+			<Fragment>
+				<Filters
+					layout={ layout }
+					sortingOrder={ getOrder() }
+					setLayout={ setLayout }
+					searchQuery={ getSearchQuery() }
+					onSearch={ onSearch }
+					setSearchQuery={ setQuery }
+					setSortingOrder={ setSorting }
+					changeOrder={ changeOrder }
+				/>
+
+				<Placeholder>
+					<Spinner />
+				</Placeholder>
+			</Fragment>
 		);
 	}
 
 	if ( ! Boolean( items.length ) ) {
 		return (
 			<div className="table-content">
+				<Filters
+					layout={ layout }
+					sortingOrder={ getOrder() }
+					setLayout={ setLayout }
+					searchQuery={ getSearchQuery() }
+					onSearch={ onSearch }
+					setSearchQuery={ setQuery }
+					setSortingOrder={ setSorting }
+					changeOrder={ changeOrder }
+				/>
+
 				{ __( 'No templates available. Add a new one?' ) }
 			</div>
 		);
@@ -116,6 +151,9 @@ const TemplatesContent = ( {
 				layout={ layout }
 				sortingOrder={ getOrder() }
 				setLayout={ setLayout }
+				searchQuery={ getSearchQuery() }
+				onSearch={ onSearch }
+				setSearchQuery={ setQuery }
 				setSortingOrder={ setSorting }
 				changeOrder={ changeOrder }
 			/>

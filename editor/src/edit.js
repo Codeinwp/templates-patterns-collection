@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { withDispatch, withSelect, useDispatch } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 import { Modal, Button } from '@wordpress/components';
@@ -24,6 +25,62 @@ const Edit = ( {
 
 	const [ modalOpen, setModalOpen ] = useState( false );
 	const [ importing, setImporting ] = useState( false );
+
+	const [ searchQuery, setSearchQuery ] = useState( {
+		templates: '',
+		library: '',
+	} );
+
+	const [ sortingOrder, setSortingOrder ] = useState( {
+		templates: 'DESC',
+		library: 'DESC',
+	} );
+
+	const isGeneral = currentTab === 'templates';
+
+	const setQuery = ( query ) => {
+		if ( isGeneral ) {
+			return setSearchQuery( {
+				...searchQuery,
+				templates: query,
+			} );
+		}
+
+		return setSearchQuery( {
+			...searchQuery,
+			library: query,
+		} );
+	};
+
+	const getSearchQuery = () => {
+		if ( isGeneral ) {
+			return searchQuery.templates;
+		}
+
+		return searchQuery.library;
+	};
+
+	const setSorting = ( order ) => {
+		if ( isGeneral ) {
+			return setSortingOrder( {
+				...sortingOrder,
+				templates: order,
+			} );
+		}
+
+		return setSortingOrder( {
+			...sortingOrder,
+			library: order,
+		} );
+	};
+
+	const getOrder = () => {
+		if ( isGeneral ) {
+			return sortingOrder.templates;
+		}
+
+		return sortingOrder.library;
+	};
 
 	const importBlocks = ( content ) => {
 		replaceBlocks( clientId, parse( content ) );
@@ -119,8 +176,19 @@ const Edit = ( {
 				isDismissible={ false }
 				overlayClassName="tpc-template-cloud-modal"
 			>
-				<Header closeModal={ closeModal } />
-				<Content importBlocks={ importBlocks } />
+				<Header
+					closeModal={ closeModal }
+					getOrder={ getOrder }
+					getSearchQuery={ getSearchQuery }
+				/>
+
+				<Content
+					importBlocks={ importBlocks }
+					getOrder={ getOrder }
+					setQuery={ setQuery }
+					getSearchQuery={ getSearchQuery }
+					setSorting={ setSorting }
+				/>
 
 				<PreviewWrap />
 			</Modal>
