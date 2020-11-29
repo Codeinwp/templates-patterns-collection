@@ -64,8 +64,32 @@
 	align-items: center;
 	margin-bottom: 40px;
 
+	.components-button {
+		&.filter-input {
+			width: 200px;
+			height: 52px;
+			display: flex;
+			align-items: center;
+			font-weight: 600;
+			padding: 5px 20px 5px 10px;
+			background: #fff;
+			border: 1px solid #d9d9d9;
+			border-left : 0;
+			color: #616161;
+			box-shadow: none;
+			font-weight: normal;
+			border-radius: 0 6px 6px 0;
+		}
+	}
+
 	.components-base-control, input {
 		width: 100%;
+
+		&.has-filters {
+			input {
+				border-radius: 6px 0 0 6px;
+			}
+		}
 
 		.components-base-control__field {
 			margin-bottom: 0;
@@ -208,6 +232,14 @@
 		p {
 			font-weight: 600;
 			margin: 0;
+		}
+	}
+}
+
+.filter-overlay {
+	.components-button {
+		&:not( .has-icon ) {
+			padding-left: 38px;
 		}
 	}
 }

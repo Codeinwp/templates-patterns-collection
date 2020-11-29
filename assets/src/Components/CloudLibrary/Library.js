@@ -20,7 +20,7 @@ const Library = ( {
 	setTemplateModal,
 	templateModal,
 	themeStatus,
-	editor,
+	currentTab,
 } ) => {
 	const [ library, setLibrary ] = useState( [] );
 	const [ toImport, setToImport ] = useState( [] );
@@ -30,6 +30,10 @@ const Library = ( {
 	const [ totalPages, setTotalPages ] = useState( 0 );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ previewUrl, setPreviewUrl ] = useState( '' );
+	const [ sortingOrder, setSortingOrder ] = useState( {
+		templates: 'DESC',
+		library: 'DESC',
+	} );
 
 	useEffect( () => {
 		setLoading( true );
@@ -135,15 +139,57 @@ const Library = ( {
 		setPreviewUrl( library[ newIndex ].link );
 	};
 
+	const getOrder = () => {
+		if ( isGeneral ) {
+			return sortingOrder.templates;
+		}
+
+		return sortingOrder.library;
+	};
+
+	const setSorting = ( order ) => {
+		if ( isGeneral ) {
+			return setSortingOrder( {
+				...sortingOrder,
+				templates: order,
+			} );
+		}
+
+		return setSortingOrder( {
+			...sortingOrder,
+			library: order,
+		} );
+	};
+
+	const changeOrder = async ( order ) => {
+		setLoading( true );
+		const params = { order };
+
+		if ( isGeneral ) {
+			params.template_site_slug = 'general';
+			params.premade = true;
+		}
+
+		fetchLibrary( isGeneral, params ).then( ( r ) => {
+			setLibrary( r.templates );
+			setTotalPages( r.total );
+			setLoading( false );
+		} );
+	};
+
 	return (
 		<div className={ wrapClasses }>
 			<>
 				<Filters
+					currentTab={ currentTab }
 					isGrid={ isGrid }
 					setGrid={ setIsGrid }
 					searchQuery={ searchQuery }
 					setSearchQuery={ setSearchQuery }
 					onSearch={ handleSearch }
+					sortingOrder={ getOrder() }
+					setSortingOrder={ setSorting }
+					changeOrder={ changeOrder }
 				/>
 				{ isLoading && <Spinner /> }
 				{ ! isLoading &&
@@ -240,14 +286,18 @@ export default compose(
 		};
 	} ),
 	withSelect( ( select ) => {
-		const { getTemplateModal, getThemeAction, getCurrentEditor } = select(
-			'neve-onboarding'
-		);
+		const {
+			getTemplateModal,
+			getThemeAction,
+			getCurrentEditor,
+			getCurrentTab,
+		} = select( 'neve-onboarding' );
 
 		return {
 			templateModal: getTemplateModal(),
 			themeStatus: getThemeAction().action || false,
 			editor: getCurrentEditor(),
+			currentTab: getCurrentTab(),
 		};
 	} )
 )( Library );
