@@ -4,8 +4,14 @@ import { Button, Dropdown, MenuItem } from '@wordpress/components';
 import { ENTER } from '@wordpress/keycodes';
 
 const sortingOptions = {
-	DESC: __( 'Latest first' ),
-	ASC: __( 'Oldest first' ),
+	DESC: __( 'Descending' ),
+	ASC: __( 'Ascending' ),
+};
+
+const sortByOptions = {
+	date: __( 'by creation date' ),
+	modified: __( 'by modification date' ),
+	template_name: __( 'by template name' ),
 };
 
 const Filters = ( {
@@ -24,11 +30,53 @@ const Filters = ( {
 		for ( const [ key, value ] of Object.entries( sortingOptions ) ) {
 			const item = (
 				<MenuItem
-					icon={ key === sortingOrder && check }
-					isSelected={ key === sortingOrder }
+					key={ key }
+					icon={ key === sortingOrder.order && check }
+					isSelected={ key === sortingOrder.order }
 					onClick={ () => {
-						setSortingOrder( key );
-						changeOrder( key );
+						setSortingOrder( {
+							order: key,
+							orderby: sortingOrder.orderby,
+						} );
+
+						changeOrder( {
+							order: key,
+							orderby: sortingOrder.orderby,
+						} );
+
+						onToggle();
+					} }
+				>
+					{ value }
+				</MenuItem>
+			);
+
+			items.push( item );
+		}
+
+		return items;
+	};
+
+	const getSortByItems = ( { onToggle } ) => {
+		const items = [];
+
+		for ( const [ key, value ] of Object.entries( sortByOptions ) ) {
+			const item = (
+				<MenuItem
+					key={ key }
+					icon={ key === sortingOrder.orderby && check }
+					isSelected={ key === sortingOrder.orderby }
+					onClick={ () => {
+						setSortingOrder( {
+							order: sortingOrder.order,
+							orderby: key,
+						} );
+
+						changeOrder( {
+							order: sortingOrder.order,
+							orderby: key,
+						} );
+
 						onToggle();
 					} }
 				>
@@ -69,10 +117,28 @@ const Filters = ( {
 							aria-expanded={ isOpen }
 							className={ 'filter-input' }
 						>
-							{ sortingOptions[ sortingOrder ] }
+							{ sortingOptions[ sortingOrder.order ] }
 						</Button>
 					) }
 					renderContent={ getSortingItems }
+				/>
+
+				<Dropdown
+					position="bottom center"
+					contentClassName="filter-overlay"
+					popoverProps={ {
+						noArrow: false,
+					} }
+					renderToggle={ ( { isOpen, onToggle } ) => (
+						<Button
+							onClick={ onToggle }
+							aria-expanded={ isOpen }
+							className={ 'filter-input' }
+						>
+							{ sortByOptions[ sortingOrder.orderby ] }
+						</Button>
+					) }
+					renderContent={ getSortByItems }
 				/>
 			</div>
 

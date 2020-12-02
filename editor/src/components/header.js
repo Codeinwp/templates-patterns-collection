@@ -35,14 +35,19 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 	const syncLibrary = async () => {
 		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 		setFetching( true );
+
+		const order = getOrder();
+
 		await fetchTemplates( {
-			order: getOrder(),
 			search: getSearchQuery(),
+			...order,
 		} );
+
 		await fetchLibrary( {
-			order: getOrder(),
 			search: getSearchQuery(),
+			...order,
 		} );
+
 		setFetching( false );
 	};
 

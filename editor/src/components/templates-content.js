@@ -27,15 +27,16 @@ const TemplatesContent = ( {
 
 	const init = async () => {
 		setFetching( true );
+		const order = getOrder();
 		if ( isGeneral ) {
 			await fetchTemplates( {
-				order: getOrder(),
 				search: getSearchQuery(),
+				...order,
 			} );
 		} else {
 			await fetchLibrary( {
-				order: getOrder(),
 				search: getSearchQuery(),
+				...order,
 			} );
 		}
 		setFetching( false );
@@ -50,17 +51,18 @@ const TemplatesContent = ( {
 
 	const changePage = async ( index ) => {
 		setFetching( true );
+		const order = getOrder();
 		if ( isGeneral ) {
 			await fetchTemplates( {
-				order: getOrder(),
 				search: getSearchQuery(),
 				page: index,
+				...order,
 			} );
 		} else {
 			await fetchLibrary( {
-				order: getOrder(),
 				search: getSearchQuery(),
 				page: index,
+				...order,
 			} );
 		}
 
@@ -69,15 +71,16 @@ const TemplatesContent = ( {
 
 	const onSearch = async () => {
 		setFetching( true );
+		const order = getOrder();
 		if ( isGeneral ) {
 			await fetchTemplates( {
-				order: getOrder(),
 				search: getSearchQuery(),
+				...order,
 			} );
 		} else {
 			await fetchLibrary( {
-				order: getOrder(),
 				search: getSearchQuery(),
+				...order,
 			} );
 		}
 
@@ -88,12 +91,12 @@ const TemplatesContent = ( {
 		setFetching( true );
 		if ( isGeneral ) {
 			await fetchTemplates( {
-				order,
+				...order,
 				search: getSearchQuery(),
 			} );
 		} else {
 			await fetchLibrary( {
-				order,
+				...order,
 				search: getSearchQuery(),
 			} );
 		}

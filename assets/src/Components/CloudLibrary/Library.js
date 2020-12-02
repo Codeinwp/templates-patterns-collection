@@ -30,9 +30,16 @@ const Library = ( {
 	const [ totalPages, setTotalPages ] = useState( 0 );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ previewUrl, setPreviewUrl ] = useState( '' );
+
 	const [ sortingOrder, setSortingOrder ] = useState( {
-		templates: 'DESC',
-		library: 'DESC',
+		templates: {
+			order: 'DESC',
+			orderby: 'date',
+		},
+		library: {
+			order: 'DESC',
+			orderby: 'date',
+		},
 	} );
 
 	useEffect( () => {
@@ -163,7 +170,7 @@ const Library = ( {
 
 	const changeOrder = async ( order ) => {
 		setLoading( true );
-		const params = { order };
+		const params = { ...order };
 
 		if ( isGeneral ) {
 			params.template_site_slug = 'general';

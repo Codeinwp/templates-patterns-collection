@@ -30,7 +30,7 @@ class Elementor {
 		wp_enqueue_script(
 			'ti-tpc-elementor',
 			TIOB_URL . 'elementor/build/index.js',
-			array_merge( $deps['dependencies'], [ 'jquery', 'elementor-editor' ] ),
+			array_merge( $deps['dependencies'], [ 'elementor-editor' ] ),
 			$deps['version'],
 			true
 		);

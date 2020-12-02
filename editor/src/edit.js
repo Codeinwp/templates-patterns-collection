@@ -32,8 +32,14 @@ const Edit = ( {
 	} );
 
 	const [ sortingOrder, setSortingOrder ] = useState( {
-		templates: 'DESC',
-		library: 'DESC',
+		templates: {
+			order: 'DESC',
+			orderby: 'date',
+		},
+		library: {
+			order: 'DESC',
+			orderby: 'date',
+		},
 	} );
 
 	const isGeneral = currentTab === 'templates';
