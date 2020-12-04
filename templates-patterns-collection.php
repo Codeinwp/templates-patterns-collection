@@ -77,7 +77,7 @@ function ti_tpc_load_textdomain() {
 	load_plugin_textdomain( 'templates-patterns-collection', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
-add_action( 'init', 'ti_tpc_run' );
+add_action( 'init', 'ti_tpc_run', 999 );
 
 function ti_tpc_run() {
 	if ( ! defined( 'TI_ONBOARDING_DISABLED' ) ) {
