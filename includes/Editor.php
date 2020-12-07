@@ -27,7 +27,7 @@ class Editor {
 	public function init() {
 		define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-cloud/' );
 
-		add_action( 'init', array( $this, 'register_block' ), 11 );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'register_block' ), 11 );
 		add_action( 'init', array( $this, 'register_post_meta' ), 11 );
 	}
 
