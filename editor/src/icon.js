@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-const { Path, SVG } = wp.primitives;
+import { Path, SVG } from '@wordpress/primitives';
 
 const icon = () => {
 	return (
