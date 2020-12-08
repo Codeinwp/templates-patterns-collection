@@ -1,3 +1,8 @@
+##### [Version 1.1.1](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.0...v1.1.1) (2020-12-08)
+
+- Multisite Starter Sites compatibility
+- Templates Cloud block compatibility with WP 5.6
+
 #### [Version 1.1.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.11...v1.1.0) (2020-11-24)
 
 - Single page templates
