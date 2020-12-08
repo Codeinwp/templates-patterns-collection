@@ -43,21 +43,22 @@ class Elementor {
 			apply_filters(
 				'ti_tpc_editor_data',
 				array(
-					'endpoint'     => TPC_TEMPLATES_CLOUD_ENDPOINT,
-					'params'       => array(
+					'endpoint'         => TPC_TEMPLATES_CLOUD_ENDPOINT,
+					'params'           => array(
 						'site_url'   => get_site_url(),
 						'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 						'type'       => 'elementor',
 					),
-					'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
-					'exporter'     => array(
+					'canPredefine'     => apply_filters( 'ti_tpc_can_predefine', false ),
+					'placeholderIndex' => '-1',
+					'exporter'         => array(
 						'exportLabel'     => __( 'Save to Templates Cloud' ),
 						'modalLabel'      => __( 'Save Templates' ),
 						'textLabel'       => __( 'Template Name' ),
 						'textPlaceholder' => __( 'Template' ),
 						'buttonLabel'     => __( 'Save' ),
 					),
-					'library'      => array(
+					'library'          => array(
 						'libraryButton'   => __( 'Import from Templates Cloud' ),
 						'templatesCloud'  => __( 'Templates Cloud' ),
 						'tabs'            => array(

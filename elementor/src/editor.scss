@@ -1,7 +1,7 @@
 .elementor-add-new-section {
 	.elementor-templates-cloud-button {
 		background-color: #0366D6;
-		margin-left: 10px;
+		margin-left: 5px;
 
 		.tpc-template-cloud-icon {
 			width: 12px;
@@ -126,12 +126,10 @@
 					border-left: 1px solid #e6e9ec;
 				}
 
-				i {
-					:not(.eicon-file-download) {
-						color: #a4afb7;
-						font-size: 18px;
-						cursor: pointer;
-					}
+				i:not(.eicon-file-download) {
+					color: #a4afb7;
+					font-size: 18px;
+					cursor: pointer;
 				}
 			}
 		}

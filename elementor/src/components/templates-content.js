@@ -39,6 +39,7 @@ const TemplatesContent = ( {
 			{ items.map( ( item ) => (
 				<Template
 					key={ item.template_id }
+					id={ item.template_id }
 					title={ item.template_name }
 					thumbnail={ item.template_thumbnail }
 					link={ item.link }

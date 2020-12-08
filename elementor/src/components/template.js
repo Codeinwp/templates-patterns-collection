@@ -1,15 +1,47 @@
-/* eslint-disable no-unused-vars */
+/* global $e, elementorCommon */
 import { Button } from '@wordpress/components';
-import { compose } from '@wordpress/compose';
-import { withDispatch, withSelect } from '@wordpress/data';
+import { withDispatch } from '@wordpress/data';
+
+import { importTemplate } from './../data/templates-cloud/index.js';
 
 const Template = ( {
+	id,
 	title,
 	thumbnail,
 	link,
 	togglePreview,
 	setPreviewData,
 } ) => {
+	const onImport = async () => {
+		const data = await importTemplate( id );
+
+		if ( data ) {
+			const history = window.$e.internal( 'document/history/start-log', {
+				type: 'add',
+				title: `Add Template from Templates Cloud: ${ title }`,
+			} );
+
+			let index = Number( window.tiTpc.placeholder );
+
+			const content = data.content;
+
+			for ( let i = 0; i < content.length; i++ ) {
+				content[ i ].id = elementorCommon.helpers.getUniqueId();
+				window.$e.run( 'document/elements/create', {
+					container: window.elementor.getPreviewContainer(),
+					model: content[ i ],
+					options: index >= 0 ? { at: index++ } : {},
+				} );
+			}
+
+			$e.internal( 'document/history/end-log', {
+				id: history,
+			} );
+
+			window.tiTpcModal.hide();
+		}
+	};
+
 	return (
 		<div className="ti-tpc-template-library-template">
 			<div className="ti-tpc-template-library-template-body">
@@ -31,7 +63,10 @@ const Template = ( {
 			</div>
 
 			<div className="ti-tpc-template-library-template-footer">
-				<Button className="ti-tpc-template-library-template-action elementor-button">
+				<Button
+					className="ti-tpc-template-library-template-action elementor-button"
+					onClick={ onImport }
+				>
 					<i className="eicon-file-download" aria-hidden="true"></i>
 					<span>{ window.tiTpc.library.actions.insert }</span>
 				</Button>

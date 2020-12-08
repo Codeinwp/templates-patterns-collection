@@ -1,9 +1,12 @@
 /* eslint-disable no-console */
-/* global localStorage, */
+/* global localStorage, elementor, */
 import { stringifyUrl } from 'query-string';
 
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch } from '@wordpress/data';
+
+const dispatchNotification = ( message ) =>
+	elementor.notifications.showToast( { message } );
 
 export const fetchTemplates = async ( additionalParams = {} ) => {
 	const params = {
@@ -33,7 +36,7 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 			const templates = await response.json();
 
 			if ( templates.message ) {
-				return console.log( templates.message );
+				return dispatchNotification( templates.message );
 			}
 			const totalPages = response.headers.get( 'x-wp-totalpages' );
 			const currentPage = params.page;
@@ -45,7 +48,7 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 		}
 	} catch ( error ) {
 		if ( error.message ) {
-			console.log( error.message );
+			dispatchNotification( error.message );
 		}
 	}
 };
@@ -77,7 +80,7 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 			const templates = await response.json();
 
 			if ( templates.message ) {
-				return console.log( templates.message );
+				return dispatchNotification( templates.message );
 			}
 
 			const totalPages = response.headers.get( 'x-wp-totalpages' );
@@ -91,7 +94,41 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 		}
 	} catch ( error ) {
 		if ( error.message ) {
-			console.log( error.message );
+			dispatchNotification( error.message );
 		}
 	}
+};
+
+export const importTemplate = async ( template ) => {
+	const url = stringifyUrl( {
+		url: `${ window.tiTpc.endpoint }templates/${ template }/import`,
+		query: {
+			cache: localStorage.getItem( 'tpcCacheBuster' ),
+			...window.tiTpc.params,
+		},
+	} );
+
+	let content = {};
+
+	try {
+		const response = await apiFetch( {
+			url,
+			method: 'GET',
+			parse: false,
+		} );
+
+		if ( response.ok ) {
+			content = await response.json();
+
+			if ( content.message ) {
+				return dispatchNotification( content.message );
+			}
+		}
+	} catch ( error ) {
+		if ( error.message ) {
+			dispatchNotification( error.message );
+		}
+	}
+
+	return content;
 };
