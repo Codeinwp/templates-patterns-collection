@@ -2,7 +2,7 @@
 Contributors: themeisle
 Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
 Requires at least: 4.7
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv3
@@ -26,6 +26,14 @@ No account is required to access the service template collection and the privacy
 == Frequently Asked Questions ==
 
 == Changelog ==
+
+#### [Version 1.1.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.11...v1.1.0) (2020-11-24)
+
+Single page templates
+Cloud storage for custom-built templates
+
+
+
 
 ##### [Version 1.0.11](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.0.10...v1.0.11) (2020-10-13)
 
