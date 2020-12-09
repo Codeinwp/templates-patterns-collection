@@ -18,7 +18,10 @@
 	}
   },
   "config": {
-	"optimize-autoloader": true
+	"optimize-autoloader": true,
+    "platform": {
+      "php": "5.6"
+    }
   },
   "extra": {
 	"installer-disable": "true"
