@@ -1,8 +1,14 @@
 import classnames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@wordpress/components';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Path, SVG } from '@wordpress/primitives';
+
+import {
+	fetchTemplates,
+	fetchLibrary,
+} from './../data/templates-cloud/index.js';
 
 const Icon = ( { title } ) => {
 	return (
@@ -32,11 +38,21 @@ const Icon = ( { title } ) => {
 };
 
 const Header = ( {
+	isFetching,
 	isPreview,
 	currentTab,
+	setFetching,
 	togglePreview,
 	updateCurrentTab,
 } ) => {
+	const syncLibrary = async () => {
+		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+		setFetching( true );
+		await fetchTemplates();
+		await fetchLibrary();
+		setFetching( false );
+	};
+
 	return (
 		<div className="dialog-header dialog-lightbox-header">
 			<div className="ti-tpc-templates-modal__header">
@@ -102,9 +118,14 @@ const Header = ( {
 							</div>
 						) : (
 							<div className="ti-tpc-template-library-header-actions">
-								<div className="ti-tpc-templates-modal__header__item">
+								<Button
+									className="ti-tpc-templates-modal__header__item"
+									onClick={ syncLibrary }
+								>
 									<i
-										className="eicon-sync"
+										className={ classnames( 'eicon-sync', {
+											'eicon-animation-spin': isFetching,
+										} ) }
 										aria-hidden="true"
 										title={
 											window.tiTpc.library.actions.sync
@@ -113,12 +134,12 @@ const Header = ( {
 									<span className="elementor-screen-only">
 										{ window.tiTpc.library.actions.sync }
 									</span>
-								</div>
+								</Button>
 							</div>
 						) }
 					</div>
 
-					<div className="ti-tpc-templates-modal__header__item ti-tpc-templates-modal__header__close">
+					<Button className="ti-tpc-templates-modal__header__item ti-tpc-templates-modal__header__close">
 						<i
 							className="eicon-close"
 							aria-hidden="true"
@@ -128,7 +149,7 @@ const Header = ( {
 						<span className="elementor-screen-only">
 							{ window.tiTpc.library.actions.close }
 						</span>
-					</div>
+					</Button>
 				</div>
 			</div>
 		</div>
@@ -137,17 +158,23 @@ const Header = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { isPreview, getCurrentTab } = select( 'tpc/elementor' );
+		const { isFetching, isPreview, getCurrentTab } = select(
+			'tpc/elementor'
+		);
 
 		return {
+			isFetching: isFetching(),
 			isPreview: isPreview(),
 			currentTab: getCurrentTab(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { togglePreview, updateCurrentTab } = dispatch( 'tpc/elementor' );
+		const { setFetching, togglePreview, updateCurrentTab } = dispatch(
+			'tpc/elementor'
+		);
 
 		return {
+			setFetching,
 			togglePreview,
 			updateCurrentTab,
 		};

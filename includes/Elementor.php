@@ -32,7 +32,7 @@ class Elementor {
 		wp_enqueue_script(
 			'ti-tpc-elementor',
 			TIOB_URL . 'elementor/build/index.js',
-			array_merge( $deps['dependencies'], [ 'elementor-editor' ] ),
+			array_merge( $deps['dependencies'], [ 'elementor-editor', 'lodash' ] ),
 			$deps['version'],
 			true
 		);
@@ -61,6 +61,7 @@ class Elementor {
 					'library'          => array(
 						'libraryButton'   => __( 'Import from Templates Cloud' ),
 						'templatesCloud'  => __( 'Templates Cloud' ),
+						'historyMessage'  => __( 'Add Template from Templates Cloud:' ),
 						'tabs'            => array(
 							'templates' => __( 'Page Templates' ),
 							'library'   => __( 'My Library' ),

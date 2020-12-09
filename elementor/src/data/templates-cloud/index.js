@@ -1,9 +1,10 @@
-/* eslint-disable no-console */
-/* global localStorage, elementor, */
+/* global localStorage, elementor, lodash */
 import { stringifyUrl } from 'query-string';
 
 import apiFetch from '@wordpress/api-fetch';
-import { dispatch } from '@wordpress/data';
+import { dispatch, select } from '@wordpress/data';
+
+const { omit } = lodash;
 
 const dispatchNotification = ( message ) =>
 	elementor.notifications.showToast( { message } );
@@ -12,12 +13,12 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 	const params = {
 		cache: localStorage.getItem( 'tpcCacheBuster' ),
 		...window.tiTpc.params,
-		per_page: 12,
+		per_page: 20,
 		page: 0,
 		type: 'gutenberg', // Remove before commiting
 		premade: true,
 		template_site_slug: 'general',
-		...additionalParams,
+		...omit( additionalParams, 'isScroll' ),
 	};
 
 	const url = stringifyUrl( {
@@ -38,10 +39,19 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 			if ( templates.message ) {
 				return dispatchNotification( templates.message );
 			}
+
+			let items = templates;
+
+			if ( additionalParams.isScroll ) {
+				const library = select( 'tpc/elementor' ).getTemplates();
+				items = [ ...library.items, ...templates ];
+			}
+
 			const totalPages = response.headers.get( 'x-wp-totalpages' );
 			const currentPage = params.page;
+
 			dispatch( 'tpc/elementor' ).updateTemplates(
-				templates,
+				items,
 				currentPage,
 				totalPages
 			);
@@ -55,9 +65,9 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 
 export const fetchLibrary = async ( additionalParams = {} ) => {
 	const params = {
-		per_page: 12,
+		per_page: 20,
 		page: 0,
-		...additionalParams,
+		...omit( additionalParams, 'isScroll' ),
 	};
 
 	const url = stringifyUrl( {
@@ -83,11 +93,18 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 				return dispatchNotification( templates.message );
 			}
 
+			let items = templates;
+
+			if ( additionalParams.isScroll ) {
+				const library = select( 'tpc/elementor' ).getLibrary();
+				items = [ ...library.items, ...templates ];
+			}
+
 			const totalPages = response.headers.get( 'x-wp-totalpages' );
 			const currentPage = params.page;
 
 			dispatch( 'tpc/elementor' ).updateLibrary(
-				templates,
+				items,
 				currentPage,
 				totalPages
 			);

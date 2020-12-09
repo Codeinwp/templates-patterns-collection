@@ -1,47 +1,15 @@
-/* global $e, elementorCommon */
 import { Button } from '@wordpress/components';
 import { withDispatch } from '@wordpress/data';
-
-import { importTemplate } from './../data/templates-cloud/index.js';
 
 const Template = ( {
 	id,
 	title,
 	thumbnail,
 	link,
+	onImport,
 	togglePreview,
 	setPreviewData,
 } ) => {
-	const onImport = async () => {
-		const data = await importTemplate( id );
-
-		if ( data ) {
-			const history = window.$e.internal( 'document/history/start-log', {
-				type: 'add',
-				title: `Add Template from Templates Cloud: ${ title }`,
-			} );
-
-			let index = Number( window.tiTpc.placeholder );
-
-			const content = data.content;
-
-			for ( let i = 0; i < content.length; i++ ) {
-				content[ i ].id = elementorCommon.helpers.getUniqueId();
-				window.$e.run( 'document/elements/create', {
-					container: window.elementor.getPreviewContainer(),
-					model: content[ i ],
-					options: index >= 0 ? { at: index++ } : {},
-				} );
-			}
-
-			$e.internal( 'document/history/end-log', {
-				id: history,
-			} );
-
-			window.tiTpcModal.hide();
-		}
-	};
-
 	return (
 		<div className="ti-tpc-template-library-template">
 			<div className="ti-tpc-template-library-template-body">
@@ -65,7 +33,7 @@ const Template = ( {
 			<div className="ti-tpc-template-library-template-footer">
 				<Button
 					className="ti-tpc-template-library-template-action elementor-button"
-					onClick={ onImport }
+					onClick={ () => onImport( { id, title } ) }
 				>
 					<i className="eicon-file-download" aria-hidden="true"></i>
 					<span>{ window.tiTpc.library.actions.insert }</span>

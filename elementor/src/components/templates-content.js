@@ -1,41 +1,56 @@
-/* eslint-disable no-console */
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-import { compose } from '@wordpress/compose';
-import { withDispatch, withSelect } from '@wordpress/data';
-import { Fragment, useEffect } from '@wordpress/element';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
+import { Placeholder, Spinner } from '@wordpress/components';
+import { withSelect } from '@wordpress/data';
+import { useState } from '@wordpress/element';
+
+import Template from './template.js';
 
 import {
 	fetchTemplates,
 	fetchLibrary,
 } from './../data/templates-cloud/index.js';
 
-import Template from './template.js';
-
 const TemplatesContent = ( {
-	isFetching,
+	onImport,
 	isGeneral,
-	setFetching,
 	items,
 	currentPage,
 	totalPages,
 } ) => {
-	const init = async () => {
-		setFetching( true );
-		if ( isGeneral ) {
-			await fetchTemplates();
-		} else {
-			await fetchLibrary();
+	const [ isLoading, setLoading ] = useState( false );
+
+	const onLoadMore = async () => {
+		if ( currentPage === totalPages ) {
+			return;
 		}
-		setFetching( false );
+
+		setLoading( true );
+		if ( isGeneral ) {
+			await fetchTemplates( {
+				page: currentPage + 1,
+				isScroll: true,
+			} );
+		} else {
+			await fetchLibrary( {
+				page: currentPage + 1,
+				isScroll: true,
+			} );
+		}
+		setLoading( false );
 	};
 
-	useEffect( () => {
-		init();
-	}, [ isGeneral ] );
+	const infiniteRef = useInfiniteScroll( {
+		loading: isLoading,
+		hasNextPage: currentPage !== totalPages,
+		onLoadMore,
+		threshold: 1,
+	} );
 
 	return (
-		<Fragment>
+		<div
+			className="ti-tpc-template-library-templates-container"
+			ref={ infiniteRef }
+		>
 			{ items.map( ( item ) => (
 				<Template
 					key={ item.template_id }
@@ -43,27 +58,25 @@ const TemplatesContent = ( {
 					title={ item.template_name }
 					thumbnail={ item.template_thumbnail }
 					link={ item.link }
+					onImport={ onImport }
 				/>
 			) ) }
-		</Fragment>
+
+			{ isLoading && (
+				<Placeholder>
+					<Spinner />
+				</Placeholder>
+			) }
+		</div>
 	);
 };
 
-export default compose(
-	withSelect( ( select, { isGeneral } ) => {
-		const library = isGeneral
-			? select( 'tpc/elementor' ).getTemplates()
-			: select( 'tpc/elementor' ).getLibrary();
+export default withSelect( ( select, { isGeneral } ) => {
+	const library = isGeneral
+		? select( 'tpc/elementor' ).getTemplates()
+		: select( 'tpc/elementor' ).getLibrary();
 
-		const { items = [], currentPage, totalPages } = library;
+	const { items = [], currentPage, totalPages } = library;
 
-		return { items, currentPage, totalPages };
-	} ),
-	withDispatch( ( dispatch ) => {
-		const { setFetching } = dispatch( 'tpc/elementor' );
-
-		return {
-			setFetching,
-		};
-	} )
-)( TemplatesContent );
+	return { items, currentPage, totalPages };
+} )( TemplatesContent );
