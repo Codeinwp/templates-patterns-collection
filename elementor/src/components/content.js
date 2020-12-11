@@ -1,9 +1,9 @@
-/* eslint-disable jsx-a11y/iframe-has-title */
 import { Spinner } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import TemplatesContent from './templates-content.js';
+import Export from './export.js';
 
 import {
 	fetchTemplates,
@@ -37,7 +37,10 @@ const Content = ( {
 			<div className="dialog-message dialog-lightbox-message">
 				<div className="dialog-content dialog-lightbox-content">
 					<div className="ti-tpc-template-library-preview">
-						<iframe src={ preview }></iframe>
+						<iframe
+							title={ preview.template_name }
+							src={ preview.link || '' }
+						></iframe>
 					</div>
 				</div>
 			</div>
@@ -52,6 +55,10 @@ const Content = ( {
 				</div>
 			</div>
 		);
+	}
+
+	if ( 'export' === currentTab ) {
+		return <Export />;
 	}
 
 	return (

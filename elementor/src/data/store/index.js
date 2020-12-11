@@ -10,7 +10,7 @@ const DEFAULT_STATE = {
 		currentPage: 0,
 		totalPages: 0,
 	},
-	preview: '',
+	preview: {},
 };
 
 registerStore( 'tpc/elementor', {

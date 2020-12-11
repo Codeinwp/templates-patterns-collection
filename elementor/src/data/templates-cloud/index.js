@@ -1,5 +1,6 @@
 /* global localStorage, elementor, lodash */
 import { stringifyUrl } from 'query-string';
+import { v4 as uuidv4 } from 'uuid';
 
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch, select } from '@wordpress/data';
@@ -148,4 +149,47 @@ export const importTemplate = async ( template ) => {
 	}
 
 	return content;
+};
+
+export const exportTemplate = async ( { title, type, content } ) => {
+	const data = {
+		version: '0.4',
+		title,
+		type,
+		content,
+	};
+
+	const url = stringifyUrl( {
+		url: window.tiTpc.endpoint + 'templates',
+		query: {
+			...window.tiTpc.params,
+			template_name: title || window.tiTpc.exporter.textPlaceholder,
+			template_type: 'elementor',
+		},
+	} );
+
+	try {
+		const response = await apiFetch( {
+			url,
+			method: 'POST',
+			data,
+			parse: false,
+		} );
+
+		if ( response.ok ) {
+			const res = await response.json();
+
+			if ( res.message ) {
+				dispatchNotification( res.message );
+			} else {
+				window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
+				dispatchNotification( window.tiTpc.exporter.templateSaved );
+			}
+		}
+	} catch ( error ) {
+		if ( error.message ) {
+			dispatchNotification( error.message );
+		}
+	}
 };

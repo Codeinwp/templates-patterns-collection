@@ -38,9 +38,11 @@ const Icon = ( { title } ) => {
 };
 
 const Header = ( {
+	onImport,
 	isFetching,
 	isPreview,
 	currentTab,
+	preview,
 	setFetching,
 	togglePreview,
 	updateCurrentTab,
@@ -106,7 +108,15 @@ const Header = ( {
 					<div className="ti-tpc-template-library-header-tools">
 						{ isPreview ? (
 							<div className="ti-tpc-templates-modal__header__item ti-tpc-template-library-header-preview-insert-wrapper">
-								<Button className="ti-tpc-template-library-template-insert elementor-button">
+								<Button
+									className="ti-tpc-template-library-template-insert elementor-button"
+									onClick={ () =>
+										onImport( {
+											id: preview.template_id,
+											title: preview.template_name,
+										} )
+									}
+								>
 									<i
 										className="eicon-file-download"
 										aria-hidden="true"
@@ -135,16 +145,34 @@ const Header = ( {
 										{ window.tiTpc.library.actions.sync }
 									</span>
 								</Button>
+
+								<Button
+									className="ti-tpc-templates-modal__header__item"
+									onClick={ () =>
+										updateCurrentTab( 'export' )
+									}
+								>
+									<i
+										className="eicon-save-o"
+										aria-hidden="true"
+										title={ window.tiTpc.library.save }
+									></i>
+									<span className="elementor-screen-only">
+										{ window.tiTpc.library.save }
+									</span>
+								</Button>
 							</div>
 						) }
 					</div>
 
-					<Button className="ti-tpc-templates-modal__header__item ti-tpc-templates-modal__header__close">
+					<Button
+						className="ti-tpc-templates-modal__header__item ti-tpc-templates-modal__header__close"
+						onClick={ window.tiTpcModal.hide }
+					>
 						<i
 							className="eicon-close"
 							aria-hidden="true"
 							title={ window.tiTpc.library.actions.close }
-							onClick={ window.tiTpcModal.hide }
 						></i>
 						<span className="elementor-screen-only">
 							{ window.tiTpc.library.actions.close }
@@ -158,7 +186,7 @@ const Header = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { isFetching, isPreview, getCurrentTab } = select(
+		const { isFetching, isPreview, getCurrentTab, getPreview } = select(
 			'tpc/elementor'
 		);
 
@@ -166,6 +194,7 @@ export default compose(
 			isFetching: isFetching(),
 			isPreview: isPreview(),
 			currentTab: getCurrentTab(),
+			preview: getPreview(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {

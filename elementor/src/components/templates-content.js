@@ -54,13 +54,22 @@ const TemplatesContent = ( {
 			{ items.map( ( item ) => (
 				<Template
 					key={ item.template_id }
+					item={ item }
 					id={ item.template_id }
 					title={ item.template_name }
 					thumbnail={ item.template_thumbnail }
-					link={ item.link }
 					onImport={ onImport }
 				/>
 			) ) }
+
+			{ 0 === items.length &&
+				( isGeneral ? (
+					<p>{ 'No templates found. Check again later!' }</p>
+				) : (
+					<p>
+						{ 'No templates available. Try adding few templates.' }
+					</p>
+				) ) }
 
 			{ isLoading && (
 				<Placeholder>

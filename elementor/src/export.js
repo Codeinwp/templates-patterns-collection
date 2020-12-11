@@ -1,9 +1,8 @@
 /* global elementor */
-import { stringifyUrl } from 'query-string';
-import { v4 as uuidv4 } from 'uuid';
-import apiFetch from '@wordpress/api-fetch';
 import { Button, Modal, TextControl } from '@wordpress/components';
 import { render, unmountComponentAtNode, useState } from '@wordpress/element';
+
+import { exportTemplate } from './data/templates-cloud/index.js';
 
 document.addEventListener( 'DOMContentLoaded', () => {
 	const addExportMenuItem = ( groups, element ) => {
@@ -30,9 +29,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		return groups;
 	};
 
-	const dispatchNotification = ( message ) =>
-		elementor.notifications.showToast( { message } );
-
 	const ExportModal = ( { content } ) => {
 		const [ title, setTitle ] = useState( '' );
 		const [ isLoading, setLoading ] = useState( false );
@@ -43,52 +39,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		const onSave = async () => {
 			setLoading( true );
-
-			const data = {
-				version: '0.4',
+			await exportTemplate( {
 				title,
 				type: 'section',
 				content: [ content ],
-			};
-
-			const url = stringifyUrl( {
-				url: window.tiTpc.endpoint + 'templates',
-				query: {
-					...window.tiTpc.params,
-					template_name:
-						title || window.tiTpc.exporter.textPlaceholder,
-					template_type: 'elementor',
-				},
 			} );
-
-			try {
-				const response = await apiFetch( {
-					url,
-					method: 'POST',
-					data,
-					parse: false,
-				} );
-
-				if ( response.ok ) {
-					const res = await response.json();
-
-					if ( res.message ) {
-						dispatchNotification( res.message );
-					} else {
-						window.localStorage.setItem(
-							'tpcCacheBuster',
-							uuidv4()
-						);
-
-						dispatchNotification( 'Template Saved' );
-					}
-				}
-			} catch ( error ) {
-				if ( error.message ) {
-					dispatchNotification( error.message );
-				}
-			}
-
 			setLoading( false );
 			onClose();
 		};

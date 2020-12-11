@@ -57,6 +57,7 @@ class Elementor {
 						'textLabel'       => __( 'Template Name' ),
 						'textPlaceholder' => __( 'Template' ),
 						'buttonLabel'     => __( 'Save' ),
+						'templateSaved'   => __( 'Template Saved.' ),
 					),
 					'library'          => array(
 						'libraryButton'   => __( 'Import from Templates Cloud' ),
@@ -68,9 +69,16 @@ class Elementor {
 						),
 						'actions'         => array(
 							'sync'   => __( 'Sync Library' ),
+							'save'   => __( 'Save to Templates Cloud' ),
 							'close'  => __( 'Close' ),
 							'insert' => __( 'Insert' ),
 							'back'   => __( 'Back to Library' ),
+						),
+						'export'           => array(
+							'save'         => __( 'Save' ),
+							'title'        => __( 'Save your page to Templates Cloud' ),
+							'placeholder'  => __( 'Enter Template Name' ),
+							'defaultTitle' => __( 'Template' ),
 						),
 					),
 				)

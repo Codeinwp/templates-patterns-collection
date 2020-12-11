@@ -2,10 +2,10 @@ import { Button } from '@wordpress/components';
 import { withDispatch } from '@wordpress/data';
 
 const Template = ( {
+	item,
 	id,
 	title,
 	thumbnail,
-	link,
 	onImport,
 	togglePreview,
 	setPreviewData,
@@ -23,7 +23,7 @@ const Template = ( {
 					className="ti-tpc-template-library-template-preview"
 					onClick={ () => {
 						togglePreview();
-						setPreviewData( link );
+						setPreviewData( { ...item } );
 					} }
 				>
 					<i className="eicon-zoom-in-bold" aria-hidden="true"></i>

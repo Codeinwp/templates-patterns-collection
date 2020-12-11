@@ -163,6 +163,10 @@
 					flex-wrap: wrap;
 					align-items: flex-start;
 
+					> p {
+						font-size: 14px;
+					}
+
 					.ti-tpc-template-library-template {
 						margin: 15px;
 						padding: 8px;
@@ -262,6 +266,52 @@
 						.components-placeholder__fieldset {
 							justify-content: center;
 						}
+					}
+				}
+			}
+
+			.ti-tpc-template-library-export {
+				padding: 150px 0;
+
+				.ti-tpc-template-library-blank-icon {
+					font-size: 65px;
+					color: #c2cbd2;
+					line-height: 1;
+				}
+
+				.ti-tpc-template-library-blank-title {
+					font-size: 30px;
+					margin-top: 40px;
+				}
+
+				.ti-tpc-template-library-blank-field {
+					margin-top: 40px;
+					display: flex;
+					-webkit-box-align: center;
+					align-items: center;
+					-webkit-box-pack: center;
+					justify-content: center;
+
+					> * {
+						height: 55px;
+						font-size: 16px;
+					}
+
+					.ti-tpc-template-library-blank-field-input {
+						width: 500px;
+						background-color: #fff;
+						font-weight: 300;
+						color: #a4afb7;
+						padding-left: 25px;
+						border-radius: 3px 0 0 3px;
+						border: none;
+					}
+
+					.elementor-button {
+						display: block;
+						width: 150px;
+						border-radius: 0 3px 3px 0;
+						background-color: #39b54a;
 					}
 				}
 			}
