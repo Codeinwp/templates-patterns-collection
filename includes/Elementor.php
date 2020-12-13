@@ -60,14 +60,14 @@ class Elementor {
 						'templateSaved'   => __( 'Template Saved.' ),
 					),
 					'library'          => array(
-						'libraryButton'   => __( 'Import from Templates Cloud' ),
-						'templatesCloud'  => __( 'Templates Cloud' ),
-						'historyMessage'  => __( 'Add Template from Templates Cloud:' ),
-						'tabs'            => array(
+						'libraryButton'  => __( 'Import from Templates Cloud' ),
+						'templatesCloud' => __( 'Templates Cloud' ),
+						'historyMessage' => __( 'Add Template from Templates Cloud:' ),
+						'tabs'           => array(
 							'templates' => __( 'Page Templates' ),
 							'library'   => __( 'My Library' ),
 						),
-						'actions'         => array(
+						'actions'        => array(
 							'sync'      => __( 'Sync Library' ),
 							'save'      => __( 'Save to Templates Cloud' ),
 							'close'     => __( 'Close' ),
@@ -78,18 +78,18 @@ class Elementor {
 							'insert'    => __( 'Insert' ),
 							'back'      => __( 'Back to Library' ),
 						),
-						'filters'         => array(
+						'filters'        => array(
 							'sortLabel'   => __( 'Sory by' ),
 							'sortLabels'  => array(
 								'name'     => __( 'Name' ),
 								'date'     => __( 'Date' ),
 								'modified' => __( 'Last Modified' ),
-								'actions'  => __( 'Actions' )
+								'actions'  => __( 'Actions' ),
 							),
 							'search'      => __( 'Search' ),
 							'searchLabel' => __( 'Search Templates' ),
 						),
-						'export'           => array(
+						'export'         => array(
 							'save'         => __( 'Save' ),
 							'title'        => __( 'Save your page to Templates Cloud' ),
 							'placeholder'  => __( 'Enter Template Name' ),

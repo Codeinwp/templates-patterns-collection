@@ -16,7 +16,6 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 		...window.tiTpc.params,
 		per_page: 20,
 		page: 0,
-		type: 'gutenberg', // Remove before commiting
 		premade: true,
 		template_site_slug: 'general',
 		...omit( additionalParams, 'isScroll' ),
