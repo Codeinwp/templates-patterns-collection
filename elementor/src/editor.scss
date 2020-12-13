@@ -157,6 +157,72 @@
 			.ti-tpc-template-library-templates {
 				padding: 0 15px;
 
+				.ti-tpc-template-library-templates-header {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+
+					.ti-tpc-template-library-templates-header-filters {
+						font-size: 11px;
+						display: flex;
+
+						.ti-tpc-template-library-templates-header-filters-label {
+							flex-grow: 1;
+							text-align: left;
+							padding-right: 20px;
+							border-right: 1px solid #d5dadf;
+							text-transform: uppercase;
+						}
+
+						.ti-tpc-template-library-templates-header-filters-filter {
+							display: flex;
+
+							.components-button {
+								padding: 0 0 0 20px;
+								height: auto;
+								color: inherit;
+								font-size: inherit;
+								text-transform: uppercase;
+
+								&.is-selected {
+									&:after {
+										font-family: eicons;
+										content: "\e8ae";
+										margin-left: 3px;
+									}
+
+									&.is-asc {
+										&:after {
+											content: "\e8ad";
+										}
+									}
+								}
+							}
+						}
+					}
+
+					.ti-tpc-template-library-templates-header-search {
+						width: 200px;
+						position: relative;
+
+						input {
+							border: none;
+							border-bottom: 1px solid #d5dadf;
+							border-radius: 0;
+							font-size: 11px;
+							padding: 8px 15px 8px 0;
+							transition: border .5s;
+						}
+
+						i {
+							position: absolute;
+							top: 50%;
+							right: 0;
+							transform: translateY(-50%);
+						}
+					}
+				}
+
 				.ti-tpc-template-library-templates-container {
 					margin: 10px -15px 0;
 					display: flex;

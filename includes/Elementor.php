@@ -74,6 +74,16 @@ class Elementor {
 							'insert' => __( 'Insert' ),
 							'back'   => __( 'Back to Library' ),
 						),
+						'filters'         => array(
+							'sortLabel'   => __( 'Sory by' ),
+							'sortLabels'  => array(
+								'name'     => __( 'Name' ),
+								'date'     => __( 'Date' ),
+								'modified' => __( 'Last Modified' )
+							),
+							'search'      => __( 'Search' ),
+							'searchLabel' => __( 'Search Templates' ),
+						),
 						'export'           => array(
 							'save'         => __( 'Save' ),
 							'title'        => __( 'Save your page to Templates Cloud' ),

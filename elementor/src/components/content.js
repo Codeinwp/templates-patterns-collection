@@ -1,7 +1,9 @@
-import { Spinner } from '@wordpress/components';
+import classnames from 'classnames';
+import { Button, Spinner } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
+import { Fragment, useEffect } from '@wordpress/element';
+import { ENTER } from '@wordpress/keycodes';
 import TemplatesContent from './templates-content.js';
 import Export from './export.js';
 
@@ -10,7 +12,17 @@ import {
 	fetchLibrary,
 } from './../data/templates-cloud/index.js';
 
+const sortByOptions = {
+	date: window.tiTpc.library.filters.sortLabels.date,
+	template_name: window.tiTpc.library.filters.sortLabels.name,
+	modified: window.tiTpc.library.filters.sortLabels.modified,
+};
+
 const Content = ( {
+	setQuery,
+	getSearchQuery,
+	setSorting,
+	getOrder,
 	onImport,
 	isFetching,
 	isPreview,
@@ -20,17 +32,26 @@ const Content = ( {
 } ) => {
 	const init = async () => {
 		setFetching( true );
+		const order = getOrder();
 		if ( currentTab === 'templates' ) {
-			await fetchTemplates();
+			await fetchTemplates( {
+				search: getSearchQuery(),
+				...order,
+			} );
 		} else {
-			await fetchLibrary();
+			await fetchLibrary( {
+				search: getSearchQuery(),
+				...order,
+			} );
 		}
 		setFetching( false );
 	};
 
 	useEffect( () => {
 		init();
-	}, [ currentTab ] );
+	}, [ currentTab, getOrder() ] );
+
+	const isGeneral = currentTab === 'templates';
 
 	if ( isPreview ) {
 		return (
@@ -65,11 +86,93 @@ const Content = ( {
 		<div className="dialog-message dialog-lightbox-message">
 			<div className="dialog-content dialog-lightbox-content">
 				<div className="ti-tpc-template-library-templates">
+					<div className="ti-tpc-template-library-templates-header">
+						<div className="ti-tpc-template-library-templates-header-filters">
+							{ isGeneral && (
+								<Fragment>
+									<div className="ti-tpc-template-library-templates-header-filters-label">
+										{
+											window.tiTpc.library.filters
+												.sortLabel
+										}
+									</div>
+
+									<div className="ti-tpc-template-library-templates-header-filters-filter">
+										{ Object.keys( sortByOptions ).map(
+											( i ) => (
+												<Button
+													key={ i }
+													className={ classnames( {
+														'is-selected':
+															i ===
+															getOrder().orderby,
+														'is-asc':
+															'ASC' ===
+															getOrder().order,
+													} ) }
+													onClick={ () => {
+														const order = {
+															order: 'DESC',
+															orderby: i,
+														};
+
+														if (
+															i ===
+															getOrder().orderby
+														) {
+															if (
+																'DESC' ===
+																getOrder().order
+															) {
+																order.order =
+																	'ASC';
+															}
+														}
+														setSorting( {
+															...order,
+														} );
+													} }
+												>
+													{ sortByOptions[ i ] }
+												</Button>
+											)
+										) }
+									</div>
+								</Fragment>
+							) }
+						</div>
+
+						<div className="ti-tpc-template-library-templates-header-search">
+							<label
+								htmlFor="ti-tpc-template-library-filter-search"
+								className="elementor-screen-only"
+							>
+								{ window.tiTpc.library.filters.searchLabel }
+							</label>
+							<input
+								id="ti-tpc-template-library-filter-search"
+								placeholder={
+									window.tiTpc.library.filters.search
+								}
+								value={ getSearchQuery() }
+								onChange={ ( e ) => setQuery( e.target.value ) }
+								onKeyDown={ ( e ) => {
+									if ( e.keyCode === ENTER ) {
+										init();
+									}
+								} }
+							/>
+							<i className="eicon-search"></i>
+						</div>
+					</div>
+
 					{ [ 'templates', 'library' ].includes( currentTab ) && (
 						<TemplatesContent
+							getSearchQuery={ () => getSearchQuery() }
+							getOrder={ getOrder }
 							onImport={ onImport }
 							isFetching={ isFetching }
-							isGeneral={ currentTab === 'templates' }
+							isGeneral={ isGeneral }
 						/>
 					) }
 				</div>

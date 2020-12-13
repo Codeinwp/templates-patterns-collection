@@ -1,12 +1,75 @@
 /* global elementor, $e, elementorCommon */
-import { Fragment } from '@wordpress/element';
-import { withDispatch } from '@wordpress/data';
+import { withDispatch, withSelect } from '@wordpress/data';
+import { compose } from '@wordpress/compose';
+import { Fragment, useState } from '@wordpress/element';
 
 import Header from './components/header.js';
 import Content from './components/content.js';
 import { importTemplate } from './data/templates-cloud/index.js';
 
-const TemplateLibrary = ( { setFetching } ) => {
+const TemplateLibrary = ( { currentTab, setFetching } ) => {
+	const [ searchQuery, setSearchQuery ] = useState( {
+		templates: '',
+		library: '',
+	} );
+
+	const [ sortingOrder, setSortingOrder ] = useState( {
+		templates: {
+			order: 'DESC',
+			orderby: 'date',
+		},
+		library: {
+			order: 'DESC',
+			orderby: 'date',
+		},
+	} );
+
+	const isGeneral = currentTab === 'templates';
+
+	const setQuery = ( query ) => {
+		if ( isGeneral ) {
+			return setSearchQuery( {
+				...searchQuery,
+				templates: query,
+			} );
+		}
+
+		return setSearchQuery( {
+			...searchQuery,
+			library: query,
+		} );
+	};
+
+	const getSearchQuery = () => {
+		if ( isGeneral ) {
+			return searchQuery.templates;
+		}
+
+		return searchQuery.library;
+	};
+
+	const setSorting = ( order ) => {
+		if ( isGeneral ) {
+			return setSortingOrder( {
+				...sortingOrder,
+				templates: order,
+			} );
+		}
+
+		return setSortingOrder( {
+			...sortingOrder,
+			library: order,
+		} );
+	};
+
+	const getOrder = () => {
+		if ( isGeneral ) {
+			return sortingOrder.templates;
+		}
+
+		return sortingOrder.library;
+	};
+
 	const onImport = async ( { id, title } ) => {
 		setFetching( true );
 		const data = await importTemplate( id );
@@ -44,16 +107,35 @@ const TemplateLibrary = ( { setFetching } ) => {
 
 	return (
 		<Fragment>
-			<Header onImport={ onImport } />
-			<Content onImport={ onImport } />
+			<Header
+				getSearchQuery={ getSearchQuery }
+				getOrder={ getOrder }
+				onImport={ onImport }
+			/>
+			<Content
+				setQuery={ setQuery }
+				getSearchQuery={ getSearchQuery }
+				setSorting={ setSorting }
+				getOrder={ getOrder }
+				onImport={ onImport }
+			/>
 		</Fragment>
 	);
 };
 
-export default withDispatch( ( dispatch ) => {
-	const { setFetching } = dispatch( 'tpc/elementor' );
+export default compose(
+	withSelect( ( select ) => {
+		const { getCurrentTab } = select( 'tpc/elementor' );
 
-	return {
-		setFetching,
-	};
-} )( TemplateLibrary );
+		return {
+			currentTab: getCurrentTab(),
+		};
+	} ),
+	withDispatch( ( dispatch ) => {
+		const { setFetching } = dispatch( 'tpc/elementor' );
+
+		return {
+			setFetching,
+		};
+	} )
+)( TemplateLibrary );

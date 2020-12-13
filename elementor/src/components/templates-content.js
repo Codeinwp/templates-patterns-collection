@@ -11,6 +11,8 @@ import {
 } from './../data/templates-cloud/index.js';
 
 const TemplatesContent = ( {
+	getSearchQuery,
+	getOrder,
 	onImport,
 	isGeneral,
 	items,
@@ -25,15 +27,21 @@ const TemplatesContent = ( {
 		}
 
 		setLoading( true );
+
+		const order = getOrder();
 		if ( isGeneral ) {
 			await fetchTemplates( {
+				search: getSearchQuery(),
 				page: currentPage + 1,
 				isScroll: true,
+				...order,
 			} );
 		} else {
 			await fetchLibrary( {
+				search: getSearchQuery(),
 				page: currentPage + 1,
 				isScroll: true,
+				...order
 			} );
 		}
 		setLoading( false );

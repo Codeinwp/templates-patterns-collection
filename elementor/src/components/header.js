@@ -38,6 +38,8 @@ const Icon = ( { title } ) => {
 };
 
 const Header = ( {
+	getSearchQuery,
+	getOrder,
 	onImport,
 	isFetching,
 	isPreview,
@@ -50,8 +52,17 @@ const Header = ( {
 	const syncLibrary = async () => {
 		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 		setFetching( true );
-		await fetchTemplates();
-		await fetchLibrary();
+		const order = getOrder();
+
+		await fetchTemplates( {
+			search: getSearchQuery(),
+			...order,
+		} );
+
+		await fetchLibrary( {
+			search: getSearchQuery(),
+			...order,
+		} );
 		setFetching( false );
 	};
 
