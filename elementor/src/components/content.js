@@ -10,6 +10,9 @@ import Export from './export.js';
 import {
 	fetchTemplates,
 	fetchLibrary,
+	updateTemplate,
+	deleteTemplate,
+	duplicateTemplate,
 } from './../data/templates-cloud/index.js';
 
 const sortByOptions = {
@@ -52,6 +55,27 @@ const Content = ( {
 	}, [ currentTab, getOrder() ] );
 
 	const isGeneral = currentTab === 'templates';
+
+	const onUpdateTemplate = async ( id, title ) => {
+		setFetching( true );
+		await updateTemplate( {
+			template_id: id,
+			template_name: title,
+		} );
+		setFetching( false );
+	};
+
+	const onDelete = async ( id ) => {
+		setFetching( true );
+		await deleteTemplate( id );
+		setFetching( false );
+	};
+
+	const onDuplicate = async ( id ) => {
+		setFetching( true );
+		await duplicateTemplate( id );
+		setFetching( false );
+	};
 
 	if ( isPreview ) {
 		return (
@@ -170,7 +194,11 @@ const Content = ( {
 						<TemplatesContent
 							getSearchQuery={ () => getSearchQuery() }
 							getOrder={ getOrder }
+							setSorting={ setSorting }
 							onImport={ onImport }
+							onUpdateTemplate={ onUpdateTemplate }
+							onDelete={ onDelete }
+							onDuplicate={ onDuplicate }
 							isFetching={ isFetching }
 							isGeneral={ isGeneral }
 						/>

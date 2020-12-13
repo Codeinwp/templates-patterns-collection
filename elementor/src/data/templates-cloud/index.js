@@ -151,6 +151,103 @@ export const importTemplate = async ( template ) => {
 	return content;
 };
 
+export const duplicateTemplate = async ( id ) => {
+	const url = stringifyUrl( {
+		url: `${ window.tiTpc.endpoint }templates/${ id }/clone`,
+		query: {
+			cache: localStorage.getItem( 'tpcCacheBuster' ),
+			...window.tiTpc.params,
+		},
+	} );
+
+	try {
+		const response = await apiFetch( { url, method: 'POST' } );
+
+		if ( response.ok ) {
+			const content = await response.json();
+
+			if ( content.message ) {
+				return dispatchNotification( content.message );
+			}
+		}
+
+		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
+		await fetchLibrary();
+	} catch ( error ) {
+		if ( error.message ) {
+			dispatchNotification( error.message );
+		}
+	}
+};
+
+export const updateTemplate = async ( params ) => {
+	const url = stringifyUrl( {
+		url: `${ window.tiTpc.endpoint }templates/${ params.template_id }`,
+		query: {
+			cache: localStorage.getItem( 'tpcCacheBuster' ),
+			...window.tiTpc.params,
+			...params,
+		},
+	} );
+
+	try {
+		const response = await apiFetch( {
+			url,
+			method: 'POST',
+			data: params,
+			parse: false,
+		} );
+
+		if ( response.ok ) {
+			const content = await response.json();
+
+			if ( content.message ) {
+				return dispatchNotification( content.message );
+			}
+		}
+
+		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
+		await fetchLibrary();
+	} catch ( error ) {
+		if ( error.message ) {
+			dispatchNotification( error.message );
+		}
+	}
+};
+
+export const deleteTemplate = async ( template ) => {
+	const url = stringifyUrl( {
+		url: `${ window.tiTpc.endpoint }templates/${ template }`,
+		query: {
+			cache: localStorage.getItem( 'tpcCacheBuster' ),
+			_method: 'DELETE',
+			...window.tiTpc.params,
+		},
+	} );
+
+	try {
+		const response = await apiFetch( { url, method: 'POST' } );
+
+		if ( response.ok ) {
+			const content = await response.json();
+
+			if ( content.message ) {
+				return dispatchNotification( content.message );
+			}
+		}
+
+		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
+		await fetchLibrary();
+	} catch ( error ) {
+		if ( error.message ) {
+			dispatchNotification( error.message );
+		}
+	}
+};
+
 export const exportTemplate = async ( { title, type, content } ) => {
 	const data = {
 		version: '0.4',

@@ -1,7 +1,8 @@
 import useInfiniteScroll from 'react-infinite-scroll-hook';
-import { Placeholder, Spinner } from '@wordpress/components';
+import classnames from 'classnames';
+import { Button, Placeholder, Spinner } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
-import { useState } from '@wordpress/element';
+import { Fragment, useState } from '@wordpress/element';
 
 import Template from './template.js';
 
@@ -10,10 +11,20 @@ import {
 	fetchLibrary,
 } from './../data/templates-cloud/index.js';
 
+const sortByOptions = {
+	template_name: window.tiTpc.library.filters.sortLabels.name,
+	date: window.tiTpc.library.filters.sortLabels.date,
+	modified: window.tiTpc.library.filters.sortLabels.modified,
+};
+
 const TemplatesContent = ( {
 	getSearchQuery,
 	getOrder,
+	setSorting,
 	onImport,
+	onUpdateTemplate,
+	onDelete,
+	onDuplicate,
 	isGeneral,
 	items,
 	currentPage,
@@ -41,7 +52,7 @@ const TemplatesContent = ( {
 				search: getSearchQuery(),
 				page: currentPage + 1,
 				isScroll: true,
-				...order
+				...order,
 			} );
 		}
 		setLoading( false );
@@ -56,19 +67,83 @@ const TemplatesContent = ( {
 
 	return (
 		<div
-			className="ti-tpc-template-library-templates-container"
+			className={ classnames(
+				'ti-tpc-template-library-templates-container',
+				{
+					'is-table': ! isGeneral,
+				}
+			) }
 			ref={ infiniteRef }
 		>
-			{ items.map( ( item ) => (
-				<Template
-					key={ item.template_id }
-					item={ item }
-					id={ item.template_id }
-					title={ item.template_name }
-					thumbnail={ item.template_thumbnail }
-					onImport={ onImport }
-				/>
-			) ) }
+			{ isGeneral ? (
+				items.map( ( item ) => (
+					<Template
+						key={ item.template_id }
+						item={ item }
+						id={ item.template_id }
+						title={ item.template_name }
+						thumbnail={ item.template_thumbnail }
+						onImport={ onImport }
+					/>
+				) )
+			) : (
+				<Fragment>
+					<div className="ti-tpc-template-library-templates-table-header">
+						{ Object.keys( sortByOptions ).map( ( i ) => (
+							<div
+								key={ i }
+								className="ti-tpc-template-library-templates-table-column"
+							>
+								<Button
+									className={ classnames( {
+										'is-selected': i === getOrder().orderby,
+										'is-asc': 'ASC' === getOrder().order,
+									} ) }
+									onClick={ () => {
+										const order = {
+											order: 'DESC',
+											orderby: i,
+										};
+
+										if ( i === getOrder().orderby ) {
+											if ( 'DESC' === getOrder().order ) {
+												order.order = 'ASC';
+											}
+										}
+										setSorting( {
+											...order,
+										} );
+									} }
+								>
+									{ sortByOptions[ i ] }
+								</Button>
+							</div>
+						) ) }
+						<div className="ti-tpc-template-library-templates-table-column">
+							<Button>
+								{
+									window.tiTpc.library.filters.sortLabels
+										.actions
+								}
+							</Button>
+						</div>
+					</div>
+
+					{ items.map( ( item ) => (
+						<Template
+							table={ true }
+							key={ item.template_id }
+							item={ item }
+							id={ item.template_id }
+							title={ item.template_name }
+							onImport={ onImport }
+							onUpdateTemplate={ onUpdateTemplate }
+							onDelete={ onDelete }
+							onDuplicate={ ( id ) => onDuplicate( id ) }
+						/>
+					) ) }
+				</Fragment>
+			) }
 
 			{ 0 === items.length &&
 				( isGeneral ? (

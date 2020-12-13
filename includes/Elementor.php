@@ -68,18 +68,23 @@ class Elementor {
 							'library'   => __( 'My Library' ),
 						),
 						'actions'         => array(
-							'sync'   => __( 'Sync Library' ),
-							'save'   => __( 'Save to Templates Cloud' ),
-							'close'  => __( 'Close' ),
-							'insert' => __( 'Insert' ),
-							'back'   => __( 'Back to Library' ),
+							'sync'      => __( 'Sync Library' ),
+							'save'      => __( 'Save to Templates Cloud' ),
+							'close'     => __( 'Close' ),
+							'cancel'    => __( 'Cancel' ),
+							'edit'      => __( 'Edit' ),
+							'duplicate' => __( 'Duplicate' ),
+							'delete'    => __( 'Delete' ),
+							'insert'    => __( 'Insert' ),
+							'back'      => __( 'Back to Library' ),
 						),
 						'filters'         => array(
 							'sortLabel'   => __( 'Sory by' ),
 							'sortLabels'  => array(
 								'name'     => __( 'Name' ),
 								'date'     => __( 'Date' ),
-								'modified' => __( 'Last Modified' )
+								'modified' => __( 'Last Modified' ),
+								'actions'  => __( 'Actions' )
 							),
 							'search'      => __( 'Search' ),
 							'searchLabel' => __( 'Search Templates' ),

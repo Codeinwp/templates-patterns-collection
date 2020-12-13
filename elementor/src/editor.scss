@@ -229,6 +229,118 @@
 					flex-wrap: wrap;
 					align-items: flex-start;
 
+					&.is-table {
+						flex-direction: column;
+						align-items: normal;
+					}
+
+					.ti-tpc-template-library-templates-table-header {
+						display: flex;
+						align-items: center;
+						padding: 0 25px;
+						margin-top: 30px;
+						text-align: left;
+
+						.ti-tpc-template-library-templates-table-column {
+							width: calc( 65% / 3 );
+
+							&:first-child {
+								width: 35%;
+							}
+
+							&:last-child {
+								display: flex;
+								justify-content: flex-end;
+							}
+
+							.components-button {
+								color: #a4afb7;
+								line-height: 1;
+								font-size: 10px;
+								font-weight: 500;
+								text-transform: uppercase;
+								padding: 0;
+								cursor: pointer;
+
+								&.is-selected {
+									&:after {
+										font-family: eicons;
+										content: "\e8ae";
+										margin-left: 3px;
+									}
+
+									&.is-asc {
+										&:after {
+											content: "\e8ad";
+										}
+									}
+								}
+
+								&:hover {
+									color: #1e1e1e;
+								}
+							}
+						}
+					}
+
+					.ti-tpc-template-library-templates-table-item {
+						display: flex;
+						height: 50px;
+						align-items: center;
+						padding: 0 25px;
+						margin-top: 1px;
+						text-align: left;
+						background-color: #fafbfb;
+
+						&:first-child {
+							border-radius: 3px 3px 0 0;
+						}
+
+						&:last-child {
+							border-radius: 0 0 3px 3px;
+						}
+
+						.ti-tpc-template-library-templates-table-column {
+							width: calc( 65% / 3 );
+
+							&:first-child {
+								font-weight: 600;
+								width: 35%;
+
+								input[type=text] {
+									width: 50%;
+									margin-right: 10px;
+								}
+
+								.components-button {
+									padding-left: 10px;
+									padding-right: 10px;
+
+									i {
+										margin: 0;
+									}
+								}
+							}
+
+							&:last-child {
+								display: flex;
+								justify-content: flex-end;
+							}
+
+							.components-button {
+								text-transform: none;
+								font-size: 12px;
+								padding: 8px 18px;
+								height: 30px;
+
+								&:not(:hover) {
+									background: none;
+									color: #a4afb7;
+								}
+							}
+						}
+					}
+
 					> p {
 						font-size: 14px;
 					}
