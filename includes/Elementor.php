@@ -32,7 +32,7 @@ class Elementor {
 		wp_enqueue_script(
 			'ti-tpc-elementor',
 			TIOB_URL . 'elementor/build/index.js',
-			array_merge( $deps['dependencies'], [ 'elementor-editor', 'lodash' ] ),
+			array_merge( $deps['dependencies'], array( 'elementor-editor', 'lodash' ) ),
 			$deps['version'],
 			true
 		);
@@ -110,7 +110,7 @@ class Elementor {
 		wp_enqueue_style(
 			'ti-tpc-elementor-styles',
 			TIOB_URL . 'elementor/build/index.css',
-			[ 'wp-components' ],
+			array( 'wp-components' ),
 			$deps['version']
 		);
 	}
