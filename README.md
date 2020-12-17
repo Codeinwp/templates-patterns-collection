@@ -27,6 +27,13 @@ No account is required to access the service template collection and the privacy
 
 ## Changelog ##
 
+##### [Version 1.1.2](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.1...v1.1.2) (2020-12-17)
+
+* Fix rest meta fields not getting registered
+
+
+
+
 ##### [Version 1.1.1](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.0...v1.1.1) (2020-12-08)
 
 - Multisite Starter Sites compatibility
