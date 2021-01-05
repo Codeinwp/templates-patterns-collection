@@ -1,17 +1,13 @@
-import { alignJustify, check, grid } from '@wordpress/icons';
+import classnames from 'classnames';
+import { alignJustify, check, grid, search } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Button, Dropdown, MenuItem } from '@wordpress/components';
+import { Button, Icon } from '@wordpress/components';
 import { ENTER } from '@wordpress/keycodes';
 
-const sortingOptions = {
-	DESC: __( 'Descending' ),
-	ASC: __( 'Ascending' ),
-};
-
 const sortByOptions = {
-	date: __( 'by creation date' ),
-	modified: __( 'by modification date' ),
-	template_name: __( 'by template name' ),
+	date: __( 'Date' ),
+	template_name: __( 'Name' ),
+	modified: __( 'Last Modified' ),
 };
 
 const Filters = ( {
@@ -24,125 +20,77 @@ const Filters = ( {
 	setSortingOrder,
 	changeOrder,
 } ) => {
-	const getSortingItems = ( { onToggle } ) => {
-		const items = [];
-
-		for ( const [ key, value ] of Object.entries( sortingOptions ) ) {
-			const item = (
-				<MenuItem
-					key={ key }
-					icon={ key === sortingOrder.order && check }
-					isSelected={ key === sortingOrder.order }
-					onClick={ () => {
-						setSortingOrder( {
-							order: key,
-							orderby: sortingOrder.orderby,
-						} );
-
-						changeOrder( {
-							order: key,
-							orderby: sortingOrder.orderby,
-						} );
-
-						onToggle();
-					} }
-				>
-					{ value }
-				</MenuItem>
-			);
-
-			items.push( item );
-		}
-
-		return items;
-	};
-
-	const getSortByItems = ( { onToggle } ) => {
-		const items = [];
-
-		for ( const [ key, value ] of Object.entries( sortByOptions ) ) {
-			const item = (
-				<MenuItem
-					key={ key }
-					icon={ key === sortingOrder.orderby && check }
-					isSelected={ key === sortingOrder.orderby }
-					onClick={ () => {
-						setSortingOrder( {
-							order: sortingOrder.order,
-							orderby: key,
-						} );
-
-						changeOrder( {
-							order: sortingOrder.order,
-							orderby: key,
-						} );
-
-						onToggle();
-					} }
-				>
-					{ value }
-				</MenuItem>
-			);
-
-			items.push( item );
-		}
-
-		return items;
-	};
 
 	return (
 		<div className="filters">
-			<div className="search-filters">
-				<input
-					placeholder={ __( 'Search for a template…' ) }
-					className="filter-search"
-					value={ searchQuery }
-					onChange={ ( e ) => setSearchQuery( e.target.value ) }
-					onKeyDown={ ( e ) => {
-						if ( e.keyCode === ENTER ) {
-							onSearch();
-						}
-					} }
-				/>
+			<div className="display-sorting">
+				<div className="sorting-label">
+					{ __( 'Sort by' ) }
+				</div>
 
-				<Dropdown
-					position="bottom center"
-					contentClassName="filter-overlay"
-					popoverProps={ {
-						noArrow: false,
-					} }
-					renderToggle={ ( { isOpen, onToggle } ) => (
-						<Button
-							onClick={ onToggle }
-							aria-expanded={ isOpen }
-							className={ 'filter-input' }
-						>
-							{ sortingOptions[ sortingOrder.order ] }
-						</Button>
-					) }
-					renderContent={ getSortingItems }
-				/>
+				<div className="sorting-filter">
+					{ Object.keys( sortByOptions ).map(
+						( i ) => (
+							<Button
+								key={ i }
+								className={ classnames( {
+									'is-selected':
+										i ===
+										sortingOrder.orderby,
+									'is-asc':
+										'ASC' ===
+										sortingOrder.order,
+								} ) }
+								onClick={ () => {
+									const order = {
+										order: 'DESC',
+										orderby: i,
+									};
 
-				<Dropdown
-					position="bottom center"
-					contentClassName="filter-overlay"
-					popoverProps={ {
-						noArrow: false,
-					} }
-					renderToggle={ ( { isOpen, onToggle } ) => (
-						<Button
-							onClick={ onToggle }
-							aria-expanded={ isOpen }
-							className={ 'filter-input' }
-						>
-							{ sortByOptions[ sortingOrder.orderby ] }
-						</Button>
+									if (
+										i ===
+										sortingOrder.orderby
+									) {
+										if (
+											'DESC' ===
+											sortingOrder.order
+										) {
+											order.order =
+												'ASC';
+										}
+									}
+									setSortingOrder( {
+										...order,
+									} );
+									changeOrder( {
+										...order,
+									} );
+								} }
+							>
+								{ sortByOptions[ i ] }
+							</Button>
+						)
 					) }
-					renderContent={ getSortByItems }
-				/>
+				</div>
 			</div>
 
 			<div className="view-filters">
+				<div className="search-filters">
+					<input
+						placeholder={ __( 'Search for a template…' ) }
+						className="filter-search"
+						value={ searchQuery }
+						onChange={ ( e ) => setSearchQuery( e.target.value ) }
+						onKeyDown={ ( e ) => {
+							if ( e.keyCode === ENTER ) {
+								onSearch();
+							}
+						} }
+					/>
+
+					<Icon icon={ search } />
+				</div>
+
 				<Button
 					label={ __( 'List View' ) }
 					icon={ alignJustify }
