@@ -64,8 +64,44 @@
 	align-items: center;
 	margin-bottom: 40px;
 
+	.components-dropdown {
+		&:nth-of-type(1) {
+			.components-button {
+				&.filter-input {
+					width: 100px;
+					border-right-width: 0.1px;
+					border-radius: 0;
+				}
+			}
+		}
+
+		.components-button {
+			&.filter-input {
+				width: 200px;
+				height: 52px;
+				display: flex;
+				align-items: center;
+				font-weight: 600;
+				padding: 5px 20px 5px 10px;
+				background: #fff;
+				border: 1px solid #d9d9d9;
+				border-left : 0;
+				color: #616161;
+				box-shadow: none;
+				font-weight: normal;
+				border-radius: 0 6px 6px 0;
+			}
+		}
+	}
+
 	.components-base-control, input {
 		width: 100%;
+
+		&.has-filters {
+			input {
+				border-radius: 6px 0 0 6px;
+			}
+		}
 
 		.components-base-control__field {
 			margin-bottom: 0;
@@ -81,6 +117,33 @@
 		display: flex;
 		margin-left: 20px;
 
+		.display-filters__search {
+			width: 200px;
+			position: relative;
+			margin-right: 20px;
+
+			input {
+				max-height: 36px;
+				border: none;
+				border-bottom: 1px solid #d5dadf;
+				border-radius: 0;
+				font-size: 11px;
+				padding: 8px 15px 8px 0;
+				transition: border .5s;
+				background: none;
+				box-shadow: none;
+				color: #6d7882;
+				outline: none;
+			}
+
+			svg {
+				position: absolute;
+				top: 50%;
+				right: 0;
+				transform: translateY(-50%);
+			}
+		}
+
 		button {
 			&.is-pressed, &:active, &:focus, &:hover {
 				background-color: transparent !important;
@@ -89,8 +152,54 @@
 		}
 	}
 
+	.display-sorting {
+		display: flex;
+		align-items: center;
+		font-size: 11px;
+
+		.sorting-label {
+			flex-grow: 1;
+			text-align: left;
+			padding-right: 20px;
+			border-right: 1px solid #d5dadf;
+			text-transform: uppercase;
+		}
+
+		.sorting-filter {
+			.components-button {
+				padding: 0 0 0 20px;
+				height: auto;
+				color: inherit;
+				font-size: inherit;
+				text-transform: uppercase;
+
+				&::after {
+					width: 11px;
+					content: " ";
+					margin-left: 3px;
+				}
+
+				&.is-selected {
+					&::after {
+						font-family: dashicons;
+						content: "\f142";
+						margin-left: 3px;
+					}
+
+					&.is-asc {
+						&::after {
+							content: "\f140";
+						}
+					}
+				}
+			}
+		}
+	}
+
 	.header-form {
 		width: 100%;
+		display: flex;
+		justify-content: space-between;
 	}
 }
 
@@ -208,6 +317,14 @@
 		p {
 			font-weight: 600;
 			margin: 0;
+		}
+	}
+}
+
+.filter-overlay {
+	.components-button {
+		&:not( .has-icon ) {
+			padding-left: 38px;
 		}
 	}
 }

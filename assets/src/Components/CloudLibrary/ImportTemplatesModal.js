@@ -166,7 +166,13 @@ const ImportTemplatesModal = ( {
 											icon={ pageIcon }
 											className="active"
 										/>
-										<span>{ page.title }</span>
+										<span>
+											{ page.title.replace(
+												/&#8217;/g,
+												// eslint-disable-next-line prettier/prettier
+												'\''
+											) }
+										</span>
 										<div className="actions">
 											<Button
 												isTertiary

@@ -129,20 +129,96 @@
 
 				.filters {
 					display: flex;
-					justify-content: flex-end;
+					justify-content: space-between;
 					padding-bottom: 20px;
 
-					.components-button {
-						&.is-pressed {
-							background: transparent;
+					.display-sorting {
+						display: flex;
+						align-items: center;
+						font-size: 11px;
+				
+						.sorting-label {
+							flex-grow: 1;
+							text-align: left;
+							padding-right: 20px;
+							border-right: 1px solid #d5dadf;
+							text-transform: uppercase;
+						}
+				
+						.sorting-filter {
+							.components-button {
+								padding: 0 0 0 20px;
+								height: auto;
+								color: inherit;
+								font-size: inherit;
+								text-transform: uppercase;
+				
+								&::after {
+									width: 11px;
+									content: " ";
+									margin-left: 3px;
+								}
+				
+								&.is-selected {
+									&::after {
+										font-family: dashicons;
+										content: "\f142";
+										margin-left: 3px;
+									}
+				
+									&.is-asc {
+										&::after {
+											content: "\f140";
+										}
+									}
+								}
+							}
+						}
+					}
 
+					.view-filters {
+						display: flex;
+
+						.search-filters {
+							width: 200px;
+							position: relative;
+							margin-right: 20px;
+				
+							input {
+								width: 100%;
+								max-height: 36px;
+								border: none;
+								border-bottom: 1px solid #d5dadf;
+								border-radius: 0;
+								font-size: 11px;
+								padding: 8px 15px 8px 0;
+								transition: border .5s;
+								background: none;
+								box-shadow: none;
+								color: #6d7882;
+								outline: none;
+							}
+				
 							svg {
-								fill: #0073aa;
+								position: absolute;
+								top: 50%;
+								right: 0;
+								transform: translateY(-50%);
 							}
 						}
 
-						svg {
-							fill: #d9d9d9;
+						.components-button {
+							&.is-pressed {
+								background: transparent;
+	
+								svg {
+									fill: #0073aa;
+								}
+							}
+	
+							svg {
+								fill: #d9d9d9;
+							}
 						}
 					}
 				}
@@ -377,6 +453,14 @@
 		svg {
 			-webkit-animation: icon-spin 2s linear infinite;
 			animation: icon-spin 2s linear infinite;
+		}
+	}
+}
+
+.filter-overlay {
+	.components-button {
+		&:not( .has-icon ) {
+			padding-left: 38px;
 		}
 	}
 }

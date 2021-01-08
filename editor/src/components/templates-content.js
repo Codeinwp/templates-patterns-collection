@@ -17,16 +17,27 @@ const TemplatesContent = ( {
 	items,
 	currentPage,
 	totalPages,
+	getOrder,
+	setQuery,
+	getSearchQuery,
+	setSorting,
 } ) => {
 	const { setFetching } = useDispatch( 'tpc/block-editor' );
 	const [ layout, setLayout ] = useState( 'grid' );
 
 	const init = async () => {
 		setFetching( true );
+		const order = getOrder();
 		if ( isGeneral ) {
-			await fetchTemplates();
+			await fetchTemplates( {
+				search: getSearchQuery(),
+				...order,
+			} );
 		} else {
-			await fetchLibrary();
+			await fetchLibrary( {
+				search: getSearchQuery(),
+				...order,
+			} );
 		}
 		setFetching( false );
 	};
@@ -40,13 +51,53 @@ const TemplatesContent = ( {
 
 	const changePage = async ( index ) => {
 		setFetching( true );
+		const order = getOrder();
 		if ( isGeneral ) {
 			await fetchTemplates( {
+				search: getSearchQuery(),
 				page: index,
+				...order,
 			} );
 		} else {
 			await fetchLibrary( {
+				search: getSearchQuery(),
 				page: index,
+				...order,
+			} );
+		}
+
+		setFetching( false );
+	};
+
+	const onSearch = async () => {
+		setFetching( true );
+		const order = getOrder();
+		if ( isGeneral ) {
+			await fetchTemplates( {
+				search: getSearchQuery(),
+				...order,
+			} );
+		} else {
+			await fetchLibrary( {
+				search: getSearchQuery(),
+				...order,
+			} );
+		}
+
+		setFetching( false );
+	};
+
+	const changeOrder = async ( order ) => {
+		setFetching( true );
+		if ( isGeneral ) {
+			await fetchTemplates( {
+				...order,
+				search: getSearchQuery(),
+			} );
+		} else {
+			await fetchLibrary( {
+				...order,
+				search: getSearchQuery(),
 			} );
 		}
 
@@ -55,15 +106,39 @@ const TemplatesContent = ( {
 
 	if ( isFetching ) {
 		return (
-			<Placeholder>
-				<Spinner />
-			</Placeholder>
+			<Fragment>
+				<Filters
+					layout={ layout }
+					sortingOrder={ getOrder() }
+					setLayout={ setLayout }
+					searchQuery={ getSearchQuery() }
+					onSearch={ onSearch }
+					setSearchQuery={ setQuery }
+					setSortingOrder={ setSorting }
+					changeOrder={ changeOrder }
+				/>
+
+				<Placeholder>
+					<Spinner />
+				</Placeholder>
+			</Fragment>
 		);
 	}
 
 	if ( ! Boolean( items.length ) ) {
 		return (
 			<div className="table-content">
+				<Filters
+					layout={ layout }
+					sortingOrder={ getOrder() }
+					setLayout={ setLayout }
+					searchQuery={ getSearchQuery() }
+					onSearch={ onSearch }
+					setSearchQuery={ setQuery }
+					setSortingOrder={ setSorting }
+					changeOrder={ changeOrder }
+				/>
+
 				{ __( 'No templates available. Add a new one?' ) }
 			</div>
 		);
@@ -75,7 +150,16 @@ const TemplatesContent = ( {
 
 	return (
 		<Fragment>
-			<Filters layout={ layout } setLayout={ setLayout } />
+			<Filters
+				layout={ layout }
+				sortingOrder={ getOrder() }
+				setLayout={ setLayout }
+				searchQuery={ getSearchQuery() }
+				onSearch={ onSearch }
+				setSearchQuery={ setQuery }
+				setSortingOrder={ setSorting }
+				changeOrder={ changeOrder }
+			/>
 
 			<div className={ contentClasses }>
 				{ items.map( ( item ) => (

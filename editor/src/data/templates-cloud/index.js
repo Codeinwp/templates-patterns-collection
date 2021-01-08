@@ -111,7 +111,6 @@ export const updateTemplate = async ( params ) => {
 		const response = await apiFetch( {
 			url,
 			method: 'POST',
-			data: params,
 			parse: false,
 		} );
 

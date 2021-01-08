@@ -50,6 +50,13 @@ class Main {
 	public $editor = null;
 
 	/**
+	 * Elementor
+	 *
+	 * @var Elementor
+	 */
+	public $elementor = null;
+
+	/**
 	 * Sites listing
 	 *
 	 * @var Sites_Listing
@@ -80,6 +87,7 @@ class Main {
 	 */
 	private function init() {
 		$this->setup_editor();
+		$this->setup_elementor();
 		$this->setup_sites_listing();
 
 		if ( ! $this->should_load() ) {
@@ -122,7 +130,6 @@ class Main {
 		$this->admin->init();
 	}
 
-
 	/**
 	 * Setup editor functionality.
 	 *
@@ -131,6 +138,16 @@ class Main {
 	private function setup_editor() {
 		$this->editor = new Editor();
 		$this->editor->init();
+	}
+
+	/**
+	 * Setup Elementor functionality.
+	 *
+	 * @return void
+	 */
+	private function setup_elementor() {
+		$this->elementor = new Elementor();
+		$this->elementor->init();
 	}
 
 	/**
