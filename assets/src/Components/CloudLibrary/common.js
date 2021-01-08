@@ -51,6 +51,8 @@ export const updateTemplate = async ( id, name ) => {
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			...tiobDash.params,
+			template_id: id,
+			template_name: name,
 		},
 	} );
 
@@ -58,10 +60,6 @@ export const updateTemplate = async ( id, name ) => {
 		await apiFetch( {
 			url,
 			method: 'POST',
-			data: {
-				template_id: id,
-				template_name: name,
-			},
 		} );
 		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
