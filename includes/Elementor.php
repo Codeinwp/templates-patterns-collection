@@ -27,9 +27,9 @@ class Elementor {
 	 * Register editor blocks.
 	 */
 	public function register_script() {
-		$isPro = apply_filters( 'product_neve_license_key', 'free' );
+		$is_pro = apply_filters( 'product_neve_license_key', 'free' );
 
-		if ( $isPro === 'free' ) {
+		if ( $is_pro === 'free' ) {
 			return;
 		}
 
@@ -111,9 +111,9 @@ class Elementor {
 	 * Register editor styles.
 	 */
 	public function register_style() {
-		$isPro = apply_filters( 'product_neve_license_key', 'free' );
+		$is_pro = apply_filters( 'product_neve_license_key', 'free' );
 
-		if ( $isPro === 'free' ) {
+		if ( $is_pro === 'free' ) {
 			return;
 		}
 
