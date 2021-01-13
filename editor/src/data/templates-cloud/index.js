@@ -201,7 +201,7 @@ export const duplicateTemplate = async ( template ) => {
 	}
 };
 
-export const deleteTemplate = async ( template ) => {
+export const deleteTemplate = async ( template, sortingOrder ) => {
 	const url = stringifyUrl( {
 		url: `${ tiTpc.endpoint }templates/${ template }`,
 		query: {
@@ -224,7 +224,7 @@ export const deleteTemplate = async ( template ) => {
 
 		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
-		await fetchLibrary();
+		await fetchLibrary( sortingOrder );
 	} catch ( error ) {
 		if ( error.message ) {
 			createErrorNotice( error.message );

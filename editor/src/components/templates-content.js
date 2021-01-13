@@ -164,6 +164,7 @@ const TemplatesContent = ( {
 			<div className={ contentClasses }>
 				{ items.map( ( item ) => (
 					<ListItem
+						sortingOrder={ getOrder() }
 						deletable={ ! isGeneral }
 						key={ item.template_id }
 						layout={ layout }

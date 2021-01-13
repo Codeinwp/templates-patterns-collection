@@ -5,7 +5,6 @@ import {
 	// cloudUpload,
 	check,
 	edit,
-	group,
 	page,
 	trash,
 	update,
@@ -23,7 +22,13 @@ import {
 	fetchLibrary,
 } from './../data/templates-cloud/index';
 
-const ListItem = ( { layout, item, importBlocks, deletable } ) => {
+const ListItem = ( {
+	sortingOrder,
+	layout,
+	item,
+	importBlocks,
+	deletable,
+} ) => {
 	const { togglePreview, setPreviewData } = useDispatch( 'tpc/block-editor' );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isEditing, setEditing ] = useState( false );
@@ -41,11 +46,14 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 
 	const updateItem = async () => {
 		setLoading( 'updating' );
-		await updateTemplate( {
-			template_id: item.template_id,
-			template_name: itemName || item.template_name,
-		} );
-		await fetchLibrary();
+		await updateTemplate(
+			{
+				template_id: item.template_id,
+				template_name: itemName || item.template_name,
+			},
+			sortingOrder
+		);
+		await fetchLibrary( sortingOrder );
 		setLoading( false );
 		setEditing( ! isEditing );
 	};
@@ -66,7 +74,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 		}
 
 		setLoading( 'deleting' );
-		await deleteTemplate( item.template_id );
+		await deleteTemplate( item.template_id, sortingOrder );
 		setLoading( false );
 	};
 

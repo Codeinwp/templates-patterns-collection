@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { alignJustify, check, grid, search } from '@wordpress/icons';
+import { alignJustify, grid, search } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import { Button, Icon } from '@wordpress/components';
 import { ENTER } from '@wordpress/keycodes';
@@ -20,57 +20,41 @@ const Filters = ( {
 	setSortingOrder,
 	changeOrder,
 } ) => {
-
 	return (
 		<div className="filters">
 			<div className="display-sorting">
-				<div className="sorting-label">
-					{ __( 'Sort by' ) }
-				</div>
+				<div className="sorting-label">{ __( 'Sort by' ) }</div>
 
 				<div className="sorting-filter">
-					{ Object.keys( sortByOptions ).map(
-						( i ) => (
-							<Button
-								key={ i }
-								className={ classnames( {
-									'is-selected':
-										i ===
-										sortingOrder.orderby,
-									'is-asc':
-										'ASC' ===
-										sortingOrder.order,
-								} ) }
-								onClick={ () => {
-									const order = {
-										order: 'DESC',
-										orderby: i,
-									};
+					{ Object.keys( sortByOptions ).map( ( i ) => (
+						<Button
+							key={ i }
+							className={ classnames( {
+								'is-selected': i === sortingOrder.orderby,
+								'is-asc': 'ASC' === sortingOrder.order,
+							} ) }
+							onClick={ () => {
+								const order = {
+									order: 'DESC',
+									orderby: i,
+								};
 
-									if (
-										i ===
-										sortingOrder.orderby
-									) {
-										if (
-											'DESC' ===
-											sortingOrder.order
-										) {
-											order.order =
-												'ASC';
-										}
+								if ( i === sortingOrder.orderby ) {
+									if ( 'DESC' === sortingOrder.order ) {
+										order.order = 'ASC';
 									}
-									setSortingOrder( {
-										...order,
-									} );
-									changeOrder( {
-										...order,
-									} );
-								} }
-							>
-								{ sortByOptions[ i ] }
-							</Button>
-						)
-					) }
+								}
+								setSortingOrder( {
+									...order,
+								} );
+								changeOrder( {
+									...order,
+								} );
+							} }
+						>
+							{ sortByOptions[ i ] }
+						</Button>
+					) ) }
 				</div>
 			</div>
 

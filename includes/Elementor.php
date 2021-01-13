@@ -27,6 +27,12 @@ class Elementor {
 	 * Register editor blocks.
 	 */
 	public function register_script() {
+		$isPro = apply_filters( 'product_neve_license_key', 'free' );
+
+		if ( $isPro === 'free' ) {
+			return;
+		}
+
 		$deps = require( TIOB_PATH . 'elementor/build/index.asset.php' );
 
 		wp_enqueue_script(
@@ -105,6 +111,12 @@ class Elementor {
 	 * Register editor styles.
 	 */
 	public function register_style() {
+		$isPro = apply_filters( 'product_neve_license_key', 'free' );
+
+		if ( $isPro === 'free' ) {
+			return;
+		}
+
 		$deps = require( TIOB_PATH . 'elementor/build/index.asset.php' );
 
 		wp_enqueue_style(

@@ -47,10 +47,11 @@ const Library = ( {
 		loadTemplates();
 	}, [ isGeneral ] );
 
-	const loadTemplates = () => {
+	const loadTemplates = ( updateItem = {} ) => {
 		const params = {
 			page: currentPage,
 			per_page: 12,
+			...updateItem,
 		};
 
 		if ( isGeneral ) {
@@ -97,7 +98,10 @@ const Library = ( {
 
 	const handleSearch = () => {
 		setLoading( true );
-		const params = { search: searchQuery };
+		const params = {
+			search: searchQuery,
+			...getOrder(),
+		};
 		if ( isGeneral ) {
 			params.template_site_slug = 'general';
 			params.premade = true;
@@ -170,8 +174,10 @@ const Library = ( {
 
 	const changeOrder = async ( order ) => {
 		setLoading( true );
-		const params = { ...order };
-
+		const params = {
+			search: searchQuery,
+			...order,
+		};
 		if ( isGeneral ) {
 			params.template_site_slug = 'general';
 			params.premade = true;
@@ -205,6 +211,7 @@ const Library = ( {
 							<div className="table">
 								{ library.map( ( item ) => (
 									<ListItem
+										sortingOrder={ getOrder() }
 										onPreview={ handlePreview }
 										userTemplate={ ! isGeneral }
 										key={ item.template_id }
