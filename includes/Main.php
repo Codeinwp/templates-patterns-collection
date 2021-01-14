@@ -50,6 +50,13 @@ class Main {
 	public $editor = null;
 
 	/**
+	 * Beaver
+	 *
+	 * @var Beaver
+	 */
+	public $beaver = null;
+
+	/**
 	 * Sites listing
 	 *
 	 * @var Sites_Listing
@@ -80,6 +87,7 @@ class Main {
 	 */
 	private function init() {
 		$this->setup_editor();
+		$this->setup_beaver();
 		$this->setup_sites_listing();
 
 		if ( ! $this->should_load() ) {
@@ -131,6 +139,17 @@ class Main {
 	private function setup_editor() {
 		$this->editor = new Editor();
 		$this->editor->init();
+	}
+
+
+	/**
+	 * Setup beaver functionality.
+	 *
+	 * @return void
+	 */
+	private function setup_beaver() {
+		$this->beaver = new Beaver();
+		$this->beaver->init();
 	}
 
 	/**
