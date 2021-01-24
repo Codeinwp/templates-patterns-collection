@@ -7,6 +7,8 @@
 
 namespace TIOB;
 
+use FLBuilder;
+
 /**
  * Class Main
  */
@@ -148,7 +150,11 @@ class Main {
 	 * @return void
 	 */
 	private function setup_beaver() {
-		$this->beaver = new Beaver();
+		if ( ! class_exists( 'FLBuilder' ) ) {
+			return;
+		}
+
+		$this->beaver = new TI_Beaver();
 		$this->beaver->init();
 	}
 
