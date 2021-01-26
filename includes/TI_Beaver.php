@@ -140,7 +140,15 @@ class TI_Beaver extends FLBuilderModule {
 
 		$response = wp_remote_get( esc_url_raw( $url ) );
 		$response = wp_remote_retrieve_body( $response );
-		$template = json_decode( $response, true );
+		$response = json_encode( $response );
+		$response = serialize( $response );
+		var_dump( $response );
+		return;
+		// $response = $response->layout[0];
+		// $response->nodes = $response->{ 'nodes' };
+		// $response->settings = $response->{ 'settings' };
+		// var_dump( $response->nodes );
+		// return;
 		$row_position = FLBuilderModel::next_node_position( 'row' );
 
 		// Delete existing nodes and settings?
@@ -148,20 +156,15 @@ class TI_Beaver extends FLBuilderModule {
 			FLBuilderModel::delete_layout_data( 'draft' );
 			FLBuilderModel::delete_layout_settings( 'draft' );
 		}
-		if ( isset( $template->nodes ) ) {
-			echo "worked";
-			return;
-		} else {
-			echo "notworked";
-			return;
-		}
 
-		if ( isset( $template->nodes ) ) {
+		if ( isset( $response->nodes ) ) {
+
+			$response->nodes = serialize( $response->nodes );
 			// Get new ids for the template nodes.
-			$template->nodes = FLBuilderModel::generate_new_node_ids( $template->nodes );
+			$response->nodes = FLBuilderModel::generate_new_node_ids( $response->nodes );
 
 			// Filter the nodes for backwards compatibility with old settings.
-			$template->nodes = FLBuilderSettingsCompat::filter_layout_data( $template->nodes );
+			$response->nodes = FLBuilderSettingsCompat::filter_layout_data( $response->nodes );
 
 			// Get the existing layout data and settings.
 			$layout_data     = FLBuilderModel::get_layout_data();
@@ -169,21 +172,23 @@ class TI_Beaver extends FLBuilderModule {
 
 			// Reposition rows?
 			if ( $append ) {
-				foreach ( $template->nodes as $node_id => $node ) {
+				foreach ( $response->nodes as $node_id => $node ) {
 
 					if ( 'row' == $node->type ) {
-						$template->nodes[ $node_id ]->position += $row_position;
+						$response->nodes[ $node_id ]->position += $row_position;
 					}
 				}
 			}
 
 			// Merge and update the layout data.
-			$data = array_merge( $layout_data, $template->nodes );
+			$data = array_merge( $layout_data, $response->nodes );
+			print_r( $data );
+			return;
 			FLBuilderModel::update_layout_data( $data );
 
 			// Merge and update the layout settings.
-			if ( isset( $template->settings ) ) {
-				$settings = FLBuilderModel::merge_layout_settings( $layout_settings, $template->settings );
+			if ( isset( $response->settings ) ) {
+				$settings = FLBuilderModel::merge_layout_settings( $layout_settings, $response->settings );
 				FLBuilderModel::update_layout_settings( $settings );
 			}
 		}
