@@ -120,12 +120,24 @@ class TI_Beaver extends FLBuilderModule {
 		?>
 		<script type="text/javascript">
 			window.tiTpc = <?php echo json_encode( $tiTpc ); ?>;
-			// FLBuilder.ajax({
-			// 	action: 'ti_apply_template',
-			// 	template_id: 1,
-			// 	append: 0
-			// }, FLBuilder._applyUserTemplateComplete );
 		</script> <?php
+	}
+
+	/**
+	 * Properly serialize JSON output.
+	 */
+	static public function serialize_corrector( $serialized_string ) {
+		// at first, check if "fixing" is really needed at all. After that, security checkup.
+		if ( @unserialize( $serialized_string ) !== true && preg_match( '/^[aOs]:/', $serialized_string ) ) {
+			$serialized_string = preg_replace_callback(
+				'/s\:(\d+)\:\"(.*?)\";/s',
+				function ( $matches ) {
+					return 's:' . strlen( $matches[2] ) . ':"' . $matches[2] . '";';
+				},
+				$serialized_string
+			);
+		}
+		return $serialized_string;
 	}
 
 	/**
@@ -140,15 +152,11 @@ class TI_Beaver extends FLBuilderModule {
 
 		$response = wp_remote_get( esc_url_raw( $url ) );
 		$response = wp_remote_retrieve_body( $response );
-		$response = json_encode( $response );
-		$response = serialize( $response );
-		var_dump( $response );
-		return;
-		// $response = $response->layout[0];
-		// $response->nodes = $response->{ 'nodes' };
-		// $response->settings = $response->{ 'settings' };
-		// var_dump( $response->nodes );
-		// return;
+		$response = json_decode( $response, true );
+		$response = self::serialize_corrector( $response );
+		$response = unserialize( $response );
+		$response = $response['layout'][0];
+
 		$row_position = FLBuilderModel::next_node_position( 'row' );
 
 		// Delete existing nodes and settings?
@@ -158,8 +166,7 @@ class TI_Beaver extends FLBuilderModule {
 		}
 
 		if ( isset( $response->nodes ) ) {
-
-			$response->nodes = serialize( $response->nodes );
+			// $response->nodes = serialize( $response->nodes );
 			// Get new ids for the template nodes.
 			$response->nodes = FLBuilderModel::generate_new_node_ids( $response->nodes );
 
@@ -182,8 +189,6 @@ class TI_Beaver extends FLBuilderModule {
 
 			// Merge and update the layout data.
 			$data = array_merge( $layout_data, $response->nodes );
-			print_r( $data );
-			return;
 			FLBuilderModel::update_layout_data( $data );
 
 			// Merge and update the layout settings.

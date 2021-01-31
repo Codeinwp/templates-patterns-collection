@@ -99,6 +99,8 @@ const App = ( { nodeID } ) => {
 			/>
 
 			<Content
+				nodeID={ nodeID }
+				closeModal={ closeModal }
 				importTemplate={ importTemplate }
 				getOrder={ getOrder }
 				setQuery={ setQuery }

@@ -13,7 +13,14 @@ import {
 	fetchLibrary,
 } from './../data/templates-cloud/index';
 
-const ListItem = ( { layout, item, importBlocks, deletable } ) => {
+const ListItem = ( {
+	nodeID,
+	closeModal,
+	layout,
+	item,
+	importBlocks,
+	deletable,
+} ) => {
 	const { togglePreview, setPreviewData } = useDispatch( 'tpc/beaver' );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isEditing, setEditing ] = useState( false );
@@ -21,24 +28,24 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 
 	const importItem = async () => {
 		setLoading( 'importing' );
-		// const data = await importTemplate( item.template_id );
-		// console.log( data );
+		await closeModal();
+		FLBuilder.showAjaxLoader();
 
-		FLBuilder.ajax(
+		await FLBuilder.ajax(
 			{
 				action: 'ti_apply_template',
 				template: item.template_id,
-				append: 0,
+				append: 1,
 			},
-			FLBuilder._applyTemplateComplete
+			( response ) => {
+
+				const data = FLBuilder._jsonParse( response );
+				if ( data.layout ) {
+					FLBuilder._renderLayout( data.layout );
+					FLBuilder.triggerHook( 'didApplyTemplate' );
+				}
+			}
 		);
-
-		FLBuilder.triggerHook( 'didApplyTemplate' );
-
-		// if ( data.__file && data.content && 'wp_export' === data.__file ) {
-		// 	importBlocks( data.content );
-		// }
-		setLoading( false );
 	};
 
 	const updateItem = async () => {
