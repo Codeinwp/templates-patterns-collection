@@ -22,6 +22,43 @@
 			box-shadow: 0 0 8px rgba(0,0,0,.1);
 			position: relative;
 
+			&.is-dark {
+				background-color: #26292c;
+
+				.ti-tpc-templates-modal__header {
+					.ti-tpc-templates-modal__header__logo-area {
+						.ti-tpc-template-library-header-preview-back {
+							border-right: 1px solid rgba(255, 255, 255, 0.25);
+
+							&:hover {
+								color: #ffffff;
+							}
+						}
+					}
+
+					.ti-tpc-templates-modal__header__items-area {
+						.ti-tpc-templates-modal__header__close {
+							border-left: 1px solid rgba(255, 255, 255, 0.25);
+
+							&:hover {
+								color: #ffffff;
+							}
+						}
+					}
+
+					.ti-tpc-templates-modal__header__menu-area {
+						.ti-tpc-template-library-menu-item {
+							color: #e0e1e3;
+
+							&.is-active {
+								background: linear-gradient(180deg,#26292c,#34383c);
+								border-bottom: 3px solid #71d7f7;
+							}
+						}
+					}
+				}
+			}
+
 			.ti-tpc-templates-modal__header {
 				display: flex;
 				align-items: center;
@@ -30,10 +67,12 @@
 
 				.ti-tpc-templates-modal__header__logo-area {
 					width: 175px;
+					height: 100%;
 					text-align: left;
 					padding-left: 15px;
 
 					.ti-tpc-templates-modal__header__logo {
+						height: 100%;
 						display: flex;
 						align-items: center;
 						line-height: 1;
@@ -44,7 +83,8 @@
 						}
 					}
 
-					.ti-tpc--template-library-header-preview-back {
+					.ti-tpc-template-library-header-preview-back {
+						height: 100%;
 						color: #a4afb7;
 						font-size: 14px;
 						padding: 16.5px 16.5px 15px 0;
@@ -143,6 +183,68 @@
 		max-height: 85vh;
 		overflow: auto;
 		padding-top: 25px;
+
+		&.is-dark {
+			.dialog-content {
+				.ti-tpc-template-library-templates {
+					.ti-tpc-template-library-templates-container {
+						.ti-tpc-template-library-templates-table-header {
+							.ti-tpc-template-library-templates-table-column {
+								.components-button {
+									&:hover {
+										color: #ffffff;
+									}
+								}
+							}
+						}
+
+						.ti-tpc-template-library-templates-table-item {
+							background-color: #4c4f56;
+
+							&:hover {
+								background-color: #64666a;
+							}
+
+							.ti-tpc-template-library-templates-table-column {
+								.components-button {
+									&:hover {
+										color: #a4afb7;
+									}
+								}
+
+								.components-dropdown {
+									.components-popover {
+										&:not(.is-without-arrow) {
+											&::before,
+											&::after {
+												border-top-color: #4c4f56;
+												border-bottom-color: #4c4f56;
+											}
+										}
+
+										.components-popover__content {
+											background: #4c4f56;
+											box-shadow: 1px 3px 11px rgba(0,0,0,.3);
+											border-color: transparent;
+										}
+									}
+								}
+							}
+						}
+
+						.ti-tpc-template-library-template {
+							background-color: #404349;
+
+							.ti-tpc-template-library-template-footer {
+								.ti-tpc-template-library-template-name {
+									color: #e0e1e3;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 
 		.dialog-content {
 			display: block;
@@ -336,6 +438,19 @@
 								&:not(:hover) {
 									background: none;
 									color: #a4afb7;
+								}
+							}
+
+							.components-dropdown {
+								.components-popover {
+									.components-popover__content {
+										.components-button {
+											> svg {
+												width: 20px;
+												height: 20px;
+											}
+										}
+									}
 								}
 							}
 						}

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import classnames from 'classnames';
 import { Button, Spinner } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
@@ -79,7 +80,18 @@ const Content = ( {
 
 	if ( isPreview ) {
 		return (
-			<div className="dialog-message dialog-lightbox-message">
+			<div
+				className={ classnames(
+					'dialog-message dialog-lightbox-message',
+					{
+						'is-dark':
+							'dark' ===
+							elementor.settings.editorPreferences.model.get(
+								'ui_theme'
+							),
+					}
+				) }
+			>
 				<div className="dialog-content dialog-lightbox-content">
 					<div className="ti-tpc-template-library-preview">
 						<iframe
@@ -94,7 +106,18 @@ const Content = ( {
 
 	if ( isFetching ) {
 		return (
-			<div className="dialog-message dialog-lightbox-message">
+			<div
+				className={ classnames(
+					'dialog-message dialog-lightbox-message',
+					{
+						'is-dark':
+							'dark' ===
+							elementor.settings.editorPreferences.model.get(
+								'ui_theme'
+							),
+					}
+				) }
+			>
 				<div className="dialog-content dialog-lightbox-content is-loading">
 					<Spinner />
 				</div>
@@ -107,7 +130,15 @@ const Content = ( {
 	}
 
 	return (
-		<div className="dialog-message dialog-lightbox-message">
+		<div
+			className={ classnames( 'dialog-message dialog-lightbox-message', {
+				'is-dark':
+					'dark' ===
+					elementor.settings.editorPreferences.model.get(
+						'ui_theme'
+					),
+			} ) }
+		>
 			<div className="dialog-content dialog-lightbox-content">
 				<div className="ti-tpc-template-library-templates">
 					<div className="ti-tpc-template-library-templates-header">

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@wordpress/components';
@@ -67,12 +68,20 @@ const Header = ( {
 	};
 
 	return (
-		<div className="dialog-header dialog-lightbox-header">
+		<div
+			className={ classnames( 'dialog-header dialog-lightbox-header', {
+				'is-dark':
+					'dark' ===
+					elementor.settings.editorPreferences.model.get(
+						'ui_theme'
+					),
+			} ) }
+		>
 			<div className="ti-tpc-templates-modal__header">
 				<div className="ti-tpc-templates-modal__header__logo-area">
 					{ isPreview ? (
 						<Button
-							className="ti-tpc--template-library-header-preview-back"
+							className="ti-tpc-template-library-header-preview-back"
 							onClick={ togglePreview }
 						>
 							<i className="eicon-" aria-hidden="true"></i>
