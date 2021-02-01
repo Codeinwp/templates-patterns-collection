@@ -70,6 +70,18 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		return sortingOrder.library;
 	};
 
+	const changeID = ( element ) => {
+		element.id = elementorCommon.helpers.getUniqueId();
+
+		if ( 0 < element.elements.length ) {
+			for ( let i = 0; i < element.elements.length; i++ ) {
+				element.elements[ i ] = changeID( element.elements[ i ] );
+			}
+		}
+
+		return element;
+	};
+
 	const onImport = async ( { id, title } ) => {
 		setFetching( true );
 		const data = await importTemplate( id );
@@ -88,7 +100,7 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		const content = data.content;
 
 		for ( let i = 0; i < content.length; i++ ) {
-			content[ i ].id = elementorCommon.helpers.getUniqueId();
+			content[ i ] = changeID( content[ i ] );
 			$e.run( 'document/elements/create', {
 				container: elementor.getPreviewContainer(),
 				model: content[ i ],
