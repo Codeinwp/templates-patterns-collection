@@ -1,4 +1,5 @@
 /* global elementor */
+import classnames from 'classnames';
 import { Button, Modal, TextControl } from '@wordpress/components';
 import { render, unmountComponentAtNode, useState } from '@wordpress/element';
 
@@ -52,6 +53,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			<Modal
 				title={ window.tiTpc.exporter.modalLabel }
 				onRequestClose={ onClose }
+				overlayClassName={ classnames( {
+					'is-dark':
+						'dark' ===
+						elementor.settings.editorPreferences.model.get(
+							'ui_theme'
+						),
+				} ) }
 			>
 				<TextControl
 					label={ window.tiTpc.exporter.textLabel }

@@ -622,6 +622,45 @@
 	}
 }
 
+.components-modal__screen-overlay {
+	&.is-dark {
+		.components-modal__frame {
+			border: 1px solid #26292c;
+
+			.components-modal__content {
+				background: #34383c;
+
+				.components-modal__header {
+					background: #26292c;
+					border-bottom: 1px solid #26292c;
+
+					.components-button {
+						color: #a4afb7;
+
+						&:hover {
+							color: #e0e1e3;
+						}
+					}
+				}
+
+				.components-text-control__input {
+					background-color: #26292c;
+					color: #a4afb7;
+					border: none;
+
+					&:focus {
+						box-shadow: none;
+					}
+
+					&::placeholder {
+						color: #a4afb7;
+					}
+				}
+			}
+		}
+	}
+}
+
 @-webkit-keyframes icon-spin {
 	0% {
 		-webkit-transform: rotate(0deg);
