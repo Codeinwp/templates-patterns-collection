@@ -301,6 +301,13 @@ class Rest_Server {
 	 * @return int|\WP_Error
 	 */
 	private function insert_single_template( $template ) {
+		add_filter(
+			'wp_insert_post_data',
+			array( $this, 'parse_global_colors_unicode' ),
+			10,
+			2
+		);
+
 		return wp_insert_post(
 			array(
 				'post_title'    => wp_strip_all_tags( $template['template_name'] ),
@@ -310,5 +317,19 @@ class Rest_Server {
 				'page_template' => 'page-templates/template-pagebuilder-full-width.php',
 			)
 		);
+	}
+
+	/**
+	 * Parse global colors unicode.
+	 *
+	 * @param array $data    post data
+	 * @param array $post_arr post array.
+	 *
+	 * @return array
+	 */
+	public function parse_global_colors_unicode( $data, $post_arr ) {
+		$data['post_content'] = str_replace( 'var(\\u002d\\u002dnv', 'var(--nv', $data['post_content'] );
+
+		return $data;
 	}
 }
