@@ -564,7 +564,7 @@
 			}
 
 			.ti-tpc-template-library-export {
-				padding: 150px 0;
+				padding: 50px 0;
 
 				.ti-tpc-template-library-blank-icon {
 					font-size: 65px;
@@ -605,6 +605,19 @@
 						width: 150px;
 						border-radius: 0 3px 3px 0;
 						background-color: #39b54a;
+					}
+
+					.ti-tpc-template-library-blank-field-input-label {
+						width: 150px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+					}
+
+					.components-form-toggle {
+						input.components-form-toggle__input[type="checkbox"] {
+							cursor: pointer;
+						}
 					}
 				}
 			}

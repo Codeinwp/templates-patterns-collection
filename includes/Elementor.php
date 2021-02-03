@@ -38,7 +38,7 @@ class Elementor {
 		wp_enqueue_script(
 			'ti-tpc-elementor',
 			TIOB_URL . 'elementor/build/index.js',
-			array_merge( $deps['dependencies'], array( 'elementor-editor', 'lodash' ) ),
+			array_merge( $deps['dependencies'], array( 'elementor-editor', 'lodash', 'wp-api' ) ),
 			$deps['version'],
 			true
 		);
@@ -58,12 +58,15 @@ class Elementor {
 					'canPredefine'     => apply_filters( 'ti_tpc_can_predefine', false ),
 					'placeholderIndex' => '-1',
 					'exporter'         => array(
-						'exportLabel'     => __( 'Save to Templates Cloud' ),
-						'modalLabel'      => __( 'Save Templates' ),
-						'textLabel'       => __( 'Template Name' ),
-						'textPlaceholder' => __( 'Template' ),
-						'buttonLabel'     => __( 'Save' ),
-						'templateSaved'   => __( 'Template Saved.' ),
+						'exportLabel'         => __( 'Save to Templates Cloud' ),
+						'modalLabel'          => __( 'Save Templates' ),
+						'textLabel'           => __( 'Template Name' ),
+						'textPlaceholder'     => __( 'Template' ),
+						'buttonLabel'         => __( 'Save' ),
+						'toggleLabel'         => __( 'Automatically sync to the cloud' ),
+						'templateSaved'       => __( 'Template Saved.' ),
+						'templatePublished'   => __( 'Template Published.' ),
+						'templateUnpublished' => __( 'Template Unpublished.' ),
 					),
 					'library'          => array(
 						'libraryButton'  => __( 'Import from Templates Cloud' ),
@@ -96,10 +99,14 @@ class Elementor {
 							'searchLabel' => __( 'Search Templates' ),
 						),
 						'export'         => array(
-							'save'         => __( 'Save' ),
-							'title'        => __( 'Save your page to Templates Cloud' ),
-							'placeholder'  => __( 'Enter Template Name' ),
-							'defaultTitle' => __( 'Template' ),
+							'save'            => __( 'Save' ),
+							'title'           => __( 'Save your page to Templates Cloud' ),
+							'placeholder'     => __( 'Enter Template Name' ),
+							'labelScreenshot' => __( 'Screenshot URL' ),
+							'labelSlug'       => __( 'Site Slug' ),
+							'publish'         => __( 'Publish' ),
+							'unpublish'       => __( 'Unpublish' ),
+							'defaultTitle'    => __( 'Template' ),
 						),
 					),
 				)

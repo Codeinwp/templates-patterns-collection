@@ -36,7 +36,7 @@ const Exporter = () => {
 		'core/notices'
 	);
 
-	const { editPost, savePost } = useDispatch( 'core/editor' );
+	const { editPost } = useDispatch( 'core/editor' );
 
 	const content = useSelect( ( select ) => {
 		const {

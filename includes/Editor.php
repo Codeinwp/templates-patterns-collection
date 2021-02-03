@@ -107,6 +107,7 @@ class Editor {
 				},
 			)
 		);
+
 		if ( apply_filters( 'ti_tpc_can_predefine', false ) === false ) {
 			return;
 		}

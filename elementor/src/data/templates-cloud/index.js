@@ -186,16 +186,31 @@ export const updateTemplate = async ( params ) => {
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			...window.tiTpc.params,
-			...params,
+			...omit( params, 'content' ),
 		},
 	} );
 
 	try {
-		const response = await apiFetch( {
+		const obj = {
 			url,
 			method: 'POST',
 			parse: false,
-		} );
+		};
+
+		if ( params.content ) {
+			const data = {
+				title:
+					elementor.config.initial_document.settings.settings
+						.post_title || '',
+				version: '0.4',
+				type: 'page',
+				content: params.content,
+			};
+
+			obj.data = data;
+		}
+
+		const response = await apiFetch( { ...obj } );
 
 		if ( response.ok ) {
 			const content = await response.json();
@@ -246,7 +261,12 @@ export const deleteTemplate = async ( template ) => {
 	}
 };
 
-export const exportTemplate = async ( { title, type, content } ) => {
+export const exportTemplate = async ( {
+	title,
+	type,
+	content,
+	callback = () => {},
+} ) => {
 	const data = {
 		version: '0.4',
 		title,
@@ -277,6 +297,7 @@ export const exportTemplate = async ( { title, type, content } ) => {
 			if ( res.message ) {
 				dispatchNotification( res.message );
 			} else {
+				callback( res );
 				window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
 				dispatchNotification( window.tiTpc.exporter.templateSaved );
@@ -285,6 +306,47 @@ export const exportTemplate = async ( { title, type, content } ) => {
 	} catch ( error ) {
 		if ( error.message ) {
 			dispatchNotification( error.message );
+		}
+	}
+};
+
+export const publishTemplate = async ( params ) => {
+	const url = stringifyUrl( {
+		url: `${ window.tiTpc.endpoint }templates/${ params.template_id }/publish`,
+		query: {
+			cache: localStorage.getItem( 'tpcCacheBuster' ),
+			method: 'POST',
+			...window.tiTpc.params,
+			...omit( params, 'template_id' ),
+		},
+	} );
+
+	try {
+		const response = await apiFetch( {
+			url,
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer  ${ window.tiTpc.bearer || '' } `,
+			},
+		} );
+		if ( response.ok ) {
+			const content = await response.json();
+			if ( content.message ) {
+				dispatchNotification( content.message );
+				return { success: false };
+			}
+		} else if ( response.message ) {
+			dispatchNotification( response.message );
+			return { success: false };
+		}
+
+		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
+
+		return { success: true };
+	} catch ( error ) {
+		if ( error.message ) {
+			dispatchNotification( error.message );
+			return { success: false };
 		}
 	}
 };

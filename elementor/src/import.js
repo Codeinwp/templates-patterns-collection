@@ -73,7 +73,7 @@ if ( placeholder ) {
 	);
 }
 
-elementor.on( 'preview:loaded', function () {
+elementor.on( 'preview:loaded', () => {
 	elementor.$previewContents[ 0 ].body.addEventListener(
 		'click',
 		( event ) => {

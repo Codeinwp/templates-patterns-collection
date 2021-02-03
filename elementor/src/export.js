@@ -1,9 +1,57 @@
+/* eslint-disable camelcase */
+/* eslint-disable @wordpress/no-global-event-listener */
 /* global elementor */
 import classnames from 'classnames';
 import { Button, Modal, TextControl } from '@wordpress/components';
 import { render, unmountComponentAtNode, useState } from '@wordpress/element';
 
-import { exportTemplate } from './data/templates-cloud/index.js';
+import {
+	exportTemplate,
+	updateTemplate,
+} from './data/templates-cloud/index.js';
+
+elementor.on( 'document:loaded', () => {
+	( async () => {
+		const id = elementor.config.document.id;
+		window.tiTpc.postModel = await new wp.api.models.Post( { id } );
+		await window.tiTpc.postModel.fetch();
+
+		const publishButton = document.querySelector(
+			'button#elementor-panel-saver-button-publish'
+		);
+
+		publishButton.addEventListener( 'click', async () => {
+			await window.tiTpc.postModel.fetch();
+
+			const {
+				_ti_tpc_template_sync,
+				_ti_tpc_template_id,
+			} = window.tiTpc.postModel.getMetas();
+
+			if (
+				! publishButton.className.includes( 'elementor-disabled' ) &&
+				_ti_tpc_template_sync &&
+				_ti_tpc_template_id
+			) {
+				const content = elementor.elements.toJSON( {
+					remove: [
+						'default',
+						'editSettings',
+						'defaultEditSettings',
+					],
+				} );
+
+				await updateTemplate( {
+					template_id: _ti_tpc_template_id,
+					template_name:
+						elementor.config.initial_document.settings.settings
+							.post_title || '',
+					content,
+				} );
+			}
+		} );
+	} )();
+} );
 
 document.addEventListener( 'DOMContentLoaded', () => {
 	const addExportMenuItem = ( groups, element ) => {
