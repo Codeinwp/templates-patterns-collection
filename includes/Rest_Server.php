@@ -318,7 +318,7 @@ class Rest_Server {
 					'meta_input'    => array(
 						'_elementor_data'          => $template['content'],
 						'_elementor_template_type' => 'wp-page',
-						'_elementor_edit_mode'     => 'builder'
+						'_elementor_edit_mode'     => 'builder',
 					),
 				)
 			);
