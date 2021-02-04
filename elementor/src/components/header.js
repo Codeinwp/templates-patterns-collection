@@ -166,21 +166,25 @@ const Header = ( {
 									</span>
 								</Button>
 
-								<Button
-									className="ti-tpc-templates-modal__header__item"
-									onClick={ () =>
-										updateCurrentTab( 'export' )
-									}
-								>
-									<i
-										className="eicon-save-o"
-										aria-hidden="true"
-										title={ window.tiTpc.library.save }
-									></i>
-									<span className="elementor-screen-only">
-										{ window.tiTpc.library.save }
-									</span>
-								</Button>
+								{ [ 'wp-post', 'wp-page' ].includes(
+									elementor.config.document.type
+								) && (
+									<Button
+										className="ti-tpc-templates-modal__header__item"
+										onClick={ () =>
+											updateCurrentTab( 'export' )
+										}
+									>
+										<i
+											className="eicon-save-o"
+											aria-hidden="true"
+											title={ window.tiTpc.library.save }
+										></i>
+										<span className="elementor-screen-only">
+											{ window.tiTpc.library.save }
+										</span>
+									</Button>
+								) }
 							</div>
 						) }
 					</div>

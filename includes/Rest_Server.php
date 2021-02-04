@@ -301,6 +301,22 @@ class Rest_Server {
 	 * @return int|\WP_Error
 	 */
 	private function insert_single_template( $template ) {
+		if ( 'elementor' === $template['template_type'] ) {
+			return wp_insert_post(
+				array(
+					'post_title'    => wp_strip_all_tags( $template['template_name'] ),
+					'post_status'   => 'publish',
+					'post_type'     => 'page',
+					'page_template' => 'page-templates/template-pagebuilder-full-width.php',
+					'meta_input'    => array(
+						'_elementor_data'          => $template['content'],
+						'_elementor_template_type' => 'wp-page',
+						'_elementor_edit_mode'     => 'builder'
+					),
+				)
+			);
+		}
+
 		return wp_insert_post(
 			array(
 				'post_title'    => wp_strip_all_tags( $template['template_name'] ),

@@ -12,8 +12,21 @@ import {
 
 elementor.on( 'document:loaded', () => {
 	( async () => {
+		if (
+			! [ 'wp-post', 'wp-page' ].includes(
+				elementor.config.document.type
+			)
+		) {
+			return null;
+		}
+
 		const id = elementor.config.document.id;
-		window.tiTpc.postModel = await new wp.api.models.Post( { id } );
+		if ( 'wp-page' === elementor.config.document.type ) {
+			window.tiTpc.postModel = await new wp.api.models.Page( { id } );
+		} else {
+			window.tiTpc.postModel = await new wp.api.models.Post( { id } );
+		}
+
 		await window.tiTpc.postModel.fetch();
 
 		const publishButton = document.querySelector(
