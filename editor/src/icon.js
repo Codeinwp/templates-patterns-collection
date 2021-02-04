@@ -1,7 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { Path, SVG } from '@wordpress/primitives';
+const { Path, SVG } = wp.primitives;
+import classnames from 'classnames';
 
 const icon = () => {
 	return (
@@ -29,7 +30,7 @@ const icon = () => {
 	);
 };
 
-export const iconBlack = () => {
+export const iconBlack = ({className}) => {
 	return (
 		<SVG
 			width="24"
@@ -37,6 +38,7 @@ export const iconBlack = () => {
 			viewBox="0 0 24 24"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
+			className={classnames(['tpc-icon', className])}
 		>
 			<Path
 				d="M22.8063 24H1.19365C0.534714 24 0 23.4653 0 22.8063V1.19365C0 0.534714 0.534714 0 1.19365 0H22.8063C23.4653 0 24 0.534714 24 1.19365V22.8063C24 23.4653 23.4653 24 22.8063 24Z"
