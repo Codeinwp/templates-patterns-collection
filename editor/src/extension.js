@@ -222,17 +222,18 @@ const Exporter = () => {
 						type: 'snackbar',
 					} );
 				} else {
-					if ( res.template_id ) {
-						setTemplateID( res.template_id );
-					}
-
 					window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
 					createSuccessNotice( __( 'Template saved.' ), {
 						type: 'snackbar',
 					} );
 
-					saveMeta();
+					if ( res.template_id ) {
+						setTemplateID( res.template_id );
+						saveMeta( { ID: res.template_id } );
+					} else {
+						saveMeta();
+					}
 				}
 			}
 		} catch ( error ) {
@@ -297,7 +298,7 @@ const Exporter = () => {
 		);
 	};
 
-	const saveMeta = () => {
+	const saveMeta = ( { ID = templateID } ) => {
 		let post = null;
 
 		if ( type === 'post' ) {
@@ -307,7 +308,7 @@ const Exporter = () => {
 		}
 
 		post.set( 'meta', {
-			_ti_tpc_template_id: templateID,
+			_ti_tpc_template_id: ID,
 			_ti_tpc_template_sync: templateSync,
 			_ti_tpc_screenshot_url: screenshotURL,
 			_ti_tpc_site_slug: siteSlug,

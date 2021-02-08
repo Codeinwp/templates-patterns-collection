@@ -58,17 +58,10 @@ const Export = ( { updateCurrentTab } ) => {
 				content,
 				callback: ( res ) => {
 					setTemplateID( res.template_id );
-					window.tiTpc.postModel.setMeta(
-						'_ti_tpc_template_sync',
-						templateSync
-					);
-
-					if ( templateSync ) {
-						window.tiTpc.postModel.setMeta(
-							'_ti_tpc_template_id',
-							res.template_id
-						);
-					}
+					window.tiTpc.postModel.set( 'meta', {
+						_ti_tpc_template_id: res.template_id,
+						_ti_tpc_template_sync: templateSync,
+					} );
 
 					window.tiTpc.postModel.save();
 				},
