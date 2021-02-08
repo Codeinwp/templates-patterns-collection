@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import VizSensor from 'react-visibility-sensor';
 
 import { chevronLeft, chevronRight, close } from '@wordpress/icons';
 import { useEffect, useState, Fragment } from '@wordpress/element';
@@ -12,7 +13,6 @@ import ListItem from './ListItem';
 import Filters from './Filters';
 import PreviewFrame from './PreviewFrame';
 import ImportTemplatesModal from './ImportTemplatesModal';
-import Pagination from '../../../../editor/src/components/pagination';
 
 const Library = ( {
 	isGeneral,
@@ -22,13 +22,24 @@ const Library = ( {
 	themeStatus,
 	currentTab,
 } ) => {
-	const [ library, setLibrary ] = useState( [] );
+	const [ library, setLibrary ] = useState( {
+		gutenberg: [],
+		elementor: [],
+	} );
+	const [ type, setType ] = useState( 'gutenberg' );
 	const [ toImport, setToImport ] = useState( [] );
 	const [ isGrid, setIsGrid ] = useState( isGeneral );
 	const [ searchQuery, setSearchQuery ] = useState( '' );
-	const [ currentPage, setCurrentPage ] = useState( 0 );
-	const [ totalPages, setTotalPages ] = useState( 0 );
+	const [ currentPage, setCurrentPage ] = useState( {
+		gutenberg: 0,
+		editor: 0,
+	} );
+	const [ totalPages, setTotalPages ] = useState( {
+		gutenberg: 0,
+		editor: 0,
+	} );
 	const [ isLoading, setLoading ] = useState( false );
+	const [ isFetching, setFetching ] = useState( false );
 	const [ previewUrl, setPreviewUrl ] = useState( '' );
 
 	const [ sortingOrder, setSortingOrder ] = useState( {
@@ -45,12 +56,35 @@ const Library = ( {
 	useEffect( () => {
 		setLoading( true );
 		loadTemplates();
-	}, [ isGeneral ] );
+		setSearchQuery( '' );
+
+		setCurrentPage( {
+			gutenberg: 0,
+			editor: 0,
+		} );
+
+		setTotalPages( {
+			gutenberg: 0,
+			editor: 0,
+		} );
+	}, [ isGeneral, type ] );
+
+	const EDITORS = {
+		gutenberg: {
+			label: __( 'Gutenberg' ),
+			icon: 'gutenberg.jpg',
+		},
+		elementor: {
+			label: __( 'Elementor' ),
+			icon: 'elementor.jpg',
+		},
+	};
 
 	const loadTemplates = ( updateItem = {} ) => {
 		const params = {
-			page: currentPage,
+			page: currentPage[ type ],
 			per_page: 12,
+			type,
 			...updateItem,
 		};
 
@@ -64,19 +98,29 @@ const Library = ( {
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
-			setLibrary( r.templates );
-			setTotalPages( r.total );
+			setLibrary( {
+				...library,
+				[ type ]: r.templates,
+			} );
+			setTotalPages( {
+				...totalPages,
+				[ type ]: r.total,
+			} );
 			setLoading( false );
 		} );
 	};
 
-	const handlePageChange = async ( index ) => {
-		setLoading( true );
-		setCurrentPage( index );
+	const handlePageChange = async ( index = currentPage[ type ] + 1 ) => {
+		setFetching( true );
+		setCurrentPage( {
+			...currentPage,
+			[ type ]: index,
+		} );
 
 		const params = {
 			page: index,
 			per_page: 12,
+			type,
 		};
 
 		if ( isGeneral ) {
@@ -89,17 +133,24 @@ const Library = ( {
 		}
 
 		await fetchLibrary( isGeneral, params ).then( ( r ) => {
-			setLibrary( r.templates );
-			setTotalPages( r.total );
+			setLibrary( {
+				...library,
+				[ type ]: [ ...library[ type ], ...r.templates ],
+			} );
+			setTotalPages( {
+				...totalPages,
+				[ type ]: r.total,
+			} );
 		} );
 
-		setLoading( false );
+		setFetching( false );
 	};
 
 	const handleSearch = () => {
 		setLoading( true );
 		const params = {
 			search: searchQuery,
+			type,
 			...getOrder(),
 		};
 		if ( isGeneral ) {
@@ -108,8 +159,11 @@ const Library = ( {
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
-			setLibrary( r.templates );
-			setTotalPages( r.total );
+			setLibrary( [ ...library, ...r.templates ] );
+			setTotalPages( {
+				...totalPages,
+				[ type ]: r.total,
+			} );
 			setLoading( false );
 		} );
 	};
@@ -129,25 +183,27 @@ const Library = ( {
 	};
 
 	const currentPreviewIndex =
-		library && library.findIndex( ( item ) => item.link === previewUrl );
+		library[ type ] &&
+		library[ type ].findIndex( ( item ) => item.link === previewUrl );
 	const previewedItem =
-		library && library.find( ( item ) => previewUrl === item.link );
+		library[ type ] &&
+		library[ type ].find( ( item ) => previewUrl === item.link );
 	const wrapClasses = classnames( 'cloud-items', { 'is-grid': isGrid } );
 
 	const handlePrevious = () => {
 		let newIndex = currentPreviewIndex - 1;
 		if ( currentPreviewIndex === 0 ) {
-			newIndex = library.length - 1;
+			newIndex = library[ type ].length - 1;
 		}
-		setPreviewUrl( library[ newIndex ].link );
+		setPreviewUrl( library[ type ][ newIndex ].link );
 	};
 
 	const handleNext = () => {
 		let newIndex = currentPreviewIndex + 1;
-		if ( currentPreviewIndex === library.length - 1 ) {
+		if ( currentPreviewIndex === library[ type ].length - 1 ) {
 			newIndex = 0;
 		}
-		setPreviewUrl( library[ newIndex ].link );
+		setPreviewUrl( library[ type ][ newIndex ].link );
 	};
 
 	const getOrder = () => {
@@ -176,16 +232,21 @@ const Library = ( {
 		setLoading( true );
 		const params = {
 			search: searchQuery,
+			type,
 			...order,
 		};
+
 		if ( isGeneral ) {
 			params.template_site_slug = 'general';
 			params.premade = true;
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
-			setLibrary( r.templates );
-			setTotalPages( r.total );
+			setLibrary( [ ...library, ...r.templates ] );
+			setTotalPages( {
+				...totalPages,
+				[ type ]: r.total,
+			} );
 			setLoading( false );
 		} );
 	};
@@ -193,6 +254,34 @@ const Library = ( {
 	return (
 		<div className={ wrapClasses }>
 			<>
+				<div className="editor-tabs">
+					{ Object.keys( EDITORS ).map( ( key ) => (
+						// eslint-disable-next-line jsx-a11y/anchor-is-valid
+						<a
+							key
+							href="#"
+							onClick={ () => setType( key ) }
+							className={ classnames( 'tab', {
+								active: type === key,
+							} ) }
+						>
+							<span className="icon-wrap">
+								<img
+									className="editor-icon"
+									src={
+										window.tiobDash.assets +
+										'img/' +
+										EDITORS[ key ].icon
+									}
+									alt={ EDITORS[ key ].label }
+								/>
+							</span>
+							<span className="editor">
+								{ EDITORS[ key ].label }
+							</span>
+						</a>
+					) ) }
+				</div>
 				<Filters
 					currentTab={ currentTab }
 					isGrid={ isGrid }
@@ -206,10 +295,10 @@ const Library = ( {
 				/>
 				{ isLoading && <Spinner /> }
 				{ ! isLoading &&
-					( library && library.length > 0 ? (
+					( library[ type ] && library[ type ].length > 0 ? (
 						<>
 							<div className="table">
-								{ library.map( ( item ) => (
+								{ library[ type ].map( ( item ) => (
 									<ListItem
 										sortingOrder={ getOrder() }
 										onPreview={ handlePreview }
@@ -222,11 +311,35 @@ const Library = ( {
 									/>
 								) ) }
 							</div>
-							<Pagination
-								total={ totalPages }
-								current={ currentPage }
-								onChange={ handlePageChange }
-							/>
+
+							<VizSensor
+								onChange={ ( isVisible ) => {
+									if ( ! isVisible ) {
+										return false;
+									}
+
+									if (
+										Number( totalPages[ type ] ) >
+										currentPage[ type ]
+									) {
+										handlePageChange();
+									}
+								} }
+							>
+								<span
+									style={ {
+										height: 10,
+										width: 10,
+										display: 'block',
+									} }
+								/>
+							</VizSensor>
+
+							{ isFetching && (
+								<div className="fetching-loader">
+									<Spinner />
+								</div>
+							) }
 						</>
 					) : (
 						<Fragment>{ __( 'No templates found.' ) }</Fragment>
@@ -249,7 +362,7 @@ const Library = ( {
 									icon={ close }
 									onClick={ () => setPreviewUrl( '' ) }
 								/>
-								{ library.length > 1 && (
+								{ library[ type ].length > 1 && (
 									<>
 										<Button
 											icon={

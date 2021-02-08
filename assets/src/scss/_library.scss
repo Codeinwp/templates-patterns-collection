@@ -211,6 +211,12 @@
 		margin-top: 50% !important;
 	}
 
+	.fetching-loader {
+		.components-spinner {
+			margin: 100px auto !important;
+		}
+	}
+
 	&.is-grid .table {
 		display: grid;
 		grid-template-columns: 1fr;
