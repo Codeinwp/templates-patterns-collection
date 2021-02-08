@@ -55,7 +55,6 @@ const Library = ( {
 
 	useEffect( () => {
 		setLoading( true );
-		loadTemplates();
 		setSearchQuery( '' );
 
 		setCurrentPage( {
@@ -67,6 +66,8 @@ const Library = ( {
 			gutenberg: 0,
 			editor: 0,
 		} );
+
+		loadTemplates();
 	}, [ isGeneral, type ] );
 
 	const EDITORS = {
@@ -159,7 +160,10 @@ const Library = ( {
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
-			setLibrary( [ ...library, ...r.templates ] );
+			setLibrary( {
+				...library,
+				[ type ]: [ ...r.templates ],
+			} );
 			setTotalPages( {
 				...totalPages,
 				[ type ]: r.total,
@@ -242,7 +246,10 @@ const Library = ( {
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
-			setLibrary( [ ...library, ...r.templates ] );
+			setLibrary( {
+				...library,
+				[ type ]: [ ...r.templates ],
+			} );
 			setTotalPages( {
 				...totalPages,
 				[ type ]: r.total,
