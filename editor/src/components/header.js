@@ -10,7 +10,7 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import icon from './../icon';
 import { fetchTemplates, fetchLibrary } from './../data/templates-cloud/index';
 
-const Header = ( { closeModal } ) => {
+const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 	const { setFetching, updateCurrentTab } = useDispatch( 'tpc/block-editor' );
 
 	const TABS = {
@@ -35,8 +35,19 @@ const Header = ( { closeModal } ) => {
 	const syncLibrary = async () => {
 		window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 		setFetching( true );
-		await fetchTemplates();
-		await fetchLibrary();
+
+		const order = getOrder();
+
+		await fetchTemplates( {
+			search: getSearchQuery(),
+			...order,
+		} );
+
+		await fetchLibrary( {
+			search: getSearchQuery(),
+			...order,
+		} );
+
 		setFetching( false );
 	};
 
