@@ -60,21 +60,24 @@ class Plugin_Importer {
 	 * @return WP_REST_Response
 	 */
 	public function install_plugins( WP_REST_Request $request ) {
-		if ( ! current_user_can( 'install_plugins' ) ) {
-			$this->logger->log( 'Current user cannot install plugins' );
-
-			return new WP_REST_Response(
-				array(
-					'success' => false,
-					'log'     => $this->log,
-					'data'    => 'ti__ob_perm_err_1',
-				)
-			);
-		}
-
-		do_action( 'themeisle_ob_before_plugins_install' );
+		require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		require_once( ABSPATH . 'wp-admin/includes/misc.php' );
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
 
 		$plugins = $request->get_json_params();
+
+		foreach ( $plugins as $slug => $state ) {
+			if ( ! $state || empty( $state ) ) {
+				unset( $plugins[ $slug ] );
+			}
+
+			if ( $this->plugin_dir_exists( $slug ) && $this->plugin_is_active( $slug ) ) {
+				unset( $plugins[ $slug ] );
+			}
+		}
+
 		if ( empty( $plugins ) || ! is_array( $plugins ) ) {
 			return new WP_REST_Response(
 				array(
@@ -84,13 +87,13 @@ class Plugin_Importer {
 			);
 		}
 
-		foreach ( $plugins as $slug => $state ) {
-			if ( ! $state || empty( $state ) ) {
-				unset( $plugins[ $slug ] );
-			}
-		}
+		do_action( 'themeisle_ob_before_plugins_install' );
 
-		$this->run_plugins_install( $plugins );
+		$install = $this->run_plugins_install( $plugins );
+
+		if ( $install instanceof WP_REST_Response ) {
+			return $install;
+		}
 
 		return new WP_REST_Response(
 			array(
@@ -104,18 +107,38 @@ class Plugin_Importer {
 	 * Install and activate plugins.
 	 *
 	 * @param array $plugins_array plugins formated slug => true.
+	 *
+	 *
+	 * @return WP_REST_Response
 	 */
 	public function run_plugins_install( $plugins_array ) {
-		$active_plugins = get_option( 'active_plugins' );
-
 		foreach ( $plugins_array as $plugin_slug => $true ) {
-			if ( in_array( $plugin_slug, $active_plugins ) ) {
-				continue;
-			}
 			$this->logger->log( "Installing {$plugin_slug}.", 'progress' );
-			$this->install_single_plugin( $plugin_slug );
+			$install = $this->install_single_plugin( $plugin_slug );
+			if ( ! $install ) {
+				$this->logger->log( 'Current user cannot install plugins.' );
+
+				return new WP_REST_Response(
+					array(
+						'success' => false,
+						'log'     => $this->log,
+						'data'    => 'no_plugin_install_permission',
+					)
+				);
+			}
 			$this->logger->log( "Activating {$plugin_slug}.", 'progress' );
-			$this->activate_single_plugin( $plugin_slug );
+			$activate = $this->activate_single_plugin( $plugin_slug );
+			if ( ! $activate ) {
+				$this->logger->log( 'Current user cannot activate plugins.' );
+
+				return new WP_REST_Response(
+					array(
+						'success' => false,
+						'log'     => $this->log,
+						'data'    => 'no_plugin_activation_permission',
+					)
+				);
+			}
 		}
 
 		$this->remove_possible_redirects();
@@ -139,21 +162,21 @@ class Plugin_Importer {
 	 * Install a single plugin
 	 *
 	 * @param string $plugin_slug plugin slug.
+	 *
+	 * @return bool
 	 */
 	private function install_single_plugin( $plugin_slug ) {
-		$plugin_dir = WP_PLUGIN_DIR . '/' . $plugin_slug;
+		// Plugin is already there.
+		if ( $this->plugin_dir_exists( $plugin_slug ) ) {
+			return true;
+		}
 
-		if ( is_dir( $plugin_dir ) ) {
-			return;
+		// User doesn't have permissions.
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return false;
 		}
 
 		do_action( 'themeisle_ob_before_single_plugin_install', $plugin_slug );
-
-		require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		require_once( ABSPATH . 'wp-admin/includes/misc.php' );
-		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
 
 		$api = plugins_api(
 			'plugin_information',
@@ -194,11 +217,13 @@ class Plugin_Importer {
 		if ( $install !== true ) {
 			$this->log .= 'Error: Install process failed (' . ucwords( $plugin_slug ) . ').' . "\n";
 
-			return;
+			return false;
 		}
 		$this->log .= 'Installed "' . ucwords( $plugin_slug ) . '"' . "\n ";
 
 		do_action( 'themeisle_ob_after_single_plugin_install', $plugin_slug );
+
+		return true;
 	}
 
 	/**
@@ -257,34 +282,43 @@ class Plugin_Importer {
 	 * Activate a single plugin
 	 *
 	 * @param string $plugin_slug plugin slug.
+	 *
+	 * @return bool
 	 */
 	private function activate_single_plugin( $plugin_slug ) {
 		$plugin_dir = WP_PLUGIN_DIR . '/' . $plugin_slug;
 
-		$plugin_path  = $this->get_plugin_path( $plugin_slug );
-		$plugin_entry = $this->get_plugin_entry( $plugin_slug );
+		$plugin_path = $this->get_plugin_path( $plugin_slug );
 
+		// Plugin isn't there.
 		if ( ! file_exists( $plugin_path ) ) {
 			$this->log .= 'No plugin with the slug "' . $plugin_slug . '" under that directory.' . "\n";
 
-			return;
+			return false;
 		}
 
 		do_action( 'themeisle_ob_before_single_plugin_activation', $plugin_slug );
 
-		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-
-		if ( is_plugin_active( $plugin_entry ) ) {
+		// Plugin is already active.
+		if ( $this->plugin_is_active( $plugin_slug ) ) {
 			$this->log .= '"' . ucwords( $plugin_slug ) . '" already active.' . "\n";
 
-			return;
+			return true;
 		}
+
+		// User doesn't have permissions.
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return false;
+		}
+
 		$this->maybe_provide_activation_help( $plugin_slug, $plugin_dir );
 
 		activate_plugin( $plugin_path );
 		$this->log .= 'Activated ' . ucwords( $plugin_slug ) . '.' . "\n";
 
 		do_action( 'themeisle_ob_after_single_plugin_activation', $plugin_slug );
+
+		return true;
 	}
 
 	/**
@@ -297,5 +331,30 @@ class Plugin_Importer {
 		if ( $slug === 'woocommerce' ) {
 			require_once( $path . '/includes/admin/wc-admin-functions.php' );
 		}
+	}
+
+	/**
+	 * Check if plugin directory exists.
+	 *
+	 * @param string $slug plugin slug.
+	 *
+	 * @retun bool
+	 */
+	private function plugin_dir_exists( $slug ) {
+		return is_dir( WP_PLUGIN_DIR . '/' . $slug );
+	}
+
+	/**
+	 * Check if plugin is already active.
+	 *
+	 * @param string $slug plugin slug.
+	 *
+	 * @retun bool
+	 */
+	private function plugin_is_active( $slug ) {
+		$plugin_entry = $this->get_plugin_entry( $slug );
+		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+		return is_plugin_active( $plugin_entry );
 	}
 }
