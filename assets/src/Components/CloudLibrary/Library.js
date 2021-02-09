@@ -265,7 +265,7 @@ const Library = ( {
 					{ Object.keys( EDITORS ).map( ( key ) => (
 						// eslint-disable-next-line jsx-a11y/anchor-is-valid
 						<a
-							key
+							key={key}
 							href="#"
 							onClick={ () => setType( key ) }
 							className={ classnames( 'tab', {
