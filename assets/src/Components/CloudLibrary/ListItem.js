@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import { check, edit, group, page, trash, update } from '@wordpress/icons';
+import { check, edit, page, trash, update } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import { Button, Icon, TextControl } from '@wordpress/components';
 
@@ -14,6 +14,7 @@ import {
 } from './common';
 
 const ListItem = ( {
+	sortingOrder,
 	item,
 	loadTemplates,
 	userTemplate,
@@ -63,7 +64,7 @@ const ListItem = ( {
 
 		deleteTemplate( item.template_id ).then( ( r ) => {
 			if ( r.success ) {
-				loadTemplates();
+				loadTemplates( sortingOrder );
 				setLoading( false );
 			}
 		} );

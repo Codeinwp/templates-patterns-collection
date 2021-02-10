@@ -73,6 +73,16 @@
   }
 }
 
+.cloud-items {
+	.editor-tabs {
+		a {	  
+		  &:not(:first-child) {
+			margin-left: 20px;
+		  }
+		}
+	}
+}
+
 @mixin ob-editor-tabs--tablet() {
 }
 

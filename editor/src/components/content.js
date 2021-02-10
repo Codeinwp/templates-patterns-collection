@@ -5,7 +5,16 @@ import Preview from './preview';
 import TemplatesContent from './templates-content';
 import Notices from './notices';
 
-const Content = ( { importBlocks, isPreview, currentTab, isFetching } ) => {
+const Content = ( {
+	importBlocks,
+	getOrder,
+	setQuery,
+	getSearchQuery,
+	setSorting,
+	isPreview,
+	currentTab,
+	isFetching,
+} ) => {
 	if ( isPreview && currentTab === 'library' ) {
 		return (
 			<Preview isFetching={ isFetching } importBlocks={ importBlocks } />
@@ -20,6 +29,10 @@ const Content = ( { importBlocks, isPreview, currentTab, isFetching } ) => {
 					isFetching={ isFetching }
 					isGeneral={ currentTab === 'templates' }
 					importBlocks={ importBlocks }
+					getOrder={ getOrder }
+					setQuery={ setQuery }
+					getSearchQuery={ getSearchQuery }
+					setSorting={ setSorting }
 				/>
 			) }
 			{ currentTab === 'patterns' &&

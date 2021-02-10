@@ -11,6 +11,7 @@
     <exclude-pattern type="relative">sample-theme</exclude-pattern>
     <exclude-pattern type="relative">node_modules</exclude-pattern>
     <exclude-pattern type="relative">tests</exclude-pattern>
+    <exclude-pattern type="relative">**/build</exclude-pattern>
 
     <rule ref="WordPress-Core">
         <exclude name="WordPress.PHP.YodaConditions.NotYoda"/>

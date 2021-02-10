@@ -5,19 +5,15 @@ const DEFAULT_STATE = {
 	isPreview: false,
 	tab: parseInt( window.tiTpc.tier ) === 3 ? 'library' : 'templates',
 	templates: [],
-	patterns: [],
 	library: {
 		items: [],
 		currentPage: 0,
 		totalPages: 0,
 	},
-	preview: {
-		type: 'templates',
-		item: {},
-	},
+	preview: {},
 };
 
-registerStore( 'tpc/block-editor', {
+registerStore( 'tpc/elementor', {
 	reducer( state = DEFAULT_STATE, action ) {
 		if ( 'SET_FETCHING' === action.type ) {
 			return {
@@ -37,7 +33,6 @@ registerStore( 'tpc/block-editor', {
 			return {
 				...state,
 				tab: action.tab,
-				isPreview: false,
 			};
 		}
 
@@ -49,13 +44,6 @@ registerStore( 'tpc/block-editor', {
 					currentPage: Number( action.currentPage ),
 					totalPages: Number( action.totalPages ),
 				},
-			};
-		}
-
-		if ( 'UPDATE_PATTERNS' === action.type ) {
-			return {
-				...state,
-				patterns: action.items,
 			};
 		}
 
@@ -97,10 +85,6 @@ registerStore( 'tpc/block-editor', {
 			return state.templates;
 		},
 
-		getPatterns( state ) {
-			return state.patterns;
-		},
-
 		getLibrary( state ) {
 			return state.library;
 		},
@@ -138,13 +122,6 @@ registerStore( 'tpc/block-editor', {
 				items,
 				currentPage,
 				totalPages,
-			};
-		},
-
-		updatePatterns( items ) {
-			return {
-				type: 'UPDATE_PATTERNS',
-				items,
 			};
 		},
 
