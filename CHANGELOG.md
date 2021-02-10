@@ -1,3 +1,11 @@
+##### [Version 1.1.3](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.2...v1.1.3) (2021-02-10)
+
+- Adds support for Elementor templates upload to Template Cloud
+- Adds support for single Elementor templates import
+- Fixe issue with CSS variables not being properly imported when importing individual templates
+- Fixes icon misalignment inside the WordPress editor
+- Allow site import even if the user doesn't have permissions to install plugins if the plugins are already installed and he can activate them
+
 ##### [Version 1.1.2](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.1...v1.1.2) (2020-12-17)
 
 * Fix rest meta fields not getting registered
