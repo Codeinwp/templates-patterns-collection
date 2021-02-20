@@ -59,6 +59,13 @@ class Main {
 	public $beaver = null;
 
 	/**
+	 * Elementor
+	 *
+	 * @var Elementor
+	 */
+	public $elementor = null;
+
+	/**
 	 * Sites listing
 	 *
 	 * @var Sites_Listing
@@ -90,6 +97,7 @@ class Main {
 	private function init() {
 		$this->setup_editor();
 		$this->setup_beaver();
+		$this->setup_elementor();
 		$this->setup_sites_listing();
 
 		if ( ! $this->should_load() ) {
@@ -132,7 +140,6 @@ class Main {
 		$this->admin->init();
 	}
 
-
 	/**
 	 * Setup editor functionality.
 	 *
@@ -156,6 +163,16 @@ class Main {
 
 		$this->beaver = new TI_Beaver();
 		$this->beaver->init();
+	}
+
+	/**
+	 * Setup Elementor functionality.
+	 *
+	 * @return void
+	 */
+	private function setup_elementor() {
+		$this->elementor = new Elementor();
+		$this->elementor->init();
 	}
 
 	/**

@@ -4,7 +4,7 @@ import { Button, Placeholder, Spinner } from '@wordpress/components';
 import { useViewportMatch } from '@wordpress/compose';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
-const { BlockPreview } = wp.blockEditor;
+import { BlockPreview } from '@wordpress/block-editor';
 
 import { importTemplate } from './../data/templates-cloud/index';
 

@@ -53,6 +53,7 @@ class Editor {
 					'params'       => array(
 						'site_url'   => get_site_url(),
 						'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+						'type'       => 'gutenberg',
 					),
 					'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
 				)
@@ -106,6 +107,7 @@ class Editor {
 				},
 			)
 		);
+
 		if ( apply_filters( 'ti_tpc_can_predefine', false ) === false ) {
 			return;
 		}
