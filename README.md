@@ -27,6 +27,13 @@ No account is required to access the service template collection and the privacy
 
 ## Changelog ##
 
+##### [Version 1.1.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.3...v1.1.4) (2021-02-22)
+
+- fix Elementor exporter sometimes not working
+
+
+
+
 ##### [Version 1.1.3](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.2...v1.1.3) (2021-02-10)
 
 - Adds support for Elementor templates upload to Template Cloud
