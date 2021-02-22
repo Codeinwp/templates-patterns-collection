@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Templates Patterns Collection plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Templates Patterns Collection 1.1.1\n"
+"Project-Id-Version: Templates Patterns Collection 1.1.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/templates-patterns-collection\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
