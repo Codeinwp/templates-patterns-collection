@@ -21,7 +21,7 @@ elementor.on( 'document:loaded', () => {
 		}
 
 		const id = elementor.config.document.id;
-		if ( 'wp-page' === elementor.config.document.type ) {
+		if ( 'page' === window.tiTpc.postType ) {
 			window.tiTpc.postModel = await new wp.api.models.Page( { id } );
 		} else {
 			window.tiTpc.postModel = await new wp.api.models.Post( { id } );
