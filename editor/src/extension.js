@@ -185,7 +185,11 @@ const Exporter = () => {
 
 		let url;
 
-		const doesExist = await getTemplate( templateID );
+		let doesExist = false;
+
+		if ( templateID ) {
+			doesExist = await getTemplate( templateID );
+		}
 
 		if ( doesExist ) {
 			url = stringifyUrl( {
