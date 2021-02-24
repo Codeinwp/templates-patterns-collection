@@ -6,6 +6,7 @@ import { Button, Modal, TextControl } from '@wordpress/components';
 import { render, unmountComponentAtNode, useState } from '@wordpress/element';
 
 import {
+	getTemplate,
 	exportTemplate,
 	updateTemplate,
 } from './data/templates-cloud/index.js';
@@ -41,10 +42,13 @@ elementor.on( 'document:loaded', () => {
 				_ti_tpc_template_id,
 			} = window.tiTpc.postModel.getMetas();
 
+			const doesExist = await getTemplate( _ti_tpc_template_id );
+
 			if (
 				! publishButton.className.includes( 'elementor-disabled' ) &&
 				_ti_tpc_template_sync &&
-				_ti_tpc_template_id
+				_ti_tpc_template_id &&
+				doesExist
 			) {
 				const content = elementor.elements.toJSON( {
 					remove: [

@@ -6,6 +6,7 @@ import { withDispatch } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 
 import {
+	getTemplate,
 	exportTemplate,
 	publishTemplate,
 	updateTemplate,
@@ -45,7 +46,9 @@ const Export = ( { updateCurrentTab } ) => {
 			remove: [ 'default', 'editSettings', 'defaultEditSettings' ],
 		} );
 
-		if ( templateID ) {
+		const doesExist = await getTemplate( templateID );
+
+		if ( doesExist ) {
 			await updateTemplate( {
 				template_id: templateID,
 				template_name: title,

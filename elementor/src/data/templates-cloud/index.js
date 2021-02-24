@@ -116,6 +116,36 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 	}
 };
 
+export const getTemplate = async ( template ) => {
+	const url = stringifyUrl( {
+		url: `${ window.tiTpc.endpoint }templates/${ template }`,
+		query: {
+			cache: localStorage.getItem( 'tpcCacheBuster' ),
+			...window.tiTpc.params,
+		},
+	} );
+
+	try {
+		const response = await apiFetch( {
+			url,
+			method: 'GET',
+			parse: false,
+		} );
+
+		if ( response.ok ) {
+			const content = await response.json();
+
+			if ( content.message ) {
+				return false;
+			}
+
+			return true;
+		}
+	} catch ( error ) {
+		return false;
+	}
+};
+
 export const importTemplate = async ( template ) => {
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ template }/import`,
