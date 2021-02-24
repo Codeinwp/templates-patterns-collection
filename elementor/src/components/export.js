@@ -46,7 +46,11 @@ const Export = ( { updateCurrentTab } ) => {
 			remove: [ 'default', 'editSettings', 'defaultEditSettings' ],
 		} );
 
-		const doesExist = await getTemplate( templateID );
+		let doesExist = false;
+
+		if ( templateID ) {
+			doesExist = await getTemplate( templateID );
+		}
 
 		if ( doesExist ) {
 			await updateTemplate( {
