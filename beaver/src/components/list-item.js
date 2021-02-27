@@ -28,22 +28,32 @@ const ListItem = ( {
 
 	const importItem = async () => {
 		setLoading( 'importing' );
-		await closeModal();
 		FLBuilder.showAjaxLoader();
 
-		await FLBuilder.ajax(
+		FLBuilder.ajax(
 			{
-				action: 'ti_apply_template',
-				template: item.template_id,
-				append: 1,
+				action: 'ti_get_position',
+				node: nodeID,
 			},
-			( response ) => {
+			async ( response ) => {
+				await closeModal();
 
-				const data = FLBuilder._jsonParse( response );
-				if ( data.layout ) {
-					FLBuilder._renderLayout( data.layout );
-					FLBuilder.triggerHook( 'didApplyTemplate' );
-				}
+				const position = response;
+
+				FLBuilder.ajax(
+					{
+						action: 'ti_apply_template',
+						template: item.template_id,
+						position,
+					},
+					( res ) => {
+						const data = FLBuilder._jsonParse( res );
+						if ( data.layout ) {
+							FLBuilder._renderLayout( data.layout );
+							FLBuilder.triggerHook( 'didApplyTemplate' );
+						}
+					}
+				);
 			}
 		);
 	};

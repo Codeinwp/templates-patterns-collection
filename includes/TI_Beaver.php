@@ -47,7 +47,8 @@ class TI_Beaver extends FLBuilderModule {
 	 * Initialize the Admin.
 	 */
 	public function init() {
-		FLBuilderAJAX::add_action( 'ti_apply_template', __CLASS__ . '::apply_template', array( 'template', 'append' ) );
+		FLBuilderAJAX::add_action( 'ti_apply_template', __CLASS__ . '::apply_template', array( 'template', 'position' ) );
+		FLBuilderAJAX::add_action( 'ti_get_position', __CLASS__ . '::get_position', array( 'node' ) );
 		add_action( 'wp_head', array( $this, 'inline_script' ), 9 );
 	}
 
@@ -140,10 +141,15 @@ class TI_Beaver extends FLBuilderModule {
 		return $serialized_string;
 	}
 
+	static public function get_position( $node ) {
+		$row = FLBuilderModel::get_node_parent_by_type( $node, 'row' );
+		return $row->position;
+	}
+
 	/**
 	 * Register editor styles.
 	 */
-	static public function apply_template( $template, $append = false ) {
+	static public function apply_template( $template, $position = 0 ) {
 		$url = add_query_arg( array(
 			'site_url'   => get_site_url(),
 			'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
@@ -157,16 +163,10 @@ class TI_Beaver extends FLBuilderModule {
 		$response = unserialize( $response );
 		$response = $response['layout'][0];
 
-		$row_position = FLBuilderModel::next_node_position( 'row' );
-
-		// Delete existing nodes and settings?
-		if ( ! $append ) {
-			FLBuilderModel::delete_layout_data( 'draft' );
-			FLBuilderModel::delete_layout_settings( 'draft' );
-		}
+		$row_position = $position;
+		$new_items_count = 0;
 
 		if ( isset( $response->nodes ) ) {
-			// $response->nodes = serialize( $response->nodes );
 			// Get new ids for the template nodes.
 			$response->nodes = FLBuilderModel::generate_new_node_ids( $response->nodes );
 
@@ -178,11 +178,17 @@ class TI_Beaver extends FLBuilderModule {
 			$layout_settings = FLBuilderModel::get_layout_settings();
 
 			// Reposition rows?
-			if ( $append ) {
-				foreach ( $response->nodes as $node_id => $node ) {
+			foreach ( $response->nodes as $node_id => $node ) {
+				if ( 'row' === $node->type ) {
+					$response->nodes[ $node_id ]->position += $row_position;
+					$new_items_count++;
+				}
+			}
 
-					if ( 'row' == $node->type ) {
-						$response->nodes[ $node_id ]->position += $row_position;
+			if ( $position > 0 && count( $response->nodes ) > 1 ) {
+				foreach ( $layout_data as $node_id => $node ) {
+					if ( 'row' === $node->type && (int) $position <= (int) $layout_data[ $node_id ]->position ) {
+						$layout_data[ $node_id ]->position += $new_items_count;
 					}
 				}
 			}
