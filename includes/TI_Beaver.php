@@ -185,7 +185,7 @@ class TI_Beaver extends FLBuilderModule {
 				}
 			}
 
-			if ( $position > 0 && count( $response->nodes ) > 1 ) {
+			if ( count( $response->nodes ) > 1 && count( $layout_data ) > 0 ) {
 				foreach ( $layout_data as $node_id => $node ) {
 					if ( 'row' === $node->type && (int) $position <= (int) $layout_data[ $node_id ]->position ) {
 						$layout_data[ $node_id ]->position += $new_items_count;
