@@ -4,8 +4,6 @@ import Preview from './preview';
 import TemplatesContent from './templates-content';
 
 const Content = ( {
-	nodeID,
-	closeModal,
 	importTemplate,
 	getOrder,
 	setQuery,
@@ -36,8 +34,6 @@ const Content = ( {
 	return (
 		<div className="tpc-modal-content">
 			<TemplatesContent
-				nodeID={ nodeID }
-				closeModal={ closeModal }
 				isFetching={ isFetching }
 				isGeneral={ currentTab === 'templates' }
 				importTemplate={ importTemplate }

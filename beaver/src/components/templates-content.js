@@ -9,8 +9,6 @@ import Pagination from './pagination';
 import { fetchLibrary, fetchTemplates } from './../data/templates-cloud/index';
 
 const TemplatesContent = ( {
-	nodeID,
-	closeModal,
 	importTemplate,
 	isGeneral = false,
 	isFetching,
@@ -166,8 +164,6 @@ const TemplatesContent = ( {
 			<div className={ contentClasses }>
 				{ items.map( ( item ) => (
 					<ListItem
-						nodeID={ nodeID }
-						closeModal={ closeModal }
 						sortingOrder={ getOrder() }
 						deletable={ ! isGeneral }
 						key={ item.template_id }

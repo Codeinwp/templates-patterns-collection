@@ -13,50 +13,11 @@ import {
 	fetchLibrary,
 } from './../data/templates-cloud/index';
 
-const ListItem = ( {
-	nodeID,
-	closeModal,
-	layout,
-	item,
-	importBlocks,
-	deletable,
-} ) => {
+const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 	const { togglePreview, setPreviewData } = useDispatch( 'tpc/beaver' );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isEditing, setEditing ] = useState( false );
 	const [ itemName, setItemName ] = useState( item.template_name );
-
-	const importItem = async () => {
-		setLoading( 'importing' );
-		FLBuilder.showAjaxLoader();
-
-		FLBuilder.ajax(
-			{
-				action: 'ti_get_position',
-				node: nodeID,
-			},
-			async ( response ) => {
-				await closeModal();
-
-				const position = response;
-
-				FLBuilder.ajax(
-					{
-						action: 'ti_apply_template',
-						template: item.template_id,
-						position,
-					},
-					( res ) => {
-						const data = FLBuilder._jsonParse( res );
-						if ( data.layout ) {
-							FLBuilder._renderLayout( data.layout );
-							FLBuilder.triggerHook( 'didApplyTemplate' );
-						}
-					}
-				);
-			}
-		);
-	};
 
 	const updateItem = async () => {
 		setLoading( 'updating' );
@@ -113,7 +74,7 @@ const ListItem = ( {
 							isPrimary
 							isBusy={ 'importing' === isLoading }
 							disabled={ false !== isLoading }
-							onClick={ importItem }
+							onClick={ () => importBlocks( item.template_id ) }
 						>
 							{ window.tiTpc.library.actions.import }
 						</Button>
@@ -227,7 +188,7 @@ const ListItem = ( {
 					isPrimary
 					isBusy={ 'importing' === isLoading }
 					disabled={ false !== isLoading }
-					onClick={ importItem }
+					onClick={ () => importBlocks( item.template_id ) }
 				>
 					{ window.tiTpc.library.actions.import }
 				</Button>

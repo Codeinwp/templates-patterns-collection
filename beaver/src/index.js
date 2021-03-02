@@ -1,8 +1,8 @@
 /* global FLBuilder */
 
 import { Modal } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
-import { render, unmountComponentAtNode, useState } from '@wordpress/element';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { render, useState } from '@wordpress/element';
 
 import './data/store/index.js';
 import './editor.scss';
@@ -10,10 +10,14 @@ import Header from './components/header';
 import Content from './components/content';
 
 // eslint-disable-next-line no-unused-vars
-const App = ( { nodeID } ) => {
+const App = () => {
 	const currentTab = useSelect( ( select ) =>
 		select( 'tpc/beaver' ).getCurrentTab()
 	);
+
+	const [ nodeID, setNodeID ] = useState( null );
+
+	const [ isOpen, setOpen ] = useState( false );
 
 	const [ searchQuery, setSearchQuery ] = useState( {
 		templates: '',
@@ -31,8 +35,17 @@ const App = ( { nodeID } ) => {
 		},
 	} );
 
+	const { setFetching } = useDispatch( 'tpc/beaver' );
+
+	const initModal = ( node ) => {
+		setNodeID( node );
+		setOpen( true );
+	};
+
+	window.tiTpc.initBeaver = ( node ) => initModal( node );
+
 	const closeModal = () => {
-		unmountComponentAtNode( document.getElementById( 'ti-tpc-beaver' ) );
+		setOpen( false );
 		FLBuilder._settingsCancelClicked();
 	};
 
@@ -82,42 +95,75 @@ const App = ( { nodeID } ) => {
 		return sortingOrder.library;
 	};
 
-	const importTemplate = () => {};
+	const importTemplate = ( template ) => {
+		setFetching( true );
 
-	return (
-		<Modal
-			title={ window.tiTpc.library.templatesCloud }
-			shouldCloseOnClickOutside={ false }
-			onRequestClose={ closeModal }
-			isDismissible={ false }
-			overlayClassName="tpc-template-cloud-modal"
-		>
-			<Header
-				closeModal={ closeModal }
-				getOrder={ getOrder }
-				getSearchQuery={ getSearchQuery }
-			/>
+		FLBuilder.ajax(
+			{
+				action: 'ti_get_position',
+				node: nodeID,
+			},
+			( response ) => {
+				FLBuilder._settingsCancelClicked();
+				const position = response;
 
-			<Content
-				nodeID={ nodeID }
-				closeModal={ closeModal }
-				importTemplate={ importTemplate }
-				getOrder={ getOrder }
-				setQuery={ setQuery }
-				getSearchQuery={ getSearchQuery }
-				setSorting={ setSorting }
-			/>
-		</Modal>
-	);
+				FLBuilder.ajax(
+					{
+						action: 'ti_apply_template',
+						template,
+						position,
+					},
+					( res ) => {
+						closeModal();
+						setFetching( false );
+
+						const data = FLBuilder._jsonParse( res );
+						if ( data.layout ) {
+							FLBuilder._renderLayout( data.layout );
+							FLBuilder.triggerHook( 'didApplyTemplate' );
+						}
+					}
+				);
+			}
+		);
+	};
+
+	if ( isOpen ) {
+		return (
+			<Modal
+				title={ window.tiTpc.library.templatesCloud }
+				shouldCloseOnClickOutside={ false }
+				onRequestClose={ closeModal }
+				isDismissible={ false }
+				overlayClassName="tpc-template-cloud-modal"
+			>
+				<Header
+					closeModal={ closeModal }
+					getOrder={ getOrder }
+					getSearchQuery={ getSearchQuery }
+				/>
+
+				<Content
+					importTemplate={ importTemplate }
+					getOrder={ getOrder }
+					setQuery={ setQuery }
+					getSearchQuery={ getSearchQuery }
+					setSorting={ setSorting }
+				/>
+			</Modal>
+		);
+	}
+
+	return <p>:)</p>;
 };
 
 if ( ! window.tiTpc ) {
 	window.tiTpc = {};
 }
 
-window.tiTpc.initBeaver = ( nodeID ) => {
-	render(
-		<App nodeID={ nodeID } />,
-		document.getElementById( 'ti-tpc-beaver' )
-	);
-};
+const elem = document.createElement( 'div' );
+elem.id = 'ti-tpc-beaver-modal';
+elem.classname = 'hidden';
+document.body.appendChild( elem );
+
+render( <App />, document.getElementById( 'ti-tpc-beaver-modal' ) );
