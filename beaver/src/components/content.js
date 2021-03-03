@@ -26,7 +26,7 @@ const Content = ( {
 		return (
 			<Preview
 				isFetching={ isFetching }
-				importBlocks={ importTemplate }
+				importTemplate={ importTemplate }
 			/>
 		);
 	}

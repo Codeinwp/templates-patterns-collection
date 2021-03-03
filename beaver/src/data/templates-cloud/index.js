@@ -7,7 +7,8 @@ import { dispatch, select } from '@wordpress/data';
 
 const { omit } = lodash;
 
-const dispatchNotification = ( message ) => console.log( message );
+// eslint-disable-next-line no-console
+const dispatchNotification = ( message ) => console.warning( message );
 
 const { setFetching } = dispatch( 'tpc/beaver' );
 

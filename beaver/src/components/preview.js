@@ -2,9 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { Button, Placeholder, Spinner } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 
-// import { importTemplate } from './../data/templates-cloud/index';
-
-const Preview = ( { isFetching, importBlocks } ) => {
+const Preview = ( { isFetching, importTemplate } ) => {
 	const { togglePreview } = useDispatch( 'tpc/beaver' );
 
 	const { item } = useSelect( ( select ) =>
@@ -13,8 +11,7 @@ const Preview = ( { isFetching, importBlocks } ) => {
 
 	const importItem = () => {
 		togglePreview();
-		// importTemplate();
-		// importBlocks( content );
+		importTemplate( item.template_id );
 	};
 
 	return (

@@ -163,7 +163,7 @@ if ( ! window.tiTpc ) {
 
 const elem = document.createElement( 'div' );
 elem.id = 'ti-tpc-beaver-modal';
-elem.classname = 'hidden';
+elem.className = 'hidden';
 document.body.appendChild( elem );
 
 render( <App />, document.getElementById( 'ti-tpc-beaver-modal' ) );

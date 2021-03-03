@@ -169,7 +169,7 @@ const TemplatesContent = ( {
 						key={ item.template_id }
 						layout={ layout }
 						item={ item }
-						importBlocks={ importTemplate }
+						importTemplate={ importTemplate }
 					/>
 				) ) }
 			</div>

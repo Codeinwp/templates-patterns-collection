@@ -13,7 +13,7 @@ import {
 	fetchLibrary,
 } from './../data/templates-cloud/index';
 
-const ListItem = ( { layout, item, importBlocks, deletable } ) => {
+const ListItem = ( { layout, item, importTemplate, deletable } ) => {
 	const { togglePreview, setPreviewData } = useDispatch( 'tpc/beaver' );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isEditing, setEditing ] = useState( false );
@@ -74,7 +74,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 							isPrimary
 							isBusy={ 'importing' === isLoading }
 							disabled={ false !== isLoading }
-							onClick={ () => importBlocks( item.template_id ) }
+							onClick={ () => importTemplate( item.template_id ) }
 						>
 							{ window.tiTpc.library.actions.import }
 						</Button>
@@ -188,7 +188,7 @@ const ListItem = ( { layout, item, importBlocks, deletable } ) => {
 					isPrimary
 					isBusy={ 'importing' === isLoading }
 					disabled={ false !== isLoading }
-					onClick={ () => importBlocks( item.template_id ) }
+					onClick={ () => importTemplate( item.template_id ) }
 				>
 					{ window.tiTpc.library.actions.import }
 				</Button>
