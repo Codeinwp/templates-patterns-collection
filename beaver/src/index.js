@@ -1,3 +1,4 @@
+/* eslint-disable @wordpress/no-global-event-listener */
 /* global FLBuilder */
 
 import { Modal } from '@wordpress/components';
@@ -163,7 +164,57 @@ if ( ! window.tiTpc ) {
 
 const elem = document.createElement( 'div' );
 elem.id = 'ti-tpc-beaver-modal';
-elem.className = 'hidden';
+elem.style = 'display:none;';
 document.body.appendChild( elem );
+
+const contextMenu = document.getElementById( 'tmpl-fl-row-overlay' );
+
+const tpcExport = ( e ) => {
+	const row = e.closest( '.fl-row' );
+	const node = row.dataset.node;
+
+	const message = `<div class="tpc-template-cloud-export-modal">
+		<h1>${ window.tiTpc.exporter.modalLabel }</h1>
+		<label for="tpc-${ node }">${ window.tiTpc.exporter.textLabel }</label>
+		<input id="tpc-${ node }" type="text" placeholder="${ window.tiTpc.exporter.textPlaceholder }" />
+	</div>`;
+
+	FLBuilder.confirm( {
+		message,
+		ok: () => {
+			const input = document.getElementById( `tpc-${ node }` );
+			const title = input.value || 'Template';
+			setTimeout( function () {
+				FLBuilder.showAjaxLoader();
+				FLBuilder.ajax(
+					{
+						action: 'ti_export_template',
+						node,
+						title,
+					},
+					( res ) => {
+						FLBuilder.hideAjaxLoader();
+					}
+				);
+			}, 1000 );
+		},
+		strings: {
+			ok: window.tiTpc.exporter.buttonLabel,
+			cancel: window.tiTpc.exporter.cancelLabel,
+		},
+	} );
+};
+
+window.tpcExport = tpcExport;
+
+if ( contextMenu ) {
+	const text = contextMenu.textContent;
+	contextMenu.textContent = text.replace(
+		// eslint-disable-next-line prettier/prettier
+		'<li><a class=\"fl-block-row-reset\" href=\"javascript:void(0);\">Reset Row Width</a></li>',
+		// eslint-disable-next-line prettier/prettier
+		'<li><a class=\"fl-block-row-reset\" href=\"javascript:void(0);\">Reset Row Width</a></li><li><a class=\"fl-block-row-tpc-export\" onclick="window.tpcExport(this)" href=\"javascript:void(0);\">Export to Templates Cloud</a></li>'
+	);
+}
 
 render( <App />, document.getElementById( 'ti-tpc-beaver-modal' ) );

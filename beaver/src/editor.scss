@@ -1,5 +1,22 @@
-.hidden {
-	display: hide;
+.fl-row-overlay {
+	.fl-builder-has-submenu {
+		&.fl-builder-submenu-open > ul.fl-builder-submenu {
+			width: 200px;
+		}
+	}
+}
+
+.tpc-template-cloud-export-modal {
+	display: flex;
+	flex-direction: column;
+
+	h1 {
+		font-size: 16px;
+	}
+
+	label {
+		margin-bottom: 10px;
+	}
 }
 
 .tpc-template-cloud-modal {

@@ -47,8 +47,9 @@ class TI_Beaver extends FLBuilderModule {
 	 * Initialize the Admin.
 	 */
 	public function init() {
-		FLBuilderAJAX::add_action( 'ti_apply_template', __CLASS__ . '::apply_template', array( 'template', 'position' ) );
 		FLBuilderAJAX::add_action( 'ti_get_position', __CLASS__ . '::get_position', array( 'node' ) );
+		FLBuilderAJAX::add_action( 'ti_apply_template', __CLASS__ . '::apply_template', array( 'template', 'position' ) );
+		FLBuilderAJAX::add_action( 'ti_export_template', __CLASS__ . '::export_template', array( 'node', 'title' ) );
 		add_action( 'wp_head', array( $this, 'inline_script' ), 9 );
 	}
 
@@ -66,10 +67,11 @@ class TI_Beaver extends FLBuilderModule {
 				// 'placeholderIndex' => '-1',
 				'exporter'         => array(
 				// 	'exportLabel'     => __( 'Save to Templates Cloud' ),
-				// 	'modalLabel'      => __( 'Save Templates' ),
+					'modalLabel'      => __( 'Save Templates' ),
 					'textLabel'       => __( 'Template Name' ),
-				// 	'textPlaceholder' => __( 'Template' ),
-				// 	'buttonLabel'     => __( 'Save' ),
+					'textPlaceholder' => __( 'Template' ),
+					'buttonLabel'     => __( 'Save' ),
+					'cancelLabel'     => __( 'Cancel' ),
 				// 	'templateSaved'   => __( 'Template Saved.' ),
 				),
 				'library'          => array(
@@ -213,6 +215,28 @@ class TI_Beaver extends FLBuilderModule {
 			'layout'     => FLBuilderAJAXLayout::render(),
 			'config'     => FLBuilderUISettingsForms::get_node_js_config(),
 		);
+	}
+
+	static public function export_template( $node, $title ) {
+		$row   = FLBuilderModel::get_node( $node );
+		$nodes = FLBuilderModel::get_nested_nodes( $node );
+		$id = FLBuilderModel::get_post_id();
+		$nodes[ $row->node ] = $row;
+
+		$url = add_query_arg( array(
+			'site_url'      => get_site_url(),
+			'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
+			'template_name' => $title,
+			'template_type' => 'beaver',
+			'cache'         => uniqid(),
+		), TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates' );
+
+		$response = wp_safe_remote_post( $url, array(
+			'body' => json_encode( $nodes ),
+		) );
+		$response = wp_remote_retrieve_body( $response );
+		$response = json_decode( $response, true );
+		return $response;
 	}
 }
 
