@@ -1,4 +1,4 @@
-/* global localStorage, lodash */
+/* global localStorage, lodash, FLBuilder */
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,8 +7,7 @@ import { dispatch, select } from '@wordpress/data';
 
 const { omit } = lodash;
 
-// eslint-disable-next-line no-console
-const dispatchNotification = ( message ) => console.warning( message );
+const dispatchNotification = ( message ) => FLBuilder.alert( message );
 
 const { setFetching } = dispatch( 'tpc/beaver' );
 
@@ -156,36 +155,6 @@ export const importTemplate = async ( template ) => {
 	return content;
 };
 
-export const duplicateTemplate = async ( id ) => {
-	const url = stringifyUrl( {
-		url: `${ window.tiTpc.endpoint }templates/${ id }/clone`,
-		query: {
-			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params,
-		},
-	} );
-
-	try {
-		const response = await apiFetch( { url, method: 'POST' } );
-
-		if ( response.ok ) {
-			const content = await response.json();
-
-			if ( content.message ) {
-				return dispatchNotification( content.message );
-			}
-		}
-
-		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-
-		await fetchLibrary();
-	} catch ( error ) {
-		if ( error.message ) {
-			dispatchNotification( error.message );
-		}
-	}
-};
-
 export const updateTemplate = async ( params ) => {
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ params.template_id }`,
@@ -245,49 +214,6 @@ export const deleteTemplate = async ( template ) => {
 		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
 		await fetchLibrary();
-	} catch ( error ) {
-		if ( error.message ) {
-			dispatchNotification( error.message );
-		}
-	}
-};
-
-export const exportTemplate = async ( { title, type, content } ) => {
-	const data = {
-		version: '0.4',
-		title,
-		type,
-		content,
-	};
-
-	const url = stringifyUrl( {
-		url: window.tiTpc.endpoint + 'templates',
-		query: {
-			...window.tiTpc.params,
-			template_name: title || window.tiTpc.exporter.textPlaceholder,
-			template_type: 'elementor',
-		},
-	} );
-
-	try {
-		const response = await apiFetch( {
-			url,
-			method: 'POST',
-			data,
-			parse: false,
-		} );
-
-		if ( response.ok ) {
-			const res = await response.json();
-
-			if ( res.message ) {
-				dispatchNotification( res.message );
-			} else {
-				window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-
-				dispatchNotification( window.tiTpc.exporter.templateSaved );
-			}
-		}
 	} catch ( error ) {
 		if ( error.message ) {
 			dispatchNotification( error.message );

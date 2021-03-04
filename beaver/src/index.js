@@ -115,8 +115,15 @@ const App = () => {
 						position,
 					},
 					( res ) => {
-						closeModal();
 						setFetching( false );
+
+						if ( undefined !== res.success && ! res.success ) {
+							return FLBuilder.alert(
+								`<h1>${ window.tiTpc.exporter.importFailed }</h1> ${ res.data }`
+							);
+						}
+
+						closeModal();
 
 						const data = FLBuilder._jsonParse( res );
 						if ( data.layout ) {
@@ -193,6 +200,12 @@ const tpcExport = ( e ) => {
 						title,
 					},
 					( res ) => {
+						if ( undefined !== res.success && ! res.success ) {
+							FLBuilder.alert(
+								`<h1>${ window.tiTpc.exporter.exportFailed }</h1> ${ res.data }`
+							);
+						}
+
 						FLBuilder.hideAjaxLoader();
 					}
 				);

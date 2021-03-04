@@ -66,14 +66,15 @@ class TI_Beaver extends FLBuilderModule {
 					'type'       => 'beaver',
 				),
 				'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
-				// 'placeholderIndex' => '-1',
 				'exporter'     => array(
 					// 	'exportLabel'     => __( 'Save to Templates Cloud' ),
-						'modalLabel'  => __( 'Save Templates' ),
+					'modalLabel'      => __( 'Save Templates' ),
 					'textLabel'       => __( 'Template Name' ),
 					'textPlaceholder' => __( 'Template' ),
 					'buttonLabel'     => __( 'Save' ),
 					'cancelLabel'     => __( 'Cancel' ),
+					'importFailed'    => __( 'Import Failed' ),
+					'exportFailed'    => __( 'Export Failed' ),
 				// 	'templateSaved'   => __( 'Template Saved.' ),
 				),
 				'library'      => array(
@@ -167,6 +168,11 @@ class TI_Beaver extends FLBuilderModule {
 		$response = wp_remote_get( esc_url_raw( $url ) );
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response, true );
+
+		if ( isset( $response['message'] ) ) {
+			return wp_send_json_error( $response['message'] );
+		}
+
 		$response = self::serialize_corrector( $response );
 		$response = unserialize( $response );
 
@@ -254,6 +260,11 @@ class TI_Beaver extends FLBuilderModule {
 		);
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response, true );
+
+		if ( isset( $response['message'] ) ) {
+			return wp_send_json_error( $response['message'] );
+		}
+
 		return $response;
 	}
 }
