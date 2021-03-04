@@ -28,14 +28,16 @@ class TI_Beaver extends FLBuilderModule {
 	 * The module construct, we need to pass some basic info here.
 	 */
 	public function __construct() {
-		parent::__construct( array(
-			'name'        => __( 'Templates Cloud', 'templates-patterns-collection' ),
-			'description' => __( 'Templates Cloud by Neve.', 'templates-patterns-collection' ),
-			'category'    => __( 'Templates Cloud', 'templates-patterns-collection' ),
-			'dir'         => TIOB_PATH . 'beaver/',
-			'url'         => TIOB_URL . 'beaver/',
-			'icon'        => TIOB_URL . 'beaver/icon.svg',
-		) );
+		parent::__construct(
+			array(
+				'name'        => __( 'Templates Cloud', 'templates-patterns-collection' ),
+				'description' => __( 'Templates Cloud by Neve.', 'templates-patterns-collection' ),
+				'category'    => __( 'Templates Cloud', 'templates-patterns-collection' ),
+				'dir'         => TIOB_PATH . 'beaver/',
+				'url'         => TIOB_URL . 'beaver/',
+				'icon'        => TIOB_URL . 'beaver/icon.svg',
+			)
+		);
 
 		$deps = require( TIOB_PATH . 'beaver/build/index.asset.php' );
 
@@ -54,48 +56,48 @@ class TI_Beaver extends FLBuilderModule {
 	}
 
 	public function inline_script() {
-		$tiTpc = apply_filters(
+		$ti_tpc = apply_filters(
 			'ti_tpc_editor_data',
 			array(
-				'endpoint'         => TPC_TEMPLATES_CLOUD_ENDPOINT,
-				'params'           => array(
+				'endpoint'     => TPC_TEMPLATES_CLOUD_ENDPOINT,
+				'params'       => array(
 					'site_url'   => get_site_url(),
 					'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 					'type'       => 'beaver',
 				),
-				'canPredefine'     => apply_filters( 'ti_tpc_can_predefine', false ),
+				'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
 				// 'placeholderIndex' => '-1',
-				'exporter'         => array(
-				// 	'exportLabel'     => __( 'Save to Templates Cloud' ),
-					'modalLabel'      => __( 'Save Templates' ),
+				'exporter'     => array(
+					// 	'exportLabel'     => __( 'Save to Templates Cloud' ),
+						'modalLabel'  => __( 'Save Templates' ),
 					'textLabel'       => __( 'Template Name' ),
 					'textPlaceholder' => __( 'Template' ),
 					'buttonLabel'     => __( 'Save' ),
 					'cancelLabel'     => __( 'Cancel' ),
 				// 	'templateSaved'   => __( 'Template Saved.' ),
 				),
-				'library'          => array(
+				'library'      => array(
 					// 'libraryButton'  => __( 'Import from Templates Cloud' ),
 					'templatesCloud' => __( 'Templates Cloud' ),
 					// 'historyMessage' => __( 'Add Template from Templates Cloud:' ),
-					'404'               => __( 'No templates available. Add a new one?' ),
-					'deleteItem'        => __( 'Are you sure you want to delete this template?' ),
+					'404'            => __( 'No templates available. Add a new one?' ),
+					'deleteItem'     => __( 'Are you sure you want to delete this template?' ),
 					'tabs'           => array(
 						'templates' => __( 'Page Templates' ),
 						'library'   => __( 'My Library' ),
 					),
 					'actions'        => array(
-						'sync'      => __( 'Sync Library' ),
+						'sync'     => __( 'Sync Library' ),
 						// 'save'      => __( 'Save to Templates Cloud' ),
-						'update'    => __( 'Update' ),
-						'close'     => __( 'Close' ),
+						'update'   => __( 'Update' ),
+						'close'    => __( 'Close' ),
 						// 'cancel'    => __( 'Cancel' ),
-						'edit'      => __( 'Edit' ),
+						'edit'     => __( 'Edit' ),
 						// 'duplicate' => __( 'Duplicate' ),
-						'delete'    => __( 'Delete' ),
-						'deleting'  => __( 'Deleting' ),
-						'preview'   => __( 'Preview' ),
-						'import'    => __( 'Import' ),
+						'delete'   => __( 'Delete' ),
+						'deleting' => __( 'Deleting' ),
+						'preview'  => __( 'Preview' ),
+						'import'   => __( 'Import' ),
 						// 'back'      => __( 'Back to Library' ),
 					),
 					'filters'        => array(
@@ -122,8 +124,9 @@ class TI_Beaver extends FLBuilderModule {
 		);
 		?>
 		<script type="text/javascript">
-			window.tiTpc = <?php echo json_encode( $tiTpc ); ?>;
-		</script> <?php
+			window.tiTpc = <?php echo json_encode( $ti_tpc ); ?>;
+		</script> 
+		<?php
 	}
 
 	/**
@@ -152,20 +155,22 @@ class TI_Beaver extends FLBuilderModule {
 	 * Register editor styles.
 	 */
 	static public function apply_template( $template, $position = 0 ) {
-		$url = add_query_arg( array(
-			'site_url'   => get_site_url(),
-			'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
-			'cache'      => uniqid(),
-		), TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . $template. '/import' );
+		$url = add_query_arg(
+			array(
+				'site_url'   => get_site_url(),
+				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+				'cache'      => uniqid(),
+			),
+			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . $template . '/import'
+		);
 
 		$response = wp_remote_get( esc_url_raw( $url ) );
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response, true );
 		$response = self::serialize_corrector( $response );
 		$response = unserialize( $response );
-		$response = $response['layout'][0];
 
-		$row_position = $position;
+		$row_position    = $position;
 		$new_items_count = 0;
 
 		if ( isset( $response->nodes ) ) {
@@ -217,23 +222,36 @@ class TI_Beaver extends FLBuilderModule {
 		);
 	}
 
+	/**
+	 * To DO
+	 * - Get row settings.
+	 */
 	static public function export_template( $node, $title ) {
-		$row   = FLBuilderModel::get_node( $node );
-		$nodes = FLBuilderModel::get_nested_nodes( $node );
-		$id = FLBuilderModel::get_post_id();
+		$row                 = FLBuilderModel::get_node( $node );
+		$nodes               = FLBuilderModel::get_nested_nodes( $node );
+		$id                  = FLBuilderModel::get_post_id();
 		$nodes[ $row->node ] = $row;
+		$obj                 = new \stdClass();
+		$obj->nodes          = $nodes;
+		$obj                 = serialize( $obj );
 
-		$url = add_query_arg( array(
-			'site_url'      => get_site_url(),
-			'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
-			'template_name' => $title,
-			'template_type' => 'beaver',
-			'cache'         => uniqid(),
-		), TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates' );
+		$url = add_query_arg(
+			array(
+				'site_url'      => get_site_url(),
+				'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
+				'template_name' => $title,
+				'template_type' => 'beaver',
+				'cache'         => uniqid(),
+			),
+			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates'
+		);
 
-		$response = wp_safe_remote_post( $url, array(
-			'body' => json_encode( $nodes ),
-		) );
+		$response = wp_safe_remote_post(
+			$url,
+			array(
+				'body' => json_encode( $obj ),
+			)
+		);
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response, true );
 		return $response;
