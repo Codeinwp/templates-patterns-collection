@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-03-05T02:22:42+00:00\n"
+"POT-Creation-Date: 2021-03-05T23:07:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -229,8 +229,12 @@ msgstr ""
 msgid "Templates Cloud by Neve."
 msgstr ""
 
-#: includes/TI_Beaver.php:235
+#: includes/TI_Beaver.php:246
 msgid "Save to Templates Cloud"
+msgstr ""
+
+#: includes/TI_Beaver.php:272
+msgid "Template"
 msgstr ""
 
 #: tests/rest-test.php:59

@@ -85,11 +85,15 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 							/>
 						) }
 
-						<Button
-							label={ window.tiTpc.library.actions.save }
-							icon={ cloudUpload }
-							onClick={ () => updateCurrentTab( 'export' ) }
-						/>
+						{ window.tiTpc.postTypes.includes(
+							window.tiTpc.postType
+						) && (
+							<Button
+								label={ window.tiTpc.library.actions.save }
+								icon={ cloudUpload }
+								onClick={ () => updateCurrentTab( 'export' ) }
+							/>
+						) }
 					</ButtonGroup>
 				) }
 

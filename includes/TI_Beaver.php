@@ -52,6 +52,7 @@ class TI_Beaver extends FLBuilderModule {
 		FLBuilderAJAX::add_action( 'ti_get_position', __CLASS__ . '::get_position', array( 'node' ) );
 		FLBuilderAJAX::add_action( 'ti_apply_template', __CLASS__ . '::apply_template', array( 'template', 'position' ) );
 		FLBuilderAJAX::add_action( 'ti_export_template', __CLASS__ . '::export_template', array( 'node', 'title' ) );
+		FLBuilderAJAX::add_action( 'ti_export_page_template', __CLASS__ . '::export_page_template' );
 		add_action( 'wp_head', array( $this, 'inline_script' ), 9 );
 		add_filter( 'fl_builder_main_menu', array( $this, 'add_export_menu' ), 10, 1 );
 	}
@@ -68,6 +69,15 @@ class TI_Beaver extends FLBuilderModule {
 				),
 				'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
 				'pageTitle'    => get_the_title(),
+				'postType'     => get_post_type(),
+				'postTypes'    => FLBuilderModel::get_post_types(),
+				'postMeta'     => array(
+					'_ti_tpc_template_sync'  => get_post_meta( get_the_ID(), '_ti_tpc_template_sync', true ),
+					'_ti_tpc_template_id'    => get_post_meta( get_the_ID(), '_ti_tpc_template_id', true ),
+					'_ti_tpc_screenshot_url' => get_post_meta( get_the_ID(), '_ti_tpc_screenshot_url', true ),
+					'_ti_tpc_site_slug'      => get_post_meta( get_the_ID(), '_ti_tpc_site_slug', true ),
+					'_ti_tpc_published'      => get_post_meta( get_the_ID(), '_ti_tpc_published', true ),
+				),
 				'exporter'     => array(
 					// 	'exportLabel'     => __( 'Save to Templates Cloud' ),
 					'modalLabel'      => __( 'Save Templates' ),
@@ -94,14 +104,11 @@ class TI_Beaver extends FLBuilderModule {
 						'save'     => __( 'Save to Templates Cloud' ),
 						'update'   => __( 'Update' ),
 						'close'    => __( 'Close' ),
-						// 'cancel'    => __( 'Cancel' ),
 						'edit'     => __( 'Edit' ),
-						// 'duplicate' => __( 'Duplicate' ),
 						'delete'   => __( 'Delete' ),
 						'deleting' => __( 'Deleting' ),
 						'preview'  => __( 'Preview' ),
 						'import'   => __( 'Import' ),
-						// 'back'      => __( 'Back to Library' ),
 					),
 					'filters'        => array(
 						'sortLabel'   => __( 'Sort by' ),
@@ -119,8 +126,6 @@ class TI_Beaver extends FLBuilderModule {
 					'export'         => array(
 						'save'  => __( 'Save' ),
 						'title' => __( 'Save your page to Templates Cloud' ),
-					// 	'placeholder'  => __( 'Enter Template Name' ),
-					// 	'defaultTitle' => __( 'Template' ),
 					),
 				),
 			)
@@ -150,6 +155,11 @@ class TI_Beaver extends FLBuilderModule {
 	}
 
 	static public function get_position( $node ) {
+		if ( empty( $node ) ) {
+			$row_position = FLBuilderModel::next_node_position( 'row' );
+			return $row_position;
+		}
+
 		$row = FLBuilderModel::get_node_parent_by_type( $node, 'row' );
 		return $row->position;
 	}
@@ -231,11 +241,13 @@ class TI_Beaver extends FLBuilderModule {
 	}
 
 	public function add_export_menu( $views ) {
-		$views['main']['items'][15] = array(
-			'label'     => __( 'Save to Templates Cloud', 'templates-patterns-collection' ),
-			'type'      => 'event',
-			'eventName' => 'tiTpcExport',
-		);
+		if ( in_array( get_post_type(), FLBuilderModel::get_post_types() ) ) {
+			$views['main']['items'][15] = array(
+				'label'     => __( 'Save to Templates Cloud', 'templates-patterns-collection' ),
+				'type'      => 'event',
+				'eventName' => 'tiTpcExport',
+			);
+		}
 
 		return $views;
 	}
@@ -243,9 +255,6 @@ class TI_Beaver extends FLBuilderModule {
 	/**
 	 * To DO
 	 * - Get row settings for Page.
-	 * - Hide navbar and import when modal opened from export. Either that or we can just import at end instead of replacing the node.
-	 * - ^ do the latter than the first.
-	 * - In `importTemplate` function, return next row position when node is null.
 	 */
 	static public function export_template( $node, $title ) {
 		$row                 = FLBuilderModel::get_node( $node );
@@ -254,8 +263,23 @@ class TI_Beaver extends FLBuilderModule {
 		$nodes[ $row->node ] = $row;
 		$obj                 = new \stdClass();
 		$obj->nodes          = $nodes;
-		$obj                 = serialize( $obj );
+		$body                = serialize( $obj );
+		return self::save_template( $title, $body );
+	}
 
+	static public function export_page_template() {
+		$title         = get_the_title();
+		$title         = empty( $title ) ? __( 'Template', 'templates-patterns-collection' ) : $title;
+		$nodes         = FLBuilderModel::get_layout_data();
+		$settings      = FLBuilderModel::get_layout_settings();
+		$obj           = new \stdClass();
+		$obj->nodes    = $nodes;
+		$obj->settings = $settings;
+		$body          = serialize( $obj );
+		return self::save_template( $title, $body );
+	}
+
+	static public function save_template( $title, $body ) {
 		$url = add_query_arg(
 			array(
 				'site_url'      => get_site_url(),
@@ -270,7 +294,7 @@ class TI_Beaver extends FLBuilderModule {
 		$response = wp_safe_remote_post(
 			$url,
 			array(
-				'body' => json_encode( $obj ),
+				'body' => json_encode( $body ),
 			)
 		);
 
