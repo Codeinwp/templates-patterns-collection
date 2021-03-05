@@ -1,6 +1,7 @@
 import { useSelect } from '@wordpress/data';
 
 import Preview from './preview';
+import Export from './export';
 import TemplatesContent from './templates-content';
 
 const Content = ( {
@@ -29,6 +30,10 @@ const Content = ( {
 				importTemplate={ importTemplate }
 			/>
 		);
+	}
+
+	if ( 'export' === currentTab ) {
+		return <Export />;
 	}
 
 	return (

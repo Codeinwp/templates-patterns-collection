@@ -106,28 +106,35 @@
 						.components-button {
 							border-left: 0;
 							box-shadow: none;
-							background: #f1f1f1;
 							width: 38px;
 							height: 38px;
 							margin: 5px 10px;
 							padding: 5px;
-							border: 1px solid #d9d9d9;
 							border-radius: 6px;
 
-							&:hover {
-								color: #f1f1f1;
-								background: #0073aa;
-								width: auto;
-								border: 1px solid #0073aa;
+							&.is-sync {
+								background: #f1f1f1;
+								border: 1px solid #d9d9d9;
 
-								&:before {
-									content: 'Sync';
-									padding: 0 10px;
-									font-weight: 500;
+								&:hover {
+									color: #f1f1f1;
+									background: #0073aa;
+									width: auto;
+									border: 1px solid #0073aa;
+	
+									&:before {
+										content: 'Sync';
+										padding: 0 10px;
+										font-weight: 500;
+									}
+	
+									svg {
+										fill: #f1f1f1;
+									}
 								}
 
 								svg {
-									fill: #f1f1f1;
+									fill: #0073aa;
 								}
 							}
 
@@ -135,7 +142,6 @@
 								width: 26px;
 								height: 26px;
 								padding: 0;
-								fill: #0073aa;
 							}
 						}
 					}
@@ -463,6 +469,64 @@
 				.components-placeholder {
 					box-shadow: none;
 					margin: 20px 0;
+				}
+
+				.tpc-modal-content-export {
+					padding: 50px 0;
+
+					.tpc-modal-content-export-icon {
+						display: flex;
+						justify-content: center;
+
+						svg {
+							fill: #c2cbd2;
+							width: 65px;
+							height: 65px;
+						}
+					}
+
+					.tpc-modal-content-export-title {
+						color: #6d7882;
+						text-align: center;
+						font-size: 30px;
+						font-weight: 500;
+						margin-top: 20px;
+					}
+
+					.tpc-modal-content-export-field {
+						margin-top: 40px;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+
+						.tpc-modal-content-export-field-input {
+							cursor: not-allowed;
+							width: 500px;
+							background-color: #fff;
+							font-weight: 300;
+							color: #a4afb7;
+							padding-left: 25px;
+							border-radius: 3px 0 0 3px;
+							border: none;
+							height: 55px;
+							font-size: 16px;
+						}
+
+						.tpc-modal-content-export-field-submit {
+							color: #fff;
+							display: flex;
+							justify-content: center;
+							width: 150px;
+							border-radius: 0 3px 3px 0;
+							background-color: #39b54a;
+							height: 55px;
+							font-size: 16px;
+
+							svg {
+								animation: a 2s infinite linear;
+							}
+						}
+					}
 				}
 			}
 		}

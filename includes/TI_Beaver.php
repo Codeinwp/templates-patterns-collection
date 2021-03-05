@@ -53,6 +53,7 @@ class TI_Beaver extends FLBuilderModule {
 		FLBuilderAJAX::add_action( 'ti_apply_template', __CLASS__ . '::apply_template', array( 'template', 'position' ) );
 		FLBuilderAJAX::add_action( 'ti_export_template', __CLASS__ . '::export_template', array( 'node', 'title' ) );
 		add_action( 'wp_head', array( $this, 'inline_script' ), 9 );
+		add_filter( 'fl_builder_main_menu', array( $this, 'add_export_menu' ), 10, 1 );
 	}
 
 	public function inline_script() {
@@ -66,6 +67,7 @@ class TI_Beaver extends FLBuilderModule {
 					'type'       => 'beaver',
 				),
 				'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
+				'pageTitle'    => get_the_title(),
 				'exporter'     => array(
 					// 	'exportLabel'     => __( 'Save to Templates Cloud' ),
 					'modalLabel'      => __( 'Save Templates' ),
@@ -89,7 +91,7 @@ class TI_Beaver extends FLBuilderModule {
 					),
 					'actions'        => array(
 						'sync'     => __( 'Sync Library' ),
-						// 'save'      => __( 'Save to Templates Cloud' ),
+						'save'     => __( 'Save to Templates Cloud' ),
 						'update'   => __( 'Update' ),
 						'close'    => __( 'Close' ),
 						// 'cancel'    => __( 'Cancel' ),
@@ -114,12 +116,12 @@ class TI_Beaver extends FLBuilderModule {
 						'search'      => __( 'Search' ),
 						'searchLabel' => __( 'Search Templates' ),
 					),
-					// 'export'         => array(
-					// 	'save'         => __( 'Save' ),
-					// 	'title'        => __( 'Save your page to Templates Cloud' ),
+					'export'         => array(
+						'save'  => __( 'Save' ),
+						'title' => __( 'Save your page to Templates Cloud' ),
 					// 	'placeholder'  => __( 'Enter Template Name' ),
 					// 	'defaultTitle' => __( 'Template' ),
-					// ),
+					),
 				),
 			)
 		);
@@ -228,9 +230,22 @@ class TI_Beaver extends FLBuilderModule {
 		);
 	}
 
+	public function add_export_menu( $views ) {
+		$views['main']['items'][15] = array(
+			'label'     => __( 'Save to Templates Cloud', 'templates-patterns-collection' ),
+			'type'      => 'event',
+			'eventName' => 'tiTpcExport',
+		);
+
+		return $views;
+	}
+
 	/**
 	 * To DO
-	 * - Get row settings.
+	 * - Get row settings for Page.
+	 * - Hide navbar and import when modal opened from export. Either that or we can just import at end instead of replacing the node.
+	 * - ^ do the latter than the first.
+	 * - In `importTemplate` function, return next row position when node is null.
 	 */
 	static public function export_template( $node, $title ) {
 		$row                 = FLBuilderModel::get_node( $node );
@@ -258,6 +273,7 @@ class TI_Beaver extends FLBuilderModule {
 				'body' => json_encode( $obj ),
 			)
 		);
+
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response, true );
 

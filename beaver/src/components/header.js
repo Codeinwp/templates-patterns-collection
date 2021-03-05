@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
-import { closeSmall, update } from '@wordpress/icons';
+import { cloudUpload, closeSmall, update } from '@wordpress/icons';
 import { Button, ButtonGroup, Icon } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 
@@ -71,16 +71,24 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 			</div>
 
 			<div className="right">
-				{ 'library' === currentTab && ! isPreview && (
+				{ ! isPreview && (
 					<ButtonGroup>
+						{ 'library' === currentTab && (
+							<Button
+								label={ window.tiTpc.library.actions.sync }
+								icon={ update }
+								disabled={ isFetching }
+								className={ classnames( 'is-sync', {
+									'is-loading': isFetching,
+								} ) }
+								onClick={ syncLibrary }
+							/>
+						) }
+
 						<Button
-							label={ window.tiTpc.library.actions.sync }
-							icon={ update }
-							disabled={ isFetching }
-							className={ classnames( 'is-sync', {
-								'is-loading': isFetching,
-							} ) }
-							onClick={ syncLibrary }
+							label={ window.tiTpc.library.actions.save }
+							icon={ cloudUpload }
+							onClick={ () => updateCurrentTab( 'export' ) }
 						/>
 					</ButtonGroup>
 				) }
