@@ -18,7 +18,7 @@ use FLBuilderAJAXLayout;
 use FLBuilderUISettingsForms;
 
 /**
- * Class Editor
+ * Class TI_Beaver
  *
  * @package templates-patterns-collection
  */
@@ -46,17 +46,23 @@ class TI_Beaver extends FLBuilderModule {
 	}
 
 	/**
-	 * Initialize the Admin.
+	 * Initialize the Editor.
 	 */
 	public function init() {
 		FLBuilderAJAX::add_action( 'ti_get_position', __CLASS__ . '::get_position', array( 'node' ) );
 		FLBuilderAJAX::add_action( 'ti_apply_template', __CLASS__ . '::apply_template', array( 'template', 'position' ) );
 		FLBuilderAJAX::add_action( 'ti_export_template', __CLASS__ . '::export_template', array( 'node', 'title' ) );
-		FLBuilderAJAX::add_action( 'ti_export_page_template', __CLASS__ . '::export_page_template' );
+		FLBuilderAJAX::add_action( 'ti_export_page_template', __CLASS__ . '::export_page_template', array( 'is_sync' ) );
+
 		add_action( 'wp_head', array( $this, 'inline_script' ), 9 );
+		add_action( 'fl_builder_before_save_layout', array( $this, 'update_published_template' ), 10, 4 );
+
 		add_filter( 'fl_builder_main_menu', array( $this, 'add_export_menu' ), 10, 1 );
 	}
 
+	/**
+	 * Add strings as global variable.
+	 */
 	public function inline_script() {
 		$ti_tpc = apply_filters(
 			'ti_tpc_editor_data',
@@ -84,6 +90,7 @@ class TI_Beaver extends FLBuilderModule {
 					'textLabel'       => __( 'Template Name' ),
 					'textPlaceholder' => __( 'Template' ),
 					'buttonLabel'     => __( 'Save' ),
+					'toggleLabel'     => __( 'Automatically sync to the cloud' ),
 					'cancelLabel'     => __( 'Cancel' ),
 					'importFailed'    => __( 'Import Failed' ),
 					'exportFailed'    => __( 'Export Failed' ),
@@ -154,6 +161,9 @@ class TI_Beaver extends FLBuilderModule {
 		return $serialized_string;
 	}
 
+	/**
+	 * Get position of node.
+	 */
 	static public function get_position( $node ) {
 		if ( empty( $node ) ) {
 			$row_position = FLBuilderModel::next_node_position( 'row' );
@@ -165,7 +175,7 @@ class TI_Beaver extends FLBuilderModule {
 	}
 
 	/**
-	 * Register editor styles.
+	 * Import templates to Beaver.
 	 */
 	static public function apply_template( $template, $position = 0 ) {
 		$url = add_query_arg(
@@ -240,6 +250,9 @@ class TI_Beaver extends FLBuilderModule {
 		);
 	}
 
+	/**
+	 * Add export menu to Beaver Row's context.
+	 */
 	public function add_export_menu( $views ) {
 		if ( in_array( get_post_type(), FLBuilderModel::get_post_types() ) ) {
 			$views['main']['items'][15] = array(
@@ -253,8 +266,7 @@ class TI_Beaver extends FLBuilderModule {
 	}
 
 	/**
-	 * To DO
-	 * - Get row settings for Page.
+	 * Export row template.
 	 */
 	static public function export_template( $node, $title ) {
 		$row                 = FLBuilderModel::get_node( $node );
@@ -267,7 +279,10 @@ class TI_Beaver extends FLBuilderModule {
 		return self::save_template( $title, $body );
 	}
 
-	static public function export_page_template() {
+	/**
+	 * Export page template.
+	 */
+	static public function export_page_template( $is_sync ) {
 		$title         = get_the_title();
 		$title         = empty( $title ) ? __( 'Template', 'templates-patterns-collection' ) : $title;
 		$nodes         = FLBuilderModel::get_layout_data();
@@ -276,15 +291,64 @@ class TI_Beaver extends FLBuilderModule {
 		$obj->nodes    = $nodes;
 		$obj->settings = $settings;
 		$body          = serialize( $obj );
-		return self::save_template( $title, $body );
+		$id            = FLBuilderModel::get_post_id();
+		$template_id   = get_post_meta( $id, '_ti_tpc_template_id', true );
+
+		if ( ! empty( $template_id ) && self::get_template( $template_id ) ) {
+			return self::update_template( $template_id, $title, $body, $is_sync );
+		} else {
+			return self::save_template( $title, $body, true, $is_sync );
+		}
 	}
 
-	static public function save_template( $title, $body ) {
+	/**
+	 * Update published templates.
+	 */
+	public function update_published_template( $post_id, $publish, $data, $settings ) {
+		if ( ! $publish ) {
+			return false;
+		}
+
+		$is_sync = get_post_meta( intval( $post_id ), '_ti_tpc_template_sync', true );
+
+		if ( $is_sync ) {
+			return self::export_page_template( true );
+		}
+	}
+
+	/**
+	 * Get template by ID.
+	 */
+	static public function get_template( $template_id ) {
+		$url = add_query_arg(
+			array(
+				'site_url'   => get_site_url(),
+				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+				'cache'      => uniqid(),
+			),
+			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id )
+		);
+
+		$response = wp_remote_get( esc_url_raw( $url ) );
+		$response = wp_remote_retrieve_body( $response );
+		$response = json_decode( $response, true );
+
+		if ( isset( $response['message'] ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Save Beaver template to Templates Cloud.
+	 */
+	static public function save_template( $title, $body, $is_page = false, $is_sync = false ) {
 		$url = add_query_arg(
 			array(
 				'site_url'      => get_site_url(),
 				'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
-				'template_name' => $title,
+				'template_name' => esc_attr( $title ),
 				'template_type' => 'beaver',
 				'cache'         => uniqid(),
 			),
@@ -304,6 +368,53 @@ class TI_Beaver extends FLBuilderModule {
 		if ( isset( $response['message'] ) ) {
 			return wp_send_json_error( $response['message'] );
 		}
+
+		if ( $is_page ) {
+			$post_id = FLBuilderModel::get_post_id();
+
+			update_post_meta( $post_id, '_ti_tpc_template_sync', $is_sync );
+
+			if ( isset( $response[ 'template_id' ] ) ) {
+				update_post_meta( $post_id, '_ti_tpc_template_id', $response[ 'template_id' ] );
+			}
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Update Beaver template to Templates Cloud.
+	 */
+	static public function update_template( $template_id, $title, $body, $is_sync = false ) {
+		$url = add_query_arg(
+			array(
+				'site_url'      => get_site_url(),
+				'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
+				'template_name' => esc_attr( $title ),
+				'template_type' => 'beaver',
+				'cache'         => uniqid(),
+			),
+			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id )
+		);
+
+		$response = wp_safe_remote_post(
+			$url,
+			array(
+				'body' => json_encode( $body ),
+			)
+		);
+
+		$response = wp_remote_retrieve_body( $response );
+		$response = json_decode( $response, true );
+
+		if ( isset( $response['message'] ) ) {
+			return wp_send_json_error( $response['message'] );
+		}
+
+		$post_id = FLBuilderModel::get_post_id();
+
+		update_post_meta( $post_id, '_ti_tpc_template_sync', $is_sync );
+		update_post_meta( $post_id, '_ti_tpc_template_id', $template_id );
 
 		return $response;
 	}

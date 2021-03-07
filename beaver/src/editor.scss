@@ -533,6 +533,10 @@
 	}
 }
 
+.components-toggle-control * {
+	cursor: pointer;
+}
+
 .components-button {
 	&.is-loading {
 		svg {

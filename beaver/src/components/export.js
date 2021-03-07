@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { v4 as uuidv4 } from 'uuid';
 
-import { Button, Icon } from '@wordpress/components';
+import { Button, Icon, ToggleControl } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { cloudUpload, rotateRight } from '@wordpress/icons';
@@ -13,13 +13,9 @@ const Export = () => {
 
 	const [ isLoading, setLoading ] = useState( false );
 
-	// const [ templateSync, setTemplateSync ] = useState(
-	// 	Boolean( window.tiTpc.postMeta._ti_tpc_template_sync )
-	// );
-
-	// const [ templateID, setTemplateID ] = useState(
-	// 	window.tiTpc.postMeta._ti_tpc_template_id
-	// );
+	const [ templateSync, setTemplateSync ] = useState(
+		Boolean( window.tiTpc.postMeta._ti_tpc_template_sync )
+	);
 
 	// const [ screenshotURL, setScreenshotURL ] = useState(
 	// 	window.tiTpc.postMeta._ti_tpc_screenshot_url
@@ -39,6 +35,7 @@ const Export = () => {
 		FLBuilder.ajax(
 			{
 				action: 'ti_export_page_template',
+				is_sync: Number( templateSync ),
 			},
 			( response ) => {
 				setLoading( false );
@@ -85,6 +82,14 @@ const Export = () => {
 					>
 						{ window.tiTpc.library.export.save }
 					</Button>
+				</div>
+
+				<div className="tpc-modal-content-export-field">
+					<ToggleControl
+						label={ window.tiTpc.exporter.toggleLabel }
+						checked={ templateSync }
+						onChange={ () => setTemplateSync( ! templateSync ) }
+					/>
 				</div>
 			</div>
 		</div>
