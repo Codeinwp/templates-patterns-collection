@@ -7,7 +7,6 @@
     <arg value="ps"/>
     <arg name="extensions" value="php"/>
 
-    <exclude-pattern type="relative">beaver/includes</exclude-pattern>
     <exclude-pattern type="relative">vendor</exclude-pattern>
     <exclude-pattern type="relative">sample-theme</exclude-pattern>
     <exclude-pattern type="relative">node_modules</exclude-pattern>
