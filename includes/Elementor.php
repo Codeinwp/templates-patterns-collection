@@ -56,6 +56,7 @@ class Elementor {
 						'type'       => 'elementor',
 					),
 					'canPredefine'     => apply_filters( 'ti_tpc_can_predefine', false ),
+					'postType'         => get_post_type(),
 					'placeholderIndex' => '-1',
 					'exporter'         => array(
 						'exportLabel'         => __( 'Save to Templates Cloud' ),

@@ -32,11 +32,11 @@ const Library = ( {
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ currentPage, setCurrentPage ] = useState( {
 		gutenberg: 0,
-		editor: 0,
+		elementor: 0,
 	} );
 	const [ totalPages, setTotalPages ] = useState( {
 		gutenberg: 0,
-		editor: 0,
+		elementor: 0,
 	} );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isFetching, setFetching ] = useState( false );
@@ -59,12 +59,12 @@ const Library = ( {
 
 		setCurrentPage( {
 			gutenberg: 0,
-			editor: 0,
+			elementor: 0,
 		} );
 
 		setTotalPages( {
 			gutenberg: 0,
-			editor: 0,
+			elementor: 0,
 		} );
 
 		loadTemplates();

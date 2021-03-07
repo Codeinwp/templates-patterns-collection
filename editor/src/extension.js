@@ -23,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
 import classnames from 'classnames';
 
 import { iconBlack } from './icon';
-import { publishTemplate } from './data/templates-cloud';
+import { getTemplate, publishTemplate } from './data/templates-cloud';
 import Notices from './components/notices';
 
 const Exporter = () => {
@@ -185,7 +185,13 @@ const Exporter = () => {
 
 		let url;
 
+		let doesExist = false;
+
 		if ( templateID ) {
+			doesExist = await getTemplate( templateID );
+		}
+
+		if ( doesExist ) {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates/' + templateID,
 				query: {
