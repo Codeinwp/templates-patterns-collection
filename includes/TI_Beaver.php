@@ -53,6 +53,7 @@ class TI_Beaver extends FLBuilderModule {
 		FLBuilderAJAX::add_action( 'ti_apply_template', __CLASS__ . '::apply_template', array( 'template', 'position' ) );
 		FLBuilderAJAX::add_action( 'ti_export_template', __CLASS__ . '::export_template', array( 'node', 'title' ) );
 		FLBuilderAJAX::add_action( 'ti_export_page_template', __CLASS__ . '::export_page_template', array( 'is_sync' ) );
+		FLBuilderAJAX::add_action( 'ti_publish_template', __CLASS__ . '::publish_template', array( 'slug', 'screenshot', 'premade' ) );
 
 		add_action( 'wp_head', array( $this, 'inline_script' ), 9 );
 		add_action( 'fl_builder_before_save_layout', array( $this, 'update_published_template' ), 10, 4 );
@@ -79,7 +80,6 @@ class TI_Beaver extends FLBuilderModule {
 				'postTypes'    => FLBuilderModel::get_post_types(),
 				'postMeta'     => array(
 					'_ti_tpc_template_sync'  => get_post_meta( get_the_ID(), '_ti_tpc_template_sync', true ),
-					'_ti_tpc_template_id'    => get_post_meta( get_the_ID(), '_ti_tpc_template_id', true ),
 					'_ti_tpc_screenshot_url' => get_post_meta( get_the_ID(), '_ti_tpc_screenshot_url', true ),
 					'_ti_tpc_site_slug'      => get_post_meta( get_the_ID(), '_ti_tpc_site_slug', true ),
 					'_ti_tpc_published'      => get_post_meta( get_the_ID(), '_ti_tpc_published', true ),
@@ -94,12 +94,9 @@ class TI_Beaver extends FLBuilderModule {
 					'cancelLabel'     => __( 'Cancel' ),
 					'importFailed'    => __( 'Import Failed' ),
 					'exportFailed'    => __( 'Export Failed' ),
-				// 	'templateSaved'   => __( 'Template Saved.' ),
 				),
 				'library'      => array(
-					// 'libraryButton'  => __( 'Import from Templates Cloud' ),
 					'templatesCloud' => __( 'Templates Cloud' ),
-					// 'historyMessage' => __( 'Add Template from Templates Cloud:' ),
 					'404'            => __( 'No templates available. Add a new one?' ),
 					'deleteItem'     => __( 'Are you sure you want to delete this template?' ),
 					'tabs'           => array(
@@ -131,8 +128,12 @@ class TI_Beaver extends FLBuilderModule {
 						'searchLabel' => __( 'Search Templates' ),
 					),
 					'export'         => array(
-						'save'  => __( 'Save' ),
-						'title' => __( 'Save your page to Templates Cloud' ),
+						'save'            => __( 'Save' ),
+						'title'           => __( 'Save your page to Templates Cloud' ),
+						'labelScreenshot' => __( 'Screenshot URL' ),
+						'labelSlug'       => __( 'Site Slug' ),
+						'publish'         => __( 'Publish' ),
+						'unpublish'       => __( 'Unpublish' ),
 					),
 				),
 			)
@@ -271,7 +272,7 @@ class TI_Beaver extends FLBuilderModule {
 	static public function export_template( $node, $title ) {
 		$row                 = FLBuilderModel::get_node( $node );
 		$nodes               = FLBuilderModel::get_nested_nodes( $node );
-		$id                  = FLBuilderModel::get_post_id();
+		$post_id             = FLBuilderModel::get_post_id();
 		$nodes[ $row->node ] = $row;
 		$obj                 = new \stdClass();
 		$obj->nodes          = $nodes;
@@ -291,8 +292,8 @@ class TI_Beaver extends FLBuilderModule {
 		$obj->nodes    = $nodes;
 		$obj->settings = $settings;
 		$body          = serialize( $obj );
-		$id            = FLBuilderModel::get_post_id();
-		$template_id   = get_post_meta( $id, '_ti_tpc_template_id', true );
+		$post_id       = FLBuilderModel::get_post_id();
+		$template_id   = get_post_meta( $post_id, '_ti_tpc_template_id', true );
 
 		if ( ! empty( $template_id ) && self::get_template( $template_id ) ) {
 			return self::update_template( $template_id, $title, $body, $is_sync );
@@ -374,8 +375,8 @@ class TI_Beaver extends FLBuilderModule {
 
 			update_post_meta( $post_id, '_ti_tpc_template_sync', $is_sync );
 
-			if ( isset( $response[ 'template_id' ] ) ) {
-				update_post_meta( $post_id, '_ti_tpc_template_id', $response[ 'template_id' ] );
+			if ( isset( $response['template_id'] ) ) {
+				update_post_meta( $post_id, '_ti_tpc_template_id', $response['template_id'] );
 			}
 		}
 
@@ -415,6 +416,51 @@ class TI_Beaver extends FLBuilderModule {
 
 		update_post_meta( $post_id, '_ti_tpc_template_sync', $is_sync );
 		update_post_meta( $post_id, '_ti_tpc_template_id', $template_id );
+
+		return $response;
+	}
+
+	/**
+	 * Publish Beaver template on Templates Cloud.
+	 */
+	static public function publish_template( $slug, $screenshot, $premade ) {
+		$post_id     = FLBuilderModel::get_post_id();
+		$template_id = get_post_meta( $post_id, '_ti_tpc_template_id', true );
+
+		$url = add_query_arg(
+			array(
+				'site_url'           => get_site_url(),
+				'license_id'         => apply_filters( 'product_neve_license_key', 'free' ),
+				'template_site_slug' => $slug,
+				'template_thumbnail' => $screenshot,
+				'premade'            => $premade,
+				'link'               => get_permalink( $post_id ),
+				'cache'              => uniqid(),
+			),
+			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id ) . '/publish'
+		);
+
+		$bearer = apply_filters( 'ti_tpc_editor_data', array() );
+
+		$response = wp_safe_remote_post(
+			$url,
+			array(
+				'headers' => array(
+					'Authorization' => 'Bearer ' . isset( $bearer['bearer'] ) ? $bearer['bearer'] : '',
+				),
+			)
+		);
+
+		$response = wp_remote_retrieve_body( $response );
+		$response = json_decode( $response, true );
+
+		if ( isset( $response['message'] ) ) {
+			return wp_send_json_error( $response['message'] );
+		}
+
+		update_post_meta( $post_id, '_ti_tpc_site_slug', $slug );
+		update_post_meta( $post_id, '_ti_tpc_screenshot_url', $screenshot );
+		update_post_meta( $post_id, '_ti_tpc_published', $premade );
 
 		return $response;
 	}

@@ -60,7 +60,7 @@ const ListItem = ( { layout, item, importTemplate, deletable } ) => {
 					} ) }
 				>
 					<div className="preview-actions">
-						{ ! deletable && (
+						{ ! deletable && item.link && (
 							<Button
 								isSecondary
 								disabled={ false !== isLoading }
@@ -174,7 +174,7 @@ const ListItem = ( { layout, item, importTemplate, deletable } ) => {
 				</div>
 			) }
 			<div className={ actionClasses }>
-				{ ! deletable && (
+				{ ! deletable && item.link && (
 					<Button
 						isSecondary
 						disabled={ false !== isLoading }

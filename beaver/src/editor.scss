@@ -500,7 +500,6 @@
 						justify-content: center;
 
 						.tpc-modal-content-export-field-input {
-							cursor: not-allowed;
 							width: 500px;
 							background-color: #fff;
 							font-weight: 300;
@@ -510,6 +509,10 @@
 							border: none;
 							height: 55px;
 							font-size: 16px;
+
+							&:disabled {
+								cursor: not-allowed;
+							}
 						}
 
 						.tpc-modal-content-export-field-submit {
@@ -525,6 +528,14 @@
 							svg {
 								animation: a 2s infinite linear;
 							}
+						}
+
+						.tpc-modal-content-export-field-input-label {
+							cursor: pointer;
+							width: 150px;
+							display: flex;
+							justify-content: center;
+							align-items: center;
 						}
 					}
 				}
