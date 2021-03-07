@@ -7,6 +7,8 @@
 
 namespace TIOB;
 
+use FLBuilder;
+
 /**
  * Class Main
  */
@@ -50,6 +52,13 @@ class Main {
 	public $editor = null;
 
 	/**
+	 * Beaver
+	 *
+	 * @var Beaver
+	 */
+	public $beaver = null;
+
+	/**
 	 * Elementor
 	 *
 	 * @var Elementor
@@ -87,6 +96,7 @@ class Main {
 	 */
 	private function init() {
 		$this->setup_editor();
+		$this->setup_beaver();
 		$this->setup_elementor();
 		$this->setup_sites_listing();
 
@@ -138,6 +148,21 @@ class Main {
 	private function setup_editor() {
 		$this->editor = new Editor();
 		$this->editor->init();
+	}
+
+
+	/**
+	 * Setup beaver functionality.
+	 *
+	 * @return void
+	 */
+	private function setup_beaver() {
+		if ( ! class_exists( 'FLBuilder' ) ) {
+			return;
+		}
+
+		$this->beaver = new TI_Beaver();
+		$this->beaver->init();
 	}
 
 	/**

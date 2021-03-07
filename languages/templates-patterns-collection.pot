@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-02-24T13:27:18+00:00\n"
+"POT-Creation-Date: 2021-03-07T23:33:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -217,6 +217,23 @@ msgstr ""
 #: includes/Sites_Listing.php:47
 #: includes/Sites_Listing.php:57
 msgid "Hi! We've noticed you were using Zelle before. To make your transition easier, we can help you keep the same beautiful homepage you had before, by converting it into an Elementor template. This option will also import your homepage content."
+msgstr ""
+
+#: includes/TI_Beaver.php:33
+#: includes/TI_Beaver.php:35
+msgid "Templates Cloud"
+msgstr ""
+
+#: includes/TI_Beaver.php:34
+msgid "Templates Cloud by Neve."
+msgstr ""
+
+#: includes/TI_Beaver.php:260
+msgid "Save to Templates Cloud"
+msgstr ""
+
+#: includes/TI_Beaver.php:288
+msgid "Template"
 msgstr ""
 
 #: tests/rest-test.php:59
