@@ -179,25 +179,7 @@ class TI_Beaver extends FLBuilderModule {
 	 * Import templates to Beaver.
 	 */
 	static public function apply_template( $template, $position = 0 ) {
-		$url = add_query_arg(
-			array(
-				'site_url'   => get_site_url(),
-				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
-				'cache'      => uniqid(),
-			),
-			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . $template . '/import'
-		);
-
-		$response = wp_remote_get( esc_url_raw( $url ) );
-		$response = wp_remote_retrieve_body( $response );
-		$response = json_decode( $response, true );
-
-		if ( isset( $response['message'] ) ) {
-			return wp_send_json_error( $response['message'] );
-		}
-
-		$response = self::serialize_corrector( $response );
-		$response = unserialize( $response );
+		$response = self::get_template_content( $template );
 
 		$row_position    = $position;
 		$new_items_count = 0;
@@ -339,6 +321,32 @@ class TI_Beaver extends FLBuilderModule {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get template content by ID.
+	 */
+	static public function get_template_content( $template_id ) {
+		$url = add_query_arg(
+			array(
+				'site_url'   => get_site_url(),
+				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+				'cache'      => uniqid(),
+			),
+			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . $template_id . '/import'
+		);
+
+		$response = wp_remote_get( esc_url_raw( $url ) );
+		$response = wp_remote_retrieve_body( $response );
+		$response = json_decode( $response, true );
+
+		if ( isset( $response['message'] ) ) {
+			return wp_send_json_error( $response['message'] );
+		}
+
+		$response = self::serialize_corrector( $response );
+		$response = unserialize( $response );
+		return $response;
 	}
 
 	/**

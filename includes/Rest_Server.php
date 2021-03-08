@@ -7,6 +7,7 @@
 
 namespace TIOB;
 
+use TIOB\TI_Beaver;
 use TIOB\Importers\Content_Importer;
 use TIOB\Importers\Plugin_Importer;
 use TIOB\Importers\Theme_Mods_Importer;
@@ -15,6 +16,7 @@ use TIOB\Importers\Zelle_Importer;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use FLBuilderModel;
 
 /**
  * Class Rest_Server
@@ -307,6 +309,34 @@ class Rest_Server {
 			10,
 			2
 		);
+
+		if ( 'beaver' === $template['template_type'] ) {
+			if ( class_exists( 'FLBuilderModel' ) ) {
+				$response = TI_Beaver::get_template_content( $template['template_id'] );
+			}
+
+			$post_id = wp_insert_post(
+				array(
+					'post_title'    => wp_strip_all_tags( $template['template_name'] ),
+					'post_status'   => 'publish',
+					'post_type'     => 'page',
+					'page_template' => 'page-templates/template-pagebuilder-full-width.php',
+				)
+			);
+
+			if ( class_exists( 'FLBuilderModel' ) ) {
+				if ( isset( $response->nodes ) ) {
+					FLBuilderModel::update_layout_data( $response->nodes, 'published', $post_id );
+				}
+
+				if ( isset( $response->settings ) ) {
+					FLBuilderModel::update_layout_settings( $response->settings, 'published', $post_id );
+				}
+				update_post_meta( $post_id, '_fl_builder_enabled', true );
+			}
+
+			return $post_id;
+		}
 
 		if ( 'elementor' === $template['template_type'] ) {
 			return wp_insert_post(
