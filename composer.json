@@ -17,6 +17,8 @@
 	  "TIOB\\": "includes/"
 	}
   },
+  "prefer-stable": true,
+  "minimum-stability": "dev",
   "config": {
 	"optimize-autoloader": true,
     "platform": {
@@ -29,7 +31,8 @@
   "require-dev": {
 	"dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
 	"squizlabs/php_codesniffer": "^3.1",
-	"wp-coding-standards/wpcs": "^1.0.0 || ^2.0.0"
+	"wp-coding-standards/wpcs": "^1.0.0 || ^2.0.0",
+    "codeinwp/phpcs-ruleset": "dev-main"
   },
   "scripts": {
 	"format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
@@ -39,4 +42,3 @@
 	"issues": "https://github.com/Codeinwp/templates-patterns-collection/issues"
   }
 }
-
