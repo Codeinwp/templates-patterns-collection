@@ -236,7 +236,7 @@ const Exporter = () => {
 
 					if ( res.template_id ) {
 						setTemplateID( res.template_id );
-						saveMeta( { ID: res.template_id } );
+						saveMeta( res.template_id );
 					} else {
 						saveMeta();
 					}
@@ -304,7 +304,7 @@ const Exporter = () => {
 		);
 	};
 
-	const saveMeta = ( { ID = templateID } ) => {
+	const saveMeta = ( ID = templateID ) => {
 		let post = null;
 
 		if ( type === 'post' ) {
