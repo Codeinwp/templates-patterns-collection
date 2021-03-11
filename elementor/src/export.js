@@ -11,158 +11,164 @@ import {
 	updateTemplate,
 } from './data/templates-cloud/index.js';
 
-elementor.on( 'document:loaded', () => {
-	( async () => {
-		if (
-			! [ 'wp-post', 'wp-page' ].includes(
-				elementor.config.document.type
-			)
-		) {
-			return null;
-		}
+if ( parseInt( window.tiTpc.tier ) === 3 ) {
+	elementor.on( 'document:loaded', () => {
+		( async () => {
+			if (
+				! [ 'wp-post', 'wp-page' ].includes(
+					elementor.config.document.type
+				)
+			) {
+				return null;
+			}
 
-		const id = elementor.config.document.id;
-		if ( 'page' === window.tiTpc.postType ) {
-			window.tiTpc.postModel = await new wp.api.models.Page( { id } );
-		} else {
-			window.tiTpc.postModel = await new wp.api.models.Post( { id } );
-		}
+			const id = elementor.config.document.id;
+			if ( 'page' === window.tiTpc.postType ) {
+				window.tiTpc.postModel = await new wp.api.models.Page( { id } );
+			} else {
+				window.tiTpc.postModel = await new wp.api.models.Post( { id } );
+			}
 
-		await window.tiTpc.postModel.fetch();
-
-		const publishButton = document.querySelector(
-			'button#elementor-panel-saver-button-publish'
-		);
-
-		publishButton.addEventListener( 'click', async () => {
 			await window.tiTpc.postModel.fetch();
 
-			const {
-				_ti_tpc_template_sync,
-				_ti_tpc_template_id,
-			} = window.tiTpc.postModel.getMetas();
+			const publishButton = document.querySelector(
+				'button#elementor-panel-saver-button-publish'
+			);
 
-			const doesExist = await getTemplate( _ti_tpc_template_id );
+			publishButton.addEventListener( 'click', async () => {
+				await window.tiTpc.postModel.fetch();
 
-			if (
-				! publishButton.className.includes( 'elementor-disabled' ) &&
-				_ti_tpc_template_sync &&
-				_ti_tpc_template_id &&
-				doesExist
-			) {
-				const content = elementor.elements.toJSON( {
-					remove: [
-						'default',
-						'editSettings',
-						'defaultEditSettings',
-					],
-				} );
+				const {
+					_ti_tpc_template_sync,
+					_ti_tpc_template_id,
+				} = window.tiTpc.postModel.getMetas();
 
-				await updateTemplate( {
-					template_id: _ti_tpc_template_id,
-					template_name:
-						elementor.config.initial_document.settings.settings
-							.post_title || '',
-					content,
-				} );
-			}
-		} );
-	} )();
-} );
+				const doesExist = await getTemplate( _ti_tpc_template_id );
 
-document.addEventListener( 'DOMContentLoaded', () => {
-	const addExportMenuItem = ( groups, element ) => {
-		const actions = {
-			name: 'ti_tpc_export',
-			title: window.tiTpc.exporter.exportLabel,
-			callback: () => onClickModal( element ),
-		};
+				if (
+					! publishButton.className.includes(
+						'elementor-disabled'
+					) &&
+					_ti_tpc_template_sync &&
+					_ti_tpc_template_id &&
+					doesExist
+				) {
+					const content = elementor.elements.toJSON( {
+						remove: [
+							'default',
+							'editSettings',
+							'defaultEditSettings',
+						],
+					} );
 
-		const isSaveExist = groups.find( ( i ) => 'save' === i.name );
+					await updateTemplate( {
+						template_id: _ti_tpc_template_id,
+						template_name:
+							elementor.config.initial_document.settings.settings
+								.post_title || '',
+						content,
+					} );
+				}
+			} );
+		} )();
+	} );
 
-		if ( isSaveExist ) {
-			isSaveExist.actions.push( actions );
-		} else {
-			const Export = {
+	document.addEventListener( 'DOMContentLoaded', () => {
+		const addExportMenuItem = ( groups, element ) => {
+			const actions = {
 				name: 'ti_tpc_export',
-				actions: [ actions ],
+				title: window.tiTpc.exporter.exportLabel,
+				callback: () => onClickModal( element ),
 			};
 
-			groups.splice( 3, 0, Export );
-			groups.join();
-		}
+			const isSaveExist = groups.find( ( i ) => 'save' === i.name );
 
-		return groups;
-	};
+			if ( isSaveExist ) {
+				isSaveExist.actions.push( actions );
+			} else {
+				const Export = {
+					name: 'ti_tpc_export',
+					actions: [ actions ],
+				};
 
-	const ExportModal = ( { content } ) => {
-		const [ title, setTitle ] = useState( '' );
-		const [ isLoading, setLoading ] = useState( false );
+				groups.splice( 3, 0, Export );
+				groups.join();
+			}
 
-		const onClose = () => {
-			unmountComponentAtNode( document.getElementById( 'ti-tpc-modal' ) );
+			return groups;
 		};
 
-		const onSave = async () => {
-			setLoading( true );
-			await exportTemplate( {
-				title,
-				type: 'section',
-				content: [ content ],
-			} );
-			setLoading( false );
-			onClose();
-		};
+		const ExportModal = ( { content } ) => {
+			const [ title, setTitle ] = useState( '' );
+			const [ isLoading, setLoading ] = useState( false );
 
-		return (
-			<Modal
-				title={ window.tiTpc.exporter.modalLabel }
-				onRequestClose={ onClose }
-				overlayClassName={ classnames( {
-					'is-dark':
-						'dark' ===
-						elementor.settings.editorPreferences.model.get(
-							'ui_theme'
-						),
-				} ) }
-			>
-				<TextControl
-					label={ window.tiTpc.exporter.textLabel }
-					placeholder={ window.tiTpc.exporter.textPlaceholder }
-					value={ title }
-					onChange={ setTitle }
-				/>
+			const onClose = () => {
+				unmountComponentAtNode(
+					document.getElementById( 'ti-tpc-modal' )
+				);
+			};
 
-				<Button
-					isPrimary
-					isBusy={ isLoading }
-					disabled={ isLoading }
-					onClick={ onSave }
+			const onSave = async () => {
+				setLoading( true );
+				await exportTemplate( {
+					title,
+					type: 'section',
+					content: [ content ],
+				} );
+				setLoading( false );
+				onClose();
+			};
+
+			return (
+				<Modal
+					title={ window.tiTpc.exporter.modalLabel }
+					onRequestClose={ onClose }
+					overlayClassName={ classnames( {
+						'is-dark':
+							'dark' ===
+							elementor.settings.editorPreferences.model.get(
+								'ui_theme'
+							),
+					} ) }
 				>
-					{ window.tiTpc.exporter.buttonLabel }
-				</Button>
-			</Modal>
+					<TextControl
+						label={ window.tiTpc.exporter.textLabel }
+						placeholder={ window.tiTpc.exporter.textPlaceholder }
+						value={ title }
+						onChange={ setTitle }
+					/>
+
+					<Button
+						isPrimary
+						isBusy={ isLoading }
+						disabled={ isLoading }
+						onClick={ onSave }
+					>
+						{ window.tiTpc.exporter.buttonLabel }
+					</Button>
+				</Modal>
+			);
+		};
+
+		const onClickModal = ( element ) => {
+			const content = element.model.toJSON( {
+				remove: [ 'default', 'editSettings', 'defaultEditSettings' ],
+			} );
+
+			const el = document.createElement( 'div' );
+			el.id = 'ti-tpc-modal';
+			document.body.appendChild( el );
+
+			render(
+				<ExportModal content={ content } />,
+				document.getElementById( 'ti-tpc-modal' )
+			);
+		};
+
+		// We only hook our menu item to Sections as handling importing of separate Column and Widgets can be tricky.
+		elementor.hooks.addFilter(
+			'elements/section/contextMenuGroups',
+			addExportMenuItem
 		);
-	};
-
-	const onClickModal = ( element ) => {
-		const content = element.model.toJSON( {
-			remove: [ 'default', 'editSettings', 'defaultEditSettings' ],
-		} );
-
-		const el = document.createElement( 'div' );
-		el.id = 'ti-tpc-modal';
-		document.body.appendChild( el );
-
-		render(
-			<ExportModal content={ content } />,
-			document.getElementById( 'ti-tpc-modal' )
-		);
-	};
-
-	// We only hook our menu item to Sections as handling importing of separate Column and Widgets can be tricky.
-	elementor.hooks.addFilter(
-		'elements/section/contextMenuGroups',
-		addExportMenuItem
-	);
-} );
+	} );
+}

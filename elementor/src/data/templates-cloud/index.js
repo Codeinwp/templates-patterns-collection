@@ -64,6 +64,10 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 };
 
 export const fetchLibrary = async ( additionalParams = {} ) => {
+	if ( parseInt( window.tiTpc.tier ) !== 3 ) {
+		return;
+	}
+
 	const params = {
 		per_page: 20,
 		page: 0,

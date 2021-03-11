@@ -87,11 +87,14 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 
 						{ window.tiTpc.postTypes.includes(
 							window.tiTpc.postType
-						) && (
+						) &&
+							parseInt( window.tiTpc.tier ) === 3 && (
 							<Button
 								label={ window.tiTpc.library.actions.save }
 								icon={ cloudUpload }
-								onClick={ () => updateCurrentTab( 'export' ) }
+								onClick={ () =>
+									updateCurrentTab( 'export' )
+								}
 							/>
 						) }
 					</ButtonGroup>

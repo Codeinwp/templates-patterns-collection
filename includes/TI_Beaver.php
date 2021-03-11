@@ -58,6 +58,12 @@ class TI_Beaver extends FLBuilderModule {
 		add_action( 'wp_head', array( $this, 'inline_script' ), 9 );
 		add_action( 'fl_builder_before_save_layout', array( $this, 'update_published_template' ), 10, 4 );
 
+		$is_pro = apply_filters( 'product_neve_license_key', 'free' );
+
+		if ( $is_pro === 'free' ) {
+			return;
+		}
+
 		add_filter( 'fl_builder_main_menu', array( $this, 'add_export_menu' ), 10, 1 );
 	}
 
@@ -85,7 +91,6 @@ class TI_Beaver extends FLBuilderModule {
 					'_ti_tpc_published'      => get_post_meta( get_the_ID(), '_ti_tpc_published', true ),
 				),
 				'exporter'     => array(
-					// 	'exportLabel'     => __( 'Save to Templates Cloud' ),
 					'modalLabel'      => __( 'Save Templates' ),
 					'textLabel'       => __( 'Template Name' ),
 					'textPlaceholder' => __( 'Template' ),
