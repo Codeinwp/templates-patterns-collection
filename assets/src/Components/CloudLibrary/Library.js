@@ -32,11 +32,13 @@ const Library = ( {
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ currentPage, setCurrentPage ] = useState( {
 		gutenberg: 0,
-		editor: 0,
+		elementor: 0,
+		beaver: 0,
 	} );
 	const [ totalPages, setTotalPages ] = useState( {
 		gutenberg: 0,
-		editor: 0,
+		elementor: 0,
+		beaver: 0,
 	} );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isFetching, setFetching ] = useState( false );
@@ -59,12 +61,14 @@ const Library = ( {
 
 		setCurrentPage( {
 			gutenberg: 0,
-			editor: 0,
+			elementor: 0,
+			beaver: 0,
 		} );
 
 		setTotalPages( {
 			gutenberg: 0,
-			editor: 0,
+			elementor: 0,
+			beaver: 0,
 		} );
 
 		loadTemplates();
@@ -78,6 +82,10 @@ const Library = ( {
 		elementor: {
 			label: __( 'Elementor' ),
 			icon: 'elementor.jpg',
+		},
+		beaver: {
+			label: __( 'Beaver' ),
+			icon: 'beaver.jpg',
 		},
 	};
 
@@ -265,7 +273,7 @@ const Library = ( {
 					{ Object.keys( EDITORS ).map( ( key ) => (
 						// eslint-disable-next-line jsx-a11y/anchor-is-valid
 						<a
-							key={key}
+							key={ key }
 							href="#"
 							onClick={ () => setType( key ) }
 							className={ classnames( 'tab', {

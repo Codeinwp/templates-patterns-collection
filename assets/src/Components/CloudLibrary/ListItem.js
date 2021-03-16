@@ -64,7 +64,10 @@ const ListItem = ( {
 
 		deleteTemplate( item.template_id ).then( ( r ) => {
 			if ( r.success ) {
-				loadTemplates( sortingOrder );
+				loadTemplates( {
+					page: 0,
+					...sortingOrder,
+				} );
 				setLoading( false );
 			}
 		} );

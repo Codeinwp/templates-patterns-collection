@@ -110,17 +110,19 @@ const Header = ( {
 							{ window.tiTpc.library.tabs.templates }
 						</Button>
 
-						<Button
-							className={ classnames(
-								'ti-tpc-template-library-menu-item',
-								{
-									'is-active': 'library' === currentTab,
-								}
-							) }
-							onClick={ () => updateCurrentTab( 'library' ) }
-						>
-							{ window.tiTpc.library.tabs.library }
-						</Button>
+						{ parseInt( window.tiTpc.tier ) === 3 && (
+							<Button
+								className={ classnames(
+									'ti-tpc-template-library-menu-item',
+									{
+										'is-active': 'library' === currentTab,
+									}
+								) }
+								onClick={ () => updateCurrentTab( 'library' ) }
+							>
+								{ window.tiTpc.library.tabs.library }
+							</Button>
+						) }
 					</div>
 				) }
 
@@ -148,27 +150,37 @@ const Header = ( {
 							</div>
 						) : (
 							<div className="ti-tpc-template-library-header-actions">
-								<Button
-									className="ti-tpc-templates-modal__header__item"
-									onClick={ syncLibrary }
-								>
-									<i
-										className={ classnames( 'eicon-sync', {
-											'eicon-animation-spin': isFetching,
-										} ) }
-										aria-hidden="true"
-										title={
-											window.tiTpc.library.actions.sync
-										}
-									></i>
-									<span className="elementor-screen-only">
-										{ window.tiTpc.library.actions.sync }
-									</span>
-								</Button>
+								{ 'library' === currentTab && (
+									<Button
+										className="ti-tpc-templates-modal__header__item"
+										onClick={ syncLibrary }
+									>
+										<i
+											className={ classnames(
+												'eicon-sync',
+												{
+													'eicon-animation-spin': isFetching,
+												}
+											) }
+											aria-hidden="true"
+											title={
+												window.tiTpc.library.actions
+													.sync
+											}
+										></i>
+										<span className="elementor-screen-only">
+											{
+												window.tiTpc.library.actions
+													.sync
+											}
+										</span>
+									</Button>
+								) }
 
 								{ [ 'wp-post', 'wp-page' ].includes(
 									elementor.config.document.type
-								) && (
+								) &&
+									parseInt( window.tiTpc.tier ) === 3 && (
 									<Button
 										className="ti-tpc-templates-modal__header__item"
 										onClick={ () =>
@@ -178,7 +190,9 @@ const Header = ( {
 										<i
 											className="eicon-save-o"
 											aria-hidden="true"
-											title={ window.tiTpc.library.save }
+											title={
+												window.tiTpc.library.save
+											}
 										></i>
 										<span className="elementor-screen-only">
 											{ window.tiTpc.library.save }
