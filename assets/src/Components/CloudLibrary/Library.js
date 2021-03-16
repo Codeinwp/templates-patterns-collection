@@ -33,10 +33,12 @@ const Library = ( {
 	const [ currentPage, setCurrentPage ] = useState( {
 		gutenberg: 0,
 		elementor: 0,
+		beaver: 0,
 	} );
 	const [ totalPages, setTotalPages ] = useState( {
 		gutenberg: 0,
 		elementor: 0,
+		beaver: 0,
 	} );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isFetching, setFetching ] = useState( false );
@@ -60,11 +62,13 @@ const Library = ( {
 		setCurrentPage( {
 			gutenberg: 0,
 			elementor: 0,
+			beaver: 0,
 		} );
 
 		setTotalPages( {
 			gutenberg: 0,
 			elementor: 0,
+			beaver: 0,
 		} );
 
 		loadTemplates();
@@ -78,6 +82,10 @@ const Library = ( {
 		elementor: {
 			label: __( 'Elementor' ),
 			icon: 'elementor.jpg',
+		},
+		beaver: {
+			label: __( 'Beaver' ),
+			icon: 'beaver.jpg',
 		},
 	};
 

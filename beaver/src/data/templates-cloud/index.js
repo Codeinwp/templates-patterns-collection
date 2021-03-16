@@ -1,4 +1,4 @@
-/* global localStorage, elementor, lodash */
+/* global localStorage, lodash, FLBuilder */
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,8 +7,9 @@ import { dispatch, select } from '@wordpress/data';
 
 const { omit } = lodash;
 
-const dispatchNotification = ( message ) =>
-	elementor.notifications.showToast( { message } );
+const dispatchNotification = ( message ) => FLBuilder.alert( message );
+
+const { setFetching } = dispatch( 'tpc/beaver' );
 
 export const fetchTemplates = async ( additionalParams = {} ) => {
 	const params = {
@@ -27,11 +28,13 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 	} );
 
 	try {
+		setFetching( true );
 		const response = await apiFetch( {
 			url,
 			method: 'GET',
 			parse: false,
 		} );
+		setFetching( false );
 
 		if ( response.ok ) {
 			const templates = await response.json();
@@ -43,14 +46,14 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 			let items = templates;
 
 			if ( additionalParams.isScroll ) {
-				const library = select( 'tpc/elementor' ).getTemplates();
+				const library = select( 'tpc/beaver' ).getTemplates();
 				items = [ ...library.items, ...templates ];
 			}
 
 			const totalPages = response.headers.get( 'x-wp-totalpages' );
 			const currentPage = params.page;
 
-			dispatch( 'tpc/elementor' ).updateTemplates(
+			dispatch( 'tpc/beaver' ).updateTemplates(
 				items,
 				currentPage,
 				totalPages
@@ -64,10 +67,6 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 };
 
 export const fetchLibrary = async ( additionalParams = {} ) => {
-	if ( parseInt( window.tiTpc.tier ) !== 3 ) {
-		return;
-	}
-
 	const params = {
 		per_page: 20,
 		page: 0,
@@ -84,11 +83,13 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 	} );
 
 	try {
+		setFetching( true );
 		const response = await apiFetch( {
 			url,
 			method: 'GET',
 			parse: false,
 		} );
+		setFetching( false );
 
 		if ( response.ok ) {
 			const templates = await response.json();
@@ -100,14 +101,14 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 			let items = templates;
 
 			if ( additionalParams.isScroll ) {
-				const library = select( 'tpc/elementor' ).getLibrary();
+				const library = select( 'tpc/beaver' ).getLibrary();
 				items = [ ...library.items, ...templates ];
 			}
 
 			const totalPages = response.headers.get( 'x-wp-totalpages' );
 			const currentPage = params.page;
 
-			dispatch( 'tpc/elementor' ).updateLibrary(
+			dispatch( 'tpc/beaver' ).updateLibrary(
 				items,
 				currentPage,
 				totalPages
@@ -117,36 +118,6 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 		if ( error.message ) {
 			dispatchNotification( error.message );
 		}
-	}
-};
-
-export const getTemplate = async ( template ) => {
-	const url = stringifyUrl( {
-		url: `${ window.tiTpc.endpoint }templates/${ template }`,
-		query: {
-			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params,
-		},
-	} );
-
-	try {
-		const response = await apiFetch( {
-			url,
-			method: 'GET',
-			parse: false,
-		} );
-
-		if ( response.ok ) {
-			const content = await response.json();
-
-			if ( content.message ) {
-				return false;
-			}
-
-			return true;
-		}
-	} catch ( error ) {
-		return false;
 	}
 };
 
@@ -184,67 +155,22 @@ export const importTemplate = async ( template ) => {
 	return content;
 };
 
-export const duplicateTemplate = async ( id ) => {
-	const url = stringifyUrl( {
-		url: `${ window.tiTpc.endpoint }templates/${ id }/clone`,
-		query: {
-			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params,
-		},
-	} );
-
-	try {
-		const response = await apiFetch( { url, method: 'POST' } );
-
-		if ( response.ok ) {
-			const content = await response.json();
-
-			if ( content.message ) {
-				return dispatchNotification( content.message );
-			}
-		}
-
-		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-
-		await fetchLibrary();
-	} catch ( error ) {
-		if ( error.message ) {
-			dispatchNotification( error.message );
-		}
-	}
-};
-
 export const updateTemplate = async ( params ) => {
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ params.template_id }`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			...window.tiTpc.params,
-			...omit( params, 'content' ),
+			...params,
 		},
 	} );
 
 	try {
-		const obj = {
+		const response = await apiFetch( {
 			url,
 			method: 'POST',
 			parse: false,
-		};
-
-		if ( params.content ) {
-			const data = {
-				title:
-					elementor.config.initial_document.settings.settings
-						.post_title || '',
-				version: '0.4',
-				type: 'page',
-				content: params.content,
-			};
-
-			obj.data = data;
-		}
-
-		const response = await apiFetch( { ...obj } );
+		} );
 
 		if ( response.ok ) {
 			const content = await response.json();
@@ -291,96 +217,6 @@ export const deleteTemplate = async ( template ) => {
 	} catch ( error ) {
 		if ( error.message ) {
 			dispatchNotification( error.message );
-		}
-	}
-};
-
-export const exportTemplate = async ( {
-	title,
-	type,
-	content,
-	callback = () => {},
-} ) => {
-	const data = {
-		version: '0.4',
-		title,
-		type,
-		content,
-	};
-
-	const url = stringifyUrl( {
-		url: window.tiTpc.endpoint + 'templates',
-		query: {
-			...window.tiTpc.params,
-			template_name: title || window.tiTpc.exporter.textPlaceholder,
-			template_type: 'elementor',
-		},
-	} );
-
-	try {
-		const response = await apiFetch( {
-			url,
-			method: 'POST',
-			data,
-			parse: false,
-		} );
-
-		if ( response.ok ) {
-			const res = await response.json();
-
-			if ( res.message ) {
-				dispatchNotification( res.message );
-			} else {
-				callback( res );
-				window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-
-				dispatchNotification( window.tiTpc.exporter.templateSaved );
-			}
-		}
-	} catch ( error ) {
-		if ( error.message ) {
-			dispatchNotification( error.message );
-		}
-	}
-};
-
-export const publishTemplate = async ( params ) => {
-	const url = stringifyUrl( {
-		url: `${ window.tiTpc.endpoint }templates/${ params.template_id }/publish`,
-		query: {
-			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			method: 'POST',
-			...window.tiTpc.params,
-			...omit( params, 'template_id' ),
-		},
-	} );
-
-	try {
-		const response = await apiFetch( {
-			url,
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer  ${ window.tiTpc.bearer || '' } `,
-			},
-		} );
-		if ( response.ok ) {
-			const content = await response.json();
-			if ( content.message ) {
-				dispatchNotification( content.message );
-				return { success: false };
-			}
-		} else if ( response.message ) {
-			dispatchNotification( response.message );
-			return { success: false };
-		}
-
-		localStorage.setItem( 'tpcCacheBuster', uuidv4() );
-
-		return { success: true };
-	} catch ( error ) {
-		if ( error.message ) {
-			dispatchNotification( error.message );
-			return { success: false };
 		}
 	}
 };
