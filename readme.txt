@@ -27,6 +27,16 @@ No account is required to access the service template collection and the privacy
 
 == Changelog ==
 
+##### [Version 1.1.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.4...v1.1.5) (2021-03-16)
+
+- Add Beaver Builder integration
+- Check if the template exists before updating
+- Fix infinite scroll for Elementor
+- Various fixes
+
+
+
+
 ##### [Version 1.1.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.3...v1.1.4) (2021-02-22)
 
 - fix Elementor exporter sometimes not working
