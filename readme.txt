@@ -27,6 +27,13 @@ No account is required to access the service template collection and the privacy
 
 == Changelog ==
 
+##### [Version 1.1.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.5...v1.1.6) (2021-03-16)
+
+- Fix Onboarding failing
+
+
+
+
 ##### [Version 1.1.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.4...v1.1.5) (2021-03-16)
 
 - Add Beaver Builder integration
