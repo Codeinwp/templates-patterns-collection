@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { alignJustify, grid, search } from '@wordpress/icons';
+import { alignJustify, closeSmall, grid, search } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import { Button, Icon } from '@wordpress/components';
 import { ENTER } from '@wordpress/keycodes';
@@ -72,7 +72,18 @@ const Filters = ( {
 						} }
 					/>
 
-					<Icon icon={ search } />
+					{ searchQuery ? (
+						<Button
+							label={ __( 'Clear search query' ) }
+							icon={ closeSmall }
+							onClick={ () => {
+								setSearchQuery( '' );
+								onSearch( '' );
+							} }
+						/>
+					) : (
+						<Icon icon={ search } />
+					) }
 				</div>
 
 				<Button

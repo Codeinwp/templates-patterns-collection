@@ -34,17 +34,17 @@ const Content = ( {
 	preview,
 	setFetching,
 } ) => {
-	const init = async () => {
+	const init = async ( search = getSearchQuery() ) => {
 		setFetching( true );
 		const order = getOrder();
 		if ( currentTab === 'templates' ) {
 			await fetchTemplates( {
-				search: getSearchQuery(),
+				search,
 				...order,
 			} );
 		} else {
 			await fetchLibrary( {
-				search: getSearchQuery(),
+				search,
 				...order,
 			} );
 		}
@@ -217,7 +217,19 @@ const Content = ( {
 									}
 								} }
 							/>
-							<i className="eicon-search"></i>
+
+							{ getSearchQuery() ? (
+								<Button
+									onClick={ () => {
+										setQuery( '' );
+										init( '' );
+									} }
+								>
+									<i className="eicon-close"></i>
+								</Button>
+							) : (
+								<i className="eicon-search"></i>
+							) }
 						</div>
 					</div>
 

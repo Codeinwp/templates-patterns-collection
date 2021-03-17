@@ -131,6 +131,7 @@ class TI_Beaver extends FLBuilderModule {
 						),
 						'search'      => __( 'Search' ),
 						'searchLabel' => __( 'Search Templates' ),
+						'clearSearch' => __( 'Clear search query' ),
 					),
 					'export'         => array(
 						'save'            => __( 'Save' ),

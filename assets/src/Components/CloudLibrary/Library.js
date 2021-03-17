@@ -155,10 +155,10 @@ const Library = ( {
 		setFetching( false );
 	};
 
-	const handleSearch = () => {
+	const handleSearch = ( query = searchQuery ) => {
 		setLoading( true );
 		const params = {
-			search: searchQuery,
+			search: query,
 			type,
 			...getOrder(),
 		};

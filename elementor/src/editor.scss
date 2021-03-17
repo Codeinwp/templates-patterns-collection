@@ -316,11 +316,13 @@
 							transition: border .5s;
 						}
 
-						i {
+						i,
+						.components-button {
 							position: absolute;
 							top: 50%;
 							right: 0;
 							transform: translateY(-50%);
+							color: #a4afb7;
 						}
 					}
 				}

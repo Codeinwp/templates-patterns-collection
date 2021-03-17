@@ -69,17 +69,17 @@ const TemplatesContent = ( {
 		setFetching( false );
 	};
 
-	const onSearch = async () => {
+	const onSearch = async ( search = getSearchQuery() ) => {
 		setFetching( true );
 		const order = getOrder();
 		if ( isGeneral ) {
 			await fetchTemplates( {
-				search: getSearchQuery(),
+				search,
 				...order,
 			} );
 		} else {
 			await fetchLibrary( {
-				search: getSearchQuery(),
+				search,
 				...order,
 			} );
 		}

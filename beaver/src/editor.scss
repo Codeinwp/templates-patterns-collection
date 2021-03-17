@@ -233,11 +233,18 @@
 								outline: none;
 							}
 				
-							svg {
+							> svg,
+							.components-button {
 								position: absolute;
 								top: 50%;
 								right: 0;
 								transform: translateY(-50%);
+								padding: 0;
+								min-width: 0;
+
+								> svg {
+									fill: #101010;
+								}
 							}
 						}
 
