@@ -53,7 +53,7 @@ class Elementor {
 					'postType'         => get_post_type(),
 					'placeholderIndex' => '-1',
 					'exporter'         => array(
-						'exportLabel'         => __( 'Save to Templates Cloud' ),
+						'exportLabel'         => __( 'Save to Neve Cloud' ),
 						'modalLabel'          => __( 'Save Templates' ),
 						'textLabel'           => __( 'Template Name' ),
 						'textPlaceholder'     => __( 'Template' ),
@@ -73,7 +73,7 @@ class Elementor {
 						),
 						'actions'        => array(
 							'sync'      => __( 'Sync Library' ),
-							'save'      => __( 'Save to Templates Cloud' ),
+							'save'      => __( 'Save to Neve Cloud' ),
 							'close'     => __( 'Close' ),
 							'cancel'    => __( 'Cancel' ),
 							'edit'      => __( 'Edit' ),
