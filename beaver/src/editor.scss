@@ -470,6 +470,19 @@
 	
 					iframe {
 						height: 560px;
+						position: relative;
+						z-index: 99;
+					}
+
+					.is-loading {
+						position: absolute;
+						top: 50%;
+						right: calc( 50% - 12px );
+	
+						svg {
+							-webkit-animation: icon-spin 2s linear infinite;
+							animation: icon-spin 2s linear infinite;
+						}
 					}
 				}
 

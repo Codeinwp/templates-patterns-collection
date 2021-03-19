@@ -630,7 +630,20 @@
 
 				iframe {
 					height: 150%;
+					position: relative;
+					z-index: 99;
 					transform: scale(.666) translateX(-25%) translateY(-25%);
+				}
+
+				.is-loading {
+					position: absolute;
+					top: 50%;
+					right: calc( 50% - 12px );
+
+					svg {
+						-webkit-animation: icon-spin 2s linear infinite;
+						animation: icon-spin 2s linear infinite;
+					}
 				}
 			}
 		}
