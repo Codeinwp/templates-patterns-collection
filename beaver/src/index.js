@@ -37,6 +37,11 @@ const App = () => {
 		},
 	} );
 
+	const [ isSearch, setSearch ] = useState( {
+		templates: false,
+		library: false,
+	} );
+
 	const initModal = ( node ) => {
 		setNodeID( node );
 		setOpen( true );
@@ -102,6 +107,28 @@ const App = () => {
 		return sortingOrder.library;
 	};
 
+	const setSearchStatus = ( status ) => {
+		if ( isGeneral ) {
+			return setSearch( {
+				...searchQuery,
+				templates: status,
+			} );
+		}
+
+		return setSearch( {
+			...isSearch,
+			library: status,
+		} );
+	};
+
+	const getSearchStatus = () => {
+		if ( isGeneral ) {
+			return isSearch.templates;
+		}
+
+		return isSearch.library;
+	};
+
 	const importTemplate = ( template ) => {
 		setFetching( true );
 
@@ -163,6 +190,8 @@ const App = () => {
 					setQuery={ setQuery }
 					getSearchQuery={ getSearchQuery }
 					setSorting={ setSorting }
+					isSearch={ getSearchStatus() }
+					setSearch={ setSearchStatus }
 				/>
 			</Modal>
 		);

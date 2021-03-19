@@ -27,6 +27,8 @@ const Content = ( {
 	getSearchQuery,
 	setSorting,
 	getOrder,
+	isSearch,
+	setSearch,
 	onImport,
 	isFetching,
 	isPreview,
@@ -36,6 +38,13 @@ const Content = ( {
 } ) => {
 	const init = async ( search = getSearchQuery() ) => {
 		setFetching( true );
+
+		if ( search ) {
+			setSearch( true );
+		} else {
+			setSearch( false );
+		}
+
 		const order = getOrder();
 		if ( currentTab === 'templates' ) {
 			await fetchTemplates( {
@@ -218,7 +227,7 @@ const Content = ( {
 								} }
 							/>
 
-							{ getSearchQuery() ? (
+							{ isSearch ? (
 								<Button
 									onClick={ () => {
 										setQuery( '' );
@@ -228,7 +237,9 @@ const Content = ( {
 									<i className="eicon-close"></i>
 								</Button>
 							) : (
-								<i className="eicon-search"></i>
+								<Button onClick={ () => init() }>
+									<i className="eicon-search"></i>
+								</Button>
 							) }
 						</div>
 					</div>

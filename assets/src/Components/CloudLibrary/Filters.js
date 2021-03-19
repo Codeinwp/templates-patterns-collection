@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { alignJustify, closeSmall, grid, search } from '@wordpress/icons';
 import { ENTER } from '@wordpress/keycodes';
 import { __ } from '@wordpress/i18n';
-import { Button, Icon } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 
 const sortByOptions = {
 	date: __( 'Date' ),
@@ -13,6 +13,7 @@ const sortByOptions = {
 const Filters = ( {
 	isGrid,
 	setGrid,
+	isSearch,
 	searchQuery,
 	setSearchQuery,
 	onSearch,
@@ -74,7 +75,7 @@ const Filters = ( {
 							} }
 						/>
 
-						{ searchQuery ? (
+						{ isSearch ? (
 							<Button
 								label={ __( 'Clear search query' ) }
 								icon={ closeSmall }
@@ -84,7 +85,11 @@ const Filters = ( {
 								} }
 							/>
 						) : (
-							<Icon icon={ search } />
+							<Button
+								label={ __( 'Search' ) }
+								icon={ search }
+								onClick={ () => onSearch() }
+							/>
 						) }
 					</div>
 

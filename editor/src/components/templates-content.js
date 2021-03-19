@@ -25,6 +25,33 @@ const TemplatesContent = ( {
 	const { setFetching } = useDispatch( 'tpc/block-editor' );
 	const [ layout, setLayout ] = useState( 'grid' );
 
+	const [ isSearch, setSearch ] = useState( {
+		templates: false,
+		library: false,
+	} );
+
+	const setSearchStatus = ( status ) => {
+		if ( isGeneral ) {
+			return setSearch( {
+				...isSearch,
+				templates: status,
+			} );
+		}
+
+		return setSearch( {
+			...isSearch,
+			library: status,
+		} );
+	};
+
+	const getSearchStatus = () => {
+		if ( isGeneral ) {
+			return isSearch.templates;
+		}
+
+		return isSearch.library;
+	};
+
 	const init = async () => {
 		setFetching( true );
 		const order = getOrder();
@@ -71,6 +98,13 @@ const TemplatesContent = ( {
 
 	const onSearch = async ( search = getSearchQuery() ) => {
 		setFetching( true );
+
+		if ( search ) {
+			setSearchStatus( true );
+		} else {
+			setSearchStatus( false );
+		}
+
 		const order = getOrder();
 		if ( isGeneral ) {
 			await fetchTemplates( {
@@ -111,6 +145,7 @@ const TemplatesContent = ( {
 					layout={ layout }
 					sortingOrder={ getOrder() }
 					setLayout={ setLayout }
+					isSearch={ getSearchStatus() }
 					searchQuery={ getSearchQuery() }
 					onSearch={ onSearch }
 					setSearchQuery={ setQuery }
@@ -132,6 +167,7 @@ const TemplatesContent = ( {
 					layout={ layout }
 					sortingOrder={ getOrder() }
 					setLayout={ setLayout }
+					isSearch={ getSearchStatus() }
 					searchQuery={ getSearchQuery() }
 					onSearch={ onSearch }
 					setSearchQuery={ setQuery }
@@ -154,6 +190,7 @@ const TemplatesContent = ( {
 				layout={ layout }
 				sortingOrder={ getOrder() }
 				setLayout={ setLayout }
+				isSearch={ getSearchStatus() }
 				searchQuery={ getSearchQuery() }
 				onSearch={ onSearch }
 				setSearchQuery={ setQuery }

@@ -18,6 +18,7 @@ const Filters = ( {
 	setSearchQuery,
 	setSortingOrder,
 	changeOrder,
+	isSearch,
 } ) => {
 	return (
 		<div className="filters">
@@ -73,7 +74,7 @@ const Filters = ( {
 						} }
 					/>
 
-					{ searchQuery ? (
+					{ isSearch ? (
 						<Button
 							label={ window.tiTpc.library.filters.clearSearch }
 							icon={ closeSmall }
