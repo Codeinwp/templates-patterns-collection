@@ -23,6 +23,10 @@ const Edit = ( {
 } ) => {
 	const { createErrorNotice } = useDispatch( 'core/notices' );
 
+	const { updateLibrary, updateTemplates } = useDispatch(
+		'tpc/block-editor'
+	);
+
 	const [ modalOpen, setModalOpen ] = useState( false );
 	const [ importing, setImporting ] = useState( false );
 
@@ -89,6 +93,8 @@ const Edit = ( {
 	};
 
 	const importBlocks = ( content ) => {
+		updateLibrary( [] );
+		updateTemplates( [] );
 		replaceBlocks( clientId, parse( content ) );
 	};
 

@@ -110,7 +110,7 @@ class TI_Beaver extends FLBuilderModule {
 					),
 					'actions'        => array(
 						'sync'     => __( 'Sync Library' ),
-						'save'     => __( 'Save to Templates Cloud' ),
+						'save'     => __( 'Save to Neve Cloud' ),
 						'update'   => __( 'Update' ),
 						'close'    => __( 'Close' ),
 						'edit'     => __( 'Edit' ),
@@ -131,6 +131,7 @@ class TI_Beaver extends FLBuilderModule {
 						),
 						'search'      => __( 'Search' ),
 						'searchLabel' => __( 'Search Templates' ),
+						'clearSearch' => __( 'Clear search query' ),
 					),
 					'export'         => array(
 						'save'            => __( 'Save' ),
@@ -244,7 +245,7 @@ class TI_Beaver extends FLBuilderModule {
 	public function add_export_menu( $views ) {
 		if ( in_array( get_post_type(), FLBuilderModel::get_post_types() ) ) {
 			$views['main']['items'][15] = array(
-				'label'     => __( 'Save to Templates Cloud', 'templates-patterns-collection' ),
+				'label'     => __( 'Save to Neve Cloud', 'templates-patterns-collection' ),
 				'type'      => 'event',
 				'eventName' => 'tiTpcExport',
 			);

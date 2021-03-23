@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
-import { Button, Placeholder, Spinner } from '@wordpress/components';
+import { Button, Icon, Placeholder, Spinner } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { rotateRight } from '@wordpress/icons';
 
 const Preview = ( { isFetching, importTemplate } ) => {
 	const { togglePreview } = useDispatch( 'tpc/beaver' );
@@ -47,6 +48,10 @@ const Preview = ( { isFetching, importTemplate } ) => {
 						src={ item.link || '' }
 						title={ item.template_name || '' }
 					/>
+
+					<div className="is-loading">
+						<Icon icon={ rotateRight } />
+					</div>
 				</div>
 			) }
 		</div>

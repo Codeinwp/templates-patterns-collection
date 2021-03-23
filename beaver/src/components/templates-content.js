@@ -16,6 +16,8 @@ const TemplatesContent = ( {
 	setQuery,
 	getSearchQuery,
 	setSorting,
+	isSearch,
+	setSearch,
 } ) => {
 	const { items, currentPage, totalPages } = useSelect( ( select ) => {
 		return isGeneral
@@ -49,17 +51,24 @@ const TemplatesContent = ( {
 		init();
 	}, [ isGeneral ] );
 
-	const onSearch = async () => {
+	const onSearch = async ( search = getSearchQuery() ) => {
 		setFetching( true );
+
+		if ( search ) {
+			setSearch( true );
+		} else {
+			setSearch( false );
+		}
+
 		const order = getOrder();
 		if ( isGeneral ) {
 			await fetchTemplates( {
-				search: getSearchQuery(),
+				search,
 				...order,
 			} );
 		} else {
 			await fetchLibrary( {
-				search: getSearchQuery(),
+				search,
 				...order,
 			} );
 		}
@@ -116,6 +125,7 @@ const TemplatesContent = ( {
 					setSearchQuery={ setQuery }
 					setSortingOrder={ setSorting }
 					changeOrder={ changeOrder }
+					isSearch={ isSearch }
 				/>
 
 				<Placeholder>
@@ -137,6 +147,7 @@ const TemplatesContent = ( {
 					setSearchQuery={ setQuery }
 					setSortingOrder={ setSorting }
 					changeOrder={ changeOrder }
+					isSearch={ isSearch }
 				/>
 
 				{ window.tiTpc.library[ 404 ] }
@@ -159,6 +170,7 @@ const TemplatesContent = ( {
 				setSearchQuery={ setQuery }
 				setSortingOrder={ setSorting }
 				changeOrder={ changeOrder }
+				isSearch={ isSearch }
 			/>
 
 			<div className={ contentClasses }>

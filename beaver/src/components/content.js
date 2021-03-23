@@ -10,6 +10,8 @@ const Content = ( {
 	setQuery,
 	getSearchQuery,
 	setSorting,
+	isSearch,
+	setSearch,
 } ) => {
 	const isFetching = useSelect( ( select ) =>
 		select( 'tpc/beaver' ).isFetching()
@@ -46,6 +48,8 @@ const Content = ( {
 				setQuery={ setQuery }
 				getSearchQuery={ getSearchQuery }
 				setSorting={ setSorting }
+				isSearch={ isSearch }
+				setSearch={ setSearch }
 			/>
 		</div>
 	);

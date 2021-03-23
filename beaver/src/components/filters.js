@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { alignJustify, grid, search } from '@wordpress/icons';
+import { alignJustify, closeSmall, grid, search } from '@wordpress/icons';
 import { Button, Icon } from '@wordpress/components';
 import { ENTER } from '@wordpress/keycodes';
 
@@ -18,6 +18,7 @@ const Filters = ( {
 	setSearchQuery,
 	setSortingOrder,
 	changeOrder,
+	isSearch,
 } ) => {
 	return (
 		<div className="filters">
@@ -73,7 +74,18 @@ const Filters = ( {
 						} }
 					/>
 
-					<Icon icon={ search } />
+					{ isSearch ? (
+						<Button
+							label={ window.tiTpc.library.filters.clearSearch }
+							icon={ closeSmall }
+							onClick={ () => {
+								setSearchQuery( '' );
+								onSearch( '' );
+							} }
+						/>
+					) : (
+						<Icon icon={ search } />
+					) }
 				</div>
 
 				<Button

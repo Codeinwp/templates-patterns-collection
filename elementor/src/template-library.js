@@ -24,6 +24,11 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		},
 	} );
 
+	const [ isSearch, setSearch ] = useState( {
+		templates: false,
+		library: false,
+	} );
+
 	const isGeneral = currentTab === 'templates';
 
 	const setQuery = ( query ) => {
@@ -68,6 +73,28 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		}
 
 		return sortingOrder.library;
+	};
+
+	const setSearchStatus = ( status ) => {
+		if ( isGeneral ) {
+			return setSearch( {
+				...isSearch,
+				templates: status,
+			} );
+		}
+
+		return setSearch( {
+			...isSearch,
+			library: status,
+		} );
+	};
+
+	const getSearchStatus = () => {
+		if ( isGeneral ) {
+			return isSearch.templates;
+		}
+
+		return isSearch.library;
 	};
 
 	const changeID = ( element ) => {
@@ -129,6 +156,8 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 				getSearchQuery={ getSearchQuery }
 				setSorting={ setSorting }
 				getOrder={ getOrder }
+				isSearch={ getSearchStatus() }
+				setSearch={ setSearchStatus }
 				onImport={ onImport }
 			/>
 		</Fragment>

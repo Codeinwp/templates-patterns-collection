@@ -136,7 +136,8 @@
 				outline: none;
 			}
 
-			svg {
+			> svg,
+			.components-button {
 				position: absolute;
 				top: 50%;
 				right: 0;
