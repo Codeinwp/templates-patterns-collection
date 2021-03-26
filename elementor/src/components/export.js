@@ -57,12 +57,14 @@ const Export = ( { updateCurrentTab } ) => {
 				template_id: templateID,
 				template_name: title,
 				content,
+				link: elementor.config.initial_document.urls.permalink,
 			} );
 		} else {
 			await exportTemplate( {
 				title,
 				type: 'page',
 				content,
+				link: elementor.config.initial_document.urls.permalink,
 				callback: ( res ) => {
 					setTemplateID( res.template_id );
 					window.tiTpc.postModel.set( 'meta', {

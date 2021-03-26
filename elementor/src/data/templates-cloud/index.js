@@ -299,6 +299,7 @@ export const exportTemplate = async ( {
 	title,
 	type,
 	content,
+	link = '',
 	callback = () => {},
 } ) => {
 	const data = {
@@ -314,6 +315,7 @@ export const exportTemplate = async ( {
 			...window.tiTpc.params,
 			template_name: title || window.tiTpc.exporter.textPlaceholder,
 			template_type: 'elementor',
+			link,
 		},
 	} );
 

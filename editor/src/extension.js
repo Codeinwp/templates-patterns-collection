@@ -197,6 +197,7 @@ const Exporter = () => {
 				query: {
 					...window.tiTpc.params,
 					template_name: postTitle,
+					link,
 				},
 			} );
 		} else {
@@ -208,6 +209,7 @@ const Exporter = () => {
 					template_type: 'gutenberg',
 					template_site_slug: _ti_tpc_site_slug || '',
 					template_thumbnail: _ti_tpc_screenshot_url || '',
+					link,
 				},
 			} );
 		}

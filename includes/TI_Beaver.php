@@ -359,12 +359,15 @@ class TI_Beaver extends FLBuilderModule {
 	 * Save Beaver template to Templates Cloud.
 	 */
 	static public function save_template( $title, $body, $is_page = false, $is_sync = false ) {
+		$post_id = FLBuilderModel::get_post_id();
+
 		$url = add_query_arg(
 			array(
 				'site_url'      => get_site_url(),
 				'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
 				'template_name' => esc_attr( $title ),
 				'template_type' => 'beaver',
+				'link'          => $is_page ? get_permalink( $post_id ) : '',
 				'cache'         => uniqid(),
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates'
@@ -385,8 +388,6 @@ class TI_Beaver extends FLBuilderModule {
 		}
 
 		if ( $is_page ) {
-			$post_id = FLBuilderModel::get_post_id();
-
 			update_post_meta( $post_id, '_ti_tpc_template_sync', $is_sync );
 
 			if ( isset( $response['template_id'] ) ) {
@@ -401,12 +402,15 @@ class TI_Beaver extends FLBuilderModule {
 	 * Update Beaver template to Templates Cloud.
 	 */
 	static public function update_template( $template_id, $title, $body, $is_sync = false ) {
+		$post_id = FLBuilderModel::get_post_id();
+
 		$url = add_query_arg(
 			array(
 				'site_url'      => get_site_url(),
 				'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
 				'template_name' => esc_attr( $title ),
 				'template_type' => 'beaver',
+				'link'          => get_permalink( $post_id ),
 				'cache'         => uniqid(),
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id )
