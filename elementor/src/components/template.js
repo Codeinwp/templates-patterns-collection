@@ -104,6 +104,7 @@ const Template = ( {
 							{
 								title: window.tiTpc.library.actions.edit,
 								icon: edit,
+								isDisabled: item.link ? true : false,
 								onClick: () => setEditing( true ),
 							},
 							{

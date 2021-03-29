@@ -104,6 +104,7 @@ class TI_Beaver extends FLBuilderModule {
 					'templatesCloud' => __( 'Templates Cloud' ),
 					'404'            => __( 'No templates available. Add a new one?' ),
 					'deleteItem'     => __( 'Are you sure you want to delete this template?' ),
+					'synced'         => __( 'This template is synced to a page.' ),
 					'tabs'           => array(
 						'templates' => __( 'Page Templates' ),
 						'library'   => __( 'My Library' ),

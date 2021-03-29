@@ -10,7 +10,7 @@ import {
 	update,
 } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Button, Icon, Popover, TextControl } from '@wordpress/components';
+import { Button, Icon, Popover, TextControl, Tooltip } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
@@ -117,56 +117,58 @@ const ListItem = ( {
 
 						{ deletable && (
 							<div className="preview-controls">
-								<Button
-									label={ __( 'Edit' ) }
-									icon={
-										'updating' === isLoading ? update : edit
-									}
-									disabled={
-										isEditing || false !== isLoading
-									}
-									className={ classnames( {
-										'is-loading': 'updating' === isLoading,
-									} ) }
-									onClick={ () => setEditing( ! isEditing ) }
-								>
-									{ isEditing && (
-										<Popover
-											onFocusOutside={ () =>
-												setEditing( ! isEditing )
-											}
-											className="controls-popover"
-										>
-											<div className="popover-content">
-												<TextControl
-													label={ __(
-														'Template Name'
-													) }
-													value={ itemName }
-													onChange={ setItemName }
-												/>
+								{ ! item.link && (
+									<Button
+										label={ __( 'Edit' ) }
+										icon={
+											'updating' === isLoading ? update : edit
+										}
+										disabled={
+											isEditing || false !== isLoading
+										}
+										className={ classnames( {
+											'is-loading': 'updating' === isLoading,
+										} ) }
+										onClick={ () => setEditing( ! isEditing ) }
+									>
+										{ isEditing && (
+											<Popover
+												onFocusOutside={ () =>
+													setEditing( ! isEditing )
+												}
+												className="controls-popover"
+											>
+												<div className="popover-content">
+													<TextControl
+														label={ __(
+															'Template Name'
+														) }
+														value={ itemName }
+														onChange={ setItemName }
+													/>
 
-												<Button
-													label={ __( 'Update' ) }
-													icon={
-														'updating' === isLoading
-															? update
-															: check
-													}
-													disabled={
-														false !== isLoading
-													}
-													className={ classnames( {
-														'is-loading':
-															'updating' ===
-															isLoading,
-													} ) }
-													onClick={ updateItem }
-												/>
-											</div>
-										</Popover>
-									) }
-								</Button>
+													<Button
+														label={ __( 'Update' ) }
+														icon={
+															'updating' === isLoading
+																? update
+																: check
+														}
+														disabled={
+															false !== isLoading
+														}
+														className={ classnames( {
+															'is-loading':
+																'updating' ===
+																isLoading,
+														} ) }
+														onClick={ updateItem }
+													/>
+												</div>
+											</Popover>
+										) }
+									</Button>
+								) }
 
 								{ /*<Button
 									label={ __( 'Duplicate' ) }
@@ -230,27 +232,39 @@ const ListItem = ( {
 
 			{ deletable && (
 				<div className="row-controls">
-					<Button
-						label={ isEditing ? __( 'Update' ) : __( 'Edit' ) }
-						icon={
-							isEditing
-								? 'updating' === isLoading
-									? update
-									: check
-								: edit
-						}
-						disabled={ false !== isLoading }
-						className={ classnames( {
-							'is-loading': 'updating' === isLoading,
-						} ) }
-						onClick={
-							isEditing
-								? updateItem
-								: () => setEditing( ! isEditing )
-						}
-					>
-						{ isEditing ? __( 'Update' ) : __( 'Edit' ) }
-					</Button>
+					{ item.link ? (
+						<Tooltip text={ __( 'This template is synced to a page.' ) }>
+							<Button
+								label={ __( 'Edit' ) }
+								icon={ edit }
+								disabled={ true }
+							>
+								{ __( 'Edit' ) }
+							</Button>
+						</Tooltip>
+					) : (
+						<Button
+							label={ isEditing ? __( 'Update' ) : __( 'Edit' ) }
+							icon={
+								isEditing
+									? 'updating' === isLoading
+										? update
+										: check
+									: edit
+							}
+							disabled={ false !== isLoading }
+							className={ classnames( {
+								'is-loading': 'updating' === isLoading,
+							} ) }
+							onClick={
+								isEditing
+									? updateItem
+									: () => setEditing( ! isEditing )
+							}
+						>
+							{ isEditing ? __( 'Update' ) : __( 'Edit' ) }
+						</Button>
+					) }
 
 					{ /*<Button
 						label={ __( 'Duplicate' ) }
