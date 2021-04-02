@@ -2,7 +2,7 @@
 
 import { check, edit, page, trash, update } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Button, Icon, TextControl } from '@wordpress/components';
+import { Button, Icon, TextControl, Tooltip } from '@wordpress/components';
 
 import { useState } from '@wordpress/element';
 import classnames from 'classnames';
@@ -52,8 +52,6 @@ const ListItem = ( {
 	};*/
 
 	const deleteItem = async () => {
-		setLoading( 'deleteing' );
-
 		if (
 			! window.confirm(
 				__( 'Are you sure you want to delete this template?' )
@@ -61,6 +59,8 @@ const ListItem = ( {
 		) {
 			return false;
 		}
+
+		setLoading( 'deleteing' );
 
 		deleteTemplate( item.template_id ).then( ( r ) => {
 			if ( r.success ) {
@@ -115,19 +115,19 @@ const ListItem = ( {
 
 						{ userTemplate && (
 							<div className="preview-controls">
-								<Button
-									label={ __( 'Edit' ) }
-									icon={
-										'updating' === isLoading ? update : edit
-									}
-									disabled={
-										isEditing || false !== isLoading
-									}
-									className={ classnames( {
-										'is-loading': 'updating' === isLoading,
-									} ) }
-									onClick={ () => setEditing( ! isEditing ) }
-								/>
+								{ ! item.link && (
+									<Button
+										label={ __( 'Edit' ) }
+										icon={
+											'updating' === isLoading ? update : edit
+										}
+										disabled={ isEditing || false !== isLoading }
+										className={ classnames( {
+											'is-loading': 'updating' === isLoading,
+										} ) }
+										onClick={ () => setEditing( ! isEditing ) }
+									/>
+								) }
 
 								{ /*<Button
 									label={ __( 'Duplicate' ) }
@@ -207,27 +207,35 @@ const ListItem = ( {
 
 			{ userTemplate && (
 				<div className="controls">
-					<Button
-						label={ isEditing ? __( 'Update' ) : __( 'Edit' ) }
-						icon={
-							isEditing
-								? 'updating' === isLoading
-									? update
-									: check
-								: edit
-						}
-						disabled={ false !== isLoading }
-						className={ classnames( {
-							'is-loading': 'updating' === isLoading,
-						} ) }
-						onClick={
-							isEditing
-								? updateItem
-								: () => setEditing( ! isEditing )
-						}
-					>
-						{ isEditing ? __( 'Update' ) : __( 'Edit' ) }
-					</Button>
+					{ item.link ? (
+						<Tooltip text={ __( 'This template is synced to a page.' ) }>
+							<Button
+								label={ __( 'Edit' ) }
+								icon={ edit }
+								disabled={ true }
+							>
+								{ __( 'Edit' ) }
+							</Button>
+						</Tooltip>
+					) : (
+						<Button
+							label={ isEditing ? __( 'Update' ) : __( 'Edit' ) }
+							icon={
+								isEditing
+									? 'updating' === isLoading
+										? update
+										: check
+									: edit
+							}
+							disabled={ false !== isLoading }
+							className={ classnames( {
+								'is-loading': 'updating' === isLoading,
+							} ) }
+							onClick={ () => isEditing ? updateItem : setEditing( ! isEditing ) }
+						>
+							{ isEditing ? __( 'Update' ) : __( 'Edit' ) }
+						</Button>
+					) }
 
 					{ /*	<Button
 						label={ __( 'Duplicate' ) }

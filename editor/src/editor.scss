@@ -433,6 +433,7 @@
 .controls-popover {
 	.components-popover__content {
 		padding: 10px;
+		min-width: 300px;
 
 		.popover-content {
 			display: flex;
