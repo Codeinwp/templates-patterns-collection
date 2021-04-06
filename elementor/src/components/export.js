@@ -58,6 +58,7 @@ const Export = ( { updateCurrentTab } ) => {
 				template_name: title,
 				content,
 				link: elementor.config.initial_document.urls.permalink,
+				meta: isPublished ? JSON.stringify( tiTpc.params.meta ) : '',
 			} );
 		} else {
 			await exportTemplate( {

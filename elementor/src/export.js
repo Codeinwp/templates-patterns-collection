@@ -41,6 +41,7 @@ if ( parseInt( window.tiTpc.tier ) === 3 ) {
 				const {
 					_ti_tpc_template_sync,
 					_ti_tpc_template_id,
+					_ti_tpc_published,
 				} = window.tiTpc.postModel.getMetas();
 
 				const doesExist = await getTemplate( _ti_tpc_template_id );
@@ -67,6 +68,7 @@ if ( parseInt( window.tiTpc.tier ) === 3 ) {
 							elementor.config.initial_document.settings.settings
 								.post_title || '',
 						content,
+						meta: _ti_tpc_published ? JSON.stringify( tiTpc.params.meta ) : '',
 					} );
 				}
 			} );

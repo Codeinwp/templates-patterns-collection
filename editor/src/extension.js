@@ -26,6 +26,8 @@ import { iconBlack } from './icon';
 import { getTemplate, publishTemplate } from './data/templates-cloud';
 import Notices from './components/notices';
 
+const { omit } = lodash;
+
 const Exporter = () => {
 	const [ isOpen, setOpen ] = useState( false );
 	const [ isLoading, setLoading ] = useState( false );
@@ -133,7 +135,7 @@ const Exporter = () => {
 		const url = stringifyUrl( {
 			url: window.tiTpc.endpoint + 'templates',
 			query: {
-				...window.tiTpc.params,
+				...omit( tiTpc.params, 'meta' ),
 				template_name: title,
 				template_type: 'gutenberg',
 			},
@@ -195,7 +197,8 @@ const Exporter = () => {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates/' + templateID,
 				query: {
-					...window.tiTpc.params,
+					...omit( tiTpc.params, 'meta' ),
+					meta: published ? JSON.stringify( tiTpc.params.meta ) : '',
 					template_name: postTitle,
 					link,
 				},
@@ -204,7 +207,7 @@ const Exporter = () => {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
 				query: {
-					...window.tiTpc.params,
+					...omit( tiTpc.params, 'meta' ),
 					template_name: postTitle,
 					template_type: 'gutenberg',
 					template_site_slug: _ti_tpc_site_slug || '',

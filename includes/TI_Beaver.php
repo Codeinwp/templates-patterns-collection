@@ -68,6 +68,15 @@ class TI_Beaver extends FLBuilderModule {
 	}
 
 	/**
+	 * Template Meta.
+	 */
+	static public function get_template_meta() {
+		return apply_filters( 'ti_tpc_template_meta', array(
+			'type' => 'beaver',
+		) );
+	}
+
+	/**
 	 * Add strings as global variable.
 	 */
 	public function inline_script() {
@@ -405,6 +414,8 @@ class TI_Beaver extends FLBuilderModule {
 	static public function update_template( $template_id, $title, $body, $is_sync = false ) {
 		$post_id = FLBuilderModel::get_post_id();
 
+		$premade = get_post_meta( get_the_ID(), '_ti_tpc_published', true );
+
 		$url = add_query_arg(
 			array(
 				'site_url'      => get_site_url(),
@@ -413,6 +424,7 @@ class TI_Beaver extends FLBuilderModule {
 				'template_type' => 'beaver',
 				'link'          => get_permalink( $post_id ),
 				'cache'         => uniqid(),
+				'meta'          => 'yes' === $premade ? json_encode( self::get_template_meta() ) : '',
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id )
 		);
@@ -455,6 +467,7 @@ class TI_Beaver extends FLBuilderModule {
 				'premade'            => $premade,
 				'link'               => get_permalink( $post_id ),
 				'cache'              => uniqid(),
+				'meta'               => 'yes' === $premade ? json_encode( self::get_template_meta() ) : '',
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id ) . '/publish'
 		);
