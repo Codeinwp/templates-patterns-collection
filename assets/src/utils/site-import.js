@@ -18,6 +18,24 @@ export const importContent = ( data ) => {
 	return send( onboarding.root + '/import_content', data );
 };
 
-export const importTemplates = ( data ) => {
+export const importTemplates = async ( data ) => {
+	let plugins = {};
+
+	data.forEach( template => {
+		if ( 'elementor' === template.template_type ) {
+			plugins.elementor = true;
+		} else if ( 'beaver' === template.template_type ) {
+			plugins['beaver-builder-lite-version'] = true;
+		}
+	} );
+
+	if ( Object.keys( plugins ).length > 0 ) {
+		try {
+			await installPlugins( plugins );
+		} catch ( e ) {
+			return error;
+		}
+	}
+
 	return send( onboarding.root + '/import_single_templates', data );
 };
