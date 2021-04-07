@@ -48,9 +48,7 @@ class Elementor {
 						'site_url'   => get_site_url(),
 						'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 						'type'       => 'elementor',
-						'meta'       => apply_filters( 'ti_tpc_template_meta', array(
-							'type' => 'elementor',
-						) ),
+						'meta'       => apply_filters( 'ti_tpc_template_meta', array(), $type = 'elementor' ),
 					),
 					'canPredefine'     => apply_filters( 'ti_tpc_can_predefine', false ),
 					'postType'         => get_post_type(),

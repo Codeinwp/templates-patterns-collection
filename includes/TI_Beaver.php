@@ -71,9 +71,7 @@ class TI_Beaver extends FLBuilderModule {
 	 * Template Meta.
 	 */
 	static public function get_template_meta() {
-		return apply_filters( 'ti_tpc_template_meta', array(
-			'type' => 'beaver',
-		) );
+		return apply_filters( 'ti_tpc_template_meta', array(), $type = 'beaver' );
 	}
 
 	/**
