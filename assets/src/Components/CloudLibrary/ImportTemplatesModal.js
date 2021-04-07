@@ -251,17 +251,17 @@ const ImportTemplatesModal = ( {
 			? sprintf(
 				/* translators: %s  the name of the template */
 				__(
-					'The %s template will be imported as a page into your site. This import <strong/> include any plugins or theme settings.',
+					'The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed.',
 						'templates-patterns-collection'
 				),
 				templatesData[ 0 ].template_name
 			  )
 			: __(
-				'All the templates that are included in this starter site, will be imported as pages. This import <strong/> include any plugins or theme settings.',
+				'All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed.',
 				'templates-patterns-collection'
 			  );
 
-		return createInterpolateElement( text, map );
+		return text;
 	};
 
 	const ModalContent = () => {

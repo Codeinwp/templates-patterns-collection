@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-07T11:55:43+00:00\n"
+"POT-Creation-Date: 2021-04-07T18:23:26+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -381,13 +381,11 @@ msgstr ""
 
 #. translators: %s  the name of the template
 #: assets/build/app.js:8
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:253
-msgid "The %s template will be imported as a page into your site. This import <strong/> include any plugins or theme settings."
+msgid "The %s template will be imported as a page into your site. This import includes the page builder plugin."
 msgstr ""
 
 #. translators: %s  the name of the template
 #: assets/build/app.js:8
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:259
 msgid "All the templates that are included in this starter site, will be imported as pages. This import <strong/> include any plugins or theme settings."
 msgstr ""
 
@@ -535,4 +533,13 @@ msgstr ""
 #: assets/build/app.js:10
 #: assets/src/Components/OnboardingContent.js:171
 msgid "No results found"
+msgstr ""
+
+#. translators: %s  the name of the template
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:253
+msgid "The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:259
+msgid "All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed."
 msgstr ""
