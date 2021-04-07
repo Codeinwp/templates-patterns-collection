@@ -6,7 +6,6 @@ import { page as pageIcon } from '@wordpress/icons';
 import {
 	useEffect,
 	useState,
-	createInterpolateElement,
 } from '@wordpress/element';
 
 import { importTemplates } from '../../utils/site-import';
