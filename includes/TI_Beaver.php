@@ -9,6 +9,8 @@
 
 namespace TIOB;
 
+
+use TIOB\Main;
 use FLBuilder;
 use FLBuilderAJAX;
 use FLBuilderModel;
@@ -71,7 +73,8 @@ class TI_Beaver extends FLBuilderModule {
 	 * Template Meta.
 	 */
 	static public function get_template_meta() {
-		return apply_filters( 'ti_tpc_template_meta', array(), $type = 'beaver' );
+		$post_id = FLBuilderModel::get_post_id();
+		return Main::get_meta_fields( $post_id, $type = 'beaver' );
 	}
 
 	/**
@@ -239,6 +242,17 @@ class TI_Beaver extends FLBuilderModule {
 		// Delete old asset cache.
 		FLBuilderModel::delete_asset_cache();
 
+		$response = self::get_template( $template, false );
+
+		if ( isset( $response['meta'] ) ) {
+			$post_id  = FLBuilderModel::get_post_id();
+			$fields = json_decode( $response['meta'] );
+
+			foreach( $fields as $key => $value ) {
+				update_post_meta( $post_id, $key, $value );
+			}
+		}
+
 		// Return the layout.
 		return array(
 			'layout_css' => isset( $settings ) ? $settings->css : null,
@@ -316,7 +330,7 @@ class TI_Beaver extends FLBuilderModule {
 	/**
 	 * Get template by ID.
 	 */
-	static public function get_template( $template_id ) {
+	static public function get_template( $template_id, $bool = true ) {
 		$url = add_query_arg(
 			array(
 				'site_url'   => get_site_url(),
@@ -329,6 +343,10 @@ class TI_Beaver extends FLBuilderModule {
 		$response = wp_remote_get( esc_url_raw( $url ) );
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response, true );
+
+		if ( ! $bool ) {
+			return $response;
+		}
 
 		if ( isset( $response['message'] ) ) {
 			return false;

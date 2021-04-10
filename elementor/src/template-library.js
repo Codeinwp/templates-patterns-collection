@@ -109,7 +109,7 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		return element;
 	};
 
-	const onImport = async ( { id, title } ) => {
+	const onImport = async ( { id, title, meta = [] } ) => {
 		setFetching( true );
 		const data = await importTemplate( id );
 
@@ -133,6 +133,11 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 				model: content[ i ],
 				options: index >= 0 ? { at: index++ } : {},
 			} );
+		}
+
+		if ( 0 < meta.length ) {
+			window.tiTpc.postModel.set( 'meta', { ... JSON.parse( meta ) } );
+			window.tiTpc.postModel.save();
 		}
 
 		$e.internal( 'document/history/end-log', {

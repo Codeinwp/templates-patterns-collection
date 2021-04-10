@@ -19,7 +19,6 @@ const ImportTemplatesModal = ( {
 	themeStatus,
 	setInstallModal,
 	setModal,
-	editor,
 	isUserTemplate = false,
 	generalTemplates = false,
 } ) => {
@@ -342,13 +341,12 @@ const ImportTemplatesModal = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getThemeAction, getCurrentSite, getCurrentEditor } = select(
+		const { getThemeAction, getCurrentSite } = select(
 			'neve-onboarding'
 		);
 		return {
 			themeStatus: getThemeAction().action || false,
 			siteData: getCurrentSite(),
-			editor: getCurrentEditor(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {

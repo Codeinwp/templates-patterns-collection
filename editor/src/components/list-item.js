@@ -39,7 +39,7 @@ const ListItem = ( {
 		const data = await importTemplate( item.template_id );
 
 		if ( data.__file && data.content && 'wp_export' === data.__file ) {
-			importBlocks( data.content );
+			importBlocks( data.content, item.meta || [] );
 		}
 		setLoading( false );
 	};

@@ -321,6 +321,7 @@ class Rest_Server {
 					'post_status'   => 'publish',
 					'post_type'     => 'page',
 					'page_template' => 'page-templates/template-pagebuilder-full-width.php',
+					'meta_input'    => isset( $template['meta'] ) ? json_decode( $template['meta'], true ) : array(),
 				)
 			);
 
@@ -345,10 +346,13 @@ class Rest_Server {
 					'post_status'   => 'publish',
 					'post_type'     => 'page',
 					'page_template' => 'page-templates/template-pagebuilder-full-width.php',
-					'meta_input'    => array(
-						'_elementor_data'          => $template['content'],
-						'_elementor_template_type' => 'wp-page',
-						'_elementor_edit_mode'     => 'builder',
+					'meta_input'    => array_merge(
+						array(
+							'_elementor_data'          => $template['content'],
+							'_elementor_template_type' => 'wp-page',
+							'_elementor_edit_mode'     => 'builder',
+						),
+						isset( $template['meta'] ) ? json_decode( $template['meta'], true ) : array()
 					),
 				)
 			);
@@ -361,6 +365,7 @@ class Rest_Server {
 				'post_status'   => 'publish',
 				'post_type'     => 'page',
 				'page_template' => 'page-templates/template-pagebuilder-full-width.php',
+				'meta_input'    => isset( $template['meta'] ) ? json_decode( $template['meta'], true ) : array(),
 			)
 		);
 	}
