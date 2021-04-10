@@ -245,10 +245,10 @@ class TI_Beaver extends FLBuilderModule {
 		$response = self::get_template( $template, false );
 
 		if ( isset( $response['meta'] ) ) {
-			$post_id  = FLBuilderModel::get_post_id();
-			$fields = json_decode( $response['meta'] );
+			$post_id = FLBuilderModel::get_post_id();
+			$fields  = json_decode( $response['meta'] );
 
-			foreach( $fields as $key => $value ) {
+			foreach ( $fields as $key => $value ) {
 				update_post_meta( $post_id, $key, $value );
 			}
 		}

@@ -196,7 +196,7 @@ class Main {
 		$meta   = array();
 
 		if ( sizeof( $fields ) > 0 ) {
-			foreach( $fields as $field ) {
+			foreach ( $fields as $field ) {
 				$value = get_post_meta( $post_id, $field, true );
 
 				if ( ! empty( $value ) ) {
