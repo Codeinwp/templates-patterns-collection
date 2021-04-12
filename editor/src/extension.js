@@ -26,6 +26,8 @@ import { iconBlack } from './icon';
 import { getTemplate, publishTemplate } from './data/templates-cloud';
 import Notices from './components/notices';
 
+const { omit } = lodash;
+
 const Exporter = () => {
 	const [ isOpen, setOpen ] = useState( false );
 	const [ isLoading, setLoading ] = useState( false );
@@ -133,7 +135,7 @@ const Exporter = () => {
 		const url = stringifyUrl( {
 			url: window.tiTpc.endpoint + 'templates',
 			query: {
-				...window.tiTpc.params,
+				...omit( tiTpc.params, 'meta' ),
 				template_name: title,
 				template_type: 'gutenberg',
 			},
@@ -195,19 +197,22 @@ const Exporter = () => {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates/' + templateID,
 				query: {
-					...window.tiTpc.params,
+					...omit( tiTpc.params, 'meta' ),
+					meta: published ? JSON.stringify( tiTpc.params.meta ) : '',
 					template_name: postTitle,
+					link,
 				},
 			} );
 		} else {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
 				query: {
-					...window.tiTpc.params,
+					...omit( tiTpc.params, 'meta' ),
 					template_name: postTitle,
 					template_type: 'gutenberg',
 					template_site_slug: _ti_tpc_site_slug || '',
 					template_thumbnail: _ti_tpc_screenshot_url || '',
+					link,
 				},
 			} );
 		}
@@ -330,7 +335,7 @@ const Exporter = () => {
 	return (
 		<Fragment>
 			<PluginBlockSettingsMenuItem
-				label={ __( 'Save as Template' ) }
+				label={ __( 'Save to Neve Cloud' ) }
 				icon={ 'none' } // We don't want an icon, as new UI of Gutenberg does't have icons for Menu Items, but the component doesn't allow that so we pass an icon which doesn't exist.
 				onClick={ () => setOpen( true ) }
 			/>
@@ -358,7 +363,7 @@ const Exporter = () => {
 						disabled={ isLoading }
 						onClick={ onSavePage }
 					>
-						{ __( 'Save Page as Template' ) }
+						{ __( 'Save Page to Neve Cloud' ) }
 					</Button>
 
 					<ToggleControl

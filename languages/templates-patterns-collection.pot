@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-03-16T18:57:36+00:00\n"
+"POT-Creation-Date: 2021-04-10T21:51:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -219,20 +219,20 @@ msgstr ""
 msgid "Hi! We've noticed you were using Zelle before. To make your transition easier, we can help you keep the same beautiful homepage you had before, by converting it into an Elementor template. This option will also import your homepage content."
 msgstr ""
 
-#: includes/TI_Beaver.php:33
 #: includes/TI_Beaver.php:35
+#: includes/TI_Beaver.php:37
 msgid "Templates Cloud"
 msgstr ""
 
-#: includes/TI_Beaver.php:34
+#: includes/TI_Beaver.php:36
 msgid "Templates Cloud by Neve."
 msgstr ""
 
-#: includes/TI_Beaver.php:247
-msgid "Save to Templates Cloud"
+#: includes/TI_Beaver.php:270
+msgid "Save to Neve Cloud"
 msgstr ""
 
-#: includes/TI_Beaver.php:275
+#: includes/TI_Beaver.php:298
 msgid "Template"
 msgstr ""
 
@@ -338,61 +338,61 @@ msgid "Dismiss"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:217
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:215
 msgid "An error occurred!"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:143
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:141
 msgid "Import done!"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:150
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:148
 msgid "Template was successfully imported!"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:154
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:152
 msgid "Templates were successfully imported!"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:181
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:179
 msgid "Visit"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:190
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:188
 msgid "Edit"
 msgstr ""
 
 #. translators: name of starter site
 #: assets/build/app.js:4
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:284
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:282
 msgid "Import the %s template"
 msgstr ""
 
 #. translators: name of template
 #: assets/build/app.js:6
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:289
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:287
 msgid "Import all templates from %s"
 msgstr ""
 
 #. translators: %s  the name of the template
 #: assets/build/app.js:8
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:253
-msgid "The %s template will be imported as a page into your site. This import <strong/> include any plugins or theme settings."
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:251
+msgid "The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed."
 msgstr ""
 
 #. translators: %s  the name of the template
 #: assets/build/app.js:8
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:259
-msgid "All the templates that are included in this starter site, will be imported as pages. This import <strong/> include any plugins or theme settings."
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:257
+msgid "All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed."
 msgstr ""
 
 #: assets/build/app.js:8
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:309
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:307
 msgid "I want to import the entire site"
 msgstr ""
 

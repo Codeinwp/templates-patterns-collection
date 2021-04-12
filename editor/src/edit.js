@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { withDispatch, withSelect, useDispatch } from '@wordpress/data';
+import { withDispatch, withSelect, useDispatch, useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 import { Modal, Button } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
@@ -21,7 +21,19 @@ const Edit = ( {
 	replaceBlocks,
 	closePreview,
 } ) => {
+	const {
+		type,
+		postId
+	} = useSelect( ( select ) => ( {
+		type: select( 'core/editor' ).getEditedPostAttribute( 'type' ),
+		postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),
+	} ) );
+
 	const { createErrorNotice } = useDispatch( 'core/notices' );
+
+	const { updateLibrary, updateTemplates } = useDispatch(
+		'tpc/block-editor'
+	);
 
 	const [ modalOpen, setModalOpen ] = useState( false );
 	const [ importing, setImporting ] = useState( false );
@@ -88,7 +100,23 @@ const Edit = ( {
 		return sortingOrder.library;
 	};
 
-	const importBlocks = ( content ) => {
+	const importBlocks = ( content, metaFields = [] ) => {
+		updateLibrary( [] );
+		updateTemplates( [] );
+
+		if ( 0 < metaFields.length && [ 'post', 'page' ].includes( type ) ) {
+			let post = null;
+
+			if ( type === 'post' ) {
+				post = new wp.api.models.Post( { id: postId } );
+			} else if ( type === 'page' ) {
+				post = new wp.api.models.Page( { id: postId } );
+			}
+
+			post.set( 'meta', { ...JSON.parse( metaFields ) } );
+			post.save();
+		}
+
 		replaceBlocks( clientId, parse( content ) );
 	};
 
@@ -98,7 +126,7 @@ const Edit = ( {
 			if ( r.__file && r.content && 'wp_export' === r.__file ) {
 				closePreview();
 				setImporting( false );
-				importBlocks( r.content );
+				importBlocks( r.content, previewData.meta || [] );
 				return false;
 			}
 

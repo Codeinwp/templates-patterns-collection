@@ -9,6 +9,7 @@ const Template = ( {
 	item,
 	id,
 	title,
+	meta,
 	thumbnail,
 	onImport,
 	onUpdateTemplate,
@@ -80,7 +81,7 @@ const Template = ( {
 				<div className="ti-tpc-template-library-templates-table-column">
 					<Button
 						className="elementor-button elementor-button-success"
-						onClick={ () => onImport( { id, title } ) }
+						onClick={ () => onImport( { id, title, meta } ) }
 					>
 						<i
 							className="eicon-file-download"
@@ -104,6 +105,7 @@ const Template = ( {
 							{
 								title: window.tiTpc.library.actions.edit,
 								icon: edit,
+								isDisabled: item.link ? true : false,
 								onClick: () => setEditing( true ),
 							},
 							{
@@ -146,7 +148,7 @@ const Template = ( {
 			<div className="ti-tpc-template-library-template-footer">
 				<Button
 					className="ti-tpc-template-library-template-action elementor-button"
-					onClick={ () => onImport( { id, title } ) }
+					onClick={ () => onImport( { id, title, meta } ) }
 				>
 					<i className="eicon-file-download" aria-hidden="true"></i>
 					<span>{ window.tiTpc.library.actions.insert }</span>

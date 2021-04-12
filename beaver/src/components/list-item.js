@@ -3,7 +3,7 @@
 import classnames from 'classnames';
 
 import { check, edit, page, trash, update } from '@wordpress/icons';
-import { Button, Icon, TextControl } from '@wordpress/components';
+import { Button, Icon, TextControl, Tooltip } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
@@ -130,33 +130,45 @@ const ListItem = ( { layout, item, importTemplate, deletable } ) => {
 
 			{ deletable && (
 				<div className="row-controls">
-					<Button
-						label={
-							isEditing
+					{ item.link ? (
+						<Tooltip text={ window.tiTpc.library.synced }>
+							<Button
+								label={ window.tiTpc.library.actions.edit }
+								icon={ edit }
+								disabled={ true }
+							>
+								{ window.tiTpc.library.actions.edit }
+							</Button>
+						</Tooltip>
+					) : (
+						<Button
+							label={
+								isEditing
+									? window.tiTpc.library.actions.update
+									: window.tiTpc.library.actions.edit
+							}
+							icon={
+								isEditing
+									? 'updating' === isLoading
+										? update
+										: check
+									: edit
+							}
+							disabled={ false !== isLoading }
+							className={ classnames( {
+								'is-loading': 'updating' === isLoading,
+							} ) }
+							onClick={
+								isEditing
+									? updateItem
+									: () => setEditing( ! isEditing )
+							}
+						>
+							{ isEditing
 								? window.tiTpc.library.actions.update
-								: window.tiTpc.library.actions.edit
-						}
-						icon={
-							isEditing
-								? 'updating' === isLoading
-									? update
-									: check
-								: edit
-						}
-						disabled={ false !== isLoading }
-						className={ classnames( {
-							'is-loading': 'updating' === isLoading,
-						} ) }
-						onClick={
-							isEditing
-								? updateItem
-								: () => setEditing( ! isEditing )
-						}
-					>
-						{ isEditing
-							? window.tiTpc.library.actions.update
-							: window.tiTpc.library.actions.edit }
-					</Button>
+								: window.tiTpc.library.actions.edit }
+						</Button>
+					) }
 
 					<Button
 						label={ window.tiTpc.library.actions.delete }

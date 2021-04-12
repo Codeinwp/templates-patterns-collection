@@ -187,6 +187,28 @@ class Main {
 	}
 
 	/**
+	 * Get meta fields.
+	 *
+	 * @return void
+	 */
+	static public function get_meta_fields( $post_id, $type ) {
+		$fields = apply_filters( 'ti_tpc_template_meta', array(), $post_id, $type );
+		$meta   = array();
+
+		if ( sizeof( $fields ) > 0 ) {
+			foreach ( $fields as $field ) {
+				$value = get_post_meta( $post_id, $field, true );
+
+				if ( ! empty( $value ) ) {
+					$meta[ $field ] = $value;
+				}
+			}
+		}
+
+		return $meta;
+	}
+
+	/**
 	 * Disallow object clone
 	 *
 	 * @access public

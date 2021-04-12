@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import { alignJustify, grid, search } from '@wordpress/icons';
+import { alignJustify, closeSmall, grid, search } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Button, Icon } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { ENTER } from '@wordpress/keycodes';
 
 const sortByOptions = {
@@ -14,6 +14,7 @@ const Filters = ( {
 	layout,
 	sortingOrder,
 	setLayout,
+	isSearch,
 	searchQuery,
 	onSearch,
 	setSearchQuery,
@@ -72,7 +73,22 @@ const Filters = ( {
 						} }
 					/>
 
-					<Icon icon={ search } />
+					{ isSearch ? (
+						<Button
+							label={ __( 'Clear search query' ) }
+							icon={ closeSmall }
+							onClick={ () => {
+								setSearchQuery( '' );
+								onSearch( '' );
+							} }
+						/>
+					) : (
+						<Button
+							label={ __( 'Search' ) }
+							icon={ search }
+							onClick={ () => onSearch() }
+						/>
+					) }
 				</div>
 
 				<Button

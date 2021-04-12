@@ -136,6 +136,7 @@ const TemplatesContent = ( {
 							item={ item }
 							id={ item.template_id }
 							title={ item.template_name }
+							meta={ item.meta || [] }
 							onImport={ onImport }
 							onUpdateTemplate={ onUpdateTemplate }
 							onDelete={ onDelete }

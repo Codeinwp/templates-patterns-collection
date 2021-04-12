@@ -6,7 +6,6 @@ import { page as pageIcon } from '@wordpress/icons';
 import {
 	useEffect,
 	useState,
-	createInterpolateElement,
 } from '@wordpress/element';
 
 import { importTemplates } from '../../utils/site-import';
@@ -20,7 +19,6 @@ const ImportTemplatesModal = ( {
 	themeStatus,
 	setInstallModal,
 	setModal,
-	editor,
 	isUserTemplate = false,
 	generalTemplates = false,
 } ) => {
@@ -251,17 +249,17 @@ const ImportTemplatesModal = ( {
 			? sprintf(
 				/* translators: %s  the name of the template */
 				__(
-					'The %s template will be imported as a page into your site. This import <strong/> include any plugins or theme settings.',
+					'The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed.',
 						'templates-patterns-collection'
 				),
 				templatesData[ 0 ].template_name
 			  )
 			: __(
-				'All the templates that are included in this starter site, will be imported as pages. This import <strong/> include any plugins or theme settings.',
+				'All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed.',
 				'templates-patterns-collection'
 			  );
 
-		return createInterpolateElement( text, map );
+		return text;
 	};
 
 	const ModalContent = () => {
@@ -343,13 +341,12 @@ const ImportTemplatesModal = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getThemeAction, getCurrentSite, getCurrentEditor } = select(
+		const { getThemeAction, getCurrentSite } = select(
 			'neve-onboarding'
 		);
 		return {
 			themeStatus: getThemeAction().action || false,
 			siteData: getCurrentSite(),
-			editor: getCurrentEditor(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {

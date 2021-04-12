@@ -1,4 +1,4 @@
-/* global localStorage, elementor, lodash */
+/* global localStorage, tiTpc, elementor, lodash */
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,7 +13,7 @@ const dispatchNotification = ( message ) =>
 export const fetchTemplates = async ( additionalParams = {} ) => {
 	const params = {
 		cache: localStorage.getItem( 'tpcCacheBuster' ),
-		...window.tiTpc.params,
+		...omit( tiTpc.params, 'meta' ),
 		per_page: 20,
 		page: 0,
 		premade: true,
@@ -78,7 +78,7 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 		url: window.tiTpc.endpoint + 'templates',
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 			...params,
 		},
 	} );
@@ -125,7 +125,7 @@ export const getTemplate = async ( template ) => {
 		url: `${ window.tiTpc.endpoint }templates/${ template }`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 		},
 	} );
 
@@ -155,7 +155,7 @@ export const importTemplate = async ( template ) => {
 		url: `${ window.tiTpc.endpoint }templates/${ template }/import`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 		},
 	} );
 
@@ -189,7 +189,7 @@ export const duplicateTemplate = async ( id ) => {
 		url: `${ window.tiTpc.endpoint }templates/${ id }/clone`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 		},
 	} );
 
@@ -219,7 +219,7 @@ export const updateTemplate = async ( params ) => {
 		url: `${ window.tiTpc.endpoint }templates/${ params.template_id }`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 			...omit( params, 'content' ),
 		},
 	} );
@@ -270,7 +270,7 @@ export const deleteTemplate = async ( template ) => {
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			_method: 'DELETE',
-			...window.tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 		},
 	} );
 
@@ -299,6 +299,7 @@ export const exportTemplate = async ( {
 	title,
 	type,
 	content,
+	link = '',
 	callback = () => {},
 } ) => {
 	const data = {
@@ -311,9 +312,10 @@ export const exportTemplate = async ( {
 	const url = stringifyUrl( {
 		url: window.tiTpc.endpoint + 'templates',
 		query: {
-			...window.tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 			template_name: title || window.tiTpc.exporter.textPlaceholder,
 			template_type: 'elementor',
+			link,
 		},
 	} );
 
@@ -350,7 +352,8 @@ export const publishTemplate = async ( params ) => {
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			method: 'POST',
-			...window.tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
+			meta: JSON.stringify( tiTpc.params.meta ),
 			...omit( params, 'template_id' ),
 		},
 	} );

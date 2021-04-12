@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch } from '@wordpress/data';
 
+const { omit } = lodash;
+
 const { updateLibrary, updateTemplates } = dispatch( 'tpc/block-editor' );
 const { createNotice } = dispatch( 'core/notices' );
 
@@ -18,7 +20,7 @@ const createErrorNotice = ( message ) => {
 export const fetchTemplates = async ( additionalParams = {} ) => {
 	const params = {
 		cache: localStorage.getItem( 'tpcCacheBuster' ),
-		...tiTpc.params,
+		...omit( tiTpc.params, 'meta' ),
 		per_page: 12,
 		page: 0,
 		premade: true,
@@ -66,7 +68,7 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 		url: tiTpc.endpoint + 'templates',
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 			...params,
 		},
 	} );
@@ -102,7 +104,8 @@ export const updateTemplate = async ( params ) => {
 		url: `${ tiTpc.endpoint }templates/${ params.template_id }`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
+			meta: JSON.stringify( tiTpc.params.meta ),
 			...params,
 		},
 	} );
@@ -137,7 +140,7 @@ export const getTemplate = async ( template ) => {
 		url: `${ window.tiTpc.endpoint }templates/${ template }`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...window.tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 		},
 	} );
 
@@ -167,7 +170,7 @@ export const importTemplate = async ( template ) => {
 		url: `${ tiTpc.endpoint }templates/${ template }/import`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 		},
 	} );
 
@@ -201,7 +204,7 @@ export const duplicateTemplate = async ( template ) => {
 		url: `${ tiTpc.endpoint }templates/${ template }/clone`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 		},
 	} );
 
@@ -237,7 +240,7 @@ export const deleteTemplate = async ( template, sortingOrder ) => {
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			_method: 'DELETE',
-			...tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
 		},
 	} );
 
@@ -278,7 +281,8 @@ export const publishTemplate = async (
 			template_thumbnail: featuredImageURL,
 			premade: publishStatus ? 'yes' : 'no',
 			link,
-			...tiTpc.params,
+			...omit( tiTpc.params, 'meta' ),
+			meta: JSON.stringify( tiTpc.params.meta )
 		},
 	} );
 

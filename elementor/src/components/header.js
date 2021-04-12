@@ -136,6 +136,7 @@ const Header = ( {
 										onImport( {
 											id: preview.template_id,
 											title: preview.template_name,
+											meta: preview.meta || [],
 										} )
 									}
 								>

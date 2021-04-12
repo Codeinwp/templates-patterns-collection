@@ -7,6 +7,8 @@
 
 namespace TIOB;
 
+use TIOB\Main;
+
 /**
  * Class Editor
  *
@@ -48,12 +50,13 @@ class Elementor {
 						'site_url'   => get_site_url(),
 						'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 						'type'       => 'elementor',
+						'meta'       => Main::get_meta_fields( $post_id = get_the_ID(), $type = 'elementor' ),
 					),
 					'canPredefine'     => apply_filters( 'ti_tpc_can_predefine', false ),
 					'postType'         => get_post_type(),
 					'placeholderIndex' => '-1',
 					'exporter'         => array(
-						'exportLabel'         => __( 'Save to Templates Cloud' ),
+						'exportLabel'         => __( 'Save to Neve Cloud' ),
 						'modalLabel'          => __( 'Save Templates' ),
 						'textLabel'           => __( 'Template Name' ),
 						'textPlaceholder'     => __( 'Template' ),
@@ -73,7 +76,7 @@ class Elementor {
 						),
 						'actions'        => array(
 							'sync'      => __( 'Sync Library' ),
-							'save'      => __( 'Save to Templates Cloud' ),
+							'save'      => __( 'Save to Neve Cloud' ),
 							'close'     => __( 'Close' ),
 							'cancel'    => __( 'Cancel' ),
 							'edit'      => __( 'Edit' ),

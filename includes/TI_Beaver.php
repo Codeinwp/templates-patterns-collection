@@ -9,6 +9,8 @@
 
 namespace TIOB;
 
+
+use TIOB\Main;
 use FLBuilder;
 use FLBuilderAJAX;
 use FLBuilderModel;
@@ -68,6 +70,14 @@ class TI_Beaver extends FLBuilderModule {
 	}
 
 	/**
+	 * Template Meta.
+	 */
+	static public function get_template_meta() {
+		$post_id = FLBuilderModel::get_post_id();
+		return Main::get_meta_fields( $post_id, $type = 'beaver' );
+	}
+
+	/**
 	 * Add strings as global variable.
 	 */
 	public function inline_script() {
@@ -104,13 +114,14 @@ class TI_Beaver extends FLBuilderModule {
 					'templatesCloud' => __( 'Templates Cloud' ),
 					'404'            => __( 'No templates available. Add a new one?' ),
 					'deleteItem'     => __( 'Are you sure you want to delete this template?' ),
+					'synced'         => __( 'This template is synced to a page.' ),
 					'tabs'           => array(
 						'templates' => __( 'Page Templates' ),
 						'library'   => __( 'My Library' ),
 					),
 					'actions'        => array(
 						'sync'     => __( 'Sync Library' ),
-						'save'     => __( 'Save to Templates Cloud' ),
+						'save'     => __( 'Save to Neve Cloud' ),
 						'update'   => __( 'Update' ),
 						'close'    => __( 'Close' ),
 						'edit'     => __( 'Edit' ),
@@ -131,6 +142,7 @@ class TI_Beaver extends FLBuilderModule {
 						),
 						'search'      => __( 'Search' ),
 						'searchLabel' => __( 'Search Templates' ),
+						'clearSearch' => __( 'Clear search query' ),
 					),
 					'export'         => array(
 						'save'            => __( 'Save' ),
@@ -230,6 +242,17 @@ class TI_Beaver extends FLBuilderModule {
 		// Delete old asset cache.
 		FLBuilderModel::delete_asset_cache();
 
+		$response = self::get_template( $template, false );
+
+		if ( isset( $response['meta'] ) ) {
+			$post_id = FLBuilderModel::get_post_id();
+			$fields  = json_decode( $response['meta'] );
+
+			foreach ( $fields as $key => $value ) {
+				update_post_meta( $post_id, $key, $value );
+			}
+		}
+
 		// Return the layout.
 		return array(
 			'layout_css' => isset( $settings ) ? $settings->css : null,
@@ -244,7 +267,7 @@ class TI_Beaver extends FLBuilderModule {
 	public function add_export_menu( $views ) {
 		if ( in_array( get_post_type(), FLBuilderModel::get_post_types() ) ) {
 			$views['main']['items'][15] = array(
-				'label'     => __( 'Save to Templates Cloud', 'templates-patterns-collection' ),
+				'label'     => __( 'Save to Neve Cloud', 'templates-patterns-collection' ),
 				'type'      => 'event',
 				'eventName' => 'tiTpcExport',
 			);
@@ -307,7 +330,7 @@ class TI_Beaver extends FLBuilderModule {
 	/**
 	 * Get template by ID.
 	 */
-	static public function get_template( $template_id ) {
+	static public function get_template( $template_id, $bool = true ) {
 		$url = add_query_arg(
 			array(
 				'site_url'   => get_site_url(),
@@ -320,6 +343,10 @@ class TI_Beaver extends FLBuilderModule {
 		$response = wp_remote_get( esc_url_raw( $url ) );
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response, true );
+
+		if ( ! $bool ) {
+			return $response;
+		}
 
 		if ( isset( $response['message'] ) ) {
 			return false;
@@ -358,12 +385,15 @@ class TI_Beaver extends FLBuilderModule {
 	 * Save Beaver template to Templates Cloud.
 	 */
 	static public function save_template( $title, $body, $is_page = false, $is_sync = false ) {
+		$post_id = FLBuilderModel::get_post_id();
+
 		$url = add_query_arg(
 			array(
 				'site_url'      => get_site_url(),
 				'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
 				'template_name' => esc_attr( $title ),
 				'template_type' => 'beaver',
+				'link'          => $is_page ? get_permalink( $post_id ) : '',
 				'cache'         => uniqid(),
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates'
@@ -384,8 +414,6 @@ class TI_Beaver extends FLBuilderModule {
 		}
 
 		if ( $is_page ) {
-			$post_id = FLBuilderModel::get_post_id();
-
 			update_post_meta( $post_id, '_ti_tpc_template_sync', $is_sync );
 
 			if ( isset( $response['template_id'] ) ) {
@@ -400,13 +428,19 @@ class TI_Beaver extends FLBuilderModule {
 	 * Update Beaver template to Templates Cloud.
 	 */
 	static public function update_template( $template_id, $title, $body, $is_sync = false ) {
+		$post_id = FLBuilderModel::get_post_id();
+
+		$premade = get_post_meta( get_the_ID(), '_ti_tpc_published', true );
+
 		$url = add_query_arg(
 			array(
 				'site_url'      => get_site_url(),
 				'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
 				'template_name' => esc_attr( $title ),
 				'template_type' => 'beaver',
+				'link'          => get_permalink( $post_id ),
 				'cache'         => uniqid(),
+				'meta'          => 'yes' === $premade ? json_encode( self::get_template_meta() ) : '',
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id )
 		);
@@ -449,6 +483,7 @@ class TI_Beaver extends FLBuilderModule {
 				'premade'            => $premade,
 				'link'               => get_permalink( $post_id ),
 				'cache'              => uniqid(),
+				'meta'               => 'yes' === $premade ? json_encode( self::get_template_meta() ) : '',
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id ) . '/publish'
 		);

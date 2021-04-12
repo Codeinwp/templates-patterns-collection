@@ -55,7 +55,7 @@ const Preview = ( { isFetching, importBlocks } ) => {
 
 	const importItem = () => {
 		togglePreview();
-		importBlocks( content );
+		importBlocks( content, item.meta || [] );
 	};
 
 	return (

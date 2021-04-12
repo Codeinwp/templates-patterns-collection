@@ -24,6 +24,11 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		},
 	} );
 
+	const [ isSearch, setSearch ] = useState( {
+		templates: false,
+		library: false,
+	} );
+
 	const isGeneral = currentTab === 'templates';
 
 	const setQuery = ( query ) => {
@@ -70,6 +75,28 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		return sortingOrder.library;
 	};
 
+	const setSearchStatus = ( status ) => {
+		if ( isGeneral ) {
+			return setSearch( {
+				...isSearch,
+				templates: status,
+			} );
+		}
+
+		return setSearch( {
+			...isSearch,
+			library: status,
+		} );
+	};
+
+	const getSearchStatus = () => {
+		if ( isGeneral ) {
+			return isSearch.templates;
+		}
+
+		return isSearch.library;
+	};
+
 	const changeID = ( element ) => {
 		element.id = elementorCommon.helpers.getUniqueId();
 
@@ -82,7 +109,7 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		return element;
 	};
 
-	const onImport = async ( { id, title } ) => {
+	const onImport = async ( { id, title, meta = [] } ) => {
 		setFetching( true );
 		const data = await importTemplate( id );
 
@@ -108,6 +135,11 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 			} );
 		}
 
+		if ( 0 < meta.length ) {
+			window.tiTpc.postModel.set( 'meta', { ... JSON.parse( meta ) } );
+			window.tiTpc.postModel.save();
+		}
+
 		$e.internal( 'document/history/end-log', {
 			id: history,
 		} );
@@ -129,6 +161,8 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 				getSearchQuery={ getSearchQuery }
 				setSorting={ setSorting }
 				getOrder={ getOrder }
+				isSearch={ getSearchStatus() }
+				setSearch={ setSearchStatus }
 				onImport={ onImport }
 			/>
 		</Fragment>

@@ -1,9 +1,10 @@
 /* eslint-disable no-undef */
 import classnames from 'classnames';
-import { Button, Spinner } from '@wordpress/components';
+import { Button, Spinner, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Fragment, useEffect } from '@wordpress/element';
+import { rotateRight } from '@wordpress/icons';
 import { ENTER } from '@wordpress/keycodes';
 import TemplatesContent from './templates-content.js';
 import Export from './export.js';
@@ -27,6 +28,8 @@ const Content = ( {
 	getSearchQuery,
 	setSorting,
 	getOrder,
+	isSearch,
+	setSearch,
 	onImport,
 	isFetching,
 	isPreview,
@@ -34,17 +37,24 @@ const Content = ( {
 	preview,
 	setFetching,
 } ) => {
-	const init = async () => {
+	const init = async ( search = getSearchQuery() ) => {
 		setFetching( true );
+
+		if ( search ) {
+			setSearch( true );
+		} else {
+			setSearch( false );
+		}
+
 		const order = getOrder();
 		if ( currentTab === 'templates' ) {
 			await fetchTemplates( {
-				search: getSearchQuery(),
+				search,
 				...order,
 			} );
 		} else {
 			await fetchLibrary( {
-				search: getSearchQuery(),
+				search,
 				...order,
 			} );
 		}
@@ -98,6 +108,10 @@ const Content = ( {
 							title={ preview.template_name }
 							src={ preview.link || '' }
 						></iframe>
+
+						<div className="is-loading">
+							<Icon icon={ rotateRight } />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -217,7 +231,21 @@ const Content = ( {
 									}
 								} }
 							/>
-							<i className="eicon-search"></i>
+
+							{ isSearch ? (
+								<Button
+									onClick={ () => {
+										setQuery( '' );
+										init( '' );
+									} }
+								>
+									<i className="eicon-close"></i>
+								</Button>
+							) : (
+								<Button onClick={ () => init() }>
+									<i className="eicon-search"></i>
+								</Button>
+							) }
 						</div>
 					</div>
 

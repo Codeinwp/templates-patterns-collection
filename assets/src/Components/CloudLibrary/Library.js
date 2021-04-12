@@ -41,6 +41,7 @@ const Library = ( {
 		beaver: 0,
 	} );
 	const [ isLoading, setLoading ] = useState( false );
+	const [ isSearch, setSearch ] = useState( false );
 	const [ isFetching, setFetching ] = useState( false );
 	const [ previewUrl, setPreviewUrl ] = useState( '' );
 
@@ -155,10 +156,17 @@ const Library = ( {
 		setFetching( false );
 	};
 
-	const handleSearch = () => {
+	const handleSearch = ( query = searchQuery ) => {
 		setLoading( true );
+
+		if ( query ) {
+			setSearch( true );
+		} else {
+			setSearch( false );
+		}
+
 		const params = {
-			search: searchQuery,
+			search: query,
 			type,
 			...getOrder(),
 		};
@@ -275,7 +283,10 @@ const Library = ( {
 						<a
 							key={ key }
 							href="#"
-							onClick={ () => setType( key ) }
+							onClick={ () => {
+								setType( key );
+								setSearch( false );
+							} }
 							className={ classnames( 'tab', {
 								active: type === key,
 							} ) }
@@ -301,6 +312,7 @@ const Library = ( {
 					currentTab={ currentTab }
 					isGrid={ isGrid }
 					setGrid={ setIsGrid }
+					isSearch={ isSearch }
 					searchQuery={ searchQuery }
 					setSearchQuery={ setSearchQuery }
 					onSearch={ handleSearch }
