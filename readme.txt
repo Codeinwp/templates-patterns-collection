@@ -27,6 +27,10 @@ No account is required to access the service template collection and the privacy
 
 == Changelog ==
 
+##### [Version 1.1.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.6...v1.1.7) (2021-04-12)
+
+- Rename to Save
+
 ##### [Version 1.1.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.5...v1.1.6) (2021-03-16)
 
 - Fix Onboarding failing

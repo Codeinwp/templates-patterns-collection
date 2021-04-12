@@ -1,3 +1,12 @@
+##### [Version 1.1.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.6...v1.1.7) (2021-04-12)
+
+- Rename to "Save to Templates Cloud" to "Neve Cloud"
+- Improve search
+- Fix Sync button layout on hover
+- Improve how we handle template name
+- Associate template with Meta
+- Activate Elementor/Beaver if importing respective templates
+
 ##### [Version 1.1.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.5...v1.1.6) (2021-03-16)
 
 - Fix Onboarding failing
