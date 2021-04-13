@@ -60,6 +60,7 @@
     "@wordpress/icons": "^2.9.0",
     "classnames": "^2.2.6",
     "fuse.js": "^6.4.6",
+    "parse-entities": "^3.0.0",
     "query-string": "^6.13.8",
     "react-infinite-scroll-hook": "^3.0.0",
     "react-visibility-sensor": "^5.1.1",
