@@ -68,6 +68,9 @@ class Admin {
 
 		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="' . esc_attr( $style ) . '">&crarr;</span>' : '';
 		add_theme_page( __( 'Starter Sites', 'templates-patterns-collection' ), $prefix . __( 'Starter Sites', 'templates-patterns-collection' ), 'activate_plugins', $this->page_slug, array( $this, 'render_starter_sites' ) );
+		if ( $this->is_agency_plan() ) {
+			add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
+		}
 	}
 
 	/**
@@ -85,6 +88,11 @@ class Admin {
 
 		if ( $screen->id !== 'appearance_page_' . $this->page_slug ) {
 			return;
+		}
+
+		$dismiss_notice = isset( $_GET['dismiss_notice'] ) && $_GET['dismiss_notice'] === 'yes';
+		if ( $dismiss_notice ) {
+			set_transient( 'tiob_library_visited', true );
 		}
 
 		$dependencies = ( include TIOB_PATH . 'assets/build/app.asset.php' );
@@ -144,7 +152,37 @@ class Admin {
 
 		$array['onboarding'] = $api;
 
+		$page_was_visited = (bool) get_transient( 'tiob_library_visited' );
+		if ( $this->is_agency_plan() && ! $page_was_visited ) {
+			$array['notifications']['template-cloud'] = array(
+				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'neve' ),
+				'cta'  => __( 'Open Templates Cloud', 'neve' ),
+				'url'  => 'themes.php?page=' . $this->page_slug . '&dismiss_notice=yes#library',
+			);
+		}
+
 		return $array;
+	}
+
+	/**
+	 * Check if current subscription is agency.
+	 *
+	 * @return bool
+	 */
+	private function is_agency_plan() {
+		$category         = apply_filters( 'product_neve_license_plan', -1 );
+		$category_mapping = array(
+			1 => 1,
+			2 => 1,
+			3 => 2,
+			4 => 2,
+			5 => 3,
+			6 => 3,
+			7 => 1,
+			8 => 2,
+			9 => 3,
+		);
+		return isset( $category_mapping[ $category ] ) && $category_mapping[ $category ] === 3;
 	}
 
 	/**

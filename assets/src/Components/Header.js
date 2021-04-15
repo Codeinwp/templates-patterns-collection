@@ -1,5 +1,6 @@
 /* global tiobDash, localStorage */
 import { withSelect, withDispatch } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 import { Button, Icon } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
@@ -9,14 +10,23 @@ import { __ } from '@wordpress/i18n';
 import Logo from './Icon';
 import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
+import { addUrlHash, getTabHash } from '../utils/common';
 
 const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
-	const [ isSyncing, setSyncing ] = useState( false );
-
 	const buttons = {
 		starterSites: __( 'Starter Sites', 'neve' ),
 		pageTemplates: __( 'Page Templates', 'neve' ),
 	};
+
+	useEffect(() => {
+		const hash = getTabHash(buttons);
+		if (null === hash) {
+			return;
+		}
+		setCurrentTab(hash);
+	}, []);
+
+	const [ isSyncing, setSyncing ] = useState( false );
 
 	const sync = () => {
 		setSyncing( true );
@@ -42,10 +52,15 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 			{ Object.keys( buttons ).map( ( slug ) => {
 				return (
 					<Button
+						href={'#' + slug}
 						key={ slug }
 						isTertiary
 						isPressed={ slug === currentTab }
-						onClick={ () => setCurrentTab( slug ) }
+						onClick={ (e) => {
+							e.preventDefault();
+							setCurrentTab( slug );
+							addUrlHash(slug);
+						} }
 					>
 						{ buttons[ slug ] }
 					</Button>
