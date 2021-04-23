@@ -185,7 +185,7 @@ describe( 'Importer Works', () => {
 			.contains( 'Install and Activate' )
 			.click();
 
-		cy.wait( '@installTheme' ).then( ( req ) => {
+		cy.wait( '@installTheme', { responseTimeout: '20000' } ).then( ( req ) => {
 			expect( req.response.body.success ).to.be.true;
 			expect( req.status ).to.equal( 200 );
 		} );
