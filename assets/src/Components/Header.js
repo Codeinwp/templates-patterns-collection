@@ -18,14 +18,6 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 		pageTemplates: __( 'Page Templates', 'neve' ),
 	};
 
-	useEffect(() => {
-		const hash = getTabHash(buttons);
-		if (null === hash) {
-			return;
-		}
-		setCurrentTab(hash);
-	}, []);
-
 	const [ isSyncing, setSyncing ] = useState( false );
 
 	const sync = () => {
@@ -46,6 +38,32 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 	) {
 		buttons.library = __( 'My Library', 'neve' );
 	}
+
+	const onHashChanged = () => {
+		const hash = getTabHash(buttons);
+		if (null === hash) {
+			return;
+		}
+
+		const menu = document.getElementById('menu-appearance');
+		const activeItem = menu.querySelector('.current');
+		const libraryItem = menu.querySelector('a[href="themes.php?page=tiob-starter-sites#library"]').parentElement;
+		const starterSitesItem = menu.querySelector('a[href="themes.php?page=tiob-starter-sites"]').parentElement;
+
+		activeItem.classList.remove('current');
+		libraryItem.classList.remove('current');
+		if ( hash === 'library' ){
+			libraryItem.classList.add('current');
+		} else {
+			starterSitesItem.classList.add('current');
+		}
+		setCurrentTab(hash);
+	}
+
+	useEffect(() => {
+		onHashChanged();
+		window.addEventListener('hashchange', onHashChanged)
+	}, []);
 
 	return (
 		<div className="header-nav">
