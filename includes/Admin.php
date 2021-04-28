@@ -36,7 +36,6 @@ class Admin {
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
 		add_action( 'admin_menu', array( $this, 'register' ) );
-		add_action( 'admin_menu', array( $this, 'register' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 
 		$white_label_module = get_option( 'nv_pro_white_label_status' );
@@ -68,6 +67,9 @@ class Admin {
 
 		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="' . esc_attr( $style ) . '">&crarr;</span>' : '';
 		add_theme_page( __( 'Starter Sites', 'templates-patterns-collection' ), $prefix . __( 'Starter Sites', 'templates-patterns-collection' ), 'activate_plugins', $this->page_slug, array( $this, 'render_starter_sites' ) );
+		if ( $this->is_agency_plan() ) {
+			add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
+		}
 	}
 
 	/**
@@ -85,6 +87,11 @@ class Admin {
 
 		if ( $screen->id !== 'appearance_page_' . $this->page_slug ) {
 			return;
+		}
+
+		$dismiss_notice = isset( $_GET['dismiss_notice'] ) && $_GET['dismiss_notice'] === 'yes';
+		if ( $dismiss_notice ) {
+			set_transient( 'tiob_library_visited', true );
 		}
 
 		$dependencies = ( include TIOB_PATH . 'assets/build/app.asset.php' );
@@ -144,7 +151,37 @@ class Admin {
 
 		$array['onboarding'] = $api;
 
+		$page_was_visited = (bool) get_transient( 'tiob_library_visited' );
+		if ( $this->is_agency_plan() && ! $page_was_visited ) {
+			$array['notifications']['template-cloud'] = array(
+				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'neve' ),
+				'cta'  => __( 'Open Templates Cloud', 'neve' ),
+				'url'  => 'themes.php?page=' . $this->page_slug . '&dismiss_notice=yes#library',
+			);
+		}
+
 		return $array;
+	}
+
+	/**
+	 * Check if current subscription is agency.
+	 *
+	 * @return bool
+	 */
+	private function is_agency_plan() {
+		$category         = apply_filters( 'product_neve_license_plan', -1 );
+		$category_mapping = array(
+			1 => 1,
+			2 => 1,
+			3 => 2,
+			4 => 2,
+			5 => 3,
+			6 => 3,
+			7 => 1,
+			8 => 2,
+			9 => 3,
+		);
+		return isset( $category_mapping[ $category ] ) && $category_mapping[ $category ] === 3;
 	}
 
 	/**
@@ -294,27 +331,28 @@ class Admin {
 			'copy_error_code'             => __( 'Copy error code', 'templates-patterns-collection' ),
 			'download_error_log'          => __( 'Download error log', 'templates-patterns-collection' ),
 			'external_plugins_notice'     => __( 'To import this demo you have to install the following plugins:', 'templates-patterns-collection' ),
-			/* translators: 1 - 'here'. */
 			'rest_not_working'            => sprintf(
+				/* translators: 1 - 'here'. */
 				__( 'It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s.', 'templates-patterns-collection' ),
 				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ) )
 			),
-			/* translators: 1 - 'get in touch'. */
 			'error_report'                => sprintf(
+				/* translators: 1 - 'get in touch'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
 				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
-			/* translators: 1 - 'troubleshooting guide'. */
 			'troubleshooting'             => sprintf(
+				/* translators: 1 - 'troubleshooting guide'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work.', 'templates-patterns-collection' ),
 				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ) )
 			),
-			/* translators: 1 - 'get in touch'. */
 			'support'                     => sprintf(
+				/* translators: 1 - 'get in touch'. */
 				__( 'If none of the solutions in the guide work, please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
 				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
 			'fsDown'                      => sprintf(
+				/* translators: %s - 'WP_Filesystem'. */
 				__( 'It seems that %s is not available. You can contact your site administrator or hosting provider to help you enable it.', 'templates-patterns-collection' ),
 				sprintf( '<code>WP_Filesystem</code>' )
 			),
