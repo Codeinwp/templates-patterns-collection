@@ -440,7 +440,8 @@ class WP_Import extends WP_Importer {
 					$comment_post_id = $post_id = $this->process_attachment( $postdata, $remote_url );
 				} else {
 					$this->logger->log( "Inserting {$postdata['post_type']}: {$postdata['post_title']}.", 'progress' );
-					$comment_post_id = $post_id = wp_insert_post( $postdata, true );
+					$postdata['post_content'] = apply_filters( 'tpc_post_content_before_insert', $postdata['post_content'], $this->base_blog_url );
+					$comment_post_id          = $post_id = wp_insert_post( $postdata, true );
 					$this->logger->log( "Done inserting {$postdata['post_type']}: {$postdata['post_title']}.", 'success' );
 					do_action( 'wp_import_insert_post', $post_id, $original_post_id, $postdata, $post );
 				}

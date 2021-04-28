@@ -105,10 +105,16 @@ trait Helper {
 	 * @return string
 	 */
 	public function cleanup_page_slug( $slug, $demo_slug ) {
+		$unhashed = array( 'shop', 'my-account', 'checkout', 'cart', 'blog', 'news' );
+		$slug     = str_replace( $demo_slug, '', $slug );
+		$slug     = str_replace( 'demo', '', $slug );
+		$slug     = ltrim( $slug, '-' );
+
+		if ( in_array( $slug, $unhashed, true ) ) {
+			return $slug;
+		}
+
 		$hash = substr( md5( $demo_slug ), 0, 5 );
-		$slug = str_replace( $demo_slug, '', $slug );
-		$slug = str_replace( 'demo', '', $slug );
-		$slug = ltrim( $slug, '-' );
 		$slug = $hash . '-' . $slug;
 
 		return $slug;
