@@ -648,6 +648,10 @@
 			}
 		}
 	}
+
+	.components-button:focus:not(:disabled) {
+		box-shadow: none;
+	}
 }
 
 .components-modal__screen-overlay {

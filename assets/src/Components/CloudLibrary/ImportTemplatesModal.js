@@ -1,3 +1,4 @@
+import { parseEntities } from 'parse-entities';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { Modal, Button, Icon } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
@@ -164,13 +165,7 @@ const ImportTemplatesModal = ( {
 											icon={ pageIcon }
 											className="active"
 										/>
-										<span>
-											{ page.title.replace(
-												/&#8217;/g,
-												// eslint-disable-next-line prettier/prettier
-												'\''
-											) }
-										</span>
+										<span>{ parseEntities( page.title ) }</span>
 										<div className="actions">
 											<Button
 												isTertiary

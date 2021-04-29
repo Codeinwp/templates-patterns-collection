@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-10T21:51:41+00:00\n"
+"POT-Creation-Date: 2021-04-29T07:49:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -30,46 +30,50 @@ msgstr ""
 msgid "https://themeisle.com"
 msgstr ""
 
-#: includes/Admin.php:70
+#: includes/Admin.php:69
 msgid "Starter Sites"
 msgstr ""
 
-#: includes/Admin.php:239
+#: includes/Admin.php:71
+msgid "My Library"
+msgstr ""
+
+#: includes/Admin.php:276
 msgid "Hi! We've noticed you were using a child theme of Zelle before. To make your transition easier, we can help you keep the same homepage settings you had before but in original Zelle's style, by converting it into an Elementor template."
 msgstr ""
 
-#: includes/Admin.php:270
+#: includes/Admin.php:307
 #: assets/build/app.js:10
 #: assets/src/Components/StarterSiteCard.js:60
 msgid "Preview"
 msgstr ""
 
-#: includes/Admin.php:271
+#: includes/Admin.php:308
 #: assets/build/app.js:10
 #: assets/src/Components/PreviewFrame.js:102
 #: assets/src/Components/StarterSiteCard.js:68
 msgid "Import"
 msgstr ""
 
-#: includes/Admin.php:272
+#: includes/Admin.php:309
 msgid "Get the PRO version!"
 msgstr ""
 
-#: includes/Admin.php:273
+#: includes/Admin.php:310
 msgid "Importing"
 msgstr ""
 
-#: includes/Admin.php:274
+#: includes/Admin.php:311
 #: assets/build/app.js:2
 #: assets/src/Components/Migration.js:165
 msgid "Cancel"
 msgstr ""
 
-#: includes/Admin.php:275
+#: includes/Admin.php:312
 msgid "Loading"
 msgstr ""
 
-#: includes/Admin.php:276
+#: includes/Admin.php:313
 #: assets/build/app.js:2
 #: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:603
@@ -77,135 +81,140 @@ msgstr ""
 msgid "View Website"
 msgstr ""
 
-#: includes/Admin.php:277
+#: includes/Admin.php:314
 #: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:613
 msgid "Add your own content"
 msgstr ""
 
-#: includes/Admin.php:278
+#: includes/Admin.php:315
 #: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:594
 msgid "Back to Sites Library"
 msgstr ""
 
-#: includes/Admin.php:279
+#: includes/Admin.php:316
 msgid "Note"
 msgstr ""
 
-#: includes/Admin.php:280
+#: includes/Admin.php:317
 msgid "Advanced Options"
 msgstr ""
 
-#: includes/Admin.php:281
+#: includes/Admin.php:318
 #: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:272
 msgid "Plugins"
 msgstr ""
 
-#: includes/Admin.php:282
+#: includes/Admin.php:319
 msgid "General"
 msgstr ""
 
-#: includes/Admin.php:283
+#: includes/Admin.php:320
 msgid "Keep current layout"
 msgstr ""
 
-#: includes/Admin.php:284
+#: includes/Admin.php:321
 msgid "Search"
 msgstr ""
 
-#: includes/Admin.php:285
+#: includes/Admin.php:322
 #: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:200
 msgid "Content"
 msgstr ""
 
-#: includes/Admin.php:286
+#: includes/Admin.php:323
 #: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:204
 msgid "Customizer"
 msgstr ""
 
-#: includes/Admin.php:287
+#: includes/Admin.php:324
 #: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:208
 msgid "Widgets"
 msgstr ""
 
-#: includes/Admin.php:288
+#: includes/Admin.php:325
 msgid "We recommend you backup your website content before attempting a full site import."
 msgstr ""
 
-#: includes/Admin.php:289
+#: includes/Admin.php:326
 msgid "Due to copyright issues, some of the demo images will not be imported and will be replaced by placeholder images."
 msgstr ""
 
-#: includes/Admin.php:290
+#: includes/Admin.php:327
 msgid "Some of the demo images will not be imported and will be replaced by placeholder images."
 msgstr ""
 
-#: includes/Admin.php:291
+#: includes/Admin.php:328
 msgid "Here is our own collection of related images you can use for your site."
 msgstr ""
 
-#: includes/Admin.php:292
+#: includes/Admin.php:329
 #: assets/build/app.js:8
 #: assets/src/Components/ImportModal.js:542
 msgid "Content was successfully imported. Enjoy your new site!"
 msgstr ""
 
-#: includes/Admin.php:293
+#: includes/Admin.php:330
 msgid "Available in the PRO version"
 msgstr ""
 
-#: includes/Admin.php:294
+#: includes/Admin.php:331
 msgid "Copy error code"
 msgstr ""
 
-#: includes/Admin.php:295
+#: includes/Admin.php:332
 msgid "Download error log"
 msgstr ""
 
-#: includes/Admin.php:296
+#: includes/Admin.php:333
 msgid "To import this demo you have to install the following plugins:"
 msgstr ""
 
-#: includes/Admin.php:299
+#. translators: 1 - 'here'.
+#: includes/Admin.php:336
 msgid "It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s."
 msgstr ""
 
-#: includes/Admin.php:300
+#: includes/Admin.php:337
 msgid "here"
 msgstr ""
 
-#: includes/Admin.php:304
+#. translators: 1 - 'get in touch'.
+#: includes/Admin.php:341
 msgid "Hi! It seems there is a configuration issue with your server that's causing the import to fail. Please %1$s with us with the error code below, so we can help you fix this."
 msgstr ""
 
-#: includes/Admin.php:305
-#: includes/Admin.php:315
+#: includes/Admin.php:342
+#: includes/Admin.php:352
 msgid "get in touch"
 msgstr ""
 
-#: includes/Admin.php:309
+#. translators: 1 - 'troubleshooting guide'.
+#: includes/Admin.php:346
 msgid "Hi! It seems there is a configuration issue with your server that's causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work."
 msgstr ""
 
-#: includes/Admin.php:310
+#: includes/Admin.php:347
 msgid "troubleshooting guide"
 msgstr ""
 
-#: includes/Admin.php:314
+#. translators: 1 - 'get in touch'.
+#: includes/Admin.php:351
 msgid "If none of the solutions in the guide work, please %1$s with us with the error code below, so we can help you fix this."
 msgstr ""
 
-#: includes/Admin.php:318
+#. translators: %s - 'WP_Filesystem'.
+#: includes/Admin.php:356
 msgid "It seems that %s is not available. You can contact your site administrator or hosting provider to help you enable it."
 msgstr ""
 
 #. translators: %s - Theme name
-#: includes/Admin.php:337
+#: includes/Admin.php:375
 msgid "Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else."
 msgstr ""
 
@@ -338,86 +347,86 @@ msgid "Dismiss"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:215
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:210
 msgid "An error occurred!"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:141
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:142
 msgid "Import done!"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:148
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:149
 msgid "Template was successfully imported!"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:152
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:153
 msgid "Templates were successfully imported!"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:179
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:174
 msgid "Visit"
 msgstr ""
 
 #: assets/build/app.js:2
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:188
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:183
 msgid "Edit"
 msgstr ""
 
 #. translators: name of starter site
 #: assets/build/app.js:4
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:282
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:277
 msgid "Import the %s template"
 msgstr ""
 
 #. translators: name of template
 #: assets/build/app.js:6
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:287
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:282
 msgid "Import all templates from %s"
 msgstr ""
 
 #. translators: %s  the name of the template
 #: assets/build/app.js:8
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:251
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:246
 msgid "The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed."
 msgstr ""
 
 #. translators: %s  the name of the template
 #: assets/build/app.js:8
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:257
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:252
 msgid "All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed."
 msgstr ""
 
 #: assets/build/app.js:8
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:307
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:302
 msgid "I want to import the entire site"
 msgstr ""
 
 #: assets/build/app.js:8
-#: assets/src/utils/common.js:7
+#: assets/src/utils/common.js:27
 msgid "Business"
 msgstr ""
 
 #: assets/build/app.js:8
-#: assets/src/utils/common.js:8
+#: assets/src/utils/common.js:28
 msgid "Ecommerce"
 msgstr ""
 
 #: assets/build/app.js:8
-#: assets/src/utils/common.js:9
+#: assets/src/utils/common.js:29
 msgid "Fashion"
 msgstr ""
 
 #: assets/build/app.js:8
-#: assets/src/utils/common.js:10
+#: assets/src/utils/common.js:30
 msgid "Blogging"
 msgstr ""
 
 #: assets/build/app.js:8
-#: assets/src/utils/common.js:11
+#: assets/src/utils/common.js:31
 msgid "Photography"
 msgstr ""
 

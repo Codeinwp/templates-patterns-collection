@@ -61,6 +61,16 @@ const Exporter = () => {
 		return serialize( blocks );
 	}, [] );
 
+	const getMetaFields = useSelect( ( select ) => {
+		const { getEditedPostAttribute } = select( 'core/editor' );
+		return getEditedPostAttribute( 'meta' );
+	}, [] );
+
+	useEffect( () => {
+		const metaKeys = window.tiTpc.metaKeys;
+		window.tiTpc.params.meta = Object.fromEntries( Object.entries( getMetaFields ).filter(( [key, value] ) => metaKeys.includes( key )) );
+	}, [ getMetaFields ] );
+
 	const {
 		meta,
 		postTitle,

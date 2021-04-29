@@ -1,5 +1,25 @@
 import { __ } from '@wordpress/i18n';
 
+const addUrlHash = (hash) => {
+	window.location.hash = hash;
+};
+
+const getTabHash = ( tabs ) => {
+	let hash = window.location.hash;
+
+	if ('string' !== typeof window.location.hash) {
+		return null;
+	}
+
+	hash = hash.substring(1);
+
+	if (!Object.keys(tabs).includes(hash)) {
+		return null;
+	}
+
+	return hash;
+};
+
 const untrailingSlashIt = ( str ) => str.replace( /\/$/, '' );
 const trailingSlashIt = ( str ) => untrailingSlashIt( str ) + '/';
 
@@ -55,4 +75,4 @@ const EDITOR_MAP = {
 	},
 };
 
-export { trailingSlashIt, untrailingSlashIt, CATEGORIES, EDITOR_MAP, TAGS };
+export { addUrlHash, getTabHash, trailingSlashIt, untrailingSlashIt, CATEGORIES, EDITOR_MAP, TAGS };
