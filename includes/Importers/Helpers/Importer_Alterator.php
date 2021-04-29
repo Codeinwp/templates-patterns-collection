@@ -54,6 +54,7 @@ class Importer_Alterator {
 		add_filter( 'wp_insert_post_data', array( $this, 'encode_post_content' ), 10, 2 );
 		add_filter( 'wp_import_nav_menu_item_args', array( $this, 'change_nav_menu_item_link' ), 10, 2 );
 		add_filter( 'intermediate_image_sizes_advanced', '__return_null' );
+		add_filter( 'tpc_post_content_before_insert', array( $this, 'replace_links' ), 10, 2 );
 	}
 
 	/**
@@ -86,6 +87,22 @@ class Importer_Alterator {
 		$args['menu-item-url'] = str_replace( $import_source_url, get_home_url(), $args['menu-item-url'] );
 
 		return $args;
+	}
+
+	/**
+	 * Replace content links.
+	 *
+	 * @hooked tpc_post_content_before_insert - 10
+	 *
+	 * @param string $content post content.
+	 * @param string $old_base_url old site URL.
+	 *
+	 * @return string
+	 */
+	public function replace_links( $content, $old_base_url ) {
+		$content = str_replace( $old_base_url, get_home_url(), $content );
+		$content = $this->replace_image_urls( $content );
+		return $content;
 	}
 
 	/**
