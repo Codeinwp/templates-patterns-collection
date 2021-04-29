@@ -27,6 +27,14 @@ No account is required to access the service template collection and the privacy
 
 ## Changelog ##
 
+##### [Version 1.1.9](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.8...v1.1.9) (2021-04-29)
+
+- [Fix] Content images not delivered from user site after import on some demos
+- [Fix] Replace content links with local links on core editor demos
+
+
+
+
 ##### [Version 1.1.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.7...v1.1.8) (2021-04-29)
 
 - Decode HTML entities in title 
