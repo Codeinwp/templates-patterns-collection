@@ -58,6 +58,7 @@ class Editor {
 						'type'       => 'gutenberg',
 						'meta'       => Main::get_meta_fields( $post_id = get_the_ID(), $type = 'gutenberg' ),
 					),
+					'metaKeys'     => apply_filters( 'ti_tpc_template_meta', array(), $post_id = get_the_ID(), $type = 'gutenberg' ),
 					'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
 				)
 			)
