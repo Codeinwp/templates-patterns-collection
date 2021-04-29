@@ -27,6 +27,15 @@ No account is required to access the service template collection and the privacy
 
 ## Changelog ##
 
+##### [Version 1.1.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.7...v1.1.8) (2021-04-29)
+
+- Decode HTML entities in title 
+- Improve Templates Cloud visibility
+- Fix meta not saving properly
+
+
+
+
 ##### [Version 1.1.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.6...v1.1.7) (2021-04-12)
 
 - Rename to Save
