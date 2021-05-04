@@ -208,7 +208,7 @@ const Exporter = () => {
 				url: window.tiTpc.endpoint + 'templates/' + templateID,
 				query: {
 					...omit( tiTpc.params, 'meta' ),
-					meta: published ? JSON.stringify( tiTpc.params.meta ) : '',
+					meta: JSON.stringify( tiTpc.params.meta ),
 					template_name: postTitle,
 					link,
 				},
@@ -218,6 +218,7 @@ const Exporter = () => {
 				url: window.tiTpc.endpoint + 'templates',
 				query: {
 					...omit( tiTpc.params, 'meta' ),
+					meta: JSON.stringify( tiTpc.params.meta ),
 					template_name: postTitle,
 					template_type: 'gutenberg',
 					template_site_slug: _ti_tpc_site_slug || '',

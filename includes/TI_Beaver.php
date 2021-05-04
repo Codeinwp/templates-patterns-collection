@@ -395,6 +395,7 @@ class TI_Beaver extends FLBuilderModule {
 				'template_type' => 'beaver',
 				'link'          => $is_page ? get_permalink( $post_id ) : '',
 				'cache'         => uniqid(),
+				'meta'          => $is_page ? json_encode( self::get_template_meta() ) : '',
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates'
 		);
@@ -440,7 +441,7 @@ class TI_Beaver extends FLBuilderModule {
 				'template_type' => 'beaver',
 				'link'          => get_permalink( $post_id ),
 				'cache'         => uniqid(),
-				'meta'          => 'yes' === $premade ? json_encode( self::get_template_meta() ) : '',
+				'meta'          => json_encode( self::get_template_meta() ),
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id )
 		);
