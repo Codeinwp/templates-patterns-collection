@@ -484,7 +484,7 @@ class TI_Beaver extends FLBuilderModule {
 				'premade'            => $premade,
 				'link'               => get_permalink( $post_id ),
 				'cache'              => uniqid(),
-				'meta'               => 'yes' === $premade ? json_encode( self::get_template_meta() ) : '',
+				'meta'               => json_encode( self::get_template_meta() ),
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id ) . '/publish'
 		);
