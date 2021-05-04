@@ -68,7 +68,7 @@ const Exporter = () => {
 
 	useEffect( () => {
 		const metaKeys = window.tiTpc.metaKeys;
-		window.tiTpc.params.meta = Object.fromEntries( Object.entries( getMetaFields ).filter(( [key, value] ) => metaKeys.includes( key )) );
+		window.tiTpc.params.meta = Object.fromEntries( Object.entries( getMetaFields || {} ).filter(( [key, value] ) => metaKeys.includes( key )) );
 	}, [ getMetaFields ] );
 
 	const {
