@@ -203,17 +203,11 @@ const Exporter = () => {
 			doesExist = await getTemplate( templateID );
 		}
 
-		if ( doesExist ) {
-			url = stringifyUrl( {
-				url: window.tiTpc.endpoint + 'templates/' + templateID,
-				query: {
-					...omit( tiTpc.params, 'meta' ),
-					meta: JSON.stringify( tiTpc.params.meta ),
-					template_name: postTitle,
-					link,
-				},
-			} );
-		} else {
+		if ( false !== doesExist && doesExist.template_type !== 'gutenberg' ) {
+			return;
+		}
+
+		if ( ! doesExist ) {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
 				query: {
@@ -223,6 +217,16 @@ const Exporter = () => {
 					template_type: 'gutenberg',
 					template_site_slug: _ti_tpc_site_slug || '',
 					template_thumbnail: _ti_tpc_screenshot_url || '',
+					link,
+				},
+			} );
+		} else {
+			url = stringifyUrl( {
+				url: window.tiTpc.endpoint + 'templates/' + templateID,
+				query: {
+					...omit( tiTpc.params, 'meta' ),
+					meta: JSON.stringify( tiTpc.params.meta ),
+					template_name: postTitle,
 					link,
 				},
 			} );
