@@ -1,3 +1,9 @@
+##### [Version 1.1.10](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.9...v1.1.10) (2021-05-05)
+
+- Allow user-made templates to save metadata
+- Fix Custom Layouts editor crashing
+- Fix Gutenberg sync update template for non-Gutenberg templates
+
 ##### [Version 1.1.9](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.8...v1.1.9) (2021-04-29)
 
 - [Fix] Content images not delivered from user site after import on some demos
