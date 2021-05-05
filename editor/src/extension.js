@@ -68,7 +68,7 @@ const Exporter = () => {
 
 	useEffect( () => {
 		const metaKeys = window.tiTpc.metaKeys;
-		window.tiTpc.params.meta = Object.fromEntries( Object.entries( getMetaFields ).filter(( [key, value] ) => metaKeys.includes( key )) );
+		window.tiTpc.params.meta = Object.fromEntries( Object.entries( getMetaFields || {} ).filter(( [key, value] ) => metaKeys.includes( key )) );
 	}, [ getMetaFields ] );
 
 	const {
@@ -203,25 +203,30 @@ const Exporter = () => {
 			doesExist = await getTemplate( templateID );
 		}
 
-		if ( doesExist ) {
+		if ( false !== doesExist && doesExist.template_type !== 'gutenberg' ) {
+			return;
+		}
+
+		if ( ! doesExist ) {
 			url = stringifyUrl( {
-				url: window.tiTpc.endpoint + 'templates/' + templateID,
+				url: window.tiTpc.endpoint + 'templates',
 				query: {
 					...omit( tiTpc.params, 'meta' ),
-					meta: published ? JSON.stringify( tiTpc.params.meta ) : '',
+					meta: JSON.stringify( tiTpc.params.meta ),
 					template_name: postTitle,
+					template_type: 'gutenberg',
+					template_site_slug: _ti_tpc_site_slug || '',
+					template_thumbnail: _ti_tpc_screenshot_url || '',
 					link,
 				},
 			} );
 		} else {
 			url = stringifyUrl( {
-				url: window.tiTpc.endpoint + 'templates',
+				url: window.tiTpc.endpoint + 'templates/' + templateID,
 				query: {
 					...omit( tiTpc.params, 'meta' ),
+					meta: JSON.stringify( tiTpc.params.meta ),
 					template_name: postTitle,
-					template_type: 'gutenberg',
-					template_site_slug: _ti_tpc_site_slug || '',
-					template_thumbnail: _ti_tpc_screenshot_url || '',
 					link,
 				},
 			} );

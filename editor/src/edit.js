@@ -23,13 +23,13 @@ const Edit = ( {
 } ) => {
 	const {
 		type,
-		postId
 	} = useSelect( ( select ) => ( {
 		type: select( 'core/editor' ).getEditedPostAttribute( 'type' ),
-		postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),
 	} ) );
 
 	const { createErrorNotice } = useDispatch( 'core/notices' );
+
+	const { editPost } = useDispatch( 'core/editor' );
 
 	const { updateLibrary, updateTemplates } = useDispatch(
 		'tpc/block-editor'
@@ -105,16 +105,9 @@ const Edit = ( {
 		updateTemplates( [] );
 
 		if ( 0 < metaFields.length && [ 'post', 'page' ].includes( type ) ) {
-			let post = null;
-
-			if ( type === 'post' ) {
-				post = new wp.api.models.Post( { id: postId } );
-			} else if ( type === 'page' ) {
-				post = new wp.api.models.Page( { id: postId } );
-			}
-
-			post.set( 'meta', { ...JSON.parse( metaFields ) } );
-			post.save();
+			editPost( {
+				meta: { ...JSON.parse( metaFields ) },
+			} );
 		}
 
 		replaceBlocks( clientId, parse( content ) );

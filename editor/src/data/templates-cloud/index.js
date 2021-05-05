@@ -158,7 +158,7 @@ export const getTemplate = async ( template ) => {
 				return false;
 			}
 
-			return true;
+			return content;
 		}
 	} catch ( error ) {
 		return false;

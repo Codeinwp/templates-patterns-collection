@@ -220,6 +220,7 @@ export const updateTemplate = async ( params ) => {
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			...omit( tiTpc.params, 'meta' ),
+			meta: JSON.stringify( tiTpc.params.meta ),
 			...omit( params, 'content' ),
 		},
 	} );
@@ -313,6 +314,7 @@ export const exportTemplate = async ( {
 		url: window.tiTpc.endpoint + 'templates',
 		query: {
 			...omit( tiTpc.params, 'meta' ),
+			meta: 'page' === type ? JSON.stringify( tiTpc.params.meta ) : '',
 			template_name: title || window.tiTpc.exporter.textPlaceholder,
 			template_type: 'elementor',
 			link,
