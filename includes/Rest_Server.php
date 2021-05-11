@@ -7,6 +7,7 @@
 
 namespace TIOB;
 
+use TIOB\Importers\Cleanup\Manager;
 use TIOB\TI_Beaver;
 use TIOB\Importers\Content_Importer;
 use TIOB\Importers\Plugin_Importer;
@@ -121,6 +122,28 @@ class Rest_Server {
 				'permission_callback' => function () {
 					return current_user_can( 'manage_options' );
 				},
+			)
+		);
+
+		register_rest_route(
+			Main::API_ROOT,
+			'/cleanup',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'run_cleanup' ),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
+	}
+
+	public function run_cleanup() {
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'data'    => Manager::instance()->do_cleanup(),
 			)
 		);
 	}
