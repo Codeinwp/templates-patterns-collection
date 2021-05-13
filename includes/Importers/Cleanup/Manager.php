@@ -75,13 +75,10 @@ class Manager {
 		return '';
 	}
 
-	final public function do_cleanup() {
-		$active_state = new Active_State();
-		$state        = $active_state->get();
-		error_log( json_encode( $state ) );
-		if ( isset( $state['plugins'] ) ) {
+	private function cleanup_plugins( $state ) {
+		if ( isset( $state[ Active_State::POSTS_NSP ] ) ) {
 			$plugin_list = get_plugins();
-			foreach ( $state['plugins'] as $plugin_slug => $info ) {
+			foreach ( $state[ Active_State::POSTS_NSP ] as $plugin_slug => $info ) {
 				$plugin = $this->get_plugin_key_by_slug( $plugin_slug, $plugin_list );
 				if ( empty( $plugin ) ) {
 					continue;
@@ -89,6 +86,47 @@ class Manager {
 				$this->uninstall_plugin( $plugin );
 			}
 		}
+	}
+
+	private function cleanup_category() {
+		if ( isset( $state[ Active_State::CATEGORY_NSP ] ) ) {
+			foreach ( $state[ Active_State::CATEGORY_NSP ] as $category_id ) {
+				wp_delete_category( $category_id );
+			}
+		}
+	}
+
+	private function cleanup_terms() {
+		if ( isset( $state[ Active_State::TERMS_NSP ] ) ) {
+			foreach ( $state[ Active_State::TERMS_NSP ] as $term_data ) {
+				wp_delete_term( $term_data['id'], $term_data['taxonomy'] );
+			}
+		}
+		if ( isset( $state[ Active_State::TAGS_NSP ] ) ) {
+			foreach ( $state[ Active_State::TAGS_NSP ] as $id ) {
+				wp_delete_term( $id, 'post_tag' );
+			}
+		}
+	}
+
+	private function cleanup_posts() {
+		if ( isset( $state[ Active_State::POSTS_NSP ] ) ) {
+			foreach ( $state[ Active_State::POSTS_NSP ] as $post_id ) {
+				wp_delete_post( $post_id, true );
+			}
+		}
+	}
+
+	final public function do_cleanup() {
+		$active_state = new Active_State();
+		$state        = $active_state->get();
+
+		error_log( json_encode( $state ) );
+		$this->cleanup_plugins( $state );
+		$this->cleanup_category( $state );
+		$this->cleanup_terms( $state );
+		$this->cleanup_posts( $state );
+
 		return true;
 	}
 }
