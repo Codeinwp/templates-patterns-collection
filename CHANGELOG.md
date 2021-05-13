@@ -1,3 +1,8 @@
+##### [Version 1.1.11](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.10...v1.1.11) (2021-05-13)
+
+* Improve translations 
+* Improve texts and descriptions
+
 ##### [Version 1.1.10](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.9...v1.1.10) (2021-05-05)
 
 - Allow user-made templates to save metadata
