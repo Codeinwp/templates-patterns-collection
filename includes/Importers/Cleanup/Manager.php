@@ -78,6 +78,7 @@ class Manager {
 	final public function do_cleanup() {
 		$active_state = new Active_State();
 		$state        = $active_state->get();
+		error_log( json_encode( $state ) );
 		if ( isset( $state['plugins'] ) ) {
 			$plugin_list = get_plugins();
 			foreach ( $state['plugins'] as $plugin_slug => $info ) {

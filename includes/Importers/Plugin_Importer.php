@@ -144,8 +144,7 @@ class Plugin_Importer {
 			}
 			$plugin_cleanup[ $plugin_slug ]['active'] = true;
 		}
-		$active_state = new Active_State();
-		$active_state->add( Active_State::PLUGINS_NSP, $plugin_cleanup );
+		do_action( 'themeisle_cl_add_property_state', Active_State::PLUGINS_NSP, $plugin_cleanup );
 
 		$this->remove_possible_redirects();
 		$this->logger->log( 'Installed and activated plugins.', 'success' );
