@@ -278,7 +278,14 @@ class WP_Import extends WP_Importer {
 			$id          = wp_insert_term( $term['term_name'], $term['term_taxonomy'], $termarr );
 			if ( ! is_wp_error( $id ) ) {
 				if ( isset( $term['term_id'] ) ) {
-					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::TERMS_NSP, array( 'id' => $id['term_id'], 'taxonomy' => $term['term_taxonomy'] ) );
+					do_action(
+						'themeisle_cl_add_item_to_property_state',
+						Active_State::TERMS_NSP,
+						array(
+							'id'       => $id['term_id'],
+							'taxonomy' => $term['term_taxonomy'],
+						)
+					);
 					$this->processed_terms[ intval( $term['term_id'] ) ] = $id['term_id'];
 				}
 			} else {
