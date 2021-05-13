@@ -221,7 +221,7 @@ class WP_Import extends WP_Importer {
 			$id       = wp_insert_term( $tag['tag_name'], 'post_tag', $tagarr );
 			if ( ! is_wp_error( $id ) ) {
 				if ( isset( $tag['term_id'] ) ) {
-					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::TAGS_NSP, id['term_id'] );
+					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::TAGS_NSP, $id['term_id'] );
 					$this->processed_terms[ intval( $tag['term_id'] ) ] = $id['term_id'];
 				}
 			} else {
@@ -278,7 +278,7 @@ class WP_Import extends WP_Importer {
 			$id          = wp_insert_term( $term['term_name'], $term['term_taxonomy'], $termarr );
 			if ( ! is_wp_error( $id ) ) {
 				if ( isset( $term['term_id'] ) ) {
-					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::TERMS_NSP, id['term_id'] );
+					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::TERMS_NSP, $id['term_id'] );
 					$this->processed_terms[ intval( $term['term_id'] ) ] = $id['term_id'];
 				}
 			} else {
