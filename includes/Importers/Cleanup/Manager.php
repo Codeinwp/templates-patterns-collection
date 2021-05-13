@@ -122,16 +122,56 @@ class Manager {
 		}
 	}
 
+	private function cleanup_theme_mods( $state ) {
+		if ( isset( $state[ Active_State::THEME_MODS_NSP ] ) ) {
+			foreach ( $state[ Active_State::THEME_MODS_NSP ] as $theme_mod ) {
+				if ( empty( $theme_mod['value'] ) ) {
+					error_log( 'Removing theme_mod: ' . $theme_mod['mod'] );
+					remove_theme_mod( $theme_mod['mod'] );
+					continue;
+				}
+				error_log( 'Updating theme_mod: ' . $theme_mod['mod'] . ' with ' . json_encode( $theme_mod['value'] ) );
+				set_theme_mod( $theme_mod['mod'], $theme_mod['value'] );
+			}
+		}
+	}
+
+	private function cleanup_menus( $state ) {
+		if ( isset( $state[ Active_State::MENUS_NSP ] ) ) {
+			error_log( 'Setting menu to: ' . json_encode( $state[ Active_State::MENUS_NSP ] ) );
+			set_theme_mod( 'nav_menu_locations', $state[ Active_State::MENUS_NSP ] );
+		}
+	}
+
+	private function cleanup_widgets( $state ) {
+		if ( isset( $state[ Active_State::WIDGETS_NSP ] ) ) {
+			foreach ( $state[ Active_State::WIDGETS_NSP ] as $widget ) {
+				if ( empty( $widget['value'] ) ) {
+					error_log( 'Removing widget: ' . $widget['id'] );
+					delete_option( $widget['id'] );
+					continue;
+				}
+				error_log( 'Updating widget: ' . $widget['id'] . ' with ' . json_encode( $widget['value'] ) );
+				update_option( $widget['id'], $widget['value'] );
+			}
+		}
+	}
+
 	final public function do_cleanup() {
 		$active_state = new Active_State();
 		$state        = $active_state->get();
 
+		error_log( json_encode( $state ) );
+
 		$this->cleanup_plugins( $state );
+		$this->cleanup_theme_mods( $state );
+		$this->cleanup_menus( $state );
 		$this->cleanup_category( $state );
 		$this->cleanup_terms( $state );
 		$this->cleanup_posts( $state );
+		$this->cleanup_widgets( $state );
 
-		//delete_transient( Active_State::STATE_NAME );
+		delete_transient( Active_State::STATE_NAME );
 
 		return true;
 	}

@@ -156,8 +156,6 @@ class WP_Import extends WP_Importer {
 					$term_id = $term_id['term_id'];
 				}
 				if ( isset( $cat['term_id'] ) ) {
-					error_log( 'Term Processed' );
-					error_log( json_encode( $term_id ) );
 					$this->processed_terms[ intval( $cat['term_id'] ) ] = (int) $term_id;
 				}
 				continue;
@@ -295,7 +293,7 @@ class WP_Import extends WP_Importer {
 			}
 			$this->process_termmeta( $term, $id['term_id'] );
 		}
-		error_log( json_encode( $this->processed_terms ) );
+
 		unset( $this->terms );
 		$this->logger->log( 'Processed terms.', 'success' );
 	}
