@@ -1,5 +1,5 @@
 // Cleanup
 GET https://neve-demo-import.test/index.php?rest_route=/ti-sites-lib/v1/cleanup
-Cookie: wordpress_test_cookie=WP%20Cookie%20check; wordpress_logged_in_8f6101c9c3d6e485a425e92a554f537c=admin%7C1620819223%7CKkgON1RlWbwL4yTbfgFpM6qT8vd0J3es09YlBtfxSw0%7Ce2fb7f0340134385b94335570fab6676037edc93655f85d40e85f883543b1412; wp-settings-time-1=1620745037
-X-WP-Nonce: 09f2715e42
+Cookie: wp-settings-time-1=1620896779; wordpress_test_cookie=WP%20Cookie%20check; wordpress_logged_in_8f6101c9c3d6e485a425e92a554f537c=admin%7C1621069302%7CLNmScQodLMysBWMEwyHckNXjjOucGokVGl7kiCyPoQF%7C66ded12223a5cc048c352abb6b469c459998ad11b26d4c1f85b42e2a0a5d7cdd
+X-WP-Nonce: 729fd85bf1
 ###

@@ -44,14 +44,26 @@ class Manager {
 	private function init() {}
 
 	final public function uninstall_plugin( $plugin ) {
+		require_once( ABSPATH . '/wp-admin/includes/file.php' );
+		global $wp_filesystem;
+		WP_Filesystem();
 		if ( is_plugin_active( $plugin ) ) {
 			deactivate_plugins( $plugin, true );
 		}
-		error_log( 'To uninstall:' );
-		error_log( $plugin );
 
-		$response = uninstall_plugin( $plugin );
-		error_log( json_encode( $response ) );
+		if ( is_uninstallable_plugin( $plugin ) ) {
+			uninstall_plugin( $plugin );
+		}
+		$plugins_dir     = $wp_filesystem->wp_plugins_dir();
+		$plugins_dir     = trailingslashit( $plugins_dir );
+		$this_plugin_dir = trailingslashit( dirname( $plugins_dir . $plugin ) );
+
+		if ( strpos( $plugin, '/' ) && $this_plugin_dir != $plugins_dir ) {
+			$deleted = $wp_filesystem->delete( $this_plugin_dir, true );
+		} else {
+			$deleted = $wp_filesystem->delete( $plugins_dir . $plugin );
+		}
+		return $deleted;
 	}
 
 	private function get_plugin_key_by_slug( $plugin_slug, $plugin_list ) {
@@ -68,12 +80,8 @@ class Manager {
 		$state        = $active_state->get();
 		if ( isset( $state['plugins'] ) ) {
 			$plugin_list = get_plugins();
-			error_log( json_encode( $plugin_list ) );
 			foreach ( $state['plugins'] as $plugin_slug => $info ) {
-				error_log( json_encode( $plugin_slug ) );
-				error_log( json_encode( $this->get_plugin_key_by_slug( $plugin_slug, $plugin_list ) ) );
-
-				$plugin =  $this->get_plugin_key_by_slug( $plugin_slug, $plugin_list );
+				$plugin = $this->get_plugin_key_by_slug( $plugin_slug, $plugin_list );
 				if ( empty( $plugin ) ) {
 					continue;
 				}
