@@ -84,35 +84,40 @@ class Manager {
 					continue;
 				}
 				$this->uninstall_plugin( $plugin );
+				error_log( 'Plugin uninstalled: ' . $plugin );
 			}
 		}
 	}
 
-	private function cleanup_category() {
+	private function cleanup_category( $state ) {
 		if ( isset( $state[ Active_State::CATEGORY_NSP ] ) ) {
 			foreach ( $state[ Active_State::CATEGORY_NSP ] as $category_id ) {
 				wp_delete_category( $category_id );
+				error_log( 'Category removed: ' . $category_id );
 			}
 		}
 	}
 
-	private function cleanup_terms() {
+	private function cleanup_terms( $state ) {
 		if ( isset( $state[ Active_State::TERMS_NSP ] ) ) {
 			foreach ( $state[ Active_State::TERMS_NSP ] as $term_data ) {
 				wp_delete_term( $term_data['id'], $term_data['taxonomy'] );
+				error_log( 'Term removed: ' . $term_data['id'] . ' as ' . $term_data['taxonomy'] );
 			}
 		}
 		if ( isset( $state[ Active_State::TAGS_NSP ] ) ) {
 			foreach ( $state[ Active_State::TAGS_NSP ] as $id ) {
 				wp_delete_term( $id, 'post_tag' );
+				error_log( 'Tag removed: ' . $id . ' as ' . 'post_tag' );
 			}
 		}
 	}
 
-	private function cleanup_posts() {
+	private function cleanup_posts( $state ) {
 		if ( isset( $state[ Active_State::POSTS_NSP ] ) ) {
 			foreach ( $state[ Active_State::POSTS_NSP ] as $post_id ) {
 				wp_delete_post( $post_id, true );
+				error_log( 'Post removed: ' . $post_id );
 			}
 		}
 	}
@@ -121,11 +126,12 @@ class Manager {
 		$active_state = new Active_State();
 		$state        = $active_state->get();
 
-		error_log( json_encode( $state ) );
 		$this->cleanup_plugins( $state );
 		$this->cleanup_category( $state );
 		$this->cleanup_terms( $state );
 		$this->cleanup_posts( $state );
+
+		//delete_transient( Active_State::STATE_NAME );
 
 		return true;
 	}
