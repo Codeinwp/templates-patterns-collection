@@ -99,45 +99,20 @@ class Main {
 		$this->setup_beaver();
 		$this->setup_elementor();
 		$this->setup_sites_listing();
-
+		add_filter( 'themeisle_sdk_hide_dashboard_widget', '__return_true' );
+		add_filter(
+			'templates_patterns_collection_feedback_review_message',
+			function ( $message ) {
+				$message = "Hey, it's great to see you are using <strong>Neve</strong>'s Starter Sites and Templates for a few days now. Which one is your favourite? If you can spare a few moments to rate our work on WordPress.org it would help us a lot (and boost our motivation). Cheers!<br/><br/>
+			~ Mihai, curator of Neve's Starter Sites";
+				return $message;
+			}
+		);
 		if ( ! $this->should_load() ) {
 			return;
 		}
 		$this->setup_admin();
 		$this->setup_api();
-	}
-
-	/**
-	 * Utility to check if sites library should be loaded.
-	 *
-	 * @return bool
-	 */
-	private function should_load() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Setup sites listing.
-	 *
-	 * @return void
-	 */
-	private function setup_sites_listing() {
-		$this->sites_listing = new Sites_Listing();
-		$this->sites_listing->init();
-	}
-
-	/**
-	 * Setup admin functionality.
-	 *
-	 * @return void
-	 */
-	private function setup_admin() {
-		$this->admin = new Admin();
-		$this->admin->init();
 	}
 
 	/**
@@ -149,7 +124,6 @@ class Main {
 		$this->editor = new Editor();
 		$this->editor->init();
 	}
-
 
 	/**
 	 * Setup beaver functionality.
@@ -173,6 +147,39 @@ class Main {
 	private function setup_elementor() {
 		$this->elementor = new Elementor();
 		$this->elementor->init();
+	}
+
+	/**
+	 * Setup sites listing.
+	 *
+	 * @return void
+	 */
+	private function setup_sites_listing() {
+		$this->sites_listing = new Sites_Listing();
+		$this->sites_listing->init();
+	}
+
+	/**
+	 * Utility to check if sites library should be loaded.
+	 *
+	 * @return bool
+	 */
+	private function should_load() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Setup admin functionality.
+	 *
+	 * @return void
+	 */
+	private function setup_admin() {
+		$this->admin = new Admin();
+		$this->admin->init();
 	}
 
 	/**

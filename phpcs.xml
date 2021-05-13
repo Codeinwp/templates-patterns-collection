@@ -37,4 +37,15 @@
         <exclude name="Generic.Files.LineEndings.InvalidEOLChar"/>
     </rule>
 
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="templates-patterns-collection"/>
+                <element value="default"/>
+            </property>
+        </properties>
+    </rule>
+    <arg value="sp"/>
+    <arg name="basepath" value="./" />
+    <arg name="parallel" value="20"/>
 </ruleset>

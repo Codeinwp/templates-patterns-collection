@@ -12,18 +12,30 @@ A cloud based service with 100+ templates and starter sites for Neve theme.
 
 == Description ==
 
-= TEMPLATE SERVICE FOR ELEMENTOR, BEAVER BUILDER, BRIZY AND GUTENBERG, DIVI and THRIVE =
+= A cloud based templates library which enables you to create or use existing ready-made website with 1-click. =
 
+### More than 100 Starter Sites and Templates available for the most popular page builders ###
+Free and premium templates and starter sites available for top 5 page builders: Elementor, Beaver Builder, Brizy, Gutenberg, Divi and Thrive.
+All templates can be previewed on [demosites.io](https://demosites.io/) and you can seamlessly import to any of your site.
 
-A cloud based templates library which enables you to create ready-made website in no time.
-
-All templates can be previewed on [demosites.io](https://demosites.io/), their import into your site is facilitated by this plugin.
+### Your own private Templates Cloud [PRO] ###
+Boost productivity and speed up your workflow by saving all your designs and share them automatically to all your sites in 1-click.
+Check more details about this in our [documentation](https://docs.themeisle.com/article/1354-neve-template-cloud-library) guide.
 
 The plugin is relying on the service behind api.themeisle.com for accessing the template collection list and their individual structure on import.
 
 No account is required to access the service template collection and the privacy policy can be found [here](https://themeisle.com/privacy-policy/).
 
 == Frequently Asked Questions ==
+
+= Does it work with any WordPress theme? =
+Right now we are supporting only [Neve](https://wordpress.org/themes/neve/) theme
+
+= Which starter sites and templates are free and which are not? =
+You can check the full collection on [demosites.io](https://demosites.io/)
+
+= Can I import just one page from one starter site? =
+Yes, you can. You can either chose to import one template or the entire starter site.
 
 == Changelog ==
 
