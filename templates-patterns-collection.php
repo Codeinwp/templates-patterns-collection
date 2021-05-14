@@ -107,7 +107,6 @@ function ti_tpc_run() {
 		define( 'TI_ONBOARDING_DISABLED', false );
 	}
 
-
 	if ( class_exists( 'WP_CLI' ) ) {
 		require_once 'includes/WP_Cli.php';
 	}
