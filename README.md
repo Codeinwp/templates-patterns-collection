@@ -39,6 +39,13 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 ## Changelog ##
 
+##### [Version 1.1.12](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.11...v1.1.12) (2021-05-17)
+
+* Improve plugin constant definitions.
+
+
+
+
 ##### [Version 1.1.11](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.10...v1.1.11) (2021-05-13)
 
 * Improve translations 
