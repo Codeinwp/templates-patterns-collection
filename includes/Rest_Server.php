@@ -129,7 +129,7 @@ class Rest_Server {
 			Main::API_ROOT,
 			'/cleanup',
 			array(
-				'methods'             => WP_REST_Server::READABLE,
+				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => array( $this, 'run_cleanup' ),
 				'permission_callback' => function () {
 					return current_user_can( 'manage_options' );

@@ -7,6 +7,8 @@
 
 namespace TIOB;
 
+use TIOB\Importers\Cleanup\Active_State;
+
 /**
  * Class Admin
  *
@@ -374,13 +376,14 @@ class Admin {
 				/* translators: %s - Theme name */
 				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
 			),
-			'onboarding'    => array(),
-			'hasFileSystem' => WP_Filesystem(),
-			'themesURL'     => admin_url( 'themes.php' ),
-			'themeAction'   => $this->get_theme_action(),
-			'brandedTheme'  => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
-			'endpoint'      => TPC_TEMPLATES_CLOUD_ENDPOINT,
-			'params'        => array(
+			'cleanupAllowed' => ( ! empty( get_transient( Active_State::STATE_NAME ) ) ) ? 'yes' : 'no',
+			'onboarding'     => array(),
+			'hasFileSystem'  => WP_Filesystem(),
+			'themesURL'      => admin_url( 'themes.php' ),
+			'themeAction'    => $this->get_theme_action(),
+			'brandedTheme'   => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
+			'endpoint'       => TPC_TEMPLATES_CLOUD_ENDPOINT,
+			'params'         => array(
 				'site_url'   => get_site_url(),
 				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 			),

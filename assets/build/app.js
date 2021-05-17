@@ -2779,71 +2779,83 @@ var ImportModal = function ImportModal(_ref) {
 
   var _useState3 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(false),
       _useState4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState3, 2),
-      pluginsProgress = _useState4[0],
-      setPluginsProgress = _useState4[1];
+      cleanupProgress = _useState4[0],
+      setCleanupProgress = _useState4[1];
 
   var _useState5 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(false),
       _useState6 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState5, 2),
-      contentProgress = _useState6[0],
-      setContentProgress = _useState6[1];
+      pluginsProgress = _useState6[0],
+      setPluginsProgress = _useState6[1];
 
   var _useState7 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(false),
       _useState8 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState7, 2),
-      customizerProgress = _useState8[0],
-      setCustomizerProgress = _useState8[1];
+      contentProgress = _useState8[0],
+      setContentProgress = _useState8[1];
 
   var _useState9 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(false),
       _useState10 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState9, 2),
-      widgetsProgress = _useState10[0],
-      setWidgetsProgress = _useState10[1];
+      customizerProgress = _useState10[0],
+      setCustomizerProgress = _useState10[1];
 
-  var _useState11 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(null),
+  var _useState11 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(false),
       _useState12 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState11, 2),
-      frontPageID = _useState12[0],
-      setFrontPageID = _useState12[1];
+      widgetsProgress = _useState12[0],
+      setWidgetsProgress = _useState12[1];
 
   var _useState13 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(null),
       _useState14 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState13, 2),
-      currentStep = _useState14[0],
-      setCurrentStep = _useState14[1];
+      frontPageID = _useState14[0],
+      setFrontPageID = _useState14[1];
 
-  var _useState15 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(false),
+  var _useState15 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(null),
       _useState16 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState15, 2),
-      importing = _useState16[0],
-      setImporting = _useState16[1];
+      currentStep = _useState16[0],
+      setCurrentStep = _useState16[1];
 
-  var _useState17 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(null),
+  var _useState17 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(false),
       _useState18 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState17, 2),
-      pluginOptions = _useState18[0],
-      setPluginOptions = _useState18[1];
+      importing = _useState18[0],
+      setImporting = _useState18[1];
 
   var _useState19 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(null),
       _useState20 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState19, 2),
-      error = _useState20[0],
-      setError = _useState20[1];
+      pluginOptions = _useState20[0],
+      setPluginOptions = _useState20[1];
 
   var _useState21 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(null),
       _useState22 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState21, 2),
-      importData = _useState22[0],
-      setImportData = _useState22[1];
+      error = _useState22[0],
+      setError = _useState22[1];
 
-  var _useState23 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(true),
+  var _useState23 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(null),
       _useState24 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState23, 2),
-      fetching = _useState24[0],
-      setFetching = _useState24[1];
+      importData = _useState24[0],
+      setImportData = _useState24[1];
 
   var _useState25 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(true),
       _useState26 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState25, 2),
-      pluginsOpened = _useState26[0],
-      setPluginsOpened = _useState26[1];
+      fetching = _useState26[0],
+      setFetching = _useState26[1];
 
   var _useState27 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(true),
       _useState28 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState27, 2),
-      optionsOpened = _useState28[0],
-      setOptionsOpened = _useState28[1];
+      pluginsOpened = _useState28[0],
+      setPluginsOpened = _useState28[1];
+
+  var _useState29 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(true),
+      _useState30 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState29, 2),
+      optionsOpened = _useState30[0],
+      setOptionsOpened = _useState30[1];
 
   var _tiobDash = tiobDash,
-      license = _tiobDash.license;
+      license = _tiobDash.license,
+      cleanupAllowed = _tiobDash.cleanupAllowed;
+
+  var _useState31 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(cleanupAllowed),
+      _useState32 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState31, 2),
+      isCleanupAllowed = _useState32[0],
+      setIsCleanupAllowed = _useState32[1];
+
   Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
     var fetchAddress = siteData.remote_url || siteData.url;
     var url = new URL("".concat(Object(_utils_common__WEBPACK_IMPORTED_MODULE_5__["trailingSlashIt"])(fetchAddress), "wp-json/ti-demo-data/data"));
@@ -2975,6 +2987,16 @@ var ImportModal = function ImportModal(_ref) {
         icon: 'admin-generic'
       }
     };
+    console.log(isCleanupAllowed);
+
+    if (isCleanupAllowed === 'yes') {
+      map = _objectSpread({
+        cleanup: {
+          title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_11__["__"])('Cleanup previous Import', 'templates-patterns-collection'),
+          icon: 'image-rotate'
+        }
+      }, map);
+    }
 
     var toggleOpen = function toggleOpen() {
       setOptionsOpened(!optionsOpened);
@@ -3045,9 +3067,34 @@ var ImportModal = function ImportModal(_ref) {
     }));
   };
 
-  function runImport() {
+  function runImportCleanup() {
     console.clear();
+    console.log(general);
 
+    if (!general.cleanup) {
+      console.log('[S] Cleanup.');
+      runImport();
+      return false;
+    }
+
+    setCurrentStep('cleanup');
+    console.log('[P] Cleanup.');
+    Object(_utils_site_import__WEBPACK_IMPORTED_MODULE_3__["cleanupImport"])({}).then(function (response) {
+      if (!response.success) {
+        handleError(response, 'cleanup');
+        return false;
+      }
+
+      console.log('[D] Cleanup.');
+      setCleanupProgress('done');
+      runImport();
+    }).catch(function (error) {
+      return handleError(error, 'cleanup');
+    });
+  }
+
+  function runImport() {
+    // console.clear();
     if (!pluginOptions) {
       console.log('[S] Plugins.');
       runImportContent();
@@ -3156,12 +3203,17 @@ var ImportModal = function ImportModal(_ref) {
 
   function importDone() {
     setCurrentStep('done');
+    setIsCleanupAllowed('yes');
     setImporting(false);
   }
 
   function handleError(error, step) {
     setImporting(false);
     setCurrentStep(null);
+
+    if ('cleanup' === step) {
+      setPluginsProgress('skip');
+    }
 
     if ('plugins' === step) {
       setContentProgress('skip');
@@ -3176,6 +3228,7 @@ var ImportModal = function ImportModal(_ref) {
     }
 
     var map = {
+      cleanup: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_11__["__"])('Something went wrong while cleaning the previous import.', 'templates-patterns-collection'),
       plugins: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_11__["__"])('Something went wrong while installing the necessary plugins.', 'templates-patterns-collection'),
       content: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_11__["__"])('Something went wrong while importing the website content.', 'templates-patterns-collection'),
       customizer: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_11__["__"])('Something went wrong while updating the customizer settings.', 'templates-patterns-collection'),
@@ -3183,6 +3236,10 @@ var ImportModal = function ImportModal(_ref) {
     };
 
     switch (step) {
+      case 'cleanup':
+        setCleanupProgress('error');
+        break;
+
       case 'plugins':
         setPluginsProgress('error');
         break;
@@ -3249,6 +3306,7 @@ var ImportModal = function ImportModal(_ref) {
     code: error.code || null
   }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])("hr", null)), null !== currentStep && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])(_ImportStepper__WEBPACK_IMPORTED_MODULE_6__["default"], {
     progress: {
+      cleanup: cleanupProgress,
       plugins: pluginsProgress,
       content: contentProgress,
       customizer: customizerProgress,
@@ -3270,7 +3328,7 @@ var ImportModal = function ImportModal(_ref) {
     disabled: allOptionsOff || !externalPluginsInstalled,
     onClick: function onClick() {
       setImporting(true);
-      runImport();
+      runImportCleanup();
     }
   }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_11__["__"])('Import entire site', 'templates-patterns-collection'))) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])("div", {
     className: "import-done-actions"
@@ -3444,6 +3502,11 @@ var ImportStepper = function ImportStepper(_ref) {
       progress = _ref.progress,
       willDo = _ref.willDo;
   var stepsMap = {
+    cleanup: {
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Cleanup previous Import', 'templates-patterns-collection'),
+      status: progress.cleanup,
+      willDo: true
+    },
     plugins: {
       label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Installing Plugins', 'templates-patterns-collection'),
       status: progress.plugins,
@@ -5451,13 +5514,14 @@ var requestData = /*#__PURE__*/function () {
 /*!*****************************************!*\
   !*** ./assets/src/utils/site-import.js ***!
   \*****************************************/
-/*! exports provided: importWidgets, importMods, installPlugins, importContent, importTemplates */
+/*! exports provided: importWidgets, importMods, cleanupImport, installPlugins, importContent, importTemplates */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "importWidgets", function() { return importWidgets; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "importMods", function() { return importMods; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cleanupImport", function() { return cleanupImport; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "installPlugins", function() { return installPlugins; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "importContent", function() { return importContent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "importTemplates", function() { return importTemplates; });
@@ -5478,6 +5542,9 @@ var importWidgets = function importWidgets(data) {
 };
 var importMods = function importMods(data) {
   return Object(_rest__WEBPACK_IMPORTED_MODULE_2__["send"])(onboarding.root + '/import_theme_mods', data);
+};
+var cleanupImport = function cleanupImport(data) {
+  return Object(_rest__WEBPACK_IMPORTED_MODULE_2__["send"])(onboarding.root + '/cleanup', data);
 };
 var installPlugins = function installPlugins(pluginArray) {
   return Object(_rest__WEBPACK_IMPORTED_MODULE_2__["send"])(onboarding.root + '/install_plugins', pluginArray);

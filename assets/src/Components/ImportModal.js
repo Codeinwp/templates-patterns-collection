@@ -1,5 +1,6 @@
 /*global tiobDash*/
 import {
+	cleanupImport,
 	importContent,
 	importMods,
 	importWidgets,
@@ -32,6 +33,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		customizer: true,
 		widgets: true,
 	} );
+	const [ cleanupProgress, setCleanupProgress ] = useState( false );
 	const [ pluginsProgress, setPluginsProgress ] = useState( false );
 	const [ contentProgress, setContentProgress ] = useState( false );
 	const [ customizerProgress, setCustomizerProgress ] = useState( false );
@@ -46,7 +48,8 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 	const [ pluginsOpened, setPluginsOpened ] = useState( true );
 	const [ optionsOpened, setOptionsOpened ] = useState( true );
 
-	const { license } = tiobDash;
+	const { license, cleanupAllowed } = tiobDash;
+	const [ isCleanupAllowed, setIsCleanupAllowed ] = useState( cleanupAllowed );
 
 	useEffect( () => {
 		const fetchAddress = siteData.remote_url || siteData.url;
@@ -195,7 +198,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 	};
 
 	const Options = () => {
-		const map = {
+		let map = {
 			content: {
 				title: __( 'Content', 'templates-patterns-collection' ),
 				icon: 'admin-post',
@@ -209,6 +212,17 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 				icon: 'admin-generic',
 			},
 		};
+
+		console.log( isCleanupAllowed );
+		if ( isCleanupAllowed === 'yes' ) {
+			map = {
+				cleanup: {
+					title: __( 'Cleanup previous Import', 'templates-patterns-collection' ),
+					icon: 'image-rotate',
+				},
+				...map
+			};
+		}
 
 		const toggleOpen = () => {
 			setOptionsOpened( ! optionsOpened );
@@ -307,8 +321,31 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		);
 	};
 
-	function runImport() {
+	function runImportCleanup() {
 		console.clear();
+		console.log( general );
+		if ( ! general.cleanup ) {
+			console.log( '[S] Cleanup.' );
+			runImport()
+			return false;
+		}
+		setCurrentStep( 'cleanup' );
+		console.log( '[P] Cleanup.' );
+		cleanupImport( {} )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					handleError( response, 'cleanup' );
+					return false;
+				}
+				console.log( '[D] Cleanup.' );
+				setCleanupProgress( 'done' );
+				runImport();
+			} )
+			.catch( ( error ) => handleError( error, 'cleanup' ) );
+	}
+
+	function runImport() {
+		// console.clear();
 		if ( ! pluginOptions ) {
 			console.log( '[S] Plugins.' );
 			runImportContent();
@@ -407,12 +444,16 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 
 	function importDone() {
 		setCurrentStep( 'done' );
+		setIsCleanupAllowed( 'yes' );
 		setImporting( false );
 	}
 
 	function handleError( error, step ) {
 		setImporting( false );
 		setCurrentStep( null );
+		if ( 'cleanup' === step ) {
+			setPluginsProgress( 'skip' );
+		}
 		if ( 'plugins' === step ) {
 			setContentProgress( 'skip' );
 		}
@@ -424,6 +465,10 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		}
 
 		const map = {
+			cleanup: __(
+				'Something went wrong while cleaning the previous import.',
+				'templates-patterns-collection'
+			),
 			plugins: __(
 				'Something went wrong while installing the necessary plugins.',
 				'templates-patterns-collection'
@@ -443,6 +488,9 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		};
 
 		switch ( step ) {
+			case 'cleanup':
+				setCleanupProgress( 'error' );
+				break;
 			case 'plugins':
 				setPluginsProgress( 'error' );
 				break;
@@ -526,6 +574,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 								{ null !== currentStep && (
 									<ImportStepper
 										progress={ {
+											cleanup: cleanupProgress,
 											plugins: pluginsProgress,
 											content: contentProgress,
 											customizer: customizerProgress,
@@ -574,7 +623,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 											}
 											onClick={ () => {
 												setImporting( true );
-												runImport();
+												runImportCleanup();
 											} }
 										>
 											{ __(
