@@ -122,6 +122,15 @@ class Manager {
 		}
 	}
 
+	private function cleanup_attachments( $state ) {
+		if ( isset( $state[ Active_State::ATTACHMENT_NSP ] ) ) {
+			foreach ( $state[ Active_State::ATTACHMENT_NSP ] as $post_id ) {
+				wp_delete_attachment( $post_id, true );
+				error_log( 'Attachment removed: ' . $post_id );
+			}
+		}
+	}
+
 	private function cleanup_theme_mods( $state ) {
 		if ( isset( $state[ Active_State::THEME_MODS_NSP ] ) ) {
 			foreach ( $state[ Active_State::THEME_MODS_NSP ] as $theme_mod ) {
@@ -157,6 +166,18 @@ class Manager {
 		}
 	}
 
+	private function cleanup_options( $namespace, $state ) {
+		if ( isset( $state[ $namespace ] ) ) {
+			foreach ( $state[ $namespace ] as $option => $value ) {
+				if ( empty( $value ) ) {
+					delete_option( $option );
+					continue;
+				}
+				update_option( $option, $value );
+			}
+		}
+	}
+
 	final public function do_cleanup() {
 		$active_state = new Active_State();
 		$state        = $active_state->get();
@@ -168,6 +189,8 @@ class Manager {
 		$this->cleanup_menus( $state );
 		$this->cleanup_category( $state );
 		$this->cleanup_terms( $state );
+		$this->cleanup_options( Active_State::FRONT_PAGE_NSP, $state );
+		$this->cleanup_options( Active_State::SHOP_PAGE_NSP, $state );
 		$this->cleanup_posts( $state );
 		$this->cleanup_widgets( $state );
 
