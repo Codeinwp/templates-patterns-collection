@@ -43,7 +43,13 @@ class Manager {
 	 */
 	private function init() {}
 
-	final public function uninstall_plugin( $plugin ) {
+	/**
+	 * Uninstall Plugin method.
+	 *
+	 * @param string $plugin The plugin file path.
+	 * @return bool
+	 */
+	private function uninstall_plugin( $plugin ) {
 		require_once( ABSPATH . '/wp-admin/includes/file.php' );
 		global $wp_filesystem;
 		WP_Filesystem();
@@ -66,6 +72,13 @@ class Manager {
 		return $deleted;
 	}
 
+	/**
+	 * Returns plugin key from slug.
+	 *
+	 * @param string $plugin_slug The plugin slug.
+	 * @param array $plugin_list The plugin list.
+	 * @return string
+	 */
 	private function get_plugin_key_by_slug( $plugin_slug, $plugin_list ) {
 		foreach ( $plugin_list as $key => $data ) {
 			if ( isset( $data['Name'] ) && sanitize_title( $data['Name'] ) === $plugin_slug ) {
@@ -75,6 +88,10 @@ class Manager {
 		return '';
 	}
 
+	/**
+	 * Handles plugin cleanup.
+	 * @param array $state The cleanup state.
+	 */
 	private function cleanup_plugins( $state ) {
 		if ( isset( $state[ Active_State::POSTS_NSP ] ) ) {
 			$plugin_list = get_plugins();
@@ -84,88 +101,109 @@ class Manager {
 					continue;
 				}
 				$this->uninstall_plugin( $plugin );
-				error_log( 'Plugin uninstalled: ' . $plugin );
 			}
 		}
 	}
 
+	/**
+	 * Handles category cleanup.
+	 * @param array $state The cleanup state.
+	 */
 	private function cleanup_category( $state ) {
 		if ( isset( $state[ Active_State::CATEGORY_NSP ] ) ) {
 			foreach ( $state[ Active_State::CATEGORY_NSP ] as $category_id ) {
 				wp_delete_category( $category_id );
-				error_log( 'Category removed: ' . $category_id );
 			}
 		}
 	}
 
+	/**
+	 * Handles terms cleanup.
+	 * @param array $state The cleanup state.
+	 */
 	private function cleanup_terms( $state ) {
 		if ( isset( $state[ Active_State::TERMS_NSP ] ) ) {
 			foreach ( $state[ Active_State::TERMS_NSP ] as $term_data ) {
 				wp_delete_term( $term_data['id'], $term_data['taxonomy'] );
-				error_log( 'Term removed: ' . $term_data['id'] . ' as ' . $term_data['taxonomy'] );
 			}
 		}
 		if ( isset( $state[ Active_State::TAGS_NSP ] ) ) {
 			foreach ( $state[ Active_State::TAGS_NSP ] as $id ) {
 				wp_delete_term( $id, 'post_tag' );
-				error_log( 'Tag removed: ' . $id . ' as ' . 'post_tag' );
 			}
 		}
 	}
 
+	/**
+	 * Handles posts cleanup.
+	 * @param array $state The cleanup state.
+	 */
 	private function cleanup_posts( $state ) {
 		if ( isset( $state[ Active_State::POSTS_NSP ] ) ) {
 			foreach ( $state[ Active_State::POSTS_NSP ] as $post_id ) {
 				wp_delete_post( $post_id, true );
-				error_log( 'Post removed: ' . $post_id );
 			}
 		}
 	}
 
+	/**
+	 * Handles attachments cleanup.
+	 * @param array $state The cleanup state.
+	 */
 	private function cleanup_attachments( $state ) {
 		if ( isset( $state[ Active_State::ATTACHMENT_NSP ] ) ) {
 			foreach ( $state[ Active_State::ATTACHMENT_NSP ] as $post_id ) {
 				wp_delete_attachment( $post_id, true );
-				error_log( 'Attachment removed: ' . $post_id );
 			}
 		}
 	}
 
+	/**
+	 * Handles theme mods cleanup.
+	 * @param array $state The cleanup state.
+	 */
 	private function cleanup_theme_mods( $state ) {
 		if ( isset( $state[ Active_State::THEME_MODS_NSP ] ) ) {
 			foreach ( $state[ Active_State::THEME_MODS_NSP ] as $theme_mod ) {
 				if ( empty( $theme_mod['value'] ) ) {
-					error_log( 'Removing theme_mod: ' . $theme_mod['mod'] );
 					remove_theme_mod( $theme_mod['mod'] );
 					continue;
 				}
-				error_log( 'Updating theme_mod: ' . $theme_mod['mod'] . ' with ' . json_encode( $theme_mod['value'] ) );
 				set_theme_mod( $theme_mod['mod'], $theme_mod['value'] );
 			}
 		}
 	}
 
+	/**
+	 * Handles menu cleanup.
+	 * @param array $state The cleanup state.
+	 */
 	private function cleanup_menus( $state ) {
 		if ( isset( $state[ Active_State::MENUS_NSP ] ) ) {
-			error_log( 'Setting menu to: ' . json_encode( $state[ Active_State::MENUS_NSP ] ) );
 			set_theme_mod( 'nav_menu_locations', $state[ Active_State::MENUS_NSP ] );
 		}
 	}
 
+	/**
+	 * Handles widget cleanup.
+	 * @param array $state The cleanup state.
+	 */
 	private function cleanup_widgets( $state ) {
 		if ( isset( $state[ Active_State::WIDGETS_NSP ] ) ) {
 			foreach ( $state[ Active_State::WIDGETS_NSP ] as $widget ) {
 				if ( empty( $widget['value'] ) ) {
-					error_log( 'Removing widget: ' . $widget['id'] );
 					delete_option( $widget['id'] );
 					continue;
 				}
-				error_log( 'Updating widget: ' . $widget['id'] . ' with ' . json_encode( $widget['value'] ) );
 				update_option( $widget['id'], $widget['value'] );
 			}
 		}
 	}
 
+	/**
+	 * Handles other options cleanup.
+	 * @param array $state The cleanup state.
+	 */
 	private function cleanup_options( $namespace, $state ) {
 		if ( isset( $state[ $namespace ] ) ) {
 			foreach ( $state[ $namespace ] as $option => $value ) {
@@ -182,8 +220,6 @@ class Manager {
 		$active_state = new Active_State();
 		$state        = $active_state->get();
 
-		error_log( json_encode( $state ) );
-
 		$this->cleanup_plugins( $state );
 		$this->cleanup_theme_mods( $state );
 		$this->cleanup_menus( $state );
@@ -192,10 +228,9 @@ class Manager {
 		$this->cleanup_options( Active_State::FRONT_PAGE_NSP, $state );
 		$this->cleanup_options( Active_State::SHOP_PAGE_NSP, $state );
 		$this->cleanup_posts( $state );
+		$this->cleanup_attachments( $state );
 		$this->cleanup_widgets( $state );
 
-		delete_transient( Active_State::STATE_NAME );
-
-		return true;
+		return delete_transient( Active_State::STATE_NAME );
 	}
 }
