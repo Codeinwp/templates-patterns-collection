@@ -7,7 +7,7 @@ const ImportStepper = ( { currentStep, progress, willDo } ) => {
 		cleanup: {
 			label: __( 'Cleanup previous Import', 'templates-patterns-collection' ),
 			status: progress.cleanup,
-			willDo: true,
+			willDo: willDo.cleanup,
 		},
 		plugins: {
 			label: __( 'Installing Plugins', 'templates-patterns-collection' ),

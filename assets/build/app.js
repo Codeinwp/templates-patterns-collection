@@ -3505,7 +3505,7 @@ var ImportStepper = function ImportStepper(_ref) {
     cleanup: {
       label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Cleanup previous Import', 'templates-patterns-collection'),
       status: progress.cleanup,
-      willDo: true
+      willDo: willDo.cleanup
     },
     plugins: {
       label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Installing Plugins', 'templates-patterns-collection'),
