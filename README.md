@@ -2,7 +2,7 @@
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** neve, templates, patterns, blocks, starter, sites, demo, content, import  
 **Requires at least:** 4.7  
-**Tested up to:** 5.6  
+**Tested up to:** 5.7  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
 **License:** GPLv3  
@@ -26,6 +26,53 @@ No account is required to access the service template collection and the privacy
 ## Frequently Asked Questions ##
 
 ## Changelog ##
+
+##### [Version 1.1.10](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.9...v1.1.10) (2021-05-05)
+
+- Allow user-made templates to save metadata
+- Fix Custom Layouts editor crashing
+- Fix Gutenberg sync update template for non-Gutenberg templates
+
+
+
+
+##### [Version 1.1.9](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.8...v1.1.9) (2021-04-29)
+
+- [Fix] Content images not delivered from user site after import on some demos
+- [Fix] Replace content links with local links on core editor demos
+
+
+
+
+##### [Version 1.1.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.7...v1.1.8) (2021-04-29)
+
+- Decode HTML entities in title 
+- Improve Templates Cloud visibility
+- Fix meta not saving properly
+
+
+
+
+##### [Version 1.1.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.6...v1.1.7) (2021-04-12)
+
+- Rename to Save
+
+##### [Version 1.1.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.5...v1.1.6) (2021-03-16)
+
+- Fix Onboarding failing
+
+
+
+
+##### [Version 1.1.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.4...v1.1.5) (2021-03-16)
+
+- Add Beaver Builder integration
+- Check if the template exists before updating
+- Fix infinite scroll for Elementor
+- Various fixes
+
+
+
 
 ##### [Version 1.1.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.3...v1.1.4) (2021-02-22)
 

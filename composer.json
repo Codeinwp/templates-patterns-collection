@@ -1,42 +1,47 @@
 {
   "name": "codeinwp/templates-patterns-collection",
   "description": "Templates and Patterns Collection Plugin.",
-  "version": "1.1.4",
-  "type": "project",
+  "version": "1.1.10",
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/Codeinwp/templates-patterns-collection",
   "authors": [
-	{
-	  "name": "ThemeIsle team",
-	  "email": "friends@themeisle.com",
-	  "homepage": "https://themeisle.com"
-	}
+    {
+      "name": "ThemeIsle team",
+      "email": "friends@themeisle.com",
+      "homepage": "https://themeisle.com"
+    }
   ],
   "autoload": {
-	"psr-4": {
-	  "TIOB\\": "includes/"
-	}
+    "psr-4": {
+      "TIOB\\": "includes/"
+    },
+    "files": [
+      "vendor/codeinwp/themeisle-sdk/load.php"
+    ]
   },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "config": {
-	"optimize-autoloader": true,
+    "optimize-autoloader": true,
+    "platform-check": false,
     "platform": {
       "php": "5.6"
     }
   },
   "extra": {
-	"installer-disable": "true"
+    "installer-disable": "true"
   },
   "require-dev": {
-	"dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-	"squizlabs/php_codesniffer": "^3.1",
-	"wp-coding-standards/wpcs": "^1.0.0 || ^2.0.0"
+    "codeinwp/phpcs-ruleset": "dev-main"
   },
   "scripts": {
-	"format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
-	"lint": "phpcs --standard=phpcs.xml"
+    "format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
+    "lint": "phpcs --standard=phpcs.xml"
   },
   "support": {
-	"issues": "https://github.com/Codeinwp/templates-patterns-collection/issues"
+    "issues": "https://github.com/Codeinwp/templates-patterns-collection/issues"
+  },
+  "require": {
+    "codeinwp/themeisle-sdk": "^3.2"
   }
 }
-

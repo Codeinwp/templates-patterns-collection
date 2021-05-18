@@ -2,7 +2,7 @@
 Contributors: themeisle
 Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
 Requires at least: 4.7
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv3
@@ -12,12 +12,15 @@ A cloud based service with 100+ templates and starter sites for Neve theme.
 
 == Description ==
 
-= TEMPLATE SERVICE FOR ELEMENTOR, BEAVER BUILDER, BRIZY AND GUTENBERG, DIVI and THRIVE =
+= A cloud based templates library which enables you to create or use existing ready-made website with 1-click. =
 
+### More than 100 Starter Sites and Templates available for the most popular page builders ###
+Free and premium templates and starter sites available for top 5 page builders: Elementor, Beaver Builder, Brizy, Gutenberg, Divi and Thrive.
+All templates can be previewed on [demosites.io](https://demosites.io/) and you can seamlessly import to any of your site.
 
-A cloud based templates library which enables you to create ready-made website in no time.
-
-All templates can be previewed on [demosites.io](https://demosites.io/), their import into your site is facilitated by this plugin.
+### Your own private Templates Cloud [PRO] ###
+Boost productivity and speed up your workflow by saving all your designs and share them automatically to all your sites in 1-click.
+Check more details about this in our [documentation](https://docs.themeisle.com/article/1354-neve-template-cloud-library) guide.
 
 The plugin is relying on the service behind api.themeisle.com for accessing the template collection list and their individual structure on import.
 
@@ -25,7 +28,63 @@ No account is required to access the service template collection and the privacy
 
 == Frequently Asked Questions ==
 
+= Does it work with any WordPress theme? =
+Right now we are supporting only [Neve](https://wordpress.org/themes/neve/) theme
+
+= Which starter sites and templates are free and which are not? =
+You can check the full collection on [demosites.io](https://demosites.io/)
+
+= Can I import just one page from one starter site? =
+Yes, you can. You can either chose to import one template or the entire starter site.
+
 == Changelog ==
+
+##### [Version 1.1.10](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.9...v1.1.10) (2021-05-05)
+
+- Allow user-made templates to save metadata
+- Fix Custom Layouts editor crashing
+- Fix Gutenberg sync update template for non-Gutenberg templates
+
+
+
+
+##### [Version 1.1.9](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.8...v1.1.9) (2021-04-29)
+
+- [Fix] Content images not delivered from user site after import on some demos
+- [Fix] Replace content links with local links on core editor demos
+
+
+
+
+##### [Version 1.1.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.7...v1.1.8) (2021-04-29)
+
+- Decode HTML entities in title 
+- Improve Templates Cloud visibility
+- Fix meta not saving properly
+
+
+
+
+##### [Version 1.1.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.6...v1.1.7) (2021-04-12)
+
+- Rename to Save
+
+##### [Version 1.1.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.5...v1.1.6) (2021-03-16)
+
+- Fix Onboarding failing
+
+
+
+
+##### [Version 1.1.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.4...v1.1.5) (2021-03-16)
+
+- Add Beaver Builder integration
+- Check if the template exists before updating
+- Fix infinite scroll for Elementor
+- Various fixes
+
+
+
 
 ##### [Version 1.1.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.3...v1.1.4) (2021-02-22)
 

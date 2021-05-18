@@ -68,10 +68,41 @@ class Admin {
 		}
 
 		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="' . esc_attr( $style ) . '">&crarr;</span>' : '';
-		add_theme_page( __( 'Starter Sites', 'templates-patterns-collection' ), $prefix . __( 'Starter Sites', 'templates-patterns-collection' ), 'activate_plugins', $this->page_slug, array( $this, 'render_starter_sites' ) );
+		add_theme_page(
+			__( 'Starter Sites', 'templates-patterns-collection' ),
+			$prefix . __( 'Starter Sites', 'templates-patterns-collection' ),
+			'activate_plugins',
+			$this->page_slug,
+			array(
+				$this,
+				'render_starter_sites',
+			)
+		);
 		if ( $this->is_agency_plan() ) {
 			add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
 		}
+	}
+
+	/**
+	 * Check if current subscription is agency.
+	 *
+	 * @return bool
+	 */
+	private function is_agency_plan() {
+		$category         = apply_filters( 'product_neve_license_plan', - 1 );
+		$category_mapping = array(
+			1 => 1,
+			2 => 1,
+			3 => 2,
+			4 => 2,
+			5 => 3,
+			6 => 3,
+			7 => 1,
+			8 => 2,
+			9 => 3,
+		);
+
+		return isset( $category_mapping[ $category ] ) && $category_mapping[ $category ] === 3;
 	}
 
 	/**
@@ -105,6 +136,63 @@ class Admin {
 		wp_register_script( 'tiob', TIOB_URL . '/assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates' ) ), $dependencies['version'], true );
 		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
 		wp_enqueue_script( 'tiob' );
+	}
+
+	/**
+	 * Get localization data for the dashboard script.
+	 *
+	 * @return array
+	 */
+	private function get_localization() {
+		$theme_name = apply_filters( 'ti_wl_theme_name', 'Neve' );
+
+		return array(
+			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'assets'        => TIOB_URL . '/assets/',
+			'upgradeURL'    => esc_url( apply_filters( 'neve_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/neve/upgrade/?utm_medium=aboutneve&utm_source=freevspro&utm_campaign=neve' ) ),
+			'strings'       => array(
+				/* translators: %s - Theme name */
+				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
+			),
+			'cleanupAllowed' => ( ! empty( get_transient( Active_State::STATE_NAME ) ) ) ? 'yes' : 'no',
+			'onboarding'    => array(),
+			'hasFileSystem' => WP_Filesystem(),
+			'themesURL'     => admin_url( 'themes.php' ),
+			'themeAction'   => $this->get_theme_action(),
+			'brandedTheme'  => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
+			'endpoint'      => TPC_TEMPLATES_CLOUD_ENDPOINT,
+			'params'        => array(
+				'site_url'   => get_site_url(),
+				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+			),
+		);
+	}
+
+	/**
+	 * Gets theme action.
+	 */
+	private function get_theme_action() {
+		if ( defined( 'NEVE_VERSION' ) ) {
+			return false;
+		}
+
+		$themes = wp_get_themes();
+		foreach ( $themes as $theme_slug => $args ) {
+			$theme = wp_get_theme( $theme_slug );
+			if ( $theme->get( 'TextDomain' ) === 'neve' ) {
+				return array(
+					'action' => 'activate',
+					'slug'   => $theme_slug,
+					'nonce'  => wp_create_nonce( 'switch-theme_' . $theme_slug ),
+				);
+			}
+		}
+
+		return array(
+			'action' => 'install',
+			'slug'   => 'neve',
+			'nonce'  => wp_create_nonce( 'switch-theme_neve' ),
+		);
 	}
 
 	/**
@@ -156,34 +244,13 @@ class Admin {
 		$page_was_visited = (bool) get_transient( 'tiob_library_visited' );
 		if ( $this->is_agency_plan() && ! $page_was_visited ) {
 			$array['notifications']['template-cloud'] = array(
-				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'neve' ),
-				'cta'  => __( 'Open Templates Cloud', 'neve' ),
+				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'templates-patterns-collection' ),
+				'cta'  => sprintf( __( 'Open %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
 				'url'  => 'themes.php?page=' . $this->page_slug . '&dismiss_notice=yes#library',
 			);
 		}
 
 		return $array;
-	}
-
-	/**
-	 * Check if current subscription is agency.
-	 *
-	 * @return bool
-	 */
-	private function is_agency_plan() {
-		$category         = apply_filters( 'product_neve_license_plan', -1 );
-		$category_mapping = array(
-			1 => 1,
-			2 => 1,
-			3 => 2,
-			4 => 2,
-			5 => 3,
-			6 => 3,
-			7 => 1,
-			8 => 2,
-			9 => 3,
-		);
-		return isset( $category_mapping[ $category ] ) && $category_mapping[ $category ] === 3;
 	}
 
 	/**
@@ -298,7 +365,6 @@ class Admin {
 		return $theme_object->get( 'Template' );
 	}
 
-
 	/**
 	 * Get strings.
 	 *
@@ -334,85 +400,31 @@ class Admin {
 			'download_error_log'          => __( 'Download error log', 'templates-patterns-collection' ),
 			'external_plugins_notice'     => __( 'To import this demo you have to install the following plugins:', 'templates-patterns-collection' ),
 			'rest_not_working'            => sprintf(
-				/* translators: 1 - 'here'. */
+			/* translators: 1 - 'here'. */
 				__( 'It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s.', 'templates-patterns-collection' ),
 				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ) )
 			),
 			'error_report'                => sprintf(
-				/* translators: 1 - 'get in touch'. */
+			/* translators: 1 - 'get in touch'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
 				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
 			'troubleshooting'             => sprintf(
-				/* translators: 1 - 'troubleshooting guide'. */
+			/* translators: 1 - 'troubleshooting guide'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work.', 'templates-patterns-collection' ),
 				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ) )
 			),
 			'support'                     => sprintf(
-				/* translators: 1 - 'get in touch'. */
+			/* translators: 1 - 'get in touch'. */
 				__( 'If none of the solutions in the guide work, please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
 				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
 			'fsDown'                      => sprintf(
-				/* translators: %s - 'WP_Filesystem'. */
+			/* translators: %s - 'WP_Filesystem'. */
 				__( 'It seems that %s is not available. You can contact your site administrator or hosting provider to help you enable it.', 'templates-patterns-collection' ),
 				sprintf( '<code>WP_Filesystem</code>' )
 			),
 		);
 	}
 
-	/**
-	 * Get localization data for the dashboard script.
-	 *
-	 * @return array
-	 */
-	private function get_localization() {
-		$theme_name = apply_filters( 'ti_wl_theme_name', 'Neve' );
-		return array(
-			'nonce'          => wp_create_nonce( 'wp_rest' ),
-			'assets'         => TIOB_URL . '/assets/',
-			'upgradeURL'     => esc_url( apply_filters( 'neve_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/neve/upgrade/?utm_medium=aboutneve&utm_source=freevspro&utm_campaign=neve' ) ),
-			'strings'        => array(
-				/* translators: %s - Theme name */
-				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
-			),
-			'cleanupAllowed' => ( ! empty( get_transient( Active_State::STATE_NAME ) ) ) ? 'yes' : 'no',
-			'onboarding'     => array(),
-			'hasFileSystem'  => WP_Filesystem(),
-			'themesURL'      => admin_url( 'themes.php' ),
-			'themeAction'    => $this->get_theme_action(),
-			'brandedTheme'   => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
-			'endpoint'       => TPC_TEMPLATES_CLOUD_ENDPOINT,
-			'params'         => array(
-				'site_url'   => get_site_url(),
-				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
-			),
-		);
-	}
-
-	/**
-	 * Gets theme action.
-	 */
-	private function get_theme_action() {
-		if ( defined( 'NEVE_VERSION' ) ) {
-			return false;
-		}
-
-		$themes = wp_get_themes();
-		foreach ( $themes as $theme_slug => $args ) {
-			$theme = wp_get_theme( $theme_slug );
-			if ( $theme->get( 'TextDomain' ) === 'neve' ) {
-				return array(
-					'action' => 'activate',
-					'slug'   => $theme_slug,
-					'nonce'  => wp_create_nonce( 'switch-theme_' . $theme_slug ),
-				);
-			}
-		}
-		return array(
-			'action' => 'install',
-			'slug'   => 'neve',
-			'nonce'  => wp_create_nonce( 'switch-theme_neve' ),
-		);
-	}
 }
