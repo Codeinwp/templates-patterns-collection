@@ -93,9 +93,10 @@ class Manager {
 	 * @param array $state The cleanup state.
 	 */
 	private function cleanup_plugins( $state ) {
-		if ( isset( $state[ Active_State::POSTS_NSP ] ) ) {
+		if ( isset( $state[ Active_State::PLUGINS_NSP ] ) ) {
+			error_log( json_encode( $state[ Active_State::PLUGINS_NSP ] ) );
 			$plugin_list = get_plugins();
-			foreach ( $state[ Active_State::POSTS_NSP ] as $plugin_slug => $info ) {
+			foreach ( $state[ Active_State::PLUGINS_NSP ] as $plugin_slug => $info ) {
 				$plugin = $this->get_plugin_key_by_slug( $plugin_slug, $plugin_list );
 				if ( empty( $plugin ) ) {
 					continue;
