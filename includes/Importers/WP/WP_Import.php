@@ -453,6 +453,7 @@ class WP_Import extends WP_Importer {
 					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::ATTACHMENT_NSP, $post_id );
 				} else {
 					$this->logger->log( "Inserting {$postdata['post_type']}: {$postdata['post_title']}.", 'progress' );
+					$postdata['post_content'] = apply_filters( 'tpc_post_content_processed_terms', $postdata['post_content'], $this->processed_terms );
 					$postdata['post_content'] = apply_filters( 'tpc_post_content_before_insert', $postdata['post_content'], $this->base_blog_url );
 					$comment_post_id          = $post_id = wp_insert_post( $postdata, true );
 					$this->logger->log( "Done inserting {$postdata['post_type']}: {$postdata['post_title']}.", 'success' );
