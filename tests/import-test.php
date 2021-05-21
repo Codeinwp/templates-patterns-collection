@@ -6,14 +6,13 @@
  * @package templates-patterns-collection
  */
 
+use TIOB\Importers\Helpers\Importer_Alterator;
 use TIOB\Importers\WP\WP_Import;
 
 /**
  * Class Import_Test
  */
 class Import_Test extends WP_UnitTestCase {
-
-	private $processed_terms;
 
 	public function setUp() {
 		parent::setUp();
@@ -155,25 +154,6 @@ class Import_Test extends WP_UnitTestCase {
 		);
 	}
 
-	private function remap_category_recursively( $input ) {
-
-		$re = '/replace_cat_(?<categoryID>\d+)/m';
-		if ( is_array( $input ) ) {
-			return ( isset( $this->processed_terms[ $input['categoryID'] ] ) ) ? $this->processed_terms[ $input['categoryID'] ] : $input['categoryID'];
-		}
-		return preg_replace_callback( $re, array( $this, 'remap_category_recursively' ), $input );
-	}
-
-	public function content_to_import( $content, $processed_terms ) {
-		$this->processed_terms = $processed_terms;
-		if ( strpos( $content, 'wp:woocommerce' ) !== false ) {
-			$new_content = $this->remap_category_recursively( $content );
-			return $new_content;
-		}
-
-		return $content;
-	}
-
 	final public function test_import_store_xml() {
 		if ( ! class_exists( 'WP_Importer' ) ) {
 			$class_wp_importer = ABSPATH . 'wp-admin/includes/class-wp-importer.php';
@@ -182,7 +162,7 @@ class Import_Test extends WP_UnitTestCase {
 			}
 		}
 
-		add_filter( 'tpc_post_content_processed_terms', array( $this, 'content_to_import' ), 10, 2 );
+		$alterator = new Importer_Alterator( [ "demoSlug" => "testImport" ] );
 
 
 		$export_file_path = dirname( __FILE__ ) . '/fixtures/digital_store/export.xml';
@@ -194,7 +174,7 @@ class Import_Test extends WP_UnitTestCase {
 		$re = '/categoryId":(?<categoryID>\d+)/m';
 		preg_match_all( $re, $post->post_content, $matches );
 		foreach ( $matches['categoryID'] as $match ) {
-			$this->assertTrue( in_array( $match, $this->processed_terms ) );
+			$this->assertTrue( in_array( $match, $importer->processed_terms ) );
 		}
 	}
 }
