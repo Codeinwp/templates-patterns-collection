@@ -213,7 +213,6 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 			},
 		};
 
-		console.log( isCleanupAllowed );
 		if ( isCleanupAllowed === 'yes' ) {
 			map = {
 				cleanup: {
@@ -445,6 +444,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 	function importDone() {
 		setCurrentStep( 'done' );
 		setIsCleanupAllowed( 'yes' );
+		tiobDash.cleanupAllowed = 'yes';
 		setImporting( false );
 	}
 

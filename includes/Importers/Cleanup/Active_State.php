@@ -68,23 +68,18 @@ class Active_State {
 	}
 
 	final public function add_property_state( $property_key, $data ) {
-		//error_log( json_encode( $property_key ) );
-		//error_log( json_encode( $data ) );
 		if ( $this->is_allowed_property( $property_key ) ) {
 			$this->add( $property_key, $data );
 		}
 	}
 
 	final public function add_item_to_property_state( $property_key, $item ) {
-		//error_log( json_encode( $property_key ) );
-		//error_log( json_encode( $item ) );
 		if ( $this->is_allowed_property( $property_key ) ) {
 			$property = $this->get_by_key( $property_key );
 			if ( empty( $property ) ) {
 				$property = array();
 			}
 			$property[] = $item;
-			//error_log( json_encode( $property ) );
 			$this->add( $property_key, $property );
 		}
 	}

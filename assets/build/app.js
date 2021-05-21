@@ -2987,7 +2987,6 @@ var ImportModal = function ImportModal(_ref) {
         icon: 'admin-generic'
       }
     };
-    console.log(isCleanupAllowed);
 
     if (isCleanupAllowed === 'yes') {
       map = _objectSpread({
@@ -3204,6 +3203,7 @@ var ImportModal = function ImportModal(_ref) {
   function importDone() {
     setCurrentStep('done');
     setIsCleanupAllowed('yes');
+    tiobDash.cleanupAllowed = 'yes';
     setImporting(false);
   }
 
