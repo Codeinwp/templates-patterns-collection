@@ -93,14 +93,25 @@ class Manager {
 	 * @param array $state The cleanup state.
 	 */
 	private function cleanup_plugins( $state ) {
-		if ( isset( $state[ Active_State::POSTS_NSP ] ) ) {
+		if ( isset( $state[ Active_State::PLUGINS_NSP ] ) ) {
 			$plugin_list = get_plugins();
-			foreach ( $state[ Active_State::POSTS_NSP ] as $plugin_slug => $info ) {
+			foreach ( $state[ Active_State::PLUGINS_NSP ] as $plugin_slug => $info ) {
 				$plugin = $this->get_plugin_key_by_slug( $plugin_slug, $plugin_list );
 				if ( empty( $plugin ) ) {
 					continue;
 				}
 				$this->uninstall_plugin( $plugin );
+				if ( $plugin_slug === 'woocommerce' ) {
+					// Remove WooCommerce Pages.
+					wp_delete_post( get_option( 'woocommerce_shop_page_id' ), true );
+					wp_delete_post( get_option( 'woocommerce_cart_page_id' ), true );
+					wp_delete_post( get_option( 'woocommerce_checkout_page_id' ), true );
+					wp_delete_post( get_option( 'woocommerce_myaccount_page_id' ), true );
+					wp_delete_post( get_option( 'woocommerce_edit_address_page_id' ), true );
+					wp_delete_post( get_option( 'woocommerce_view_order_page_id' ), true );
+					wp_delete_post( get_option( 'woocommerce_change_password_page_id' ), true );
+					wp_delete_post( get_option( 'woocommerce_logout_page_id' ), true );
+				}
 			}
 		}
 	}
@@ -220,7 +231,6 @@ class Manager {
 		$active_state = new Active_State();
 		$state        = $active_state->get();
 
-		$this->cleanup_plugins( $state );
 		$this->cleanup_theme_mods( $state );
 		$this->cleanup_menus( $state );
 		$this->cleanup_category( $state );
@@ -230,6 +240,7 @@ class Manager {
 		$this->cleanup_posts( $state );
 		$this->cleanup_attachments( $state );
 		$this->cleanup_widgets( $state );
+		$this->cleanup_plugins( $state );
 
 		return delete_transient( Active_State::STATE_NAME );
 	}

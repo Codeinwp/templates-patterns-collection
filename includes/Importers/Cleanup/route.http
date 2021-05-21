@@ -1,5 +1,0 @@
-// Cleanup
-POST https://neve-demo-import.test/index.php?rest_route=/ti-sites-lib/v1/cleanup
-Cookie: wp-settings-time-1=1621242500; wordpress_test_cookie=WP%20Cookie%20check; tk_ai=woo%3AjmUgQMu43%2F1lARhK4ZXV0nTW; wordpress_logged_in_8f6101c9c3d6e485a425e92a554f537c=admin%7C1621415181%7CKNZH1dwGYfvDDOnZQPetJq83Sf96WPY8rhxvVnyPo7g%7C1fafb6d2fa15e7763f028410fc42b87c23ca2825768276da65a6a63fcd3e6f03
-X-WP-Nonce: 51cf7dba5b
-###
