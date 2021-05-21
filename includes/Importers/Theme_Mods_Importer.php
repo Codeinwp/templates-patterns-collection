@@ -7,6 +7,7 @@
 
 namespace TIOB\Importers;
 
+use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Helper;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -99,6 +100,15 @@ class Theme_Mods_Importer {
 			if ( $value === 'false' ) {
 				$value = false;
 			}
+			$previous_value = get_theme_mod( $mod );
+			do_action(
+				'themeisle_cl_add_item_to_property_state',
+				Active_State::THEME_MODS_NSP,
+				array(
+					'mod'   => $mod,
+					'value' => $previous_value,
+				)
+			);
 			set_theme_mod( $mod, $value );
 		}
 
@@ -162,6 +172,8 @@ class Theme_Mods_Importer {
 
 			return;
 		}
+		$previous_menu_locations = get_theme_mod( 'nav_menu_locations' );
+		do_action( 'themeisle_cl_add_property_state', Active_State::MENUS_NSP, $previous_menu_locations );
 		set_theme_mod( 'nav_menu_locations', $setup_menus );
 
 		$this->log .= 'Menus are set up.' . "\n";

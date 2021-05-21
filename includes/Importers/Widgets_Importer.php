@@ -11,6 +11,7 @@
 
 namespace TIOB\Importers;
 
+use TIOB\Importers\Cleanup\Active_State;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -159,6 +160,16 @@ class Widgets_Importer {
 						$single_widget_instances['_multiwidget'] = $multiwidget;
 					}
 
+					// Get previous value to reset on cleanup
+					do_action(
+						'themeisle_cl_add_item_to_property_state',
+						Active_State::WIDGETS_NSP,
+						array(
+							'id'    => 'widget_' . $id_base,
+							'value' => get_option( 'widget_' . $id_base ),
+						)
+					);
+
 					// Update option with new widget.
 					update_option( 'widget_' . $id_base, $single_widget_instances );
 
@@ -177,6 +188,15 @@ class Widgets_Importer {
 					// Add new instance to sidebar.
 					$sidebars_widgets[ $use_sidebar_id ][] = $new_instance_id;
 
+					// Get previous value to reset on cleanup
+					do_action(
+						'themeisle_cl_add_item_to_property_state',
+						Active_State::WIDGETS_NSP,
+						array(
+							'id'    => 'sidebars_widgets',
+							'value' => get_option( 'sidebars_widgets' ),
+						)
+					);
 					// Save the amended data.
 					update_option( 'sidebars_widgets', $sidebars_widgets );
 

@@ -4,6 +4,11 @@ import { __ } from '@wordpress/i18n';
 import { Dashicon } from '@wordpress/components';
 const ImportStepper = ( { currentStep, progress, willDo } ) => {
 	const stepsMap = {
+		cleanup: {
+			label: __( 'Cleanup previous Import', 'templates-patterns-collection' ),
+			status: progress.cleanup,
+			willDo: willDo.cleanup,
+		},
 		plugins: {
 			label: __( 'Installing Plugins', 'templates-patterns-collection' ),
 			status: progress.plugins,

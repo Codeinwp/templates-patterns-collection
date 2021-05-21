@@ -7,6 +7,7 @@
 
 namespace TIOB\Importers;
 
+use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Helper;
 use TIOB\Importers\Helpers\Importer_Alterator;
 use TIOB\Logger;
@@ -185,6 +186,7 @@ class Content_Importer {
 	 * @return int|void
 	 */
 	public function setup_front_page( $args, $demo_slug ) {
+		$front_page_options = array();
 		if ( ! is_array( $args ) ) {
 			return;
 		}
@@ -194,11 +196,13 @@ class Content_Importer {
 			return null;
 		}
 
+		$front_page_options['show_on_front'] = get_option( 'show_on_front' );
 		update_option( 'show_on_front', 'page' );
 
 		if ( isset( $args['front_page'] ) && $args['front_page'] !== null ) {
 			$front_page_obj = get_page_by_path( $this->cleanup_page_slug( $args['front_page'], $demo_slug ) );
 			if ( isset( $front_page_obj->ID ) ) {
+				$front_page_options['page_on_front'] = get_option( 'page_on_front' );
 				update_option( 'page_on_front', $front_page_obj->ID );
 			}
 		}
@@ -206,9 +210,12 @@ class Content_Importer {
 		if ( isset( $args['blog_page'] ) && $args['blog_page'] !== null ) {
 			$blog_page_obj = get_page_by_path( $this->cleanup_page_slug( $args['blog_page'], $demo_slug ) );
 			if ( isset( $blog_page_obj->ID ) ) {
+				$front_page_options['page_for_posts'] = get_option( 'page_for_posts' );
 				update_option( 'page_for_posts', $blog_page_obj->ID );
 			}
 		}
+
+		do_action( 'themeisle_cl_add_property_state', Active_State::FRONT_PAGE_NSP, $front_page_options );
 
 		if ( isset( $front_page_obj->ID ) ) {
 			$this->logger->log( "Front page set up with id: {$front_page_obj->ID}.", 'success' );
@@ -235,14 +242,17 @@ class Content_Importer {
 
 			return;
 		}
+		$shop_page_options = array();
 		foreach ( $pages as $option_id => $slug ) {
 			if ( ! empty( $slug ) ) {
 				$page_object = get_page_by_path( $this->cleanup_page_slug( $slug, $demo_slug ) );
 				if ( isset( $page_object->ID ) ) {
+					$shop_page_options[ $option_id ] = get_option( $option_id );
 					update_option( $option_id, $page_object->ID );
 				}
 			}
 		}
+		do_action( 'themeisle_cl_add_property_state', Active_State::SHOP_PAGE_NSP, $shop_page_options );
 		$this->logger->log( 'Shop pages set up.', 'success' );
 	}
 
