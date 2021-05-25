@@ -178,6 +178,18 @@ class Digital_Rest_Test extends WP_UnitTestCase {
 		$this->assertEquals( 200, $response->get_status() );
 		$this->assertTrue( $response->get_data()['success'] );
 
+		//Test that there are NO placeholders left unprocessed
+		$placeholders_list = array( 'replace_cat' ); // add more if other placeholders are added
+		foreach ( array( 'page', 'product', 'wp_block' ) as $post_type ) {
+			$posts = get_posts( array( 'post_type' => $post_type ) );
+			foreach ( $posts as $post ) {
+				foreach ( $placeholders_list as $search ) {
+					$this->assertFalse( strpos( $post->post_content, $search ) );
+				}
+			}
+		}
+
+
 		//Test that front page has been set up.
 		$this->assertEquals( 'page', get_option( 'show_on_front' ) );
 		//Test that front page WP_Post object exists and is set as front page.
@@ -192,6 +204,7 @@ class Digital_Rest_Test extends WP_UnitTestCase {
 		$this->assertInstanceOf( 'WP_Post', $blog_page );
 		$this->assertNotEmpty( $blog_page->ID );
 
+		//Test that shop pages have been imported and set correctly
 		foreach ( $this->json['shop_pages'] as $option_id => $slug ) {
 			if ( ! empty( $slug ) ) {
 				$shop_page_id = get_option( $option_id );
