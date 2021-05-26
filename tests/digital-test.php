@@ -80,77 +80,77 @@ class Digital_Rest_Test extends WP_UnitTestCase {
 		add_filter( 'async_update_translation', '__return_false' );
 	}
 
-	//  /**
-	//   * Test all theme_mods import form the json data.
-	//   *
-	//   * @covers \TIOB\Importers\Theme_Mods_Importer::import_theme_mods
-	//   */
-	//  public function test_theme_mods_importing() {
-	//
-	//      $request = new WP_REST_Request();
-	//
-	//      $request->set_header( 'content-type', 'application/json' );
-	//      $request->set_method( 'POST' );
-	//      $request->set_body(
-	//          json_encode(
-	//              array(
-	//                  'theme_mods' => $this->json['theme_mods'],
-	//                  'source_url' => 'https://demo.themeisle.com/digital-store-gb',
-	//              )
-	//          )
-	//      );
-	//
-	//      $response = $this->rest_api->run_theme_mods_importer( $request );
-	//
-	//      $this->assertInstanceOf( 'WP_REST_Response', $response );
-	//      $this->assertEquals( 200, $response->get_status() );
-	//      $this->assertTrue( $response->get_data()['success'] );
-	//      //Test that ALL theme mods have been successfully imported.
-	//      foreach ( $this->json['theme_mods'] as $key => $value ) {
-	//          $this->assertEquals( $value, get_theme_mod( $key ) );
-	//      }
-	//  }
-	//
-	//  /**
-	//   * Test all plugin imports from the JSON data.
-	//   *
-	//   * @covers \TIOB\Importers\Plugin_Importer::install_plugins
-	//   */
-	//  public function test_plugin_importing() {
-	//      $request = new WP_REST_Request();
-	//
-	//      $request->set_header( 'content-type', 'application/json' );
-	//      $request->set_method( 'POST' );
-	//      $plugins_to_install = array_merge( $this->json['mandatory_plugins'], $this->json['recommended_plugins'] );
-	//      $plugins_to_install = array_map(
-	//          function( $val ) {
-	//              return true;
-	//          },
-	//          $plugins_to_install
-	//      );
-	//      $request->set_body(
-	//          json_encode(
-	//              $plugins_to_install
-	//          )
-	//      );
-	//
-	//      $response = $this->rest_api->run_plugin_importer( $request );
-	//
-	//      $this->assertInstanceOf( 'WP_REST_Response', $response );
-	//      $this->assertEquals( 200, $response->get_status() );
-	//      $this->assertTrue( $response->get_data()['success'] );
-	//      //Test that ALL plugins have been installed and activated.
-	//      $plugin_list = get_plugins();
-	//      foreach ( $plugins_to_install as $plugin_slug => $value ) {
-	//          foreach ( $plugin_list as $key => $data ) {
-	//              if ( isset( $data['Name'] ) && sanitize_title( $data['Name'] ) === $plugin_slug ) {
-	//                  $this->assertTrue( is_plugin_active( $key ) );
-	//              }
-	//          }
-	//      }
-	//      // Test that the amount of plugins to install is contained inside the installed plugins.
-	//      $this->assertTrue( count( $plugins_to_install ) <= count( $plugin_list ) );
-	//  }
+	  /**
+	   * Test all theme_mods import form the json data.
+	   *
+	   * @covers \TIOB\Importers\Theme_Mods_Importer::import_theme_mods
+	   */
+	public function test_theme_mods_importing() {
+
+		$request = new WP_REST_Request();
+
+		$request->set_header( 'content-type', 'application/json' );
+		$request->set_method( 'POST' );
+		$request->set_body(
+			json_encode(
+				array(
+					'theme_mods' => $this->json['theme_mods'],
+					'source_url' => 'https://demo.themeisle.com/digital-store-gb',
+				)
+			)
+		);
+
+		$response = $this->rest_api->run_theme_mods_importer( $request );
+
+		$this->assertInstanceOf( 'WP_REST_Response', $response );
+		$this->assertEquals( 200, $response->get_status() );
+		$this->assertTrue( $response->get_data()['success'] );
+		//Test that ALL theme mods have been successfully imported.
+		foreach ( $this->json['theme_mods'] as $key => $value ) {
+			$this->assertEquals( $value, get_theme_mod( $key ) );
+		}
+	}
+
+	  /**
+	   * Test all plugin imports from the JSON data.
+	   *
+	   * @covers \TIOB\Importers\Plugin_Importer::install_plugins
+	   */
+	public function test_plugin_importing() {
+		$request = new WP_REST_Request();
+
+		$request->set_header( 'content-type', 'application/json' );
+		$request->set_method( 'POST' );
+		$plugins_to_install = array_merge( $this->json['mandatory_plugins'], $this->json['recommended_plugins'] );
+		$plugins_to_install = array_map(
+			function( $val ) {
+				return true;
+			},
+			$plugins_to_install
+		);
+		$request->set_body(
+			json_encode(
+				$plugins_to_install
+			)
+		);
+
+		$response = $this->rest_api->run_plugin_importer( $request );
+
+		$this->assertInstanceOf( 'WP_REST_Response', $response );
+		$this->assertEquals( 200, $response->get_status() );
+		$this->assertTrue( $response->get_data()['success'] );
+		//Test that ALL plugins have been installed and activated.
+		$plugin_list = get_plugins();
+		foreach ( $plugins_to_install as $plugin_slug => $value ) {
+			foreach ( $plugin_list as $key => $data ) {
+				if ( isset( $data['Name'] ) && sanitize_title( $data['Name'] ) === $plugin_slug ) {
+					$this->assertTrue( is_plugin_active( $key ) );
+				}
+			}
+		}
+		// Test that the amount of plugins to install is contained inside the installed plugins.
+		$this->assertTrue( count( $plugins_to_install ) <= count( $plugin_list ) );
+	}
 
 
 	/**
@@ -188,7 +188,6 @@ class Digital_Rest_Test extends WP_UnitTestCase {
 				}
 			}
 		}
-
 
 		//Test that front page has been set up.
 		$this->assertEquals( 'page', get_option( 'show_on_front' ) );

@@ -22,7 +22,6 @@ class WXR_Parser_SimpleXML {
 		if ( \PHP_VERSION_ID < 80000 && function_exists( 'libxml_disable_entity_loader' ) ) {
 			$old_value = libxml_disable_entity_loader( true );
 		}
-		error_log( $file );
 		$success = $dom->loadXML( $wp_filesystem->get_contents( $file ) );
 		if ( ! is_null( $old_value ) ) {
 			libxml_disable_entity_loader( $old_value );
