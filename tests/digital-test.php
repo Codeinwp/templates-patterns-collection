@@ -9,10 +9,6 @@ use TIOB\Importers\Widgets_Importer;
 use TIOB\Main;
 use TIOB\Rest_Server;
 
-/**
- * Mock Class WooCommerce to pass class check for individual tests
- */
-class WooCommerce {}
 
 /**
  * Test Digital Store import.
