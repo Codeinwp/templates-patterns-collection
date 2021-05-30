@@ -310,11 +310,21 @@ export const exportTemplate = async ( {
 		content,
 	};
 
+	const meta = window.tiTpc.params.meta;
+
+	const currentTemplate = elementor.documents
+		.getCurrent()
+		.container.settings.get( 'template' );
+
+	if ( currentTemplate ) {
+		meta._wp_page_template = currentTemplate;
+	}
+
 	const url = stringifyUrl( {
 		url: window.tiTpc.endpoint + 'templates',
 		query: {
 			...omit( tiTpc.params, 'meta' ),
-			meta: 'page' === type ? JSON.stringify( tiTpc.params.meta ) : '',
+			meta: JSON.stringify( meta ),
 			template_name: title || window.tiTpc.exporter.textPlaceholder,
 			template_type: 'elementor',
 			link,
@@ -355,7 +365,6 @@ export const publishTemplate = async ( params ) => {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			method: 'POST',
 			...omit( tiTpc.params, 'meta' ),
-			meta: JSON.stringify( tiTpc.params.meta ),
 			...omit( params, 'template_id' ),
 		},
 	} );

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable camelcase */
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
@@ -66,10 +67,28 @@ const Exporter = () => {
 		return getEditedPostAttribute( 'meta' );
 	}, [] );
 
+	const pageTemplate = useSelect( ( select ) => {
+		const { getEditedPostAttribute } = select( 'core/editor' );
+		return getEditedPostAttribute( 'template' );
+	}, [] );
+
 	useEffect( () => {
 		const metaKeys = window.tiTpc.metaKeys;
-		window.tiTpc.params.meta = Object.fromEntries( Object.entries( getMetaFields || {} ).filter(( [key, value] ) => metaKeys.includes( key )) );
-	}, [ getMetaFields ] );
+		window.tiTpc.params.meta = Object.fromEntries(
+			Object.entries( getMetaFields || {} ).filter( ( [ key ] ) =>
+				metaKeys.includes( key )
+			)
+		);
+
+		if ( pageTemplate ) {
+			window.tiTpc.params.meta._wp_page_template = pageTemplate;
+		} else if (
+			'' === pageTemplate &&
+			window.tiTpc.params.meta._wp_page_template
+		) {
+			delete window.tiTpc.params.meta._wp_page_template;
+		}
+	}, [ getMetaFields, pageTemplate ] );
 
 	const {
 		meta,

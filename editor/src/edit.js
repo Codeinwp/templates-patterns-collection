@@ -1,5 +1,11 @@
+/* eslint-disable no-undef */
 /* eslint-disable camelcase */
-import { withDispatch, withSelect, useDispatch, useSelect } from '@wordpress/data';
+import {
+	withDispatch,
+	withSelect,
+	useDispatch,
+	useSelect,
+} from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 import { Modal, Button } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
@@ -12,6 +18,8 @@ import Content from './components/content';
 import PreviewFrame from '../../assets/src/Components/CloudLibrary/PreviewFrame';
 import { importTemplate } from './data/templates-cloud';
 
+const { omit } = lodash;
+
 const Edit = ( {
 	clientId,
 	isPreview,
@@ -21,9 +29,7 @@ const Edit = ( {
 	replaceBlocks,
 	closePreview,
 } ) => {
-	const {
-		type,
-	} = useSelect( ( select ) => ( {
+	const { type } = useSelect( ( select ) => ( {
 		type: select( 'core/editor' ).getEditedPostAttribute( 'type' ),
 	} ) );
 
@@ -103,11 +109,22 @@ const Edit = ( {
 	const importBlocks = ( content, metaFields = [] ) => {
 		updateLibrary( [] );
 		updateTemplates( [] );
+		const fields = JSON.parse( metaFields );
 
-		if ( 0 < metaFields.length && [ 'post', 'page' ].includes( type ) ) {
-			editPost( {
-				meta: { ...JSON.parse( metaFields ) },
-			} );
+		if (
+			0 < Object.keys( fields ).length &&
+			[ 'post', 'page' ].includes( type )
+		) {
+			const meta = {
+				...omit( { ...fields }, '_wp_page_template' ),
+			};
+			editPost( { meta } );
+
+			if ( 'page' === type && fields._wp_page_template ) {
+				editPost( {
+					template: fields._wp_page_template,
+				} );
+			}
 		}
 
 		replaceBlocks( clientId, parse( content ) );

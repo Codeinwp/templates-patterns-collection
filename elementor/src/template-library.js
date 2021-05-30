@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* global elementor, $e, elementorCommon */
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -6,6 +7,8 @@ import { Fragment, useState } from '@wordpress/element';
 import Header from './components/header.js';
 import Content from './components/content.js';
 import { importTemplate } from './data/templates-cloud/index.js';
+
+const { omit } = lodash;
 
 const TemplateLibrary = ( { currentTab, setFetching } ) => {
 	const [ searchQuery, setSearchQuery ] = useState( {
@@ -109,7 +112,7 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		return element;
 	};
 
-	const onImport = async ( { id, title, meta = [] } ) => {
+	const onImport = async ( { id, title, meta = undefined } ) => {
 		setFetching( true );
 		const data = await importTemplate( id );
 
@@ -135,9 +138,22 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 			} );
 		}
 
-		if ( 0 < meta.length ) {
-			window.tiTpc.postModel.set( 'meta', { ... JSON.parse( meta ) } );
+		if (
+			undefined !== meta &&
+			0 < Object.keys( JSON.parse( meta ) || {} ).length
+		) {
+			meta = { ...JSON.parse( meta ) };
+
+			window.tiTpc.postModel.set( 'meta', {
+				...omit( meta, '_wp_page_template' ),
+			} );
 			window.tiTpc.postModel.save();
+
+			if ( meta._wp_page_template ) {
+				elementor.documents.getCurrent().container.settings.set( {
+					template: meta._wp_page_template,
+				} );
+			}
 		}
 
 		$e.internal( 'document/history/end-log', {
