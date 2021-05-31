@@ -324,7 +324,7 @@ export const exportTemplate = async ( {
 		url: window.tiTpc.endpoint + 'templates',
 		query: {
 			...omit( tiTpc.params, 'meta' ),
-			meta: JSON.stringify( meta ),
+			meta: 'page' === type ? JSON.stringify( meta ) : '',
 			template_name: title || window.tiTpc.exporter.textPlaceholder,
 			template_type: 'elementor',
 			link,
