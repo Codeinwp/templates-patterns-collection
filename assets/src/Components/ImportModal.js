@@ -52,7 +52,8 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 	const [ isCleanupAllowed, setIsCleanupAllowed ] = useState( cleanupAllowed );
 
 	useEffect( () => {
-		const fetchAddress = siteData.remote_url || siteData.url;
+		//const fetchAddress = siteData.remote_url || siteData.url;
+		const fetchAddress = siteData.url || siteData.remote_url;
 		const url = new URL(
 			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
 		);

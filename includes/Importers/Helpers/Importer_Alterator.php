@@ -39,6 +39,8 @@ class Importer_Alterator {
 	 */
 	private $site_json_data;
 
+	private $processed_terms;
+
 	/**
 	 * Importer_Alterator constructor.
 	 *
@@ -55,6 +57,38 @@ class Importer_Alterator {
 		add_filter( 'wp_import_nav_menu_item_args', array( $this, 'change_nav_menu_item_link' ), 10, 2 );
 		add_filter( 'intermediate_image_sizes_advanced', '__return_null' );
 		add_filter( 'tpc_post_content_before_insert', array( $this, 'replace_links' ), 10, 2 );
+		add_filter( 'tpc_post_content_processed_terms', array( $this, 'content_to_import' ), 10, 2 );
+	}
+
+	/**
+	 * Remap method for category terms.
+	 *
+	 * @param mixed $input
+	 * @return array|mixed|string|string[]|null
+	 */
+	private function remap_category_recursively( $input ) {
+		$re = '/replace_cat_(?<categoryID>\d+)/m';
+		if ( is_array( $input ) ) {
+			return ( isset( $this->processed_terms[ $input['categoryID'] ] ) ) ? $this->processed_terms[ $input['categoryID'] ] : $input['categoryID'];
+		}
+		return preg_replace_callback( $re, array( $this, 'remap_category_recursively' ), $input );
+	}
+
+	/**
+	 * Process imported content and remap terms.
+	 *
+	 * @param string $content The content.
+	 * @param array $processed_terms The list of processed terms.
+	 * @return string
+	 */
+	public function content_to_import( $content, $processed_terms ) {
+		$this->processed_terms = $processed_terms;
+		if ( strpos( $content, 'wp:woocommerce' ) !== false ) {
+			$new_content = $this->remap_category_recursively( $content );
+			return $new_content;
+		}
+
+		return $content;
 	}
 
 	/**

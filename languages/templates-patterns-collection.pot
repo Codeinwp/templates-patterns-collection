@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-05-21T11:00:12+00:00\n"
+"POT-Creation-Date: 2021-05-26T09:26:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -166,7 +166,7 @@ msgstr ""
 #: assets/build/app.js:3044
 #: assets/src/Components/ImportModal.js:285
 #: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:286
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:285
 msgid "Plugins"
 msgstr ""
 
@@ -634,10 +634,12 @@ msgstr ""
 msgid "Install and Activate %s"
 msgstr ""
 
+#: tests/digital-test.php:62
 #: tests/rest-test.php:59
 msgid "Ready to use pre-built websites with 1-click installation"
 msgstr ""
 
+#: tests/digital-test.php:63
 #: tests/rest-test.php:60
 msgid "With Neve, you can choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else."
 msgstr ""
@@ -771,7 +773,7 @@ msgstr ""
 #: assets/src/Components/ImportStepper.js:8
 #: dist/templates-patterns-collection/assets/build/app.js:8
 #: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:220
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:219
 #: dist/templates-patterns-collection/assets/src/Components/ImportStepper.js:8
 msgid "Cleanup previous Import"
 msgstr ""
@@ -779,7 +781,7 @@ msgstr ""
 #: assets/build/app.js:3008
 #: assets/src/Components/ImportModal.js:235
 #: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:236
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:235
 msgid "Import settings"
 msgstr ""
 

@@ -2857,7 +2857,8 @@ var ImportModal = function ImportModal(_ref) {
       setIsCleanupAllowed = _useState32[1];
 
   Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
-    var fetchAddress = siteData.remote_url || siteData.url;
+    //const fetchAddress = siteData.remote_url || siteData.url;
+    var fetchAddress = siteData.url || siteData.remote_url;
     var url = new URL("".concat(Object(_utils_common__WEBPACK_IMPORTED_MODULE_5__["trailingSlashIt"])(fetchAddress), "wp-json/ti-demo-data/data"));
     url.searchParams.append('license', license ? license.key : 'free');
     Object(_utils_rest__WEBPACK_IMPORTED_MODULE_4__["get"])(url, true, false).then(function (response) {
