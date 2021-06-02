@@ -15,8 +15,7 @@ class Sites_Listing {
 	/**
 	 * Sites Listing API URL
 	 */
-	//const API = 'https://api.themeisle.com/sites/wp-json/demosites-api/sites';
-	const API = 'https://staging.demosites.io/wp-json/demosites-api/sites';
+	const API = 'https://api.themeisle.com/sites/wp-json/demosites-api/sites';
 
 	/**
 	 * Key of transient where we save the sites list.
@@ -66,7 +65,11 @@ class Sites_Listing {
 		$this->add_sites_library_support();
 	}
 
-	public final static function getAPIPath() {
+	/**
+	 * Return the API path
+	 * @return string
+	 */
+	public final static function get_api_path() {
 		if ( defined( 'USE_STAGING' ) && USE_STAGING === true ) {
 			return ( defined( 'API_STAGING' ) && ! empty( API_STAGING ) ) ? API_STAGING : self::API;
 		}
@@ -86,7 +89,7 @@ class Sites_Listing {
 		if ( $cache !== false ) {
 			$response = $cache;
 		} else {
-			$response = wp_remote_get( esc_url( self::getAPIPath() ) );
+			$response = wp_remote_get( esc_url( self::get_api_path() ) );
 
 			if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
 				return array();
