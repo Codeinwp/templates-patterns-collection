@@ -146,6 +146,9 @@ class Rest_Server {
 	 */
 	public function run_plugin_importer( WP_REST_Request $request ) {
 		$plugin_importer = new Plugin_Importer();
+		add_filter( 'woocommerce_create_pages', function() {
+			return array();
+		} );
 		return $plugin_importer->install_plugins( $request );
 	}
 
