@@ -112,6 +112,23 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 		return element;
 	};
 
+	const tryParseJSON = ( jsonString ) => {
+		try {
+			const o = JSON.parse( jsonString );
+
+			// Handle non-exception-throwing cases:
+			// Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+			// but... JSON.parse(null) returns null, and typeof null === "object",
+			// so we must check for that, too. Thankfully, null is falsey, so this suffices:
+			// Source: https://stackoverflow.com/a/20392392
+			if ( o && typeof o === 'object' ) {
+				return o;
+			}
+		} catch ( e ) {}
+
+		return false;
+	};
+
 	const onImport = async ( { id, title, meta = undefined } ) => {
 		setFetching( true );
 		const data = await importTemplate( id );
@@ -140,7 +157,7 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 
 		if (
 			undefined !== meta &&
-			0 < Object.keys( JSON.parse( meta ) || {} ).length
+			0 < Object.keys( tryParseJSON( meta ) || {} ).length
 		) {
 			meta = { ...JSON.parse( meta ) };
 

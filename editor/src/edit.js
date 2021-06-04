@@ -106,15 +106,32 @@ const Edit = ( {
 		return sortingOrder.library;
 	};
 
+	const tryParseJSON = ( jsonString ) => {
+		try {
+			const o = JSON.parse( jsonString );
+
+			// Handle non-exception-throwing cases:
+			// Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+			// but... JSON.parse(null) returns null, and typeof null === "object",
+			// so we must check for that, too. Thankfully, null is falsey, so this suffices:
+			// Source: https://stackoverflow.com/a/20392392
+			if ( o && typeof o === 'object' ) {
+				return o;
+			}
+		} catch ( e ) {}
+
+		return false;
+	};
+
 	const importBlocks = ( content, metaFields = [] ) => {
 		updateLibrary( [] );
 		updateTemplates( [] );
-		const fields = JSON.parse( metaFields );
 
 		if (
-			0 < Object.keys( fields ).length &&
+			0 < Object.keys( tryParseJSON( metaFields ) || {} ).length &&
 			[ 'post', 'page' ].includes( type )
 		) {
+			const fields = JSON.parse( metaFields );
 			const meta = {
 				...omit( { ...fields }, '_wp_page_template' ),
 			};
