@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-05-24T14:06:55+00:00\n"
+"POT-Creation-Date: 2021-06-09T08:23:57+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -42,7 +42,7 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:398
 #: includes/Admin.php:80
 #: includes/Elementor.php:75
-#: includes/TI_Beaver.php:398
+#: includes/TI_Beaver.php:402
 msgid "My Library"
 msgstr ""
 
@@ -70,8 +70,8 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/Admin.php:375
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:408
 #: includes/Admin.php:372
-#: includes/TI_Beaver.php:408
-#: assets/build/app.js:4665
+#: includes/TI_Beaver.php:412
+#: assets/build/app.js:10
 #: assets/src/Components/StarterSiteCard.js:60
 #: dist/templates-patterns-collection/assets/build/app.js:10
 #: dist/templates-patterns-collection/assets/src/Components/StarterSiteCard.js:60
@@ -81,9 +81,8 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/Admin.php:376
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:409
 #: includes/Admin.php:373
-#: includes/TI_Beaver.php:409
-#: assets/build/app.js:4402
-#: assets/build/app.js:4669
+#: includes/TI_Beaver.php:413
+#: assets/build/app.js:10
 #: assets/src/Components/PreviewFrame.js:102
 #: assets/src/Components/StarterSiteCard.js:68
 #: dist/templates-patterns-collection/assets/build/app.js:10
@@ -107,8 +106,8 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:387
 #: includes/Admin.php:376
 #: includes/Elementor.php:81
-#: includes/TI_Beaver.php:387
-#: assets/build/app.js:3971
+#: includes/TI_Beaver.php:391
+#: assets/build/app.js:2
 #: assets/src/Components/Migration.js:165
 #: dist/templates-patterns-collection/assets/build/app.js:2
 #: dist/templates-patterns-collection/assets/src/Components/Migration.js:165
@@ -185,7 +184,7 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:421
 #: includes/Admin.php:386
 #: includes/Elementor.php:96
-#: includes/TI_Beaver.php:421
+#: includes/TI_Beaver.php:425
 msgid "Search"
 msgstr ""
 
@@ -317,21 +316,21 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:402
 #: includes/Elementor.php:59
 #: includes/Elementor.php:79
-#: includes/TI_Beaver.php:402
+#: includes/TI_Beaver.php:406
 msgid "Save to %s"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:60
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:382
 #: includes/Elementor.php:60
-#: includes/TI_Beaver.php:382
+#: includes/TI_Beaver.php:386
 msgid "Save Templates"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:61
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:383
 #: includes/Elementor.php:61
-#: includes/TI_Beaver.php:383
+#: includes/TI_Beaver.php:387
 msgid "Template Name"
 msgstr ""
 
@@ -341,8 +340,8 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:478
 #: includes/Elementor.php:62
 #: includes/Elementor.php:107
-#: includes/TI_Beaver.php:384
-#: includes/TI_Beaver.php:478
+#: includes/TI_Beaver.php:388
+#: includes/TI_Beaver.php:482
 msgid "Template"
 msgstr ""
 
@@ -352,15 +351,15 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:426
 #: includes/Elementor.php:63
 #: includes/Elementor.php:100
-#: includes/TI_Beaver.php:385
-#: includes/TI_Beaver.php:426
+#: includes/TI_Beaver.php:389
+#: includes/TI_Beaver.php:430
 msgid "Save"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:64
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:386
 #: includes/Elementor.php:64
-#: includes/TI_Beaver.php:386
+#: includes/TI_Beaver.php:390
 msgid "Automatically sync to the cloud"
 msgstr ""
 
@@ -392,26 +391,23 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/Elementor.php:74
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:397
 #: includes/Elementor.php:74
-#: includes/TI_Beaver.php:397
+#: includes/TI_Beaver.php:401
 msgid "Page Templates"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:78
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:401
 #: includes/Elementor.php:78
-#: includes/TI_Beaver.php:401
+#: includes/TI_Beaver.php:405
 msgid "Sync Library"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:80
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:404
 #: includes/Elementor.php:80
-#: includes/TI_Beaver.php:404
-#: assets/build/app.js:447
-#: assets/build/app.js:3683
-#: assets/build/app.js:3971
-#: assets/build/app.js:4221
-#: assets/build/app.js:4380
+#: includes/TI_Beaver.php:408
+#: assets/build/app.js:2
+#: assets/build/app.js:10
 #: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:206
 #: assets/src/Components/InstallModal.js:163
 #: assets/src/Components/Migration.js:161
@@ -430,8 +426,8 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/Elementor.php:82
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:405
 #: includes/Elementor.php:82
-#: includes/TI_Beaver.php:405
-#: assets/build/app.js:859
+#: includes/TI_Beaver.php:409
+#: assets/build/app.js:2
 #: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:183
 #: dist/templates-patterns-collection/assets/build/app.js:2
 #: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:183
@@ -446,7 +442,7 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/Elementor.php:84
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:406
 #: includes/Elementor.php:84
-#: includes/TI_Beaver.php:406
+#: includes/TI_Beaver.php:410
 msgid "Delete"
 msgstr ""
 
@@ -463,49 +459,49 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/Elementor.php:89
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:412
 #: includes/Elementor.php:89
-#: includes/TI_Beaver.php:412
+#: includes/TI_Beaver.php:416
 msgid "Sort by"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:91
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:414
 #: includes/Elementor.php:91
-#: includes/TI_Beaver.php:414
+#: includes/TI_Beaver.php:418
 msgid "Name"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:92
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:415
 #: includes/Elementor.php:92
-#: includes/TI_Beaver.php:415
+#: includes/TI_Beaver.php:419
 msgid "Date"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:93
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:416
 #: includes/Elementor.php:93
-#: includes/TI_Beaver.php:416
+#: includes/TI_Beaver.php:420
 msgid "Last Modified"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:94
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:417
 #: includes/Elementor.php:94
-#: includes/TI_Beaver.php:417
+#: includes/TI_Beaver.php:421
 msgid "Actions"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:97
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:422
 #: includes/Elementor.php:97
-#: includes/TI_Beaver.php:422
+#: includes/TI_Beaver.php:426
 msgid "Search Templates"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:101
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:427
 #: includes/Elementor.php:101
-#: includes/TI_Beaver.php:427
+#: includes/TI_Beaver.php:431
 msgid "Save your page to %s"
 msgstr ""
 
@@ -517,28 +513,28 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/Elementor.php:103
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:428
 #: includes/Elementor.php:103
-#: includes/TI_Beaver.php:428
+#: includes/TI_Beaver.php:432
 msgid "Screenshot URL"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:104
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:429
 #: includes/Elementor.php:104
-#: includes/TI_Beaver.php:429
+#: includes/TI_Beaver.php:433
 msgid "Site Slug"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:105
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:430
 #: includes/Elementor.php:105
-#: includes/TI_Beaver.php:430
+#: includes/TI_Beaver.php:434
 msgid "Publish"
 msgstr ""
 
 #: dist/templates-patterns-collection/includes/Elementor.php:106
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:431
 #: includes/Elementor.php:106
-#: includes/TI_Beaver.php:431
+#: includes/TI_Beaver.php:435
 msgid "Unpublish"
 msgstr ""
 
@@ -568,58 +564,47 @@ msgstr ""
 msgid "Templates Cloud by Neve."
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:388
-#: includes/TI_Beaver.php:388
+#: includes/TI_Beaver.php:392
 msgid "Import Failed"
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:389
-#: includes/TI_Beaver.php:389
+#: includes/TI_Beaver.php:393
 msgid "Export Failed"
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:393
-#: includes/TI_Beaver.php:393
+#: includes/TI_Beaver.php:397
 msgid "No templates available. Add a new one?"
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:394
-#: includes/TI_Beaver.php:394
+#: includes/TI_Beaver.php:398
 msgid "Are you sure you want to delete this template?"
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:395
-#: includes/TI_Beaver.php:395
+#: includes/TI_Beaver.php:399
 msgid "This template is synced to a page."
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:403
-#: includes/TI_Beaver.php:403
+#: includes/TI_Beaver.php:407
 msgid "Update"
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:407
-#: includes/TI_Beaver.php:407
+#: includes/TI_Beaver.php:411
 msgid "Deleting"
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:418
-#: includes/TI_Beaver.php:418
+#: includes/TI_Beaver.php:422
 msgid "List View"
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:419
-#: includes/TI_Beaver.php:419
+#: includes/TI_Beaver.php:423
 msgid "Grid View"
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:423
-#: includes/TI_Beaver.php:423
+#: includes/TI_Beaver.php:427
 msgid "Clear search query"
 msgstr ""
 
-#: dist/templates-patterns-collection/includes/TI_Beaver.php:449
-#: includes/TI_Beaver.php:449
+#: includes/TI_Beaver.php:453
 msgid "Save to Neve Cloud"
 msgstr ""
 

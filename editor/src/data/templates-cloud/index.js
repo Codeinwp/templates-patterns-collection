@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* global localStorage, tiTpc */
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
@@ -282,7 +283,6 @@ export const publishTemplate = async (
 			premade: publishStatus ? 'yes' : 'no',
 			link,
 			...omit( tiTpc.params, 'meta' ),
-			meta: JSON.stringify( tiTpc.params.meta )
 		},
 	} );
 

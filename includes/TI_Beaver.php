@@ -268,8 +268,13 @@ class TI_Beaver extends FLBuilderModule {
 	 */
 	static public function get_template_meta() {
 		$post_id = FLBuilderModel::get_post_id();
+		$fields  = Main::get_meta_fields( $post_id, $type = 'beaver' );
 
-		return Main::get_meta_fields( $post_id, $type = 'beaver' );
+		if ( get_page_template_slug( $post_id ) ) {
+			$fields['_wp_page_template'] = get_page_template_slug( $post_id );
+		}
+
+		return $fields;
 	}
 
 	/**
@@ -288,7 +293,6 @@ class TI_Beaver extends FLBuilderModule {
 				'premade'            => $premade,
 				'link'               => get_permalink( $post_id ),
 				'cache'              => uniqid(),
-				'meta'               => json_encode( self::get_template_meta() ),
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id ) . '/publish'
 		);

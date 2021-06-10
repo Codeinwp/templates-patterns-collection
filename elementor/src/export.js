@@ -61,13 +61,23 @@ if ( parseInt( window.tiTpc.tier ) === 3 ) {
 						],
 					} );
 
+					const meta = window.tiTpc.params.meta;
+
+					const currentTemplate = elementor.documents
+						.getCurrent()
+						.container.settings.get( 'template' );
+
+					if ( currentTemplate ) {
+						meta._wp_page_template = currentTemplate;
+					}
+
 					await updateTemplate( {
 						template_id: _ti_tpc_template_id,
 						template_name:
 							elementor.config.initial_document.settings.settings
 								.post_title || '',
 						content,
-						meta: JSON.stringify( tiTpc.params.meta ),
+						meta: JSON.stringify( meta ),
 					} );
 				}
 			} );
