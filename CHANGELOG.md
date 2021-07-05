@@ -1,3 +1,7 @@
+##### [Version 1.1.14](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.13...v1.1.14) (2021-07-05)
+
+- Allow Page Templates Support
+
 ##### [Version 1.1.13](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.12...v1.1.13) (2021-05-31)
 
 * Fix compatibility with WooCommerce specific pages on import
