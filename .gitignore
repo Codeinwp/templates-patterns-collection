@@ -6,4 +6,5 @@ artifact
 vendor
 languages/*.pot
 **/build/*
+cypress/fixtures
 **/.DS_Store
