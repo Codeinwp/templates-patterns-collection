@@ -2,7 +2,7 @@
 Contributors: themeisle
 Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
 Requires at least: 4.7
-Tested up to: 5.7
+Tested up to: 5.8
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv3
@@ -38,6 +38,13 @@ You can check the full collection on [demosites.io](https://demosites.io/)
 Yes, you can. You can either chose to import one template or the entire starter site.
 
 == Changelog ==
+
+##### [Version 1.1.14](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.13...v1.1.14) (2021-07-05)
+
+- Allow Page Templates Support
+
+
+
 
 ##### [Version 1.1.13](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.12...v1.1.13) (2021-05-31)
 
