@@ -16,6 +16,7 @@ import ImportTemplatesModal from './ImportTemplatesModal';
 
 const Library = ( {
 	isGeneral,
+	setPreview,
 	setInstallModal,
 	setTemplateModal,
 	templateModal,
@@ -190,7 +191,13 @@ const Library = ( {
 
 	const handlePreview = ( url ) => {
 		setPreviewUrl( url );
+		setPreview(true);
 	};
+
+	const handleClose = () => {
+		setPreviewUrl( '' );
+		setPreview(false);
+	}
 
 	const handleImport = ( id ) => {
 		if ( themeStatus ) {
@@ -387,7 +394,7 @@ const Library = ( {
 							<>
 								<Button
 									icon={ close }
-									onClick={ () => setPreviewUrl( '' ) }
+									onClick={ handleClose }
 								/>
 								{ library[ type ].length > 1 && (
 									<>
@@ -430,11 +437,12 @@ const Library = ( {
 
 export default compose(
 	withDispatch( ( dispatch ) => {
-		const { setInstallModalStatus, setTemplateModal } = dispatch(
+		const { setInstallModalStatus, setTemplateModal, setPreviewStatus } = dispatch(
 			'neve-onboarding'
 		);
 
 		return {
+			setPreview: ( status ) => setPreviewStatus( status ),
 			setInstallModal: ( status ) => setInstallModalStatus( status ),
 			setTemplateModal,
 		};

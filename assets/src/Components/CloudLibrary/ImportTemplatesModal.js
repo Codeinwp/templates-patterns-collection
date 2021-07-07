@@ -326,8 +326,8 @@ const ImportTemplatesModal = ( {
 		<Modal
 			className={ classnames( [ 'ob-import-modal', { fetching } ] ) }
 			onRequestClose={ cancel }
-			shouldCloseOnClickOutside={ ! importing && ! fetching }
-			isDismissible={ ! importing && ! fetching }
+			shouldCloseOnClickOutside={ ( ! importing || importing === 'done' ) && ! fetching }
+			isDismissible={ ( ! importing || importing === 'done' ) && ! fetching }
 		>
 			{ importing === 'done' ? <ImportDone /> : <ModalContent /> }
 		</Modal>
