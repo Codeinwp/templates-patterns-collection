@@ -1401,7 +1401,9 @@ var Library = function Library(_ref) {
     sortingOrder: getOrder(),
     setSortingOrder: setSorting,
     changeOrder: changeOrder
-  }), isLoading && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["createElement"])(_Loading__WEBPACK_IMPORTED_MODULE_15__["default"], null), !isLoading && (library[type] && library[type].length > 0 ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["createElement"])("div", {
+  }), isLoading && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["createElement"])(_Loading__WEBPACK_IMPORTED_MODULE_15__["default"], {
+    isGrid: isGrid
+  }), !isLoading && (library[type] && library[type].length > 0 ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["createElement"])("div", {
     className: "table"
   }, library[type].map(function (item) {
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["createElement"])(_ListItem__WEBPACK_IMPORTED_MODULE_14__["default"], {
@@ -3741,46 +3743,45 @@ var InstallModal = function InstallModal(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
-
-
 
 
 var Loading = function Loading(_ref) {
-  var isOnboarding = _ref.isOnboarding;
+  var isGrid = _ref.isGrid;
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
     className: "table"
   }, [1, 2, 3, 4, 5, 6, 7, 8].map(function (i) {
+    if (isGrid) {
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+        key: i,
+        className: "table-grid"
+      }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+        className: "grid-preview image is-loading"
+      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+        className: "card-footer"
+      }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
+        className: "title loading",
+        style: {
+          height: 14,
+          'background-color': '#f3f3f3'
+        }
+      })));
+    }
+
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       key: i,
-      className: "table-grid"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "grid-preview image is-loading"
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "card-footer"
+      className: "table-row"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
       className: "title loading",
       style: {
+        width: '100%',
         height: 14,
-        'background-color': '#f3f3f3'
+        background: 'linear-gradient(to right, #f3f3f3, #ffffff)'
       }
-    })));
-  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-    className: "fade-out"
+    }));
   }));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_1__["withSelect"])(function (select) {
-  var _select = select('neve-onboarding'),
-      getOnboardingStatus = _select.getOnboardingStatus;
-
-  return {
-    isOnboarding: getOnboardingStatus()
-  };
-})(Loading));
+/* harmony default export */ __webpack_exports__["default"] = (Loading);
 
 /***/ }),
 

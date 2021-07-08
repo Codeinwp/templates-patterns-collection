@@ -328,7 +328,7 @@ const Library = ( {
 					setSortingOrder={ setSorting }
 					changeOrder={ changeOrder }
 				/>
-				{ isLoading && <Loading /> }
+				{ isLoading && <Loading isGrid={ isGrid } /> }
 				{ ! isLoading &&
 					( library[ type ] && library[ type ].length > 0 ? (
 						<>
