@@ -10,6 +10,7 @@ import { __, isRTL } from '@wordpress/i18n';
 
 import { fetchLibrary } from './common';
 import ListItem from './ListItem';
+import Loading from '../Loading';
 import Filters from './Filters';
 import PreviewFrame from './PreviewFrame';
 import ImportTemplatesModal from './ImportTemplatesModal';
@@ -327,7 +328,7 @@ const Library = ( {
 					setSortingOrder={ setSorting }
 					changeOrder={ changeOrder }
 				/>
-				{ isLoading && <Spinner /> }
+				{ isLoading && <Loading /> }
 				{ ! isLoading &&
 					( library[ type ] && library[ type ].length > 0 ? (
 						<>

@@ -1,48 +1,24 @@
 import { withSelect } from '@wordpress/data';
+import classnames from "classnames";
 
 const Loading = ( { isOnboarding } ) => {
 	return (
-		<div className="ob mock-dash">
-			<div className="ob-head">
-				<h2 className="loading" />
-				<p className="loading" />
-				<p className="loading" />
-				{ isOnboarding && (
-					<button className="loading components-button is-primary" />
-				) }
-				<div className="header-form">
-					<div>
-						<div className="ob-dropdown">
-							<button>
-								<div className="editor-icon loading" />
-								<span className="loading" />
-							</button>
+		<div className="table">
+			{ [ 1, 2, 3, 4, 5, 6, 7, 8 ].map( ( i ) => {
+				return (
+					<div key={ i } className="table-grid">
+						<div className="grid-preview image is-loading">
+						</div>
+						<div className="card-footer">
+							<p className="title loading" style={ {
+								height: 14,
+								'background-color': '#f3f3f3',
+							} } />
 						</div>
 					</div>
-					<div className="search">
-						<button>
-							<span className="loading" />
-						</button>
-					</div>
-				</div>
-			</div>
-			<div className="ob-body">
-				<div className="ob-sites">
-					{ [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ].map( ( i ) => {
-						return (
-							<div key={ i } className="card starter-site-card">
-								<div className="top">
-									<div className="image loading" />
-								</div>
-								<div className="bottom">
-									<p className="title loading" />
-								</div>
-							</div>
-						);
-					} ) }
-				</div>
-			</div>
-			{ isOnboarding && <div className="ob-footer" /> }
+				);
+			} ) }
+			<div className="fade-out"></div>
 		</div>
 	);
 };
