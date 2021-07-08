@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-07-07T14:50:22+00:00\n"
+"POT-Creation-Date: 2021-07-08T11:10:46+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: templates-patterns-collection\n"
@@ -71,7 +71,7 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:412
 #: includes/Admin.php:372
 #: includes/TI_Beaver.php:412
-#: assets/build/app.js:4676
+#: assets/build/app.js:10
 #: assets/src/Components/StarterSiteCard.js:60
 #: dist/templates-patterns-collection/assets/build/app.js:10
 #: dist/templates-patterns-collection/assets/src/Components/StarterSiteCard.js:60
@@ -82,8 +82,7 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:413
 #: includes/Admin.php:373
 #: includes/TI_Beaver.php:413
-#: assets/build/app.js:4413
-#: assets/build/app.js:4680
+#: assets/build/app.js:10
 #: assets/src/Components/PreviewFrame.js:102
 #: assets/src/Components/StarterSiteCard.js:68
 #: dist/templates-patterns-collection/assets/build/app.js:10
@@ -108,7 +107,7 @@ msgstr ""
 #: includes/Admin.php:376
 #: includes/Elementor.php:81
 #: includes/TI_Beaver.php:391
-#: assets/build/app.js:3982
+#: assets/build/app.js:2
 #: assets/src/Components/Migration.js:165
 #: dist/templates-patterns-collection/assets/build/app.js:2
 #: dist/templates-patterns-collection/assets/src/Components/Migration.js:165
@@ -122,8 +121,8 @@ msgstr ""
 
 #: dist/templates-patterns-collection/includes/Admin.php:378
 #: includes/Admin.php:378
-#: assets/build/app.js:3295
-#: assets/build/app.js:3996
+#: assets/build/app.js:2
+#: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:603
 #: assets/src/Components/Migration.js:198
 #: dist/templates-patterns-collection/assets/build/app.js:2
@@ -135,7 +134,7 @@ msgstr ""
 
 #: dist/templates-patterns-collection/includes/Admin.php:379
 #: includes/Admin.php:379
-#: assets/build/app.js:3299
+#: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:613
 #: dist/templates-patterns-collection/assets/build/app.js:10
 #: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:613
@@ -144,7 +143,7 @@ msgstr ""
 
 #: dist/templates-patterns-collection/includes/Admin.php:380
 #: includes/Admin.php:380
-#: assets/build/app.js:3292
+#: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:594
 #: dist/templates-patterns-collection/assets/build/app.js:10
 #: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:594
@@ -163,7 +162,7 @@ msgstr ""
 
 #: dist/templates-patterns-collection/includes/Admin.php:383
 #: includes/Admin.php:383
-#: assets/build/app.js:3034
+#: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:272
 #: dist/templates-patterns-collection/assets/build/app.js:10
 #: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:272
@@ -191,7 +190,7 @@ msgstr ""
 
 #: dist/templates-patterns-collection/includes/Admin.php:387
 #: includes/Admin.php:387
-#: assets/build/app.js:2977
+#: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:200
 #: dist/templates-patterns-collection/assets/build/app.js:10
 #: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:200
@@ -200,7 +199,7 @@ msgstr ""
 
 #: dist/templates-patterns-collection/includes/Admin.php:388
 #: includes/Admin.php:388
-#: assets/build/app.js:2981
+#: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:204
 #: dist/templates-patterns-collection/assets/build/app.js:10
 #: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:204
@@ -209,7 +208,7 @@ msgstr ""
 
 #: dist/templates-patterns-collection/includes/Admin.php:389
 #: includes/Admin.php:389
-#: assets/build/app.js:2985
+#: assets/build/app.js:10
 #: assets/src/Components/ImportModal.js:208
 #: dist/templates-patterns-collection/assets/build/app.js:10
 #: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:208
@@ -238,7 +237,7 @@ msgstr ""
 
 #: dist/templates-patterns-collection/includes/Admin.php:394
 #: includes/Admin.php:394
-#: assets/build/app.js:3272
+#: assets/build/app.js:8
 #: assets/src/Components/ImportModal.js:542
 #: dist/templates-patterns-collection/assets/build/app.js:8
 #: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:542
@@ -407,11 +406,8 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:408
 #: includes/Elementor.php:80
 #: includes/TI_Beaver.php:408
-#: assets/build/app.js:449
-#: assets/build/app.js:3694
-#: assets/build/app.js:3982
-#: assets/build/app.js:4232
-#: assets/build/app.js:4391
+#: assets/build/app.js:2
+#: assets/build/app.js:10
 #: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:207
 #: assets/src/Components/InstallModal.js:163
 #: assets/src/Components/Migration.js:161
@@ -431,7 +427,7 @@ msgstr ""
 #: dist/templates-patterns-collection/includes/TI_Beaver.php:409
 #: includes/Elementor.php:82
 #: includes/TI_Beaver.php:409
-#: assets/build/app.js:861
+#: assets/build/app.js:2
 #: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:183
 #: dist/templates-patterns-collection/assets/build/app.js:2
 #: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:183
@@ -642,8 +638,334 @@ msgstr ""
 msgid "With Neve, you can choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else."
 msgstr ""
 
-#: assets/build/app.js:427
-#: assets/build/app.js:4702
+#. translators: %s: Error message.
+#: assets/build/app.js:2
+#: assets/src/Components/InstallModal.js:31
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:31
+msgid "An error has ocurred: %s"
+msgstr ""
+
+#. translators: %s: Error message.
+#: assets/build/app.js:2
+#: assets/src/Components/InstallModal.js:67
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:67
+msgid "Could not activate theme."
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/InstallModal.js:89
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:89
+msgid "Install and Activate Neve"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/InstallModal.js:102
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:102
+msgid "Logo"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/InstallModal.js:116
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:116
+msgid "In order to import the starter site, Neve theme has to be installed and activated. Click the button below to install and activate Neve"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/InstallModal.js:52
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:52
+msgid "Could not install theme."
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/InstallModal.js:147
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:147
+msgid "Install and Activate"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/InstallModal.js:151
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:151
+msgid "Activate"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/ImportModalError.js:26
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/ImportModalError.js:26
+msgid "Error code"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/ImportModalError.js:31
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/ImportModalError.js:31
+msgid "Error log"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/Migration.js:82
+#: assets/src/Components/Migration.js:240
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/Migration.js:82
+#: dist/templates-patterns-collection/assets/src/Components/Migration.js:240
+msgid "Migrate"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/Migration.js:141
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/Migration.js:141
+msgid "Migrating"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/Migration.js:189
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/Migration.js:189
+msgid "Edit Content"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/Migration.js:177
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/Migration.js:177
+msgid "Start Migration"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/Migration.js:260
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/Migration.js:260
+msgid "Dismissed"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/Migration.js:269
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/Migration.js:269
+msgid "Dismiss"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:210
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:210
+msgid "An error occurred!"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:142
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:142
+msgid "Import done!"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:149
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:149
+msgid "Template was successfully imported!"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:153
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:153
+msgid "Templates were successfully imported!"
+msgstr ""
+
+#: assets/build/app.js:2
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:174
+#: dist/templates-patterns-collection/assets/build/app.js:2
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:174
+msgid "Visit"
+msgstr ""
+
+#. translators: name of starter site
+#: assets/build/app.js:4
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:277
+#: dist/templates-patterns-collection/assets/build/app.js:4
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:277
+msgid "Import the %s template"
+msgstr ""
+
+#. translators: name of template
+#: assets/build/app.js:6
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:282
+#: dist/templates-patterns-collection/assets/build/app.js:6
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:282
+msgid "Import all templates from %s"
+msgstr ""
+
+#. translators: %s  the name of the template
+#: assets/build/app.js:8
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:246
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:246
+msgid "The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed."
+msgstr ""
+
+#. translators: %s  the name of the template
+#: assets/build/app.js:8
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:252
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:252
+msgid "All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed."
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:302
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:302
+msgid "I want to import the entire site"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/utils/common.js:27
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/utils/common.js:27
+msgid "Business"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/utils/common.js:28
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/utils/common.js:28
+msgid "Ecommerce"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/utils/common.js:29
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/utils/common.js:29
+msgid "Fashion"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/utils/common.js:30
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/utils/common.js:30
+msgid "Blogging"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/utils/common.js:31
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/utils/common.js:31
+msgid "Photography"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/ImportStepper.js:8
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/ImportStepper.js:8
+msgid "Installing Plugins"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/ImportStepper.js:13
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/ImportStepper.js:13
+msgid "Importing Content"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/ImportStepper.js:18
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/ImportStepper.js:18
+msgid "Importing Customizer Settings"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/ImportStepper.js:26
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/ImportStepper.js:26
+msgid "Importing Widgets"
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/ImportModal.js:427
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:427
+msgid "Something went wrong while installing the necessary plugins."
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/ImportModal.js:431
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:431
+msgid "Something went wrong while importing the website content."
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/ImportModal.js:435
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:435
+msgid "Something went wrong while updating the customizer settings."
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/ImportModal.js:439
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:439
+msgid "Something went wrong while importing the widgets."
+msgstr ""
+
+#: assets/build/app.js:8
+#: assets/src/Components/ImportModal.js:61
+#: assets/src/Components/ImportModal.js:97
+#: dist/templates-patterns-collection/assets/build/app.js:8
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:61
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:97
+msgid "Something went wrong while loading the site data. Please refresh the page and try again."
+msgstr ""
+
+#. translators: name of starter site
+#: assets/build/app.js:10
+#: assets/src/Components/ImportModal.js:180
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:180
+msgid "Import %s as a complete site"
+msgstr ""
+
+#. translators: name of starter site
+#: assets/build/app.js:10
+#: assets/src/Components/ImportModal.js:188
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:188
+msgid "Import the entire site including customizer options, pages, content and plugins."
+msgstr ""
+
+#: assets/build/app.js:10
+#: assets/src/Components/ImportModal.js:222
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:222
+msgid "Import settings"
+msgstr ""
+
+#: assets/build/app.js:10
+#: assets/src/Components/ImportModal.js:562
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:562
+msgid "I want to import just the templates"
+msgstr ""
+
+#: assets/build/app.js:10
+#: assets/src/Components/ImportModal.js:580
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:580
+msgid "Import entire site"
+msgstr ""
+
+#: assets/build/app.js:10
 #: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:156
 #: assets/src/Components/StarterSiteCard.js:103
 #: dist/templates-patterns-collection/assets/build/app.js:10
@@ -652,83 +974,42 @@ msgstr ""
 msgid "Premium"
 msgstr ""
 
-#: assets/build/app.js:842
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:142
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:142
-msgid "Import done!"
+#: assets/build/app.js:10
+#: assets/src/Components/StarterSiteCard.js:81
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/StarterSiteCard.js:81
+msgid "View Pages"
 msgstr ""
 
-#: assets/build/app.js:844
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:149
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:149
-msgid "Template was successfully imported!"
+#: assets/build/app.js:10
+#: assets/src/Components/PreviewFrame.js:62
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/PreviewFrame.js:62
+msgid "Previous"
 msgstr ""
 
-#: assets/build/app.js:844
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:153
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:153
-msgid "Templates were successfully imported!"
+#: assets/build/app.js:10
+#: assets/src/Components/PreviewFrame.js:74
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/PreviewFrame.js:74
+msgid "Next"
 msgstr ""
 
-#: assets/build/app.js:858
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:174
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:174
-msgid "Visit"
+#: assets/build/app.js:10
+#: assets/src/Components/PreviewFrame.js:91
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/PreviewFrame.js:91
+msgid "Upgrade and Import"
 msgstr ""
 
-#: assets/build/app.js:876
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:210
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:210
-msgid "An error occurred!"
+#: assets/build/app.js:10
+#: assets/src/Components/Search.js:102
+#: dist/templates-patterns-collection/assets/build/app.js:10
+#: dist/templates-patterns-collection/assets/src/Components/Search.js:102
+msgid "Search for a starter site"
 msgstr ""
 
-#. translators: %s  the name of the template
-#: assets/build/app.js:896
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:246
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:246
-msgid "The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed."
-msgstr ""
-
-#. translators: %s  the name of the template
-#: assets/build/app.js:896
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:252
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:252
-msgid "All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed."
-msgstr ""
-
-#. translators: name of starter site
-#: assets/build/app.js:915
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:277
-#: dist/templates-patterns-collection/assets/build/app.js:4
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:277
-msgid "Import the %s template"
-msgstr ""
-
-#. translators: name of template
-#: assets/build/app.js:917
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:282
-#: dist/templates-patterns-collection/assets/build/app.js:6
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:282
-msgid "Import all templates from %s"
-msgstr ""
-
-#: assets/build/app.js:926
-#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:302
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/CloudLibrary/ImportTemplatesModal.js:302
-msgid "I want to import the entire site"
-msgstr ""
-
-#: assets/build/app.js:2361
-#: assets/build/app.js:2390
-#: assets/build/app.js:2471
+#: assets/build/app.js:10
 #: assets/src/Components/EditorSelector.js:30
 #: assets/src/Components/EditorSelector.js:70
 #: assets/src/Components/EditorTabs.js:42
@@ -739,299 +1020,9 @@ msgstr ""
 msgid "Builder Logo"
 msgstr ""
 
-#: assets/build/app.js:2865
-#: assets/build/app.js:2890
-#: assets/src/Components/ImportModal.js:61
-#: assets/src/Components/ImportModal.js:97
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:61
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:97
-msgid "Something went wrong while loading the site data. Please refresh the page and try again."
-msgstr ""
-
-#. translators: name of starter site
-#: assets/build/app.js:2969
-#: assets/src/Components/ImportModal.js:180
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:180
-msgid "Import %s as a complete site"
-msgstr ""
-
-#. translators: name of starter site
-#: assets/build/app.js:2971
-#: assets/src/Components/ImportModal.js:188
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:188
-msgid "Import the entire site including customizer options, pages, content and plugins."
-msgstr ""
-
-#: assets/build/app.js:2998
-#: assets/src/Components/ImportModal.js:222
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:222
-msgid "Import settings"
-msgstr ""
-
-#: assets/build/app.js:3190
-#: assets/src/Components/ImportModal.js:427
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:427
-msgid "Something went wrong while installing the necessary plugins."
-msgstr ""
-
-#: assets/build/app.js:3191
-#: assets/src/Components/ImportModal.js:431
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:431
-msgid "Something went wrong while importing the website content."
-msgstr ""
-
-#: assets/build/app.js:3192
-#: assets/src/Components/ImportModal.js:435
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:435
-msgid "Something went wrong while updating the customizer settings."
-msgstr ""
-
-#: assets/build/app.js:3193
-#: assets/src/Components/ImportModal.js:439
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:439
-msgid "Something went wrong while importing the widgets."
-msgstr ""
-
-#: assets/build/app.js:3278
-#: assets/src/Components/ImportModal.js:562
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:562
-msgid "I want to import just the templates"
-msgstr ""
-
-#: assets/build/app.js:3286
-#: assets/src/Components/ImportModal.js:580
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/ImportModal.js:580
-msgid "Import entire site"
-msgstr ""
-
-#: assets/build/app.js:3369
-#: assets/src/Components/ImportModalError.js:26
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/ImportModalError.js:26
-msgid "Error code"
-msgstr ""
-
-#: assets/build/app.js:3369
-#: assets/src/Components/ImportModalError.js:31
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/ImportModalError.js:31
-msgid "Error log"
-msgstr ""
-
-#: assets/build/app.js:3459
-#: assets/src/Components/ImportStepper.js:8
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/ImportStepper.js:8
-msgid "Installing Plugins"
-msgstr ""
-
-#: assets/build/app.js:3464
-#: assets/src/Components/ImportStepper.js:13
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/ImportStepper.js:13
-msgid "Importing Content"
-msgstr ""
-
-#: assets/build/app.js:3469
-#: assets/src/Components/ImportStepper.js:18
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/ImportStepper.js:18
-msgid "Importing Customizer Settings"
-msgstr ""
-
-#: assets/build/app.js:3474
-#: assets/src/Components/ImportStepper.js:26
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/Components/ImportStepper.js:26
-msgid "Importing Widgets"
-msgstr ""
-
-#. translators: %s: Error message.
-#: assets/build/app.js:3598
-#: assets/src/Components/InstallModal.js:31
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:31
-msgid "An error has ocurred: %s"
-msgstr ""
-
-#: assets/build/app.js:3615
-#: assets/src/Components/InstallModal.js:52
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:52
-msgid "Could not install theme."
-msgstr ""
-
-#. translators: %s: Error message.
-#: assets/build/app.js:3625
-#: assets/src/Components/InstallModal.js:67
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:67
-msgid "Could not activate theme."
-msgstr ""
-
-#: assets/build/app.js:3645
-#: assets/src/Components/InstallModal.js:89
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:89
-msgid "Install and Activate Neve"
-msgstr ""
-
-#: assets/build/app.js:3659
-#: assets/src/Components/InstallModal.js:102
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:102
-msgid "Logo"
-msgstr ""
-
-#: assets/build/app.js:3670
-#: assets/src/Components/InstallModal.js:116
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:116
-msgid "In order to import the starter site, Neve theme has to be installed and activated. Click the button below to install and activate Neve"
-msgstr ""
-
-#: assets/build/app.js:3687
-#: assets/src/Components/InstallModal.js:147
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:147
-msgid "Install and Activate"
-msgstr ""
-
-#: assets/build/app.js:3687
-#: assets/src/Components/InstallModal.js:151
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/InstallModal.js:151
-msgid "Activate"
-msgstr ""
-
-#: assets/build/app.js:3953
-#: assets/build/app.js:4025
-#: assets/src/Components/Migration.js:82
-#: assets/src/Components/Migration.js:240
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/Migration.js:82
-#: dist/templates-patterns-collection/assets/src/Components/Migration.js:240
-msgid "Migrate"
-msgstr ""
-
-#: assets/build/app.js:3975
-#: assets/src/Components/Migration.js:141
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/Migration.js:141
-msgid "Migrating"
-msgstr ""
-
-#: assets/build/app.js:3987
-#: assets/src/Components/Migration.js:177
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/Migration.js:177
-msgid "Start Migration"
-msgstr ""
-
-#: assets/build/app.js:3993
-#: assets/src/Components/Migration.js:189
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/Migration.js:189
-msgid "Edit Content"
-msgstr ""
-
-#: assets/build/app.js:4036
-#: assets/src/Components/Migration.js:260
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/Migration.js:260
-msgid "Dismissed"
-msgstr ""
-
-#: assets/build/app.js:4040
-#: assets/src/Components/Migration.js:269
-#: dist/templates-patterns-collection/assets/build/app.js:2
-#: dist/templates-patterns-collection/assets/src/Components/Migration.js:269
-msgid "Dismiss"
-msgstr ""
-
-#: assets/build/app.js:4241
+#: assets/build/app.js:10
 #: assets/src/Components/OnboardingContent.js:171
 msgid "No results found."
-msgstr ""
-
-#: assets/build/app.js:4396
-#: assets/src/Components/PreviewFrame.js:62
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/PreviewFrame.js:62
-msgid "Previous"
-msgstr ""
-
-#: assets/build/app.js:4401
-#: assets/src/Components/PreviewFrame.js:74
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/PreviewFrame.js:74
-msgid "Next"
-msgstr ""
-
-#: assets/build/app.js:4409
-#: assets/src/Components/PreviewFrame.js:91
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/PreviewFrame.js:91
-msgid "Upgrade and Import"
-msgstr ""
-
-#: assets/build/app.js:4553
-#: assets/src/Components/Search.js:102
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/Search.js:102
-msgid "Search for a starter site"
-msgstr ""
-
-#: assets/build/app.js:4688
-#: assets/src/Components/StarterSiteCard.js:81
-#: dist/templates-patterns-collection/assets/build/app.js:10
-#: dist/templates-patterns-collection/assets/src/Components/StarterSiteCard.js:81
-msgid "View Pages"
-msgstr ""
-
-#: assets/build/app.js:5334
-#: assets/src/utils/common.js:27
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/utils/common.js:27
-msgid "Business"
-msgstr ""
-
-#: assets/build/app.js:5334
-#: assets/src/utils/common.js:28
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/utils/common.js:28
-msgid "Ecommerce"
-msgstr ""
-
-#: assets/build/app.js:5334
-#: assets/src/utils/common.js:29
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/utils/common.js:29
-msgid "Fashion"
-msgstr ""
-
-#: assets/build/app.js:5334
-#: assets/src/utils/common.js:30
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/utils/common.js:30
-msgid "Blogging"
-msgstr ""
-
-#: assets/build/app.js:5334
-#: assets/src/utils/common.js:31
-#: dist/templates-patterns-collection/assets/build/app.js:8
-#: dist/templates-patterns-collection/assets/src/utils/common.js:31
-msgid "Photography"
 msgstr ""
 
 #: dist/templates-patterns-collection/assets/build/app.js:10
