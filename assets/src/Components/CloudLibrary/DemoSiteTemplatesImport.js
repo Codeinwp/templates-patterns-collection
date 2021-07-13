@@ -141,7 +141,8 @@ const DemoSiteTemplatesImport = ( {
 			<div className="top">
 				<div className="breadcrumb">
 					<Button isTertiary onClick={ cancel }>
-						{ __( 'Back to starter sites' ) }
+						<Icon icon={chevronLeft} />
+						{ __( 'Back to Starter Sites' ) }
 					</Button>
 				</div>
 				<div className="header">
