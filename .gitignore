@@ -4,4 +4,6 @@ logs
 dist
 artifact
 vendor
+languages/*.pot
+**/build/*
 **/.DS_Store

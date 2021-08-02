@@ -38,6 +38,15 @@ class Editor {
 	public function register_block() {
 		$deps = require( TIOB_PATH . 'editor/build/index.asset.php' );
 
+		$screen = get_current_screen();
+		if ( ! isset( $screen->id ) ) {
+			return;
+		}
+
+		if ( $screen->id === 'widgets' ) {
+			return;
+		}
+
 		wp_register_script(
 			$this->handle,
 			TIOB_URL . 'editor/build/index.js',
