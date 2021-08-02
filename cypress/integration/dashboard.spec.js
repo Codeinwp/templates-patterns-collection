@@ -238,15 +238,24 @@ describe( 'Importer Works', () => {
 
 		cy.wait( '@installPlugins', { timeout: 20000 } ).then( ( req ) => {
 			expect( req.response.statusCode ).to.equal( 200 );
-		} );
-		cy.wait( '@importContent', { timeout: 20000 } ).then( ( req ) => {
-			expect( req.response.statusCode ).to.equal( 200 );
-		} );
-		cy.wait( '@importCustomizer', { timeout: 20000 } ).then( ( req ) => {
-			expect( req.response.statusCode ).to.equal( 200 );
-		} );
-		cy.wait( '@importWidgets', { timeout: 20000 } ).then( ( req ) => {
-			expect( req.response.statusCode ).to.equal( 200 );
+
+			cy.wait( '@importContent', { timeout: 20000 } ).then( ( req ) => {
+				expect( req.response.statusCode ).to.equal( 200 );
+
+				cy.wait( '@importCustomizer', { timeout: 20000 } ).then(
+					( req ) => {
+						expect( req.response.statusCode ).to.equal( 200 );
+
+						cy.wait( '@importWidgets', { timeout: 20000 } ).then(
+							( req ) => {
+								expect( req.response.statusCode ).to.equal(
+									200
+								);
+							}
+						);
+					}
+				);
+			} );
 		} );
 	} );
 } );
