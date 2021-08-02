@@ -1,3 +1,20 @@
+##### [Version 1.1.14](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.13...v1.1.14) (2021-07-05)
+
+- Allow Page Templates Support
+
+##### [Version 1.1.13](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.12...v1.1.13) (2021-05-31)
+
+* Fix compatibility with WooCommerce specific pages on import
+
+##### [Version 1.1.12](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.11...v1.1.12) (2021-05-17)
+
+* Improve plugin constant definitions.
+
+##### [Version 1.1.11](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.10...v1.1.11) (2021-05-13)
+
+* Improve translations 
+* Improve texts and descriptions
+
 ##### [Version 1.1.10](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.9...v1.1.10) (2021-05-05)
 
 - Allow user-made templates to save metadata
