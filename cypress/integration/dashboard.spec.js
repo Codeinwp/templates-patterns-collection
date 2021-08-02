@@ -147,7 +147,9 @@ describe( 'Importer Works', () => {
 		cy.visit( '/wp-admin/themes.php?page=tiob-starter-sites' );
 	};
 
-	const ALIAS_ROUTES = () => {
+	before( () => BEFORE() );
+
+	it( 'Installs & Activates Theme', () => {
 		cy.intercept( 'POST', '/wp-admin/admin-ajax.php' ).as( 'installTheme' );
 		cy.intercept(
 			'GET',
@@ -158,16 +160,6 @@ describe( 'Importer Works', () => {
 			'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*'
 		).as( 'getModalData' );
 
-		cy.intercept( 'POST', 'install_plugins' ).as( 'installPlugins' );
-		cy.intercept( 'POST', 'import_content' ).as( 'importContent' );
-		cy.intercept( 'POST', 'import_theme_mods' ).as( 'importCustomizer' );
-		cy.intercept( 'POST', 'import_widgets' ).as( 'importWidgets' );
-	};
-
-	before( () => BEFORE() );
-
-	it( 'Installs & Activates Theme', () => {
-		ALIAS_ROUTES();
 		cy.get( '.starter-site-card' ).first().as( 'firstCard' );
 		cy.get( '@firstCard' ).trigger( 'mouseover' );
 		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 3 );
@@ -209,8 +201,16 @@ describe( 'Importer Works', () => {
 	} );
 
 	it( 'Imports Site', () => {
-		cy.reload();
-		ALIAS_ROUTES();
+		cy.intercept(
+			'GET',
+			'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*'
+		).as( 'getModalData' );
+
+		cy.intercept( 'POST', 'install_plugins' ).as( 'installPlugins' );
+		cy.intercept( 'POST', 'import_content' ).as( 'importContent' );
+		cy.intercept( 'POST', 'import_theme_mods' ).as( 'importCustomizer' );
+		cy.intercept( 'POST', 'import_widgets' ).as( 'importWidgets' );
+
 		cy.get( '.starter-site-card' ).first().as( 'firstCard' );
 		cy.get( '@firstCard' ).trigger( 'mouseover' );
 		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 3 );
@@ -238,24 +238,18 @@ describe( 'Importer Works', () => {
 
 		cy.wait( '@installPlugins', { timeout: 20000 } ).then( ( req ) => {
 			expect( req.response.statusCode ).to.equal( 200 );
+		} );
 
-			cy.wait( '@importContent', { timeout: 20000 } ).then( ( req ) => {
-				expect( req.response.statusCode ).to.equal( 200 );
+		cy.wait( '@importContent', { timeout: 20000 } ).then( ( req ) => {
+			expect( req.response.statusCode ).to.equal( 200 );
+		} );
 
-				cy.wait( '@importCustomizer', { timeout: 20000 } ).then(
-					( req ) => {
-						expect( req.response.statusCode ).to.equal( 200 );
+		cy.wait( '@importCustomizer', { timeout: 20000 } ).then( ( req ) => {
+			expect( req.response.statusCode ).to.equal( 200 );
+		} );
 
-						cy.wait( '@importWidgets', { timeout: 20000 } ).then(
-							( req ) => {
-								expect( req.response.statusCode ).to.equal(
-									200
-								);
-							}
-						);
-					}
-				);
-			} );
+		cy.wait( '@importWidgets', { timeout: 20000 } ).then( ( req ) => {
+			expect( req.response.statusCode ).to.equal( 200 );
 		} );
 	} );
 } );
