@@ -1,5 +1,3 @@
-import 'whatwg-fetch';
-
 describe( 'Dashboard Page - Default', () => {
 	const EDITORS = [
 		'gutenberg',
@@ -145,36 +143,23 @@ describe( 'Dashboard Page - Onboarding', () => {
 
 describe( 'Importer Works', () => {
 	const BEFORE = () => {
-		// Polyfill Fetch as cypress doesn't handle it.
-		Cypress.on( 'window:before:load', ( win ) => {
-			delete win.fetch;
-		} );
 		cy.login();
 		cy.visit( '/wp-admin/themes.php?page=tiob-starter-sites' );
-	};
-
-	const ALIAS_ROUTES = () => {
-		cy.server();
-		cy.route( 'POST', '/wp-admin/admin-ajax.php' ).as( 'installTheme' );
-		cy.route(
-			'GET',
-			'/wp-admin/themes.php?action=activate&stylesheet=neve&_wpnonce=*'
-		).as( 'activateTheme' );
-		cy.route(
-			'GET',
-			'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*'
-		).as( 'getModalData' );
-
-		cy.route( 'POST', 'install_plugins' ).as( 'installPlugins' );
-		cy.route( 'POST', 'import_content' ).as( 'importContent' );
-		cy.route( 'POST', 'import_theme_mods' ).as( 'importCustomizer' );
-		cy.route( 'POST', 'import_widgets' ).as( 'importWidgets' );
 	};
 
 	before( () => BEFORE() );
 
 	it( 'Installs & Activates Theme', () => {
-		ALIAS_ROUTES();
+		cy.intercept( 'POST', '/wp-admin/admin-ajax.php' ).as( 'installTheme' );
+		cy.intercept(
+			'GET',
+			'/wp-admin/themes.php?action=activate&stylesheet=neve&_wpnonce=*'
+		).as( 'activateTheme' );
+		cy.intercept(
+			'GET',
+			'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*'
+		).as( 'getModalData' );
+
 		cy.get( '.starter-site-card' ).first().as( 'firstCard' );
 		cy.get( '@firstCard' ).trigger( 'mouseover' );
 		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 3 );
@@ -184,32 +169,66 @@ describe( 'Importer Works', () => {
 			.find( 'button' )
 			.contains( 'Install and Activate' )
 			.click();
+		cy.wait( '@installTheme', { responseTimeout: 20000 } ).then(
+			( req ) => {
+				expect( req.response.body.success ).to.be.true;
+				expect( req.response.statusCode ).to.equal( 200 );
+			}
+		);
 
-		cy.wait( '@installTheme', { responseTimeout: '20000' } ).then( ( req ) => {
-			expect( req.response.body.success ).to.be.true;
-			expect( req.status ).to.equal( 200 );
+		cy.wait( '@activateTheme', {
+			requestTimeout: 20000,
+		} ).then( ( req ) => {
+			// Found.
+			expect( req.response.statusCode ).to.equal( 302 );
 		} );
 
-		cy.wait( '@activateTheme' ).then( ( req ) => {
-			expect( req.status ).to.equal( 200 );
-		} );
 		cy.wait( '@getModalData' ).then( ( req ) => {
-			expect( req.status ).to.equal( 200 );
+			expect( req.response.statusCode ).to.equal( 200 );
+			expect( req.response.body ).to.have.all.keys(
+				'content_file',
+				'theme_mods',
+				'wp_options',
+				'widgets',
+				'recommended_plugins',
+				'mandatory_plugins',
+				'default_off_recommended_plugins',
+				'front_page',
+				'shop_pages'
+			);
 		} );
-		cy.get( '.ob-import-modal .components-modal__header' )
-			.find( 'button' )
-			.click();
+		cy.get( '.ob-import-modal .components-modal__header button' ).click();
 	} );
 
 	it( 'Imports Site', () => {
-		ALIAS_ROUTES();
+		cy.intercept(
+			'GET',
+			'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*'
+		).as( 'getModalData' );
+
+		cy.intercept( 'POST', 'install_plugins' ).as( 'installPlugins' );
+		cy.intercept( 'POST', 'import_content' ).as( 'importContent' );
+		cy.intercept( 'POST', 'import_theme_mods' ).as( 'importCustomizer' );
+		cy.intercept( 'POST', 'import_widgets' ).as( 'importWidgets' );
+
 		cy.get( '.starter-site-card' ).first().as( 'firstCard' );
 		cy.get( '@firstCard' ).trigger( 'mouseover' );
 		cy.get( '@firstCard' ).find( 'button' ).should( 'have.length', 3 );
 		cy.get( '@firstCard' ).find( 'button' ).contains( 'Import' ).click();
 
 		cy.wait( '@getModalData' ).then( ( req ) => {
-			expect( req.status ).to.equal( 200 );
+			expect( req.response.statusCode ).to.equal( 200 );
+			expect( req.response.body ).to.have.all.keys(
+				'content_file',
+				'theme_mods',
+				'wp_options',
+				'widgets',
+				'recommended_plugins',
+				'mandatory_plugins',
+				'default_off_recommended_plugins',
+				'front_page',
+				'shop_pages'
+			);
 		} );
 
 		cy.get( '.ob-import-modal' )
@@ -217,17 +236,20 @@ describe( 'Importer Works', () => {
 			.contains( 'Import entire site' )
 			.click();
 
-		cy.wait( '@installPlugins' ).then( ( req ) => {
-			expect( req.status ).to.equal( 200 );
+		cy.wait( '@installPlugins', { timeout: 20000 } ).then( ( req ) => {
+			expect( req.response.statusCode ).to.equal( 200 );
 		} );
-		cy.wait( '@importContent' ).then( ( req ) => {
-			expect( req.status ).to.equal( 200 );
+
+		cy.wait( '@importContent', { timeout: 20000 } ).then( ( req ) => {
+			expect( req.response.statusCode ).to.equal( 200 );
 		} );
-		cy.wait( '@importCustomizer' ).then( ( req ) => {
-			expect( req.status ).to.equal( 200 );
+
+		cy.wait( '@importCustomizer', { timeout: 20000 } ).then( ( req ) => {
+			expect( req.response.statusCode ).to.equal( 200 );
 		} );
-		cy.wait( '@importWidgets' ).then( ( req ) => {
-			expect( req.status ).to.equal( 200 );
+
+		cy.wait( '@importWidgets', { timeout: 20000 } ).then( ( req ) => {
+			expect( req.response.statusCode ).to.equal( 200 );
 		} );
 	} );
 } );

@@ -4,6 +4,7 @@ yarn install --frozen-lockfile
 yarn run dist
 
 export DOCKER_FILE=docker-compose.ci.yml
+export ZIP_LOCATION=/artifact/templates-patterns-collection.zip
 
 # Bring stack up.
 docker-compose -f $DOCKER_FILE up -d
@@ -22,7 +23,8 @@ init_environment(){
 }
 
 docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root core install --url=http://localhost:8080 --title=SandboxSite --admin_user=admin --admin_password=admin --admin_email=admin@admin.com
-docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root plugin activate templates-patterns-collection
+echo 'installing tpc plugin'
+docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root plugin install --force --activate $ZIP_LOCATION
 mkdir -p /var/www/html/wp-content/uploads
 rm -rf /var/www/html/wp-content/plugins/akismet
 

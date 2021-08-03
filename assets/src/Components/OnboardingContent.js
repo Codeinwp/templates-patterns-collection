@@ -169,9 +169,9 @@ const OnboardingContent = ( {
 				<div className="no-results">
 					<p>
 						{ __(
-							'No results found',
+							'No results found.',
 							'templates-patterns-collection'
-						) }
+						) }&nbsp;
 						{ __(
 							'You can try a different search or use one of the categories below.',
 							'neve'

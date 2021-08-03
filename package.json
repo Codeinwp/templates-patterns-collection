@@ -46,7 +46,7 @@
     "@wordpress/eslint-plugin": "^7.4.0",
     "@wordpress/scripts": "^12.6.1",
     "conventional-changelog-simple-preset": "^1.0.14",
-    "cypress": "^5.3.0",
+    "cypress": "6.8.0",
     "grunt": "^1.2.1",
     "grunt-version": "^2.0.0",
     "grunt-wp-readme-to-markdown": "^2.0.1",
