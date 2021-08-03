@@ -39,6 +39,13 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 == Changelog ==
 
+##### [Version 1.1.16](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.15...v1.1.16) (2021-08-03)
+
+- fix missing files error
+
+
+
+
 ##### [Version 1.1.15](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.14...v1.1.15) (2021-08-03)
 
 - Add filter for imported theme mods
