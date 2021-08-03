@@ -39,6 +39,16 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 ## Changelog ##
 
+##### [Version 1.1.15](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.14...v1.1.15) (2021-08-03)
+
+- Add filter for imported theme mods
+- Fix dashboard notice on WordPress 5.8
+- Fix error when refreshing the templates page with the page templates tab focused
+- UX improvements
+
+
+
+
 ##### [Version 1.1.14](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.13...v1.1.14) (2021-07-05)
 
 - Allow Page Templates Support
