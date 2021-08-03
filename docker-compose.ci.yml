@@ -16,7 +16,7 @@ services:
     restart: always
     volumes:
       - wpcore:/var/www/html
-      - ./dist/templates-patterns-collection:/var/www/html/wp-content/plugins/templates-patterns-collection
+      - ./artifact:/artifact
     depends_on:
       - mysql
       - wordpress
@@ -35,7 +35,7 @@ services:
     image: wordpress:latest
     volumes:
       - wpcore:/var/www/html
-      - ./dist/templates-patterns-collection:/var/www/html/wp-content/plugins/templates-patterns-collection
+      - ./artifact:/artifact
     restart: always
     environment:
       - WORDPRESS_DB_NAME=wordpress
