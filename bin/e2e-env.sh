@@ -28,6 +28,10 @@ docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root plugin ins
 mkdir -p /var/www/html/wp-content/uploads
 rm -rf /var/www/html/wp-content/plugins/akismet
 
+## install no login plugin
+docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root plugin install --force --activate https://gist.github.com/selul/2f5f76d423f9d44f7b5a927e17001c28/archive/ffe3a56894c9aed005e69268ad50dfb16b8177fb.zip 
+docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root theme install --force --activate neve
+
 init_environment
 
 docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root cache flush
