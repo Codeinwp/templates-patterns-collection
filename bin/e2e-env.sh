@@ -19,7 +19,7 @@ init_environment(){
 	#Setup core
 	docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root core update --version=$WP_VERSION
 	docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root core update-db
-	chmod 0777 -R /var/www/html/wp-content/
+	docker-compose -f $DOCKER_FILE exec  --rm -u root wordpress chmod 0777 -R /var/www/html/wp-content/
 }
 
 docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root core install --url=http://localhost:8080 --title=SandboxSite --admin_user=admin --admin_password=admin --admin_email=admin@admin.com
