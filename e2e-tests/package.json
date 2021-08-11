@@ -26,6 +26,7 @@
     "cypress-html-validate": "^2.0.2",
     "cypress-localstorage-commands": "^1.4.1",
     "cypress-nv-commands": "^1.0.20",
+    "cypress-real-events": "^1.5.1",
     "cypress-storybook": "^0.5.1",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",

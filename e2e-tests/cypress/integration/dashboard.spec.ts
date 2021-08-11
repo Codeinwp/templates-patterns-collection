@@ -1,4 +1,4 @@
-describe('Dashboard Page - Default', () => {
+describe('Dashboard Page - Default', function () {
   const EDITORS = ['gutenberg', 'elementor', 'brizy', 'beaver', 'divi', 'thrive'];
   const CATEGORIES = [
     'All Categories',
@@ -12,36 +12,49 @@ describe('Dashboard Page - Default', () => {
   ];
 
   beforeEach(function () {
-    cy.scrollTo('top').wait(100);
-  });
-  before(function () {
-    cy.login();
     cy.visit('/wp-admin/themes.php?page=tiob-starter-sites');
   });
 
-  it.only('Preview Works', () => {
+  it('Preview Works', function () {
     cy.get('.starter-site-card').first().as('firstCard');
-    cy.get('@firstCard').trigger('mouseover');
+    cy.get('@firstCard').realHover();
     cy.get('@firstCard').find('button').should('have.length', 3);
     cy.get('@firstCard').find('button').contains('Preview').click();
 
     cy.get('.ob-preview').as('previewWrap');
     cy.get('@previewWrap').find('button').contains('Import').click();
-    cy.get('.ob-import-modal.install-modal').as('modal');
-    cy.get('@modal').should('exist');
-    cy.get('@modal').find('.actions button').should('have.length', 2);
-    cy.get('@modal').find('button').contains('Close').click();
-    cy.get('@previewWrap').find('button.close').click();
+    cy.findByRole('dialog');
+    cy.findByRole('button', {
+      name: /i want to import just the templates/i,
+    });
+    cy.findByRole('button', {
+      name: /import entire site/i,
+    });
+    cy.findByRole('button', {
+      name: /close dialog/i,
+    }).click();
+
+    cy.findByRole('button', {
+      name: /previous/i,
+    });
+
+    cy.findByRole('button', {
+      name: /next/i,
+    });
+    cy.findByRole('button', {
+      name: /close/i,
+    }).click();
+    cy.url().should('contain', '/wp-admin/themes.php?page=tiob-starter-sites');
   });
 
-  it('Infinite Scroll', () => {
+  it('Infinite Scroll', function () {
     cy.get('.starter-site-card').should('have.length', 9);
     cy.scrollTo('bottom').wait(100);
     cy.get('.starter-site-card').should('have.length', 18);
     cy.scrollTo('top');
   });
 
-  it('No Results Search & Tags Functionality', () => {
+  it('No Results Search & Tags Functionality', function () {
     const TAG = 'Photography';
     cy.get('.header-form:not(.in-sticky) .search input').type('$');
     cy.get('.no-results').should('exist');
@@ -51,7 +64,7 @@ describe('Dashboard Page - Default', () => {
     cy.get('.header-form:not(.in-sticky) .search input').clear();
   });
 
-  it('Editor Tabs Functionality', () => {
+  it('Editor Tabs Functionality', function () {
     cy.get('.tab.gutenberg').should('have.class', 'active');
     EDITORS.map((editor) => {
       cy.get(`.tab.${editor}`).as('tab');
@@ -60,7 +73,7 @@ describe('Dashboard Page - Default', () => {
     });
     cy.get('.tab.gutenberg').click().should('have.class', 'active');
   });
-  it('Categories Functionality', () => {
+  it('Categories Functionality', function () {
     const ALL = 'All Categories';
     cy.get('.categories-selector button').last().as('dropdown');
 
@@ -77,7 +90,7 @@ describe('Dashboard Page - Default', () => {
     cy.get('.categories-selector button').should('contain', ALL);
   });
 
-  it('Sticky Nav Works', () => {
+  it('Sticky Nav Works', function () {
     cy.scrollTo('top');
     const CATEGORY = 'Blog';
     cy.get('.sticky-nav').should('exist');
@@ -94,14 +107,12 @@ describe('Dashboard Page - Default', () => {
   });
 });
 
-describe('Dashboard Page - Onboarding', () => {
-  const BEFORE = () => {
-    cy.login();
+describe('Dashboard Page - Onboarding', function () {
+  before(function () {
     cy.visit('/wp-admin/themes.php?page=tiob-starter-sites&onboarding=yes');
-  };
-  before(() => BEFORE());
+  });
 
-  it('Onboarding Works Properly', () => {
+  it('Onboarding Works Properly', function () {
     cy.get('.content-wrap.starter-sites').should('have.class', 'is-onboarding');
     cy.get('.content-wrap').scrollTo('bottom').wait(100).scrollTo('bottom');
     cy.get('button.close-onboarding').should('exist').click();
@@ -109,63 +120,12 @@ describe('Dashboard Page - Onboarding', () => {
   });
 });
 
-describe('Importer Works', () => {
-  const BEFORE = () => {
-    cy.login();
+describe('Importer Works', function () {
+  before(function () {
     cy.visit('/wp-admin/themes.php?page=tiob-starter-sites');
-  };
-
-  before(() => BEFORE());
-
-  it('Installs & Activates Theme', () => {
-    cy.intercept('POST', '/wp-admin/admin-ajax.php').as('installTheme');
-    cy.intercept('GET', '/wp-admin/themes.php?action=activate&stylesheet=neve&_wpnonce=*').as(
-      'activateTheme',
-    );
-    cy.intercept(
-      'GET',
-      'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*',
-    ).as('getModalData');
-
-    cy.get('.starter-site-card').first().as('firstCard');
-    cy.get('@firstCard').trigger('mouseover');
-    cy.get('@firstCard').find('button').should('have.length', 3);
-    cy.get('@firstCard').find('button').contains('Import').click();
-
-    cy.get('.ob-import-modal.install-modal')
-      .find('button')
-      .contains('Install and Activate')
-      .click();
-    cy.wait('@installTheme', { responseTimeout: 20000 }).then((req) => {
-      expect(req.response.body.success).to.be.true;
-      expect(req.response.statusCode).to.equal(200);
-    });
-
-    cy.wait('@activateTheme', {
-      requestTimeout: 20000,
-    }).then((req) => {
-      // Found.
-      expect(req.response.statusCode).to.equal(302);
-    });
-
-    cy.wait('@getModalData').then((req) => {
-      expect(req.response.statusCode).to.equal(200);
-      expect(req.response.body).to.have.all.keys(
-        'content_file',
-        'theme_mods',
-        'wp_options',
-        'widgets',
-        'recommended_plugins',
-        'mandatory_plugins',
-        'default_off_recommended_plugins',
-        'front_page',
-        'shop_pages',
-      );
-    });
-    cy.get('.ob-import-modal .components-modal__header button').click();
   });
 
-  it('Imports Site', () => {
+  it('Imports Site', function () {
     cy.intercept(
       'GET',
       'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*',
