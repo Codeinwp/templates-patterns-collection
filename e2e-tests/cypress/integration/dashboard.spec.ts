@@ -11,6 +11,10 @@ describe('Dashboard Page - Default', function () {
     'Other',
   ];
 
+  before(function () {
+    cy.visit('/');
+  });
+
   beforeEach(function () {
     cy.visit('/wp-admin/themes.php?page=tiob-starter-sites');
   });
@@ -109,6 +113,7 @@ describe('Dashboard Page - Default', function () {
 
 describe('Dashboard Page - Onboarding', function () {
   before(function () {
+    cy.visit('/');
     cy.visit('/wp-admin/themes.php?page=tiob-starter-sites&onboarding=yes');
   });
 
@@ -122,6 +127,7 @@ describe('Dashboard Page - Onboarding', function () {
 
 describe('Importer Works', function () {
   before(function () {
+    cy.visit('/');
     cy.visit('/wp-admin/themes.php?page=tiob-starter-sites');
   });
 

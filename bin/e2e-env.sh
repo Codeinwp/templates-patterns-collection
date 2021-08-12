@@ -20,16 +20,18 @@ init_environment(){
 	docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root core update --version=$WP_VERSION
 	docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root core update-db
 	docker-compose -f $DOCKER_FILE exec  --rm -u root wordpress chmod 0777 -R /var/www/html/wp-content/
+  docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root core install --url=http://localhost:8080 --title=SandboxSite --admin_user=admin --admin_password=admin --admin_email=admin@admin.com
+
+  # Install Neve
+docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root theme install --force --activate neve
+
+echo 'installing tpc plugin'
+docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root plugin install --force --activate $ZIP_LOCATION
 
   # Install no login plugin
 docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root plugin install --force --activate https://gist.github.com/selul/2f5f76d423f9d44f7b5a927e17001c28/archive/ffe3a56894c9aed005e69268ad50dfb16b8177fb.zip 
-  # Install Neve
-docker-compose -f $DOCKER_FILE run  --rm -u root cli wp --allow-root theme install --force --activate neve
 }
 
-docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root core install --url=http://localhost:8080 --title=SandboxSite --admin_user=admin --admin_password=admin --admin_email=admin@admin.com
-echo 'installing tpc plugin'
-docker-compose -f $DOCKER_FILE run  --rm -u root cli wp  --allow-root plugin install --force --activate $ZIP_LOCATION
 mkdir -p /var/www/html/wp-content/uploads
 rm -rf /var/www/html/wp-content/plugins/akismet
 
