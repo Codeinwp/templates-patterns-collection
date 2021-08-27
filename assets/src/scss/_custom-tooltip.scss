@@ -1,0 +1,29 @@
+.tiob-tooltip-wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+	margin-left: 10px;
+
+	.tiob-tooltip-toggle {
+		&:hover, &:focus {
+			outline: none;
+			box-shadow: none;
+			+ .tiob-tooltip-content {
+				opacity: 1;
+				pointer-events: all;
+			}
+		}
+	}
+}
+
+.tiob-tooltip-content {
+	top: 100%;
+	left: 0;
+	position: absolute;
+	min-width: 300px;
+	background: #fff;
+	box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
+	padding: 10px;
+	pointer-events: none;
+	opacity: 0;
+}
