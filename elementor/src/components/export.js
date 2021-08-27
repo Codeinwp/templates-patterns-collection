@@ -52,13 +52,23 @@ const Export = ( { updateCurrentTab } ) => {
 			doesExist = await getTemplate( templateID );
 		}
 
+		const meta = window.tiTpc.params.meta;
+
+		const currentTemplate = elementor.documents
+			.getCurrent()
+			.container.settings.get( 'template' );
+
+		if ( currentTemplate ) {
+			meta._wp_page_template = currentTemplate;
+		}
+
 		if ( doesExist ) {
 			await updateTemplate( {
 				template_id: templateID,
 				template_name: title,
 				content,
 				link: elementor.config.initial_document.urls.permalink,
-				meta: JSON.stringify( tiTpc.params.meta ),
+				meta: JSON.stringify( meta ),
 			} );
 		} else {
 			await exportTemplate( {

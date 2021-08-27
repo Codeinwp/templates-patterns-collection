@@ -86,7 +86,7 @@ class Theme_Mods_Importer {
 			);
 		}
 		$this->source_url = $data['source_url'];
-		$this->theme_mods = $data['theme_mods'];
+		$this->theme_mods = apply_filters( 'ti_tpc_theme_mods_pre_import', $data['theme_mods'] );
 		array_walk( $this->theme_mods, array( $this, 'change_theme_mods_root_url' ) );
 
 		foreach ( $this->theme_mods as $mod => $value ) {

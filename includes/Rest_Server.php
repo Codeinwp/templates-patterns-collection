@@ -333,6 +333,19 @@ class Rest_Server {
 			2
 		);
 
+		$page_template = '';
+
+		if ( 'gutenberg' !== $template['template_type'] ) {
+			$page_template = 'page-templates/template-pagebuilder-full-width.php';
+		}
+
+		if ( isset( $template['meta'] ) ) {
+			$meta = json_decode( $template['meta'], true );
+			if ( isset( $meta['_wp_page_template'] ) ) {
+				$page_template = $meta['_wp_page_template'];
+			}
+		}
+
 		if ( 'beaver' === $template['template_type'] ) {
 			if ( class_exists( 'FLBuilderModel' ) ) {
 				$response = TI_Beaver::get_template_content( $template['template_id'] );
@@ -343,7 +356,7 @@ class Rest_Server {
 					'post_title'    => wp_strip_all_tags( $template['template_name'] ),
 					'post_status'   => 'publish',
 					'post_type'     => 'page',
-					'page_template' => 'page-templates/template-pagebuilder-full-width.php',
+					'page_template' => $page_template,
 					'meta_input'    => isset( $template['meta'] ) ? json_decode( $template['meta'], true ) : array(),
 				)
 			);
@@ -368,7 +381,7 @@ class Rest_Server {
 					'post_title'    => wp_strip_all_tags( $template['template_name'] ),
 					'post_status'   => 'publish',
 					'post_type'     => 'page',
-					'page_template' => 'page-templates/template-pagebuilder-full-width.php',
+					'page_template' => $page_template,
 					'meta_input'    => array_merge(
 						array(
 							'_elementor_data'          => $template['content'],
@@ -387,7 +400,7 @@ class Rest_Server {
 				'post_content'  => wp_kses_post( $template['content'] ),
 				'post_status'   => 'publish',
 				'post_type'     => 'page',
-				'page_template' => 'page-templates/template-pagebuilder-full-width.php',
+				'page_template' => $page_template,
 				'meta_input'    => isset( $template['meta'] ) ? json_decode( $template['meta'], true ) : array(),
 			)
 		);
