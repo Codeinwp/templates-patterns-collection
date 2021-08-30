@@ -8,6 +8,7 @@
 namespace TIOB\Importers;
 
 use Plugin_Upgrader;
+use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Quiet_Skin;
 use TIOB\Importers\Helpers\Quiet_Skin_Legacy;
 use TIOB\Logger;
@@ -112,6 +113,7 @@ class Plugin_Importer {
 	 * @return WP_REST_Response
 	 */
 	public function run_plugins_install( $plugins_array ) {
+		$plugin_cleanup = array();
 		foreach ( $plugins_array as $plugin_slug => $true ) {
 			$this->logger->log( "Installing {$plugin_slug}.", 'progress' );
 			$install = $this->install_single_plugin( $plugin_slug );
@@ -126,6 +128,7 @@ class Plugin_Importer {
 					)
 				);
 			}
+			$plugin_cleanup[ $plugin_slug ]['installed'] = true;
 			$this->logger->log( "Activating {$plugin_slug}.", 'progress' );
 			$activate = $this->activate_single_plugin( $plugin_slug );
 			if ( ! $activate ) {
@@ -139,7 +142,9 @@ class Plugin_Importer {
 					)
 				);
 			}
+			$plugin_cleanup[ $plugin_slug ]['active'] = true;
 		}
+		do_action( 'themeisle_cl_add_property_state', Active_State::PLUGINS_NSP, $plugin_cleanup );
 
 		$this->remove_possible_redirects();
 		$this->logger->log( 'Installed and activated plugins.', 'success' );
@@ -172,7 +177,7 @@ class Plugin_Importer {
 		}
 
 		// User doesn't have permissions.
-		if ( ! current_user_can( 'install_plugins' ) ) {
+		if ( ! current_user_can( 'install_plugins' ) && ! class_exists( 'WP_CLI' ) ) {
 			return false;
 		}
 
@@ -307,7 +312,7 @@ class Plugin_Importer {
 		}
 
 		// User doesn't have permissions.
-		if ( ! current_user_can( 'activate_plugins' ) ) {
+		if ( ! current_user_can( 'activate_plugins' ) && ! class_exists( 'WP_CLI' ) ) {
 			return false;
 		}
 

@@ -5,6 +5,7 @@
 
 namespace TIOB\Importers\WP;
 
+use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Helper;
 use TIOB\Logger;
 use WP_Error;
@@ -171,6 +172,7 @@ class WP_Import extends WP_Importer {
 			$id                   = wp_insert_category( $catarr );
 			if ( ! is_wp_error( $id ) ) {
 				if ( isset( $cat['term_id'] ) ) {
+					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::CATEGORY_NSP, $id );
 					$this->processed_terms[ intval( $cat['term_id'] ) ] = $id;
 				}
 			} else {
@@ -217,6 +219,7 @@ class WP_Import extends WP_Importer {
 			$id       = wp_insert_term( $tag['tag_name'], 'post_tag', $tagarr );
 			if ( ! is_wp_error( $id ) ) {
 				if ( isset( $tag['term_id'] ) ) {
+					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::TAGS_NSP, $id['term_id'] );
 					$this->processed_terms[ intval( $tag['term_id'] ) ] = $id['term_id'];
 				}
 			} else {
@@ -273,6 +276,14 @@ class WP_Import extends WP_Importer {
 			$id          = wp_insert_term( $term['term_name'], $term['term_taxonomy'], $termarr );
 			if ( ! is_wp_error( $id ) ) {
 				if ( isset( $term['term_id'] ) ) {
+					do_action(
+						'themeisle_cl_add_item_to_property_state',
+						Active_State::TERMS_NSP,
+						array(
+							'id'       => $id['term_id'],
+							'taxonomy' => $term['term_taxonomy'],
+						)
+					);
 					$this->processed_terms[ intval( $term['term_id'] ) ] = $id['term_id'];
 				}
 			} else {
@@ -282,6 +293,7 @@ class WP_Import extends WP_Importer {
 			}
 			$this->process_termmeta( $term, $id['term_id'] );
 		}
+
 		unset( $this->terms );
 		$this->logger->log( 'Processed terms.', 'success' );
 	}
@@ -438,12 +450,15 @@ class WP_Import extends WP_Importer {
 						}
 					}
 					$comment_post_id = $post_id = $this->process_attachment( $postdata, $remote_url );
+					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::ATTACHMENT_NSP, $post_id );
 				} else {
 					$this->logger->log( "Inserting {$postdata['post_type']}: {$postdata['post_title']}.", 'progress' );
+					$postdata['post_content'] = apply_filters( 'tpc_post_content_processed_terms', $postdata['post_content'], $this->processed_terms );
 					$postdata['post_content'] = apply_filters( 'tpc_post_content_before_insert', $postdata['post_content'], $this->base_blog_url );
 					$comment_post_id          = $post_id = wp_insert_post( $postdata, true );
 					$this->logger->log( "Done inserting {$postdata['post_type']}: {$postdata['post_title']}.", 'success' );
 					do_action( 'wp_import_insert_post', $post_id, $original_post_id, $postdata, $post );
+					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::POSTS_NSP, $post_id );
 				}
 				if ( is_wp_error( $post_id ) ) {
 					$this->logger->log( "Failed to import {$post_type_object->labels->singular_name} {$post['post_title']}. \n {$post_id->get_error_message()}" );

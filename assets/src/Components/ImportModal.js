@@ -1,5 +1,7 @@
 /*global tiobDash*/
+/* eslint-disable no-console */
 import {
+	cleanupImport,
 	importContent,
 	importMods,
 	importWidgets,
@@ -11,11 +13,14 @@ import ImportStepper from './ImportStepper';
 import ImportModalNote from './ImportModalNote';
 import classnames from 'classnames';
 import ImportModalError from './ImportModalError';
+import ImportModalMock from './ImportModalMock';
+import CustomTooltip from './CustomTooltip';
 
-import { useState, useEffect, Fragment } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
+
 import {
 	Button,
 	Icon,
@@ -31,7 +36,9 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		content: true,
 		customizer: true,
 		widgets: true,
+		cleanup: false,
 	} );
+	const [ cleanupProgress, setCleanupProgress ] = useState( false );
 	const [ pluginsProgress, setPluginsProgress ] = useState( false );
 	const [ contentProgress, setContentProgress ] = useState( false );
 	const [ customizerProgress, setCustomizerProgress ] = useState( false );
@@ -46,10 +53,15 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 	const [ pluginsOpened, setPluginsOpened ] = useState( true );
 	const [ optionsOpened, setOptionsOpened ] = useState( true );
 
-	const { license } = tiobDash;
+	const { license, cleanupAllowed } = tiobDash;
+	const [ isCleanupAllowed, setIsCleanupAllowed ] = useState(
+		cleanupAllowed
+	);
 
 	useEffect( () => {
 		const fetchAddress = siteData.remote_url || siteData.url;
+		// Use the line below if testing in a staging env:
+		// const fetchAddress = siteData.url || siteData.remote_url;
 		const url = new URL(
 			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
 		);
@@ -77,10 +89,10 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 					const defaultOff =
 						result.default_off_recommended_plugins || [];
 
-					Object.keys( mandatory ).map( ( key ) => {
+					Object.keys( mandatory ).forEach( ( key ) => {
 						mandatory[ key ] = true;
 					} );
-					Object.keys( optional ).map( ( key ) => {
+					Object.keys( optional ).forEach( ( key ) => {
 						optional[ key ] = ! defaultOff.includes( key );
 					} );
 
@@ -92,7 +104,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 					setFetching( false );
 				} );
 			} )
-			.catch( ( error ) => {
+			.catch( () => {
 				setError( {
 					message: __(
 						'Something went wrong while loading the site data. Please refresh the page and try again.',
@@ -104,56 +116,6 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 			} );
 	}, [] );
 
-	const renderMock = () => {
-		return (
-			<Fragment>
-				<div className="modal-body">
-					<div className="header">
-						<span
-							className="title is-loading"
-							style={ { height: 35, marginBottom: 20 } }
-						/>
-						<p className="description is-loading" />
-						<p className="description is-loading" />
-					</div>
-					<div className="well is-loading">
-						<span
-							className="title is-loading"
-							style={ { height: 20 } }
-						/>
-						<ol>
-							<li />
-							<li />
-						</ol>
-					</div>
-
-					<div className="modal-toggles components-panel">
-						{ [ 1, 2 ].map( ( i ) => (
-							<div
-								key={ i }
-								className="components-panel__body options general is-opened"
-							>
-								<span className="title is-loading" />
-								<ul>
-									{ [ 1, 2, 3 ].map( ( i ) => (
-										<li className="option-row" key={ i }>
-											<div className="mock-icon is-loading" />
-											<span className="is-loading" />
-											<div className="toggle is-loading" />
-										</li>
-									) ) }
-								</ul>
-							</div>
-						) ) }
-					</div>
-				</div>
-				<div className="modal-footer">
-					<span className="link is-loading" />
-					<Button isPrimary className="import is-loading" />
-				</div>
-			</Fragment>
-		);
-	};
 	const Note = () => {
 		return (
 			<ImportModalNote
@@ -163,39 +125,28 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		);
 	};
 
-	const ModalHead = () => {
-		if ( fetching ) {
-			return (
-				<>
-					<h1 className="is-loading title" />
-					<p className="is-loading description" />
-				</>
-			);
-		}
-		return (
-			<div className="header">
-				<h1>
-					{ sprintf(
-						/* translators: name of starter site */
-						__(
-							'Import %s as a complete site',
-							'templates-patterns-collection'
-						),
-						importData.title
-					) }
-				</h1>
-				<p className="description">
-					{ __(
-						'Import the entire site including customizer options, pages, content and plugins.',
+	const ModalHead = () => (
+		<div className="header">
+			<h1>
+				{ sprintf(
+					/* translators: name of starter site */
+					__(
+						'Import %s as a complete site',
 						'templates-patterns-collection'
-					) }
-				</p>
-			</div>
-		);
-	};
-
+					),
+					importData.title
+				) }
+			</h1>
+			<p className="description">
+				{ __(
+					'Import the entire site including customizer options, pages, content and plugins.',
+					'templates-patterns-collection'
+				) }
+			</p>
+		</div>
+	);
 	const Options = () => {
-		const map = {
+		let map = {
 			content: {
 				title: __( 'Content', 'templates-patterns-collection' ),
 				icon: 'admin-post',
@@ -209,6 +160,23 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 				icon: 'admin-generic',
 			},
 		};
+
+		if ( isCleanupAllowed === 'yes' ) {
+			map = {
+				cleanup: {
+					icon: 'trash',
+					title: __(
+						'Cleanup previous import',
+						'templates-patterns-collection'
+					),
+					tooltip: __(
+						'This will remove any plugins, images, customizer options, widgets posts and pages added by the previous demo import',
+						'templates-patterns-collection'
+					),
+				},
+				...map,
+			};
+		}
 
 		const toggleOpen = () => {
 			setOptionsOpened( ! optionsOpened );
@@ -225,15 +193,18 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 				) }
 			>
 				{ Object.keys( map ).map( ( id, index ) => {
+					const rowClass = classnames( 'option-row', {
+						active: general[ id ],
+					} );
+					const { icon, title, tooltip } = map[ id ];
+
 					return (
-						<PanelRow className="option-row" key={ index }>
-							<Icon
-								className={ classnames( {
-									active: general[ id ],
-								} ) }
-								icon={ map[ id ].icon }
-							/>
-							<span>{ map[ id ].title }</span>
+						<PanelRow className={ rowClass } key={ index }>
+							<Icon icon={ icon } />
+							<span>{ title }</span>
+							{ tooltip && (
+								<CustomTooltip>{ tooltip }</CustomTooltip>
+							) }
 							<div className="toggle-wrapper">
 								<ToggleControl
 									checked={ general[ id ] }
@@ -272,14 +243,12 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 				title={ __( 'Plugins', 'templates-patterns-collection' ) }
 			>
 				{ Object.keys( allPlugins ).map( ( slug, index ) => {
+					const rowClass = classnames( 'option-row', {
+						active: pluginOptions[ slug ],
+					} );
 					return (
-						<PanelRow className="option-row" key={ index }>
-							<Icon
-								icon="admin-plugins"
-								className={ classnames( {
-									active: pluginOptions[ slug ],
-								} ) }
-							/>
+						<PanelRow className={ rowClass } key={ index }>
+							<Icon icon="admin-plugins" />
 							<span
 								dangerouslySetInnerHTML={ {
 									__html: allPlugins[ slug ],
@@ -307,8 +276,32 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		);
 	};
 
-	function runImport() {
+	function runImportCleanup() {
 		console.clear();
+		if ( ! general.cleanup ) {
+			console.log( '[S] Cleanup.' );
+			runImport();
+			return false;
+		}
+		setCurrentStep( 'cleanup' );
+		console.log( '[P] Cleanup.' );
+		cleanupImport( {} )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					handleError( response, 'cleanup' );
+					return false;
+				}
+				console.log( '[D] Cleanup.' );
+				setCleanupProgress( 'done' );
+				runImport();
+			} )
+			.catch( ( incomingError ) =>
+				handleError( incomingError, 'cleanup' )
+			);
+	}
+
+	function runImport() {
+		// console.clear();
 		if ( ! pluginOptions ) {
 			console.log( '[S] Plugins.' );
 			runImportContent();
@@ -326,7 +319,9 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 				setPluginsProgress( 'done' );
 				runImportContent();
 			} )
-			.catch( ( error ) => handleError( error, 'plugins' ) );
+			.catch( ( incomingError ) =>
+				handleError( incomingError, 'plugins' )
+			);
 	}
 
 	function runImportContent() {
@@ -357,7 +352,9 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 				setContentProgress( 'done' );
 				runImportCustomizer();
 			} )
-			.catch( ( error ) => handleError( error, 'content' ) );
+			.catch( ( incomingError ) =>
+				handleError( incomingError, 'content' )
+			);
 	}
 
 	function runImportCustomizer() {
@@ -382,7 +379,9 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 				setCustomizerProgress( 'done' );
 				runImportWidgets();
 			} )
-			.catch( ( error ) => handleError( error, 'customizer' ) );
+			.catch( ( incomingError ) =>
+				handleError( incomingError, 'customizer' )
+			);
 	}
 
 	function runImportWidgets() {
@@ -402,17 +401,24 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 				setWidgetsProgress( 'done' );
 				importDone();
 			} )
-			.catch( ( error ) => handleError( error, 'widgets' ) );
+			.catch( ( incomingError ) =>
+				handleError( incomingError, 'widgets' )
+			);
 	}
 
 	function importDone() {
 		setCurrentStep( 'done' );
+		setIsCleanupAllowed( 'yes' );
+		tiobDash.cleanupAllowed = 'yes';
 		setImporting( false );
 	}
 
-	function handleError( error, step ) {
+	function handleError( incomingError, step ) {
 		setImporting( false );
 		setCurrentStep( null );
+		if ( 'cleanup' === step ) {
+			setPluginsProgress( 'skip' );
+		}
 		if ( 'plugins' === step ) {
 			setContentProgress( 'skip' );
 		}
@@ -424,6 +430,10 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		}
 
 		const map = {
+			cleanup: __(
+				'Something went wrong while cleaning the previous import.',
+				'templates-patterns-collection'
+			),
 			plugins: __(
 				'Something went wrong while installing the necessary plugins.',
 				'templates-patterns-collection'
@@ -443,6 +453,9 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		};
 
 		switch ( step ) {
+			case 'cleanup':
+				setCleanupProgress( 'error' );
+				break;
 			case 'plugins':
 				setPluginsProgress( 'error' );
 				break;
@@ -457,10 +470,10 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 				break;
 		}
 		setError(
-			error.data
+			incomingError.data
 				? {
 						message: map[ step ],
-						code: error.data,
+					code: incomingError.data,
 				  }
 				: { message: map[ step ] }
 		);
@@ -472,8 +485,6 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		}
 		setModal( false );
 	};
-
-	const runTemplatesImport = () => {};
 
 	const externalPluginsInstalled = siteData.external_plugins
 		? siteData.external_plugins.every( ( value ) => true === value.active )
@@ -499,9 +510,9 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 			isDismissible={ ! importing && ! fetching }
 		>
 			{ fetching ? (
-				renderMock()
+				<ImportModalMock />
 			) : (
-				<Fragment>
+				<>
 					<div className="modal-body">
 						{ ! importing && 'done' !== currentStep && ! error ? (
 							<>
@@ -526,6 +537,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 								{ null !== currentStep && (
 									<ImportStepper
 										progress={ {
+											cleanup: cleanupProgress,
 											plugins: pluginsProgress,
 											content: contentProgress,
 											customizer: customizerProgress,
@@ -536,7 +548,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 									/>
 								) }
 								{ 'done' === currentStep && (
-									<Fragment>
+									<>
 										<hr />
 										<p className="import-result">
 											{ __(
@@ -545,7 +557,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 											) }
 										</p>
 										<hr />
-									</Fragment>
+									</>
 								) }
 							</>
 						) }
@@ -553,7 +565,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 					{ ! importing && (
 						<div className="modal-footer">
 							{ 'done' !== currentStep ? (
-								<Fragment>
+								<>
 									<Button
 										className="import-templates"
 										isLink
@@ -574,7 +586,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 											}
 											onClick={ () => {
 												setImporting( true );
-												runImport();
+												runImportCleanup();
 											} }
 										>
 											{ __(
@@ -583,7 +595,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 											) }
 										</Button>
 									) }
-								</Fragment>
+								</>
 							) : (
 								<div className="import-done-actions">
 									<Button
@@ -619,7 +631,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 							) }
 						</div>
 					) }
-				</Fragment>
+				</>
 			) }
 		</Modal>
 	);

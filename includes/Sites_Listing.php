@@ -66,19 +66,36 @@ class Sites_Listing {
 	}
 
 	/**
+	 * Return the API path
 	 *
+	 * @return string
+	 */
+	final public static function get_api_path() {
+		if ( defined( 'TPC_USE_STAGING' ) && TPC_USE_STAGING === true ) {
+			return ( defined( 'TPC_API_STAGING' ) && ! empty( TPC_API_STAGING ) ) ? TPC_API_STAGING : self::API;
+		}
+		return self::API;
+	}
+
+	/**
+	 * Add theme support
 	 */
 	public function add_sites_library_support() {
 		add_theme_support( 'themeisle-demo-import', $this->get_ti_demo_content_support_data() );
 	}
 
+	/**
+	 * Get the sites
+	 *
+	 * @return array
+	 */
 	private function get_sites() {
 		$cache = get_transient( $this->transient_key );
 
 		if ( $cache !== false ) {
 			$response = $cache;
 		} else {
-			$response = wp_remote_get( esc_url( self::API ) );
+			$response = wp_remote_get( esc_url( self::get_api_path() ) );
 
 			if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
 				return array();
@@ -93,7 +110,7 @@ class Sites_Listing {
 			}
 		}
 
-		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		$upsell_status = $this->get_upsell_status();
 
 		$divi  = array(
