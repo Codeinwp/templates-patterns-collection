@@ -1,3 +1,31 @@
+##### [Version 1.1.16](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.15...v1.1.16) (2021-08-03)
+
+- fix missing files error
+
+##### [Version 1.1.15](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.14...v1.1.15) (2021-08-03)
+
+- Add filter for imported theme mods
+- Fix dashboard notice on WordPress 5.8
+- Fix error when refreshing the templates page with the page templates tab focused
+- UX improvements
+
+##### [Version 1.1.14](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.13...v1.1.14) (2021-07-05)
+
+- Allow Page Templates Support
+
+##### [Version 1.1.13](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.12...v1.1.13) (2021-05-31)
+
+* Fix compatibility with WooCommerce specific pages on import
+
+##### [Version 1.1.12](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.11...v1.1.12) (2021-05-17)
+
+* Improve plugin constant definitions.
+
+##### [Version 1.1.11](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.10...v1.1.11) (2021-05-13)
+
+* Improve translations 
+* Improve texts and descriptions
+
 ##### [Version 1.1.10](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.9...v1.1.10) (2021-05-05)
 
 - Allow user-made templates to save metadata

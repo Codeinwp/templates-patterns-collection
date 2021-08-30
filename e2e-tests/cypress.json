@@ -1,0 +1,14 @@
+{
+  "projectId": "od347f",
+  "pluginsFile": "cypress/plugins/index.js",
+  "supportFile": "cypress/support/index.ts",
+  "baseUrl": "http://localhost:8080",
+  "viewportWidth": 1920,
+  "viewportHeight": 1080,
+  "retries": 1,
+  "screenshotsFolder": "visual-regression/screenshots",
+  "videoUploadOnPasses": false,
+  "numTestsKeptInMemory": 0,
+  "watchForFileChanges": false,
+  "experimentalStudio": true
+}

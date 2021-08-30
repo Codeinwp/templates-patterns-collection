@@ -46,16 +46,23 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 		}
 
 		const menu = document.getElementById('menu-appearance');
-		const activeItem = menu.querySelector('.current');
-		const libraryItem = menu.querySelector('a[href="themes.php?page=tiob-starter-sites#library"]').parentElement;
-		const starterSitesItem = menu.querySelector('a[href="themes.php?page=tiob-starter-sites"]').parentElement;
+		const libraryLink = menu.querySelector('a[href="themes.php?page=tiob-starter-sites#library"]');
+		const starterLink = menu.querySelector('a[href="themes.php?page=tiob-starter-sites"]');
 
-		activeItem.classList.remove('current');
-		libraryItem.classList.remove('current');
-		if ( hash === 'library' ){
-			libraryItem.classList.add('current');
-		} else {
-			starterSitesItem.classList.add('current');
+		// This is used only to set the active state of the links from the left admin nav.
+		// So we check that those items exist before trying to mutate them.
+		if ( libraryLink && starterLink ) {
+			const libraryItem = libraryLink.parentElement;
+			const starterSitesItem = starterLink.parentElement;
+			const activeItem = menu.querySelector('.current');
+
+			activeItem.classList.remove('current');
+			libraryItem.classList.remove('current');
+			if ( hash === 'library' ){
+				libraryItem.classList.add('current');
+			} else {
+				starterSitesItem.classList.add('current');
+			}
 		}
 		setCurrentTab(hash);
 	}

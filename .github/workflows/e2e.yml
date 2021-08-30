@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          yarn install --frozen-lockfile
+          composer install --no-dev --prefer-dist --no-progress --no-suggest
+          yarn run build
       - name: Install testing env
         run: bash ./bin/e2e-env.sh
       - name: Run Cypress tests
@@ -19,6 +24,7 @@ jobs:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
         uses: cypress-io/github-action@v2
         with:
+          working-directory: ./e2e-tests
           env: host=localhost,port=8080
           browser: chrome
           parallel: true

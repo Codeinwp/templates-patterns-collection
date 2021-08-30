@@ -335,7 +335,27 @@ class Plugin_Importer {
 	private function maybe_provide_activation_help( $slug, $path ) {
 		if ( $slug === 'woocommerce' ) {
 			require_once( $path . '/includes/admin/wc-admin-functions.php' );
+
+			// hook into this filter to remove pages on activation of woocommerce
+			add_filter( 'woocommerce_create_pages', array( $this, 'woocommerce_activation_pages' ) );
 		}
+	}
+
+	/**
+	 * Filter pages from woocommerce activation.
+	 *
+	 * @param array $pages List of pages to be created on activation.
+	 * @return array
+	 */
+	public function woocommerce_activation_pages( $pages ) {
+		$filtered_pages = array( 'shop', 'cart', 'checkout', 'myaccount' );
+		foreach ( $filtered_pages as $filter ) {
+			if ( isset( $pages[ $filter ] ) ) {
+				unset( $pages[ $filter ] );
+			}
+		}
+
+		return $pages;
 	}
 
 	/**
