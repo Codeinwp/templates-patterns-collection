@@ -259,7 +259,7 @@ class Content_Importer {
 	/**
 	 * Maybe bust cache for elementor plugin.
 	 */
-	private function maybe_bust_elementor_cache() {
+	public function maybe_bust_elementor_cache() {
 		if ( ! class_exists( '\Elementor\Plugin' ) ) {
 			return;
 		}

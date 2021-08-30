@@ -177,7 +177,7 @@ class Plugin_Importer {
 		}
 
 		// User doesn't have permissions.
-		if ( ! current_user_can( 'install_plugins' ) ) {
+		if ( ! current_user_can( 'install_plugins' ) && ! class_exists( 'WP_CLI' ) ) {
 			return false;
 		}
 
@@ -312,7 +312,7 @@ class Plugin_Importer {
 		}
 
 		// User doesn't have permissions.
-		if ( ! current_user_can( 'activate_plugins' ) ) {
+		if ( ! current_user_can( 'activate_plugins' ) && ! class_exists( 'WP_CLI' ) ) {
 			return false;
 		}
 

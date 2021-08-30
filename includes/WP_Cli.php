@@ -45,8 +45,6 @@ class WP_Cli {
 	 */
 	private $data = array();
 
-	private $locations = array( 'local', 'remote' );
-
 	/**
 	 * Theme mods importer.
 	 *
@@ -80,7 +78,7 @@ class WP_Cli {
 	 */
 	private function setup_props() {
 		$theme_support             = get_theme_support( 'themeisle-demo-import' );
-		$this->data                = $theme_support[0];
+		$this->data                = $theme_support[0]['remote'];
 		$this->theme_mods_importer = new Theme_Mods_Importer();
 		$this->content_importer    = new Content_Importer();
 		$this->widgets_importer    = new Widgets_Importer();
@@ -103,46 +101,23 @@ class WP_Cli {
 	/**
 	 * Get all sites as (string) $slug => (array) $args
 	 *
-	 * @param string $source the source [local/remote/all].
+	 * @param string $builder what editor to get sites for.
 	 *
 	 * @return array
 	 */
-	private function get_all_sites( $source = 'all' ) {
+	private function get_all_sites( $builder = false ) {
 		$this->setup_props();
+		$all_sites = array();
 
-		if ( $source !== 'all' ) {
-			$this->locations = array( $source );
-		}
+		foreach ( $this->data as $editor => $sites ) {
 
-		$defaults = array(
-			'editors' => array(),
-			'local'   => array(),
-			'remote'  => array(),
-		);
-
-		$this->data = wp_parse_args( $this->data, $defaults );
-		$editors    = $this->data['editors'];
-		$all_sites  = array();
-		foreach ( $this->locations as $site_source ) {
-			if ( ! isset( $this->data[ $site_source ] ) || empty( $this->data[ $site_source ] ) ) {
+			if ( $builder !== false && strpos( $editor, $builder ) === false ) {
 				continue;
 			}
-			foreach ( $editors as $editor ) {
-				if ( ! isset( $this->data[ $site_source ][ $editor ] ) ) {
-					continue;
-				}
-				foreach ( $this->data[ $site_source ][ $editor ] as $site_slug => $data ) {
-					$this->data[ $site_source ][ $editor ][ $site_slug ]['slug']   = $site_slug;
-					$this->data[ $site_source ][ $editor ][ $site_slug ]['editor'] = $editor;
-					$this->data[ $site_source ][ $editor ][ $site_slug ]['source'] = $site_source;
-					if ( isset( $data['local_json'] ) ) {
-						$this->data[ $site_source ][ $editor ][ $site_slug ]['local_json'] = $data['local_json'];
-					}
-					if ( isset( $data['remote_json'] ) ) {
-						$this->data[ $site_source ][ $editor ][ $site_slug ]['remote_json'] = $data['remote_json'];
-					}
-					$all_sites[ $site_slug ] = $this->data[ $site_source ][ $editor ][ $site_slug ];
-				}
+			foreach ( $sites as $slug => $data ) {
+				$this->data[ $editor ][ $slug ]['slug']   = $slug;
+				$this->data[ $editor ][ $slug ]['editor'] = $editor;
+				$all_sites[ $slug ]                       = $this->data[ $editor ][ $slug ];
 			}
 		}
 
@@ -167,8 +142,8 @@ class WP_Cli {
 	 *
 	 */
 	public function import( $args, $assoc_args ) {
-
 		$this->setup_props();
+
 		$sites     = $this->get_all_sites();
 		$site_slug = $args[0];
 		if ( ! array_key_exists( $site_slug, $sites ) ) {
@@ -285,6 +260,7 @@ class WP_Cli {
 			\WP_CLI::warning( "Cannot import XML file. Either the file is not readable or it does not exist (${path})" );
 		}
 		$this->content_importer->import_file( $path, $json, $editor );
+		$this->content_importer->maybe_bust_elementor_cache();
 		\WP_CLI::success( 'Content imported.' );
 	}
 
@@ -294,6 +270,11 @@ class WP_Cli {
 	 * @param array $json_data site json data.
 	 */
 	private function import_plugins_for_starter_site( $json_data ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skin.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
+
 		$all_plugins = array();
 
 		if ( isset( $json_data['recommended_plugins'] ) ) {
@@ -320,16 +301,6 @@ class WP_Cli {
 	 *
 	 * ## OPTIONS
 	 *
-	 * [--source=<type>]
-	 * : Which source to list ( local or remote ).
-	 * ---
-	 * default: all
-	 * options:
-	 *   - local
-	 *   - remote
-	 *   - all
-	 * ---
-	 *
 	 * [--field=<field>]
 	 * : Which field to list.
 	 * ---
@@ -339,6 +310,20 @@ class WP_Cli {
 	 *   - editor
 	 *   - source
 	 *   - title
+	 *   - url
+	 * ---
+	 *
+	 * [--editor=<editor>]
+	 * : For which editor to list.
+	 * ---
+	 * default: null
+	 * options:
+	 *   - gutenberg
+	 *   - elementor
+	 *   - beaver
+	 *   - brizy
+	 *   - divi
+	 *   - thrive
 	 * ---
 	 *
 	 * [--show-url=<bool>]
@@ -360,16 +345,23 @@ class WP_Cli {
 	 */
 	public function list_sites( $args, $assoc_args ) {
 		$fields = array(
+			'title',
 			'slug',
 			'editor',
-			'source',
-			'title',
 		);
+
+		if ( $assoc_args['show-url'] === 'true' ) {
+			$fields[] = 'url';
+		}
+
+		$filtered_by_editor = $assoc_args['editor'] !== null;
+
+		$sites = $filtered_by_editor ? $this->get_all_sites( $assoc_args['editor'] ) : $this->get_all_sites();
 
 		if ( $assoc_args['field'] ) {
 			if ( in_array( $assoc_args['field'], $fields, true ) ) {
 				$formatter = new \WP_CLI\Formatter( $assoc_args, null );
-				$formatter->display_items( $this->get_all_sites(), array( $assoc_args['field'] ) );
+				$formatter->display_items( $sites, array( $assoc_args['field'] ) );
 			} else {
 				\WP_CLI::error( 'Error' );
 			}
@@ -377,11 +369,7 @@ class WP_Cli {
 			return;
 		}
 
-		if ( $assoc_args['show-url'] === 'true' ) {
-			$fields[] = 'url';
-		}
-
-		\WP_CLI\Utils\format_items( 'table', $this->get_all_sites( $assoc_args['source'] ), $fields );
+		\WP_CLI\Utils\format_items( 'table', $sites, $fields );
 	}
 
 	/**
@@ -393,15 +381,8 @@ class WP_Cli {
 	 * @return string
 	 */
 	private function get_starter_site_xml( $site, $json ) {
-		$source = $site['source'];
-		$slug   = $site['slug'];
-
-		if ( $source === 'local' ) {
-			return get_template_directory() . '/onboarding/' . $slug . '/export.xml';
-		}
 		set_time_limit( 0 );
 		\WP_CLI::line( 'Saving... ' . $json['content_file'] );
-
 		$response_file     = wp_remote_get( $json['content_file'] );
 		$content_file_path = $this->content_importer->save_xhr_return_path( wp_remote_retrieve_body( $response_file ) );
 		\WP_CLI::line( 'Saved content file in ' . $content_file_path );
@@ -417,20 +398,7 @@ class WP_Cli {
 	 * @return array
 	 */
 	private function get_starter_site_json( $site ) {
-		$slug   = $site['slug'];
-		$editor = $site['editor'];
-		$source = $site['source'];
-
-		global $wp_filesystem;
-		WP_Filesystem();
-		if ( $source === 'local' ) {
-			return json_decode( $wp_filesystem->get_contents( get_template_directory() . '/onboarding/' . $slug . '/data.json' ), true );
-		}
-		if ( isset( $site['local_json'] ) ) {
-			return json_decode( $wp_filesystem->get_contents( $site['local_json'] ), true );
-		}
-		$site_url      = isset( $site['remote_json'] ) ? $site['remote_json'] : $this->data[ $source ][ $editor ][ $slug ]['url'];
-		$request       = wp_remote_get( $site_url . 'wp-json/ti-demo-data/data' );
+		$request       = wp_remote_get( $site['url'] . 'wp-json/ti-demo-data/data' );
 		$response_code = wp_remote_retrieve_response_code( $request );
 		if ( $response_code !== 200 || empty( $request['body'] ) || ! isset( $request['body'] ) ) {
 			\WP_CLI::warning( 'Cannot get site json data.' );
