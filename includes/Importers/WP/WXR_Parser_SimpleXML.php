@@ -1,6 +1,7 @@
 <?php
 
 namespace TIOB\Importers\WP;
+use WP_Error;
 
 /**
  * WXR Parser that makes use of the SimpleXML PHP extension.

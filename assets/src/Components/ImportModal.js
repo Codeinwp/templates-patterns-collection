@@ -60,6 +60,8 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 
 	useEffect( () => {
 		const fetchAddress = siteData.remote_url || siteData.url;
+		// Use the line below if testing in a staging env:
+		// const fetchAddress = siteData.url || siteData.remote_url;
 		const url = new URL(
 			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
 		);
