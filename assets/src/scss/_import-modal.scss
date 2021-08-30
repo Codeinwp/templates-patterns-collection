@@ -54,9 +54,9 @@ $base-index: 100000;
 		}
 	}
 
-	.components-tooltip {
-		display: none;
-	}
+	//.components-tooltip {
+	//	display: none;
+	//}
 
 	.modal-body {
 		h3 {
@@ -299,11 +299,14 @@ $base-index: 100000;
 
 		.dashicon {
 			margin-left: 10px;
-			fill: #d9d9d9;
+			color: #888888;
+			font-size: 18px;
+			display: flex;
+			align-items: center;
+		}
 
-			&.active {
-				fill: $blue;
-			}
+		&.active .dashicon {
+			color: $blue;
 		}
 
 		.toggle-wrapper {

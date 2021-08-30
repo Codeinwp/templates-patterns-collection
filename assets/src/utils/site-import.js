@@ -10,6 +10,10 @@ export const importMods = ( data ) => {
 	return send( onboarding.root + '/import_theme_mods', data );
 };
 
+export const cleanupImport = ( data ) => {
+	return send( onboarding.root + '/cleanup', data );
+}
+
 export const installPlugins = ( pluginArray ) => {
 	return send( onboarding.root + '/install_plugins', pluginArray );
 };

@@ -8,6 +8,7 @@
 namespace TIOB;
 
 use FLBuilder;
+use TIOB\Importers\Cleanup\Active_State;
 
 /**
  * Class Main
@@ -113,6 +114,7 @@ class Main {
 		}
 		$this->setup_admin();
 		$this->setup_api();
+		$this->setup_active_state();
 	}
 
 	/**
@@ -191,6 +193,16 @@ class Main {
 	private function setup_api() {
 		$api = new Rest_Server();
 		$api->init();
+	}
+
+	/**
+	 * Setup Active State
+	 *
+	 * @return void;
+	 */
+	private function setup_active_state() {
+		$active_state = new Active_State();
+		$active_state->init();
 	}
 
 	/**
