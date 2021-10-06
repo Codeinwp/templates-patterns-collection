@@ -540,7 +540,7 @@ class WP_Import extends WP_Importer {
 						) ) {
 							$value = $this->replace_image_urls( $value );
 						}
-						add_post_meta( $post_id, $key, $value );
+						update_post_meta( $post_id, $key, $value );
 						do_action( 'import_post_meta', $post_id, $key, $value );
 						// if the post has a featured image, take note of this in case of remap
 						if ( '_thumbnail_id' == $key ) {
