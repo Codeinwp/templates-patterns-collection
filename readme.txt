@@ -39,6 +39,13 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 == Changelog ==
 
+##### [Version 1.1.18](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.17...v1.1.18) (2021-10-07)
+
+* Replace add_post_meta function with update_post_meta function to avoid duplicate meta keys.
+
+
+
+
 ##### [Version 1.1.17](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.16...v1.1.17) (2021-08-30)
 
 - add the capability to clean up previous import plugins and content before the next import
