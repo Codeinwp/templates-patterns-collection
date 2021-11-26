@@ -15,7 +15,7 @@ const ImportModalNote = ( { data, externalInstalled } ) => {
 					<span>
 						{ __(
 							'To import this demo you have to install the following plugins',
-							'neve'
+							'templates-patterns-collection'
 						) }
 					</span>
 				</h3>
@@ -46,7 +46,7 @@ const ImportModalNote = ( { data, externalInstalled } ) => {
 						<li>
 							{ __(
 								'Some of the demo images will not be imported and will be replaced by placeholder images.',
-								'neve'
+								'templates-patterns-collection'
 							) }
 						</li>
 					</Fragment>

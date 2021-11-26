@@ -139,7 +139,7 @@ const OnboardingContent = ( {
 				<p>
 					{ __(
 						'Starter sites could not be loaded. Please refresh and try again.',
-						'neve'
+						'templates-patterns-collection'
 					) }
 					{ isOnboarding && (
 						<Button
@@ -171,10 +171,11 @@ const OnboardingContent = ( {
 						{ __(
 							'No results found.',
 							'templates-patterns-collection'
-						) }&nbsp;
+						) }
+						&nbsp;
 						{ __(
 							'You can try a different search or use one of the categories below.',
-							'neve'
+							'templates-patterns-collection'
 						) }
 					</p>
 					<div className="tags">
