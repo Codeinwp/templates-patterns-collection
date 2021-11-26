@@ -34,7 +34,13 @@ const ImportModalNote = ( { data, externalInstalled } ) => {
 						<li>
 							{ __(
 								'We recommend you backup your website content before attempting a full site import.',
-								'neve'
+								'templates-patterns-collection'
+							) }
+						</li>
+						<li>
+							{ __(
+								'Widgets will be moved to the Inactive Widgets sidebar and can be retrieved from there.',
+								'templates-patterns-collection'
 							) }
 						</li>
 						<li>
