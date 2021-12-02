@@ -75,6 +75,18 @@ class Widgets_Importer {
 
 		$available_widgets = $this->available_widgets();
 
+		// Get previous value to reset on cleanup
+		do_action(
+			'themeisle_cl_add_item_to_property_state',
+			Active_State::WIDGETS_NSP,
+			array(
+				'id'    => 'sidebars_widgets',
+				'value' => get_option( 'sidebars_widgets' ),
+			)
+		);
+
+		$this->move_widgets_to_inactive();
+
 		$widget_instances = array();
 		foreach ( $available_widgets as $widget_data ) {
 			$widget_instances[ $widget_data['id_base'] ] = get_option( 'widget_' . $widget_data['id_base'] );
@@ -188,15 +200,6 @@ class Widgets_Importer {
 					// Add new instance to sidebar.
 					$sidebars_widgets[ $use_sidebar_id ][] = $new_instance_id;
 
-					// Get previous value to reset on cleanup
-					do_action(
-						'themeisle_cl_add_item_to_property_state',
-						Active_State::WIDGETS_NSP,
-						array(
-							'id'    => 'sidebars_widgets',
-							'value' => get_option( 'sidebars_widgets' ),
-						)
-					);
 					// Save the amended data.
 					update_option( 'sidebars_widgets', $sidebars_widgets );
 
@@ -249,4 +252,36 @@ class Widgets_Importer {
 
 	}
 
+	/**
+	 * Moves widgets to inactive widgets.
+	 */
+	private function move_widgets_to_inactive() {
+		$current_widgets  = get_option( 'sidebars_widgets' );
+		$move_to_inactive = array();
+		$clean_widgets    = array();
+
+		foreach ( $current_widgets as $widgets ) {
+			if ( ! is_array( $widgets ) ) {
+				continue;
+			}
+			$move_to_inactive = array_merge( $move_to_inactive, $widgets );
+		}
+
+		foreach ( $current_widgets as $sidebar_slug => $widgets ) {
+			if ( ! is_array( $widgets ) ) {
+				$clean_widgets[ $sidebar_slug ] = $widgets;
+				continue;
+			}
+
+			if ( $sidebar_slug === 'wp_inactive_widgets' ) {
+				$clean_widgets[ $sidebar_slug ] = $move_to_inactive;
+				continue;
+			}
+
+			$clean_widgets[ $sidebar_slug ] = array();
+		}
+
+		update_option( 'sidebars_widgets', $clean_widgets );
+	}
 }
+

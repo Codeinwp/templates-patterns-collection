@@ -22,6 +22,7 @@ const ImportModalMock = ( {} ) => (
 				<ol>
 					<li />
 					<li />
+					<li />
 				</ol>
 			</div>
 

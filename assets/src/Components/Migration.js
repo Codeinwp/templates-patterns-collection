@@ -46,7 +46,7 @@ const Migration = ( { data } ) => {
 					code: r.data || null,
 					message: __(
 						'Something went wrong while installing the necessary plugins.',
-						'neve'
+						'templates-patterns-collection'
 					),
 				} );
 				setMigrating( false );
@@ -62,7 +62,7 @@ const Migration = ( { data } ) => {
 						code: r.data || null,
 						message: __(
 							'Something went wrong while importing the website content.',
-							'neve'
+							'templates-patterns-collection'
 						),
 					} );
 					setMigrating( false );
@@ -104,7 +104,7 @@ const Migration = ( { data } ) => {
 										<h3>
 											{ __(
 												'The following plugins will be installed',
-												'neve'
+												'templates-patterns-collection'
 											) }
 											:
 										</h3>
@@ -130,7 +130,7 @@ const Migration = ( { data } ) => {
 							<p className="import-result">
 								{ __(
 									'Content was successfully imported. Enjoy your new site!',
-									'neve'
+									'templates-patterns-collection'
 								) }
 							</p>
 						) }
@@ -251,7 +251,7 @@ const Migration = ( { data } ) => {
 								setToast(
 									__(
 										'Something went wrong. Please reload the page and try again.',
-										'neve'
+										'templates-patterns-collection'
 									)
 								);
 								return false;
