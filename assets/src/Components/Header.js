@@ -14,8 +14,8 @@ import { addUrlHash, getTabHash } from '../utils/common';
 
 const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 	const buttons = {
-		starterSites: __( 'Starter Sites', 'neve' ),
-		pageTemplates: __( 'Page Templates', 'neve' ),
+		starterSites: __( 'Starter Sites', 'templates-patterns-collection' ),
+		pageTemplates: __( 'Page Templates', 'templates-patterns-collection' ),
 	};
 
 	const [ isSyncing, setSyncing ] = useState( false );
@@ -36,7 +36,7 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 		tiobDash.license.tier &&
 		tiobDash.license.tier === 3
 	) {
-		buttons.library = __( 'My Library', 'neve' );
+		buttons.library = __( 'My Library', 'templates-patterns-collection' );
 	}
 
 	const onHashChanged = () => {
@@ -122,7 +122,12 @@ const Header = ( {
 							{ ! tiobDash.brandedTheme && (
 								<Icon icon={ Logo } />
 							) }
-							<span>{ __( 'Templates Cloud', 'neve' ) }</span>
+							<span>
+								{ __(
+									'Templates Cloud',
+									'templates-patterns-collection'
+								) }
+							</span>
 						</h2>
 						<TabNavigation
 							setCurrentTab={ setCurrentTab }

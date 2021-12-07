@@ -15,7 +15,7 @@ const ImportModalNote = ( { data, externalInstalled } ) => {
 					<span>
 						{ __(
 							'To import this demo you have to install the following plugins',
-							'neve'
+							'templates-patterns-collection'
 						) }
 					</span>
 				</h3>
@@ -34,13 +34,19 @@ const ImportModalNote = ( { data, externalInstalled } ) => {
 						<li>
 							{ __(
 								'We recommend you backup your website content before attempting a full site import.',
-								'neve'
+								'templates-patterns-collection'
+							) }
+						</li>
+						<li>
+							{ __(
+								'Widgets will be moved to the Inactive Widgets sidebar and can be retrieved from there.',
+								'templates-patterns-collection'
 							) }
 						</li>
 						<li>
 							{ __(
 								'Some of the demo images will not be imported and will be replaced by placeholder images.',
-								'neve'
+								'templates-patterns-collection'
 							) }
 						</li>
 					</Fragment>

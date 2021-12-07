@@ -388,6 +388,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 		if ( ! general.widgets ) {
 			console.log( '[S] Widgets.' );
 			importDone();
+			return false;
 		}
 		setCurrentStep( 'widgets' );
 		console.log( '[P] Widgets.' );
