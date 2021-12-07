@@ -1,3 +1,8 @@
+##### [Version 1.1.19](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.18...v1.1.19) (2021-12-07)
+
+- widgets import was not skipped if toggle was off
+- reassign duplicated widgets to inactive widgets sidebar
+
 ##### [Version 1.1.18](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.17...v1.1.18) (2021-10-07)
 
 * Replace add_post_meta function with update_post_meta function to avoid duplicate meta keys.
