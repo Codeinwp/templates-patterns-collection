@@ -4,6 +4,7 @@ import { withSelect, withDispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
 import { Icon } from '@wordpress/components';
+import Notification from '../Notification';
 
 import Logo from '../Icon';
 import Search from '../Search';
@@ -119,6 +120,13 @@ const Filters = ( {
 						onlyProSites={ onlyProBuilders }
 						count={ counted.builders }
 					/>
+					{ ! tiobDash.isValidLicense && editor !== 'elementor' && (
+					<Notification
+						data={tiobDash.upsellNotifications['upsell_1'] }
+						editor={editor}
+					/>
+					)
+					}
 				</div>
 			</VizSensor>
 		</>

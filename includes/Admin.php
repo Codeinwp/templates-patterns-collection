@@ -147,25 +147,43 @@ class Admin {
 		$theme_name = apply_filters( 'ti_wl_theme_name', 'Neve' );
 
 		return array(
-			'nonce'          => wp_create_nonce( 'wp_rest' ),
-			'assets'         => TIOB_URL . '/assets/',
-			'upgradeURL'     => esc_url( apply_filters( 'neve_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/neve/upgrade/?utm_medium=aboutneve&utm_source=freevspro&utm_campaign=neve' ) ),
-			'strings'        => array(
+			'nonce'               => wp_create_nonce( 'wp_rest' ),
+			'assets'              => TIOB_URL . '/assets/',
+			'upgradeURL'          => esc_url( apply_filters( 'neve_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/neve/upgrade/?utm_medium=aboutneve&utm_source=freevspro&utm_campaign=neve' ) ),
+			'strings'             => array(
 				/* translators: %s - Theme name */
 				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
 			),
-			'cleanupAllowed' => ( ! empty( get_transient( Active_State::STATE_NAME ) ) ) ? 'yes' : 'no',
-			'onboarding'     => array(),
-			'hasFileSystem'  => WP_Filesystem(),
-			'themesURL'      => admin_url( 'themes.php' ),
-			'themeAction'    => $this->get_theme_action(),
-			'brandedTheme'   => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
-			'endpoint'       => TPC_TEMPLATES_CLOUD_ENDPOINT,
-			'params'         => array(
+			'cleanupAllowed'      => ( ! empty( get_transient( Active_State::STATE_NAME ) ) ) ? 'yes' : 'no',
+			'onboarding'          => array(),
+			'hasFileSystem'       => WP_Filesystem(),
+			'themesURL'           => admin_url( 'themes.php' ),
+			'themeAction'         => $this->get_theme_action(),
+			'brandedTheme'        => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
+			'endpoint'            => TPC_TEMPLATES_CLOUD_ENDPOINT,
+			'params'              => array(
 				'site_url'   => get_site_url(),
 				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 			),
+			'upsellNotifications' => $this->get_upsell_notifications(),
+			'isValidLicense' => $this->is_valid_license(),
 		);
+	}
+
+	/**
+	 * Neve Pro upsells.
+	 * @return array
+	 */
+	private function get_upsell_notifications() {
+
+		$notifications['upsell_1'] = array(
+			'text' => esc_html__( 'Upgrade to the Pro version and get instant access to all Premium Starter Sites — including Expert Sites — and much more.', 'neve' ),
+			'cta'  => __( 'Get Neve Pro Now', 'neve' ),
+			'url'  => 'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=templatecloud&utm_campaign=neve&utm_content=<builder_name>notice',
+		);
+
+		return $notifications;
+
 	}
 
 	/**
@@ -425,6 +443,23 @@ class Admin {
 				sprintf( '<code>WP_Filesystem</code>' )
 			),
 		);
+	}
+
+	/**
+	 * Check if the Neve Pro license is valid.
+	 *
+	 * @return bool 
+	 */
+	private function is_valid_license() {
+
+		$nv_pro_data = get_option( 'neve_pro_addon_license_data' ); 
+
+		if ( is_object( $nv_pro_data ) && $nv_pro_data->license === 'valid' ) {
+			return true;
+		}
+
+		return false;
+
 	}
 
 }
