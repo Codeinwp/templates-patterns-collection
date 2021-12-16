@@ -166,7 +166,7 @@ class Admin {
 				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
-			'isValidLicense' => $this->is_valid_license(),
+			'isValidLicense'      => $this->is_valid_license(),
 		);
 	}
 
@@ -177,8 +177,9 @@ class Admin {
 	private function get_upsell_notifications() {
 
 		$notifications['upsell_1'] = array(
-			'text' => esc_html__( 'Upgrade to the Pro version and get instant access to all Premium Starter Sites — including Expert Sites — and much more.', 'neve' ),
-			'cta'  => __( 'Get Neve Pro Now', 'neve' ),
+			// We use these strings in Neve already so lets reuse the translations here.
+			'text' => esc_html__( 'Upgrade to the Pro version and get instant access to all Premium Starter Sites — including Expert Sites — and much more.', 'neve' ), //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+			'cta'  => __( 'Get Neve Pro Now', 'neve' ), //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 			'url'  => 'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=templatecloud&utm_campaign=neve&utm_content=<builder_name>notice',
 		);
 
@@ -448,11 +449,11 @@ class Admin {
 	/**
 	 * Check if the Neve Pro license is valid.
 	 *
-	 * @return bool 
+	 * @return bool
 	 */
 	private function is_valid_license() {
 
-		$nv_pro_data = get_option( 'neve_pro_addon_license_data' ); 
+		$nv_pro_data = get_option( 'neve_pro_addon_license_data' );
 
 		if ( is_object( $nv_pro_data ) && $nv_pro_data->license === 'valid' ) {
 			return true;
