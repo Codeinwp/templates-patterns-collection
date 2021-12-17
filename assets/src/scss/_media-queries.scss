@@ -17,7 +17,6 @@
 	@include demo-site-templates--laptop();
 }
 
-
 @media (min-width: #{$desktop}) {
 	@include general--desktop();
 	@include ob-editor-tabs--desktop();
@@ -25,9 +24,12 @@
 	@include demo-site-templates--desktop();
 }
 
-
 @media (min-width: #{$desktop-large}) {
 	@include general--desktop-large();
 	@include card--desktop-large();
 	@include ob-editor-tabs--desktop-large();
+}
+
+@media( max-width: #{$tablet}){
+	@include notification--tablet();
 }
