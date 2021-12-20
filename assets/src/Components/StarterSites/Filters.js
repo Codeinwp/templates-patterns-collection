@@ -121,12 +121,11 @@ const Filters = ( {
 						count={ counted.builders }
 					/>
 					{ ! tiobDash.isValidLicense && (
-					<Notification
-						data={tiobDash.upsellNotifications['upsell_1'] }
-						editor={editor}
-					/>
-					)
-					}
+						<Notification
+							data={ tiobDash.upsellNotifications.upsell_1 }
+							editor={ editor }
+						/>
+					) }
 				</div>
 			</VizSensor>
 		</>
