@@ -4,6 +4,7 @@
 	@include ob-header--tablet();
 	@include ob-header--tablet();
 	@include library--tablet();
+	@include notification--tablet()
 }
 
 @media (min-width: #{$laptop}) {
@@ -28,8 +29,4 @@
 	@include general--desktop-large();
 	@include card--desktop-large();
 	@include ob-editor-tabs--desktop-large();
-}
-
-@media( max-width: #{$tablet}){
-	@include notification--tablet();
 }
