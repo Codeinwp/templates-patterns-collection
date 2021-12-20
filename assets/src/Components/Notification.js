@@ -1,5 +1,5 @@
 /* global tiobDash */
-import { Button } from '@wordpress/components';
+import { Button, Dashicon } from '@wordpress/components';
 
 const Notification = ({ editor, data }) => {
 	const { text, cta, url } = data;
@@ -10,7 +10,7 @@ const Notification = ({ editor, data }) => {
 				<p>{text}</p>
 				{url && cta && (
 					<Button target="_blank" isSecondary href={url.replace('<builder_name>', editor).replace(' ', '')}>
-						{cta}
+						{cta} <Dashicon icon="external" />
 					</Button>
 				)}
 			</div>

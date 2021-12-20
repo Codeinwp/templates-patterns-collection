@@ -51,6 +51,10 @@
     }
   }
 
+  .components-button .dashicon{
+    margin-left: 5px;
+  }
+
 }
 
 @mixin notification--tablet() {
