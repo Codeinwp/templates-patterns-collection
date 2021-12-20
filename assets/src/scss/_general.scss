@@ -220,6 +220,26 @@ svg.is-loading, button.is-loading svg {
 	}
 }
 
+.is-free {
+	.header-nav {
+		.components-button {
+			&[href="#library"] {
+				&::after {
+					content: "Pro";
+					border-radius: 2px;
+					background: #6EB77A;
+					color: #FFF;
+					padding: 2px 5px;
+					font-size: 10px;
+					top: -5px;
+					position: relative;
+					left: 5px;
+				}
+			}
+		}
+	}
+}
+
 .ob {
 	width: 100%;
 	display: flex;

@@ -224,6 +224,21 @@
 		grid-column-gap: 20px;
 		grid-row-gap: 20px;
 	}
+
+	.empty-information {
+		max-width: 500px;
+		margin: 0 auto;
+		text-align: center;
+
+		img {
+			max-width: 150px;
+		}
+
+		h3,
+		p {
+			color: #616161;
+		}
+	}
 }
 
 .table-grid {

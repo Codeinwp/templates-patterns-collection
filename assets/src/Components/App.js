@@ -7,7 +7,14 @@ const App = ( { onboarding } ) => {
 	const wrapClasses = classnames( [
 		'content-wrap',
 		'starter-sites',
-		{ 'is-onboarding': onboarding },
+		{
+			'is-onboarding': onboarding,
+			'is-free': ! (
+				window.tiobDash.license &&
+				window.tiobDash.license.tier &&
+				window.tiobDash.license.tier === 3
+			),
+		},
 	] );
 	return (
 		<div className="tiob-wrap">

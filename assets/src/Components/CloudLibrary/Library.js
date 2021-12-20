@@ -192,13 +192,13 @@ const Library = ( {
 
 	const handlePreview = ( url ) => {
 		setPreviewUrl( url );
-		setPreview(true);
+		setPreview( true );
 	};
 
 	const handleClose = () => {
 		setPreviewUrl( '' );
-		setPreview(false);
-	}
+		setPreview( false );
+	};
 
 	const handleImport = ( id ) => {
 		if ( themeStatus ) {
@@ -377,7 +377,28 @@ const Library = ( {
 							) }
 						</>
 					) : (
-						<Fragment>{ __( 'No templates found.' ) }</Fragment>
+						<div className="empty-information">
+							<img
+								src={
+									window.tiobDash.assets + '/img/layout.jpg'
+								}
+								alt={ __( 'No Templates Found' ) }
+							/>
+							<h3>{ __( 'There are no templates yet' ) }</h3>
+							<p>
+								{ __(
+									'You can add a page or post to the cloud by accessing it with the WordPress or Elementor/Beaver editor. Learn more about this in our docs.'
+								) }
+							</p>
+							<Button
+								variant="secondary"
+								isSecondary
+								href="https://docs.themeisle.com/article/1354-neve-template-cloud-library?utm_medium=nevedashboard&utm_source=templatecloud&utm_campaign=neve&utm_content=learnmore"
+								target="_blank"
+							>
+								{ __( 'Learn more' ) }
+							</Button>
+						</div>
 					) ) }
 				{ previewUrl && (
 					<PreviewFrame
@@ -426,21 +447,23 @@ const Library = ( {
 				toImport &&
 				! isLoading &&
 				toImport.length > 0 && (
-				<ImportTemplatesModal
-					generalTemplates={ true }
-					isUserTemplate={ ! isGeneral }
-					templatesData={ toImport }
-				/>
-			) }
+					<ImportTemplatesModal
+						generalTemplates={ true }
+						isUserTemplate={ ! isGeneral }
+						templatesData={ toImport }
+					/>
+				) }
 		</div>
 	);
 };
 
 export default compose(
 	withDispatch( ( dispatch ) => {
-		const { setInstallModalStatus, setTemplateModal, setPreviewStatus } = dispatch(
-			'neve-onboarding'
-		);
+		const {
+			setInstallModalStatus,
+			setTemplateModal,
+			setPreviewStatus,
+		} = dispatch( 'neve-onboarding' );
 
 		return {
 			setPreview: ( status ) => setPreviewStatus( status ),
