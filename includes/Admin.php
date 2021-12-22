@@ -166,7 +166,7 @@ class Admin {
 				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
-			'isValidLicense'      => $this->is_valid_license(),
+			'isValidLicense'      => $this->has_valid_addons(),
 		);
 	}
 
@@ -447,20 +447,32 @@ class Admin {
 	}
 
 	/**
-	 * Check if the Neve Pro license is valid.
+	 * Check validity of addons plugin.
 	 *
 	 * @return bool
 	 */
-	private function is_valid_license() {
-
-		$nv_pro_data = get_option( 'neve_pro_addon_license_data' );
-
-		if ( is_object( $nv_pro_data ) && $nv_pro_data->license === 'valid' ) {
-			return true;
+	private function has_valid_addons() {
+		if ( ! defined( 'NEVE_PRO_BASEFILE' ) ) {
+			return false;
 		}
 
-		return false;
+		$option_name = basename( dirname( NEVE_PRO_BASEFILE ) );
+		$option_name = str_replace( '-', '_', strtolower( trim( $option_name ) ) );
+		$status      = get_option( $option_name . '_license_data' );
 
+		if ( ! $status ) {
+			return false;
+		}
+
+		if ( ! isset( $status->license ) ) {
+			return false;
+		}
+
+		if ( $status->license === 'not_active' || $status->license === 'invalid' ) {
+			return false;
+		}
+
+		return true;
 	}
 
 }
