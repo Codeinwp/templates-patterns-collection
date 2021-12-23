@@ -1,5 +1,4 @@
-/* global tiobDash */
-import { Button, Dashicon } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 
 const Notification = ( { editor, data } ) => {
 	const { text, cta, url } = data;
@@ -16,7 +15,7 @@ const Notification = ( { editor, data } ) => {
 							.replace( '<builder_name>', editor )
 							.replace( ' ', '' ) }
 					>
-						{ cta } <Dashicon icon="external" />
+						{ cta }
 					</Button>
 				) }
 			</div>
