@@ -39,6 +39,13 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 == Changelog ==
 
+##### [Version 1.1.20](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.19...v1.1.20) (2021-12-23)
+
+- Improve upsells to better inform the possibilities from pro
+
+
+
+
 ##### [Version 1.1.19](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.18...v1.1.19) (2021-12-07)
 
 - widgets import was not skipped if toggle was off
