@@ -1,0 +1,71 @@
+.notification {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: $blue;
+  border: 1px solid darken($blue, 5%);
+  margin: 0 0 20px;
+  max-height: 1000px;
+
+  .components-button {
+		box-shadow: none;
+    margin: 10px 0 0;
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #FFFFFF;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: normal;
+    padding: 5px 10px;
+    height: auto;
+	  flex-shrink: 0;
+	&:hover {
+	  background-color: #fff;
+	  color: $blue;
+	  box-shadow: none;
+	}
+    span {
+      display: flex;
+      align-items: center;
+
+      svg {
+        height: 15px;
+        margin-right: 5px;
+      }
+    }
+  
+  }
+
+  p {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+	  flex-grow: 0;
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  .components-button .dashicon{
+    margin-left: 5px;
+  }
+
+}
+
+@mixin notification--tablet() {
+  .notification {
+    flex-wrap: nowrap;
+    padding: 10px;
+    p{
+      margin: 0;
+    }
+    .components-button{
+     margin: 0 0 0 auto;
+    }
+  }
+}
