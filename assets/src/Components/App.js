@@ -3,17 +3,13 @@ import classnames from 'classnames';
 
 import Onboarding from './Main';
 
-const App = ( { onboarding } ) => {
+const App = ( { onboarding, userStatus } ) => {
 	const wrapClasses = classnames( [
 		'content-wrap',
 		'starter-sites',
 		{
 			'is-onboarding': onboarding,
-			'is-free': ! (
-				window.tiobDash.license &&
-				window.tiobDash.license.tier &&
-				window.tiobDash.license.tier === 3
-			),
+			'is-free': ! userStatus,
 		},
 	] );
 	return (
@@ -32,8 +28,9 @@ const App = ( { onboarding } ) => {
 };
 
 export default withSelect( ( select ) => {
-	const { getOnboardingStatus } = select( 'neve-onboarding' );
+	const { getOnboardingStatus, getUserStatus } = select( 'neve-onboarding' );
 	return {
 		onboarding: getOnboardingStatus(),
+		userStatus: getUserStatus(),
 	};
 } )( App );

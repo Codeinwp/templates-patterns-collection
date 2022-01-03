@@ -4,7 +4,7 @@ import VizSensor from 'react-visibility-sensor';
 import { chevronLeft, chevronRight, close } from '@wordpress/icons';
 import { useEffect, useState, Fragment } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
-import { Spinner, Button } from '@wordpress/components';
+import { Spinner, Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { __, isRTL } from '@wordpress/i18n';
 
@@ -14,6 +14,7 @@ import Loading from '../Loading';
 import Filters from './Filters';
 import PreviewFrame from './PreviewFrame';
 import ImportTemplatesModal from './ImportTemplatesModal';
+import Logo from '../Icon';
 
 const Library = ( {
 	isGeneral,
@@ -23,6 +24,7 @@ const Library = ( {
 	templateModal,
 	themeStatus,
 	currentTab,
+	userStatus,
 } ) => {
 	const [ library, setLibrary ] = useState( {
 		gutenberg: [],
@@ -216,7 +218,10 @@ const Library = ( {
 	const previewedItem =
 		library[ type ] &&
 		library[ type ].find( ( item ) => previewUrl === item.link );
-	const wrapClasses = classnames( 'cloud-items', { 'is-grid': isGrid } );
+	const wrapClasses = classnames( 'cloud-items', {
+		'is-grid': isGrid || ( ! userStatus && ! isGeneral ),
+		'is-dummy': ! userStatus && ! isGeneral,
+	} );
 
 	const handlePrevious = () => {
 		let newIndex = currentPreviewIndex - 1;
@@ -281,6 +286,55 @@ const Library = ( {
 			setLoading( false );
 		} );
 	};
+
+	if ( ! userStatus && ! isGeneral ) {
+		return (
+			<div className={ wrapClasses }>
+				<div className="table">
+					{ [ ...Array( 12 ) ].map( ( i, n ) => (
+						<ListItem
+							sortingOrder={ getOrder() }
+							onPreview={ handlePreview }
+							userTemplate={ false }
+							key={ n }
+							item={ {} }
+							grid={ true }
+						/>
+					) ) }
+				</div>
+
+				<div className="upsell-modal-overlay">
+					<div className="upsell-modal">
+						<div className="upsell-modal-content">
+							<div className="info">
+								<h3>
+									{ __( 'Templates Cloud is a PRO Feature' ) }
+								</h3>
+
+								<p>
+									{ __(
+										'Unlock all the template cloud features and save your pages or posts in the cloud.'
+									) }
+								</p>
+
+								<Button
+									variant="primary"
+									isPrimary
+									href="https://themeisle.com/themes/neve/pricing/?utm_medium=nevedashboard&utm_source=templatecloud&utm_campaign=neve&utm_content=upgradetoprobtn"
+									target="_blank"
+								>
+									{ __( 'Upgrade to Pro' ) }
+								</Button>
+							</div>
+							<div className="icon">
+								<Icon icon={ Logo } />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className={ wrapClasses }>
@@ -477,6 +531,7 @@ export default compose(
 			getThemeAction,
 			getCurrentEditor,
 			getCurrentTab,
+			getUserStatus,
 		} = select( 'neve-onboarding' );
 
 		return {
@@ -484,6 +539,7 @@ export default compose(
 			themeStatus: getThemeAction().action || false,
 			editor: getCurrentEditor(),
 			currentTab: getCurrentTab(),
+			userStatus: getUserStatus(),
 		};
 	} )
 )( Library );
