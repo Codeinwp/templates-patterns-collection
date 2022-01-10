@@ -324,7 +324,7 @@ const Library = ( {
 									https://themeisle.com/themes/neve/neve-upgrade-new/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=changeplanbtn"
 									target="_blank"
 								>
-									{ __( 'Upgrade to Pro' ) }
+									{ __( 'Upgrade to PRO' ) }
 								</Button>
 							</div>
 							<div className="icon">
