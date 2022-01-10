@@ -313,14 +313,15 @@ const Library = ( {
 
 								<p>
 									{ __(
-										'Unlock all the template cloud features and save your pages or posts in the cloud.'
+										'Unlock the Template Cloud features and save your pages or posts in the cloud.'
 									) }
 								</p>
 
 								<Button
 									variant="primary"
 									isPrimary
-									href="https://themeisle.com/themes/neve/pricing/?utm_medium=nevedashboard&utm_source=templatecloud&utm_campaign=neve&utm_content=upgradetoprobtn"
+									href="https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=upgradetoprobtn and
+									https://themeisle.com/themes/neve/neve-upgrade-new/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=changeplanbtn"
 									target="_blank"
 								>
 									{ __( 'Upgrade to Pro' ) }
