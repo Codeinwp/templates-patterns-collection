@@ -313,7 +313,7 @@ const Library = ( {
 
 								<p>
 									{ __(
-										'Unlock the Template Clouds features and save your pages or posts in the cloud.'
+										'Unlock the Templates Cloud features and save your pages or posts in the cloud.'
 									) }
 								</p>
 
