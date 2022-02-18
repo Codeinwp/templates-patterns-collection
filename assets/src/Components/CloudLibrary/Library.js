@@ -4,7 +4,7 @@ import VizSensor from 'react-visibility-sensor';
 import { chevronLeft, chevronRight, close } from '@wordpress/icons';
 import { useEffect, useState, Fragment } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
-import { Spinner, Button } from '@wordpress/components';
+import { Spinner, Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { __, isRTL } from '@wordpress/i18n';
 
@@ -14,6 +14,7 @@ import Loading from '../Loading';
 import Filters from './Filters';
 import PreviewFrame from './PreviewFrame';
 import ImportTemplatesModal from './ImportTemplatesModal';
+import Logo from '../Icon';
 
 const Library = ( {
 	isGeneral,
@@ -23,6 +24,7 @@ const Library = ( {
 	templateModal,
 	themeStatus,
 	currentTab,
+	userStatus,
 } ) => {
 	const [ library, setLibrary ] = useState( {
 		gutenberg: [],
@@ -192,13 +194,13 @@ const Library = ( {
 
 	const handlePreview = ( url ) => {
 		setPreviewUrl( url );
-		setPreview(true);
+		setPreview( true );
 	};
 
 	const handleClose = () => {
 		setPreviewUrl( '' );
-		setPreview(false);
-	}
+		setPreview( false );
+	};
 
 	const handleImport = ( id ) => {
 		if ( themeStatus ) {
@@ -216,7 +218,10 @@ const Library = ( {
 	const previewedItem =
 		library[ type ] &&
 		library[ type ].find( ( item ) => previewUrl === item.link );
-	const wrapClasses = classnames( 'cloud-items', { 'is-grid': isGrid } );
+	const wrapClasses = classnames( 'cloud-items', {
+		'is-grid': isGrid || ( ! userStatus && ! isGeneral ),
+		'is-dummy': ! userStatus && ! isGeneral,
+	} );
 
 	const handlePrevious = () => {
 		let newIndex = currentPreviewIndex - 1;
@@ -281,6 +286,56 @@ const Library = ( {
 			setLoading( false );
 		} );
 	};
+
+	if ( ! userStatus && ! isGeneral ) {
+		return (
+			<div className={ wrapClasses }>
+				<div className="table">
+					{ [ ...Array( 12 ) ].map( ( i, n ) => (
+						<ListItem
+							sortingOrder={ getOrder() }
+							onPreview={ handlePreview }
+							userTemplate={ false }
+							key={ n }
+							item={ {} }
+							grid={ true }
+						/>
+					) ) }
+				</div>
+
+				<div className="upsell-modal-overlay">
+					<div className="upsell-modal">
+						<div className="upsell-modal-content">
+							<div className="info">
+								<h3>
+									{ __( 'Templates Cloud is a PRO Feature' ) }
+								</h3>
+
+								<p>
+									{ __(
+										'Unlock the Templates Cloud features and save your pages or posts in the cloud.'
+									) }
+								</p>
+
+								<Button
+									variant="primary"
+									isPrimary
+									href="https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=upgradetoprobtn and
+									https://themeisle.com/themes/neve/neve-upgrade-new/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=changeplanbtn"
+									target="_blank"
+								>
+									{ __( 'Upgrade to PRO' ) }
+								</Button>
+							</div>
+							<div className="icon">
+								<Icon icon={ Logo } />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className={ wrapClasses }>
@@ -377,7 +432,28 @@ const Library = ( {
 							) }
 						</>
 					) : (
-						<Fragment>{ __( 'No templates found.' ) }</Fragment>
+						<div className="empty-information">
+							<img
+								src={
+									window.tiobDash.assets + '/img/layout.jpg'
+								}
+								alt={ __( 'No Templates Found' ) }
+							/>
+							<h3>{ __( 'There are no templates yet' ) }</h3>
+							<p>
+								{ __(
+									'You can add a page or post to the cloud by accessing it with the WordPress or Elementor/Beaver editor. Learn more about this in our docs.'
+								) }
+							</p>
+							<Button
+								variant="secondary"
+								isSecondary
+								href="https://docs.themeisle.com/article/1354-neve-template-cloud-library?utm_medium=nevedashboard&utm_source=templatecloud&utm_campaign=neve&utm_content=learnmore"
+								target="_blank"
+							>
+								{ __( 'Learn more' ) }
+							</Button>
+						</div>
 					) ) }
 				{ previewUrl && (
 					<PreviewFrame
@@ -426,21 +502,23 @@ const Library = ( {
 				toImport &&
 				! isLoading &&
 				toImport.length > 0 && (
-				<ImportTemplatesModal
-					generalTemplates={ true }
-					isUserTemplate={ ! isGeneral }
-					templatesData={ toImport }
-				/>
-			) }
+					<ImportTemplatesModal
+						generalTemplates={ true }
+						isUserTemplate={ ! isGeneral }
+						templatesData={ toImport }
+					/>
+				) }
 		</div>
 	);
 };
 
 export default compose(
 	withDispatch( ( dispatch ) => {
-		const { setInstallModalStatus, setTemplateModal, setPreviewStatus } = dispatch(
-			'neve-onboarding'
-		);
+		const {
+			setInstallModalStatus,
+			setTemplateModal,
+			setPreviewStatus,
+		} = dispatch( 'neve-onboarding' );
 
 		return {
 			setPreview: ( status ) => setPreviewStatus( status ),
@@ -454,6 +532,7 @@ export default compose(
 			getThemeAction,
 			getCurrentEditor,
 			getCurrentTab,
+			getUserStatus,
 		} = select( 'neve-onboarding' );
 
 		return {
@@ -461,6 +540,7 @@ export default compose(
 			themeStatus: getThemeAction().action || false,
 			editor: getCurrentEditor(),
 			currentTab: getCurrentTab(),
+			userStatus: getUserStatus(),
 		};
 	} )
 )( Library );

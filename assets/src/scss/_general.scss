@@ -204,6 +204,7 @@ svg.is-loading, button.is-loading svg {
 		display: flex;
 		justify-content: flex-end;
 		align-items: flex-end;
+		z-index: 1;
 
 		button.close-onboarding {
 			color: #676767;
@@ -220,6 +221,26 @@ svg.is-loading, button.is-loading svg {
 	}
 }
 
+.is-free {
+	.header-nav {
+		.components-button {
+			&[href="#library"] {
+				&::after {
+					content: "PRO";
+					border-radius: 2px;
+					background: #6EB77A;
+					color: #FFF;
+					padding: 2px 5px;
+					font-size: 10px;
+					top: -5px;
+					position: relative;
+					left: 5px;
+				}
+			}
+		}
+	}
+}
+
 .ob {
 	width: 100%;
 	display: flex;
@@ -233,6 +254,7 @@ svg.is-loading, button.is-loading svg {
 		width: 100%;
 		display: flex;
 		justify-content: center;
+		z-index: 1;
 
 		.header-container {
 			display: flex;

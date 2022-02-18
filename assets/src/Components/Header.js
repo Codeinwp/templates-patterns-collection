@@ -16,6 +16,7 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 	const buttons = {
 		starterSites: __( 'Starter Sites', 'templates-patterns-collection' ),
 		pageTemplates: __( 'Page Templates', 'templates-patterns-collection' ),
+		library: __( 'My Library', 'templates-patterns-collection' ),
 	};
 
 	const [ isSyncing, setSyncing ] = useState( false );
@@ -30,14 +31,6 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 			setSyncing( false );
 		}, 100 );
 	};
-
-	if (
-		tiobDash.license &&
-		tiobDash.license.tier &&
-		tiobDash.license.tier === 3
-	) {
-		buttons.library = __( 'My Library', 'templates-patterns-collection' );
-	}
 
 	const onHashChanged = () => {
 		const hash = getTabHash(buttons);
