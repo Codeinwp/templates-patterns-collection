@@ -1,3 +1,8 @@
+##### [Version 1.1.21](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.20...v1.1.21) (2022-02-21)
+
+- Remove upsell from Gutenberg tab
+- Improve no template screen
+
 ##### [Version 1.1.20](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.19...v1.1.20) (2021-12-23)
 
 - Improve upsells to better inform the possibilities from pro
