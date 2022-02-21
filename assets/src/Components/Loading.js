@@ -9,7 +9,7 @@ const Loading = ( { isGrid } ) => {
 							<div className="card-footer">
 								<p className="title loading" style={ {
 									height: 14,
-									'background-color': '#f3f3f3',
+									backgroundColor: '#f3f3f3',
 								} } />
 							</div>
 						</div>
