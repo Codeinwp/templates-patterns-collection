@@ -509,7 +509,9 @@ class WP_Import extends WP_Importer {
 			if ( ! empty( $post['comments'] ) ) {
 				foreach ( $post['comments'] as $comment ) {
 					$comment['comment_post_ID'] = $post_id;
-					$comment_id                 = wp_insert_comment( $comment );
+					$comment['comment_meta']    = array_combine( array_column( $comment['commentmeta'], 'key' ), array_column( $comment['commentmeta'], 'value' ) );
+					unset( $comment['commentmeta'] );
+					$comment_id = wp_insert_comment( $comment );
 					if ( $comment_id === false ) {
 						$this->logger->log( "Could not import comment for {$post_id}." );
 						continue;
