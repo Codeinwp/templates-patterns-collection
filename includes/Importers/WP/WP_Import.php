@@ -636,7 +636,7 @@ class WP_Import extends WP_Importer {
 		$args     = apply_filters( 'wp_import_nav_menu_item_args', $args, $this->base_blog_url );
 		$existing = wp_get_nav_menu_items( $menu_id );
 		foreach ( $existing as $existing_item ) {
-			if ( $args['menu-item-url'] === $existing_item->url ) {
+			if ( $args['menu-item-url'] === $existing_item->url && trim( $args['menu-item-title'] ) === $existing_item->title ) {
 				$this->logger->log( 'Menu item already exists.', 'success' );
 
 				return;
