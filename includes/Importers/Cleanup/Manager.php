@@ -155,6 +155,11 @@ class Manager {
 				wp_delete_post( $post_id, true );
 			}
 		}
+		if ( isset( $state[ Active_State::COMMENTS_NSP ] ) ) {
+			foreach ( $state[ Active_State::COMMENTS_NSP ] as $comment_id ) {
+				wp_delete_comment( $comment_id, true );
+			}
+		}
 	}
 
 	/**
