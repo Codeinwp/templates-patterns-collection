@@ -50,7 +50,9 @@ const EditorTabs = ( {
 						</span>
 						<span className="count">{ count[ key ] }</span>
 						{ onlyProSites.includes( key ) && (
-							<span className="pro-badge">PRO</span>
+							<span className="pro-badge">
+								{ __( 'Premium', 'templates-patterns-collection' ) }
+							</span>
 						) }
 					</a>
 				);
