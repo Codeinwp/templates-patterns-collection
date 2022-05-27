@@ -506,6 +506,19 @@ class WP_Import extends WP_Importer {
 				$post['comments'] = array();
 			}
 			$post['comments'] = apply_filters( 'wp_import_post_comments', $post['comments'], $post_id, $post );
+			if ( ! empty( $post['comments'] ) ) {
+				foreach ( $post['comments'] as $comment ) {
+					$comment['comment_post_ID'] = $post_id;
+					$comment['comment_meta']    = array_combine( array_column( $comment['commentmeta'], 'key' ), array_column( $comment['commentmeta'], 'value' ) );
+					unset( $comment['commentmeta'] );
+					$comment_id = wp_insert_comment( $comment );
+					if ( $comment_id === false ) {
+						$this->logger->log( "Could not import comment for {$post_id}." );
+						continue;
+					}
+					do_action( 'themeisle_cl_add_item_to_property_state', Active_State::COMMENTS_NSP, $comment_id );
+				}
+			}
 
 			if ( ! isset( $post['postmeta'] ) ) {
 				$post['postmeta'] = array();
@@ -636,7 +649,7 @@ class WP_Import extends WP_Importer {
 		$args     = apply_filters( 'wp_import_nav_menu_item_args', $args, $this->base_blog_url );
 		$existing = wp_get_nav_menu_items( $menu_id );
 		foreach ( $existing as $existing_item ) {
-			if ( $args['menu-item-url'] === $existing_item->url ) {
+			if ( $args['menu-item-url'] === $existing_item->url && trim( $args['menu-item-title'] ) === $existing_item->title ) {
 				$this->logger->log( 'Menu item already exists.', 'success' );
 
 				return;

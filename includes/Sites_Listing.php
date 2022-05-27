@@ -72,9 +72,26 @@ class Sites_Listing {
 	 */
 	final public static function get_api_path() {
 		if ( defined( 'TPC_USE_STAGING' ) && TPC_USE_STAGING === true ) {
-			return ( defined( 'TPC_API_STAGING' ) && ! empty( TPC_API_STAGING ) ) ? TPC_API_STAGING : self::API;
+			return ( ( defined( 'TPC_API_STAGING' ) && ! empty( TPC_API_STAGING ) ) ? TPC_API_STAGING : self::API ) . self::add_query_args();
 		}
-		return self::API;
+		return self::API . self::add_query_args();
+	}
+
+	/**
+	 * Allows adding $_GET arguments to API path.
+	 *
+	 * @return string
+	 */
+	private static function add_query_args() {
+		$query_args   = array();
+		$allowed_keys = array(
+			'show-legacy-sites',
+		);
+		// filter all keys that are not in $allowed_keys since the filter can provide third parties access to the URL.
+		$query_args   = array_intersect_key( apply_filters( 'tpc_starter_api_query_filter', $query_args ), array_flip( $allowed_keys ) );
+		$query_string = http_build_query( $query_args );
+
+		return ( ! empty( $query_string ) ) ? '?' . $query_string : '';
 	}
 
 	/**

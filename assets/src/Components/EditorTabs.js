@@ -4,6 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 
+import { Dashicon } from '@wordpress/components';
 const EditorTabs = ( {
 	EDITOR_MAP,
 	count,
@@ -46,12 +47,19 @@ const EditorTabs = ( {
 							/>
 						</span>
 						<span className="editor">
+							{ onlyProSites.includes( key ) && (
+								<Dashicon
+									icon="lock"
+									style={ {
+										fontSize: '16px',
+										width: '16px',
+										height: '16px',
+									} }
+								/>
+							) }
 							{ EDITOR_MAP[ key ].niceName }
 						</span>
 						<span className="count">{ count[ key ] }</span>
-						{ onlyProSites.includes( key ) && (
-							<span className="pro-badge">PRO</span>
-						) }
 					</a>
 				);
 			} ) }

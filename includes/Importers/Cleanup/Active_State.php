@@ -21,6 +21,7 @@ class Active_State {
 	const TAGS_NSP        = 'tags';
 	const TERMS_NSP       = 'terms';
 	const POSTS_NSP       = 'posts';
+	const COMMENTS_NSP    = 'comments';
 	const ATTACHMENT_NSP  = 'attachment';
 	const FRONT_PAGE_NSP  = 'front_page_options';
 	const SHOP_PAGE_NSP   = 'shop_page_options';
@@ -56,6 +57,7 @@ class Active_State {
 				self::TAGS_NSP,
 				self::TERMS_NSP,
 				self::POSTS_NSP,
+				self::COMMENTS_NSP,
 				self::ATTACHMENT_NSP,
 				self::THEME_MODS_NSP,
 				self::MENUS_NSP,

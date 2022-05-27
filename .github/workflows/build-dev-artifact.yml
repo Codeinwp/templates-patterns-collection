@@ -1,5 +1,9 @@
 name: Build and test
 
+# Cancel previous workflow run groups that have not completed.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
+  cancel-in-progress: true
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review]
