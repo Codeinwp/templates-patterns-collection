@@ -179,7 +179,7 @@ class Admin {
 		$notifications['upsell_1'] = array(
 			// We use these strings in Neve already so lets reuse the translations here.
 			'text' => esc_html__( 'Purchase the Business plan or higher to get instant access to all Premium Starter Site Templates — including Expert Sites — and much more.', 'neve' ), //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
-			'cta'  => __( 'Get Neve PRO Now', 'neve' ), //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+			'cta'  => __( 'Get Neve Business', 'neve' ), //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 			'url'  => 'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=templatecloud&utm_campaign=neve&utm_content=<builder_name>notice',
 		);
 

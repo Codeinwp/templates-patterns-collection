@@ -120,7 +120,7 @@ const Filters = ( {
 						onlyProSites={ onlyProBuilders }
 						count={ counted.builders }
 					/>
-					{ ! tiobDash.isValidLicense && editor !== 'gutenberg' && (
+					{ ! tiobDash.isValidLicense && (
 						<Notification
 							data={ tiobDash.upsellNotifications.upsell_1 }
 							editor={ editor }

@@ -56,6 +56,7 @@ const StarterSiteCard = ( {
 		>
 			<div className="top">
 				<div className={ 'actions ' + actionsClass }>
+
 					<Button isSecondary onClick={ launchPreview }>
 						{ __( 'Preview', 'templates-patterns-collection' ) }
 					</Button>
@@ -66,6 +67,19 @@ const StarterSiteCard = ( {
 							onClick={ launchImport }
 						>
 							{ __( 'Import', 'templates-patterns-collection' ) }
+						</Button>
+					) }
+					{ ! has_templates && upsell && (
+						<Button
+							isLink
+							className="templates"
+							target="_blank"
+							href="https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=unlockprobtn"
+						>
+							{ __(
+								'Unlock access with Business plan',
+								'templates-patterns-collection'
+							) }
 						</Button>
 					) }
 					{ has_templates && (

@@ -15,7 +15,6 @@ import classnames from 'classnames';
 import ImportModalError from './ImportModalError';
 import ImportModalMock from './ImportModalMock';
 import CustomTooltip from './CustomTooltip';
-
 import { useState, useEffect } from '@wordpress/element';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
@@ -27,6 +26,7 @@ import {
 	ToggleControl,
 	Modal,
 	Panel,
+	Tooltip,
 	PanelBody,
 	PanelRow,
 } from '@wordpress/components';
@@ -150,6 +150,10 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 			content: {
 				title: __( 'Content', 'templates-patterns-collection' ),
 				icon: 'admin-post',
+				tooltip: __(
+					'We recommend you backup your website content before attempting a full site import.',
+					'templates-patterns-collection'
+				),
 			},
 			customizer: {
 				title: __( 'Customizer', 'templates-patterns-collection' ),
@@ -158,6 +162,10 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 			widgets: {
 				title: __( 'Widgets', 'templates-patterns-collection' ),
 				icon: 'admin-generic',
+				tooltip: __(
+					'Widgets will be moved to the Inactive Widgets sidebar and can be retrieved from there.',
+					'templates-patterns-collection'
+				),
 			},
 		};
 
