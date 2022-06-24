@@ -108,6 +108,7 @@ class Sites_Listing {
 	 */
 	private function get_sites() {
 		$cache = get_transient( $this->transient_key );
+
 		if ( $cache !== false ) {
 			$response = $cache;
 		} else {
