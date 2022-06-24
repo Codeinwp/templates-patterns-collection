@@ -8,10 +8,12 @@ import Notification from '../Notification';
 
 import Logo from '../Icon';
 import Search from '../Search';
-import { CATEGORIES, EDITOR_MAP } from '../../utils/common';
+import { CATEGORIES, EDITOR_MAP, isTabbedEditor } from '../../utils/common';
 import EditorSelector from '../EditorSelector';
 import VizSensor from 'react-visibility-sensor';
 import EditorTabs from '../EditorTabs';
+import CategoriesTabs from '../CategoriesTabs';
+import CategorySelector from "../CategorySelector";
 
 const Filters = ( {
 	filterByCategory,
@@ -79,14 +81,28 @@ const Filters = ( {
 						) }
 						<Search
 							className="in-sticky"
-							count={ counted.categories }
+							count={
+								isTabbedEditor
+									? counted.categories
+									: counted.builders
+							}
 							categories={ CATEGORIES }
+							editors={ EDITOR_MAP }
+							onlyProSites={ onlyProBuilders }
 						/>
-						<EditorSelector
-							isSmall
-							count={ counted.builders }
-							EDITOR_MAP={ EDITOR_MAP }
-						/>
+						{ isTabbedEditor && (
+							<EditorSelector
+								isSmall
+								count={ counted.builders }
+								EDITOR_MAP={ EDITOR_MAP }
+							/>
+						) }
+						{ ! isTabbedEditor && (
+							<CategorySelector
+								count={ counted.categories }
+								categories={ CATEGORIES }
+							/>
+						) }
 					</div>
 				</div>
 			) }
@@ -111,15 +127,29 @@ const Filters = ( {
 					/>
 
 					<Search
-						count={ counted.categories }
+						count={
+							isTabbedEditor
+								? counted.categories
+								: counted.builders
+						}
 						categories={ CATEGORIES }
+						editors={ EDITOR_MAP }
+						onlyProSites={ onlyProBuilders }
 					/>
 
-					<EditorTabs
-						EDITOR_MAP={ EDITOR_MAP }
-						onlyProSites={ onlyProBuilders }
-						count={ counted.builders }
-					/>
+					{ isTabbedEditor && (
+						<EditorTabs
+							EDITOR_MAP={ EDITOR_MAP }
+							onlyProSites={ onlyProBuilders }
+							count={ counted.builders }
+						/>
+					) }
+					{ ! isTabbedEditor && (
+						<CategoriesTabs
+							categories={ CATEGORIES }
+							count={ counted.categories }
+						/>
+					) }
 					{ ! tiobDash.isValidLicense && (
 						<Notification
 							data={ tiobDash.upsellNotifications.upsell_1 }

@@ -16,6 +16,25 @@
     left: 10px;
   }
 
+  .label-editor {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .icon-wrap{
+      width: 30px;
+      margin-right: 10px;
+      img {
+        position: relative;
+        opacity: 1;
+        width: 100%;
+        top: auto;
+        left: auto;
+        transform: unset;
+        border-radius: 50%;
+      }
+    }
+  }
+
   .ob-dropdown {
     width: 100%;
     height: 52px;
