@@ -108,11 +108,9 @@ class Sites_Listing {
 	 */
 	private function get_sites() {
 		$cache = get_transient( $this->transient_key );
-		$cache = false;
 		if ( $cache !== false ) {
 			$response = $cache;
 		} else {
-			add_filter('https_ssl_verify', '__return_false');
 			$response = wp_remote_get( esc_url( self::get_api_path() ) );
 
 			if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
