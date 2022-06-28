@@ -17,6 +17,21 @@
 		overflow: hidden;
 	}
 
+	.new-badge {
+		position: absolute;
+		display: block;
+		z-index: 25;
+		padding: 5px 7px;
+		left: -10px;
+		top: 8px;
+		border-radius: 2px;
+		background-color: #D5E5F6;
+		font-style: normal;
+		font-weight: 800;
+		font-size: 12px;
+		color: #585858;
+	}
+
 	.fav {
 		position: absolute;
 		z-index: 2000;
