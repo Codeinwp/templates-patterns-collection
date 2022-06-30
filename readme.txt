@@ -39,6 +39,14 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 == Changelog ==
 
+##### [Version 1.1.23](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.22...v1.1.23) (2022-06-30)
+
+Removed unsupported builders from the list
+Enhanced and changed layout
+
+
+
+
 ##### [Version 1.1.22](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.21...v1.1.22) (2022-05-27)
 
 Enhance compatibility with Woocommerce Starter Sites
