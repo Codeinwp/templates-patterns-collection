@@ -1,15 +1,15 @@
 describe('Dashboard Page - Default', function () {
-  const EDITORS = ['gutenberg', 'elementor', 'brizy', 'beaver', 'divi', 'thrive'];
-  const CATEGORIES = [
-    'All Categories',
-    'Free',
-    'Business',
-    'Portfolio',
-    'WooCommerce',
-    'Blog',
-    'Personal',
-    'Other',
-  ];
+  const EDITORS = ['gutenberg', 'elementor'];
+  const CATEGORIES = {
+    all: 'All Categories',
+    free: 'Free',
+    business: 'Business',
+    portfolio: 'Portfolio',
+    woocommerce: 'WooCommerce',
+    blog: 'Blog',
+    personal: 'Personal',
+    other: 'Other',
+  };
 
   before(function () {
     cy.visit('/');
@@ -68,46 +68,48 @@ describe('Dashboard Page - Default', function () {
     cy.get('.header-form:not(.in-sticky) .search input').clear();
   });
 
-  it('Editor Tabs Functionality', function () {
-    cy.get('.tab.gutenberg').should('have.class', 'active');
-    EDITORS.map((editor) => {
-      cy.get(`.tab.${editor}`).as('tab');
+  it('Categories Tabs Functionality', function () {
+    cy.get('.tab.all').should('have.class', 'active');
+    Object.keys(CATEGORIES).map((category) => {
+      cy.get(`.tab.${category}`).as('tab');
       cy.get('@tab').click();
       cy.get('@tab').should('have.class', 'active');
     });
-    cy.get('.tab.gutenberg').click().should('have.class', 'active');
+    cy.get('.tab.all').click().should('have.class', 'active');
   });
-  it('Categories Functionality', function () {
-    const ALL = 'All Categories';
+  it('Editor Functionality', function () {
+    const GTB = 'Gutenberg';
     cy.get('.categories-selector button').last().as('dropdown');
 
-    CATEGORIES.map((category) => {
-      if (category === ALL) {
+    EDITORS.map((editor) => {
+      const editorName = editor.charAt(0).toUpperCase() + editor.slice(1);
+      if (editorName === GTB) {
         return;
       }
       cy.get('@dropdown').click({ force: true });
-      cy.get('.categories-selector li').contains(category).click();
-      cy.get('.categories-selector button').should('contain', category);
+      cy.get('.categories-selector li').contains(editorName).click();
+      cy.get('.categories-selector button').should('contain', editorName);
     });
     cy.get('@dropdown').click({ force: true });
-    cy.get('.categories-selector li').contains(ALL).click();
-    cy.get('.categories-selector button').should('contain', ALL);
+    cy.get('.categories-selector li').contains(GTB).click();
+    cy.get('.categories-selector button').should('contain', GTB);
   });
 
   it('Sticky Nav Works', function () {
     cy.scrollTo('top');
     const CATEGORY = 'Blog';
+    const EDITOR = 'Elementor';
     cy.get('.sticky-nav').should('exist');
     cy.get('.header-form .search input').last().type(CATEGORY);
     cy.get('.categories-selector button').last().click({ force: true });
-    cy.get('.categories-selector li').contains(CATEGORY).click({ force: true });
+    cy.get('.categories-selector li').contains(EDITOR).click({ force: true });
 
     cy.scrollTo('bottom').wait(100).scrollTo('bottom').wait(100);
 
     cy.get('.sticky-nav').should('exist').and('be.visible');
 
     cy.get('.sticky-nav input').should('have.value', CATEGORY);
-    cy.get('.sticky-nav .categories-selector button').should('contain', CATEGORY);
+    cy.get('.sticky-nav .categories-selector button').should('contain', EDITOR);
   });
 });
 

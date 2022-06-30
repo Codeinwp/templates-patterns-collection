@@ -16,7 +16,7 @@ const StarterSiteCard = ( {
 	setInstallModal,
 	setImportingPages,
 } ) => {
-	const { upsell, slug, screenshot, title, has_templates } = data;
+	const { upsell, screenshot, title, has_templates, isNew } = data;
 	const [ actionsClass, setActionClass ] = useState( '' );
 
 	const showActions = () => {
@@ -54,9 +54,16 @@ const StarterSiteCard = ( {
 			onMouseLeave={ hideActions }
 			className={ cardClassNames }
 		>
+			{ isNew && (
+				<span className="new-badge">
+					{ __(
+						'New',
+						'templates-patterns-collection'
+					).toUpperCase() }
+				</span>
+			) }
 			<div className="top">
 				<div className={ 'actions ' + actionsClass }>
-
 					<Button isSecondary onClick={ launchPreview }>
 						{ __( 'Preview', 'templates-patterns-collection' ) }
 					</Button>

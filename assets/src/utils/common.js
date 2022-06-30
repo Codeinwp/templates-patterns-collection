@@ -23,6 +23,8 @@ const getTabHash = ( tabs ) => {
 const untrailingSlashIt = ( str ) => str.replace( /\/$/, '' );
 const trailingSlashIt = ( str ) => untrailingSlashIt( str ) + '/';
 
+const isTabbedEditor = false;
+
 const TAGS = [
 	__( 'Business', 'templates-patterns-collection' ),
 	__( 'Ecommerce', 'templates-patterns-collection' ),
@@ -49,6 +51,9 @@ const EDITOR_MAP = {
 		icon: 'elementor.jpg',
 		niceName: 'Elementor',
 	},
+};
+
+const EDITOR_MAP_ARCHIVED = {
 	'beaver builder': {
 		icon: 'beaver.jpg',
 		niceName: (
@@ -75,4 +80,4 @@ const EDITOR_MAP = {
 	},
 };
 
-export { addUrlHash, getTabHash, trailingSlashIt, untrailingSlashIt, CATEGORIES, EDITOR_MAP, TAGS };
+export { addUrlHash, getTabHash, trailingSlashIt, untrailingSlashIt, isTabbedEditor, CATEGORIES, EDITOR_MAP, EDITOR_MAP_ARCHIVED, TAGS };
