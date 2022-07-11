@@ -10,6 +10,7 @@ const CategorySelector = ( {
 	count,
 	category,
 	setCurrentCategory,
+	showCount = false,
 } ) => {
 	const [ open, setOpen ] = useState( false );
 	const toggleDropdown = () => setOpen( ! open );
@@ -22,7 +23,7 @@ const CategorySelector = ( {
 		<div className={ wrapClasses }>
 			<Button onClick={ toggleDropdown } className="select ob-dropdown">
 				<span>{ categories[ category ] }</span>
-				<span className="count">{ count[ category ] }</span>
+				<span className="count">{ showCount ? count[ category ] : '' }</span>
 				<Dashicon
 					size={ 14 }
 					icon={ open ? 'arrow-up-alt2' : 'arrow-down-alt2' }
@@ -58,9 +59,11 @@ const CategorySelector = ( {
 													<span>
 														{ categories[ key ] }
 													</span>
-													<span className="count">
-														{ count[ key ] }
-													</span>
+													{ showCount && (
+														<span className="count">
+															{ count[ key ] }
+														</span>
+													) }
 												</a>
 											</li>
 										);
