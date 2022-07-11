@@ -71,10 +71,8 @@ const Filters = ( {
 
 	const counted = getCounts();
 
-	const activeCount = isTabbedEditor
-		? counted.builders[ editor ]
-		: counted.categories[ category ];
-	const showCount = ( 50 <= activeCount );
+	const activeCount = getSitesForBuilder( editor ).length;
+	const showCount = 50 <= activeCount;
 
 	return (
 		<>
