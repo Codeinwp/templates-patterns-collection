@@ -19,6 +19,7 @@ const Search = ( {
 	setCurrentEditor,
 	query,
 	className,
+	showCount = false,
 } ) => {
 	const [ open, setOpen ] = useState( false );
 	const toggleDropdown = () => setOpen( ! open );
@@ -72,9 +73,11 @@ const Search = ( {
 																]
 															}
 														</span>
-														<span className="count">
-															{ count[ key ] }
-														</span>
+														{ showCount && (
+															<span className="count">
+																{ count[ key ] }
+															</span>
+														) }
 													</a>
 												</li>
 											);
@@ -189,9 +192,11 @@ const Search = ( {
 																	.niceName
 															}
 														</span>
-														<span className="count">
-															{ count[ key ] }
-														</span>
+														{ showCount && (
+															<span className="count">
+																{ count[ key ] }
+															</span>
+														) }
 													</a>
 												</li>
 											);
