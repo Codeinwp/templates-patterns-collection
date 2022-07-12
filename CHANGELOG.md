@@ -1,3 +1,7 @@
+##### [Version 1.1.24](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.23...v1.1.24) (2022-07-12)
+
+Release
+
 ##### [Version 1.1.23](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.22...v1.1.23) (2022-06-30)
 
 Removed unsupported builders from the list
