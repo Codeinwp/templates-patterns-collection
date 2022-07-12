@@ -71,6 +71,9 @@ const Filters = ( {
 
 	const counted = getCounts();
 
+	const activeCount = getSitesForBuilder( editor ).length;
+	const showCount = 50 <= activeCount;
+
 	return (
 		<>
 			{ ! isOnboarding && ! migration && (
@@ -89,6 +92,7 @@ const Filters = ( {
 							categories={ CATEGORIES }
 							editors={ EDITOR_MAP }
 							onlyProSites={ onlyProBuilders }
+							showCount={ showCount }
 						/>
 						{ isTabbedEditor && (
 							<EditorSelector
@@ -101,6 +105,7 @@ const Filters = ( {
 							<CategorySelector
 								count={ counted.categories }
 								categories={ CATEGORIES }
+								showCount={ showCount }
 							/>
 						) }
 					</div>
@@ -121,10 +126,19 @@ const Filters = ( {
 							{ tiobDash.strings.starterSitesTabDescription }
 						</p>
 					) }
-					<EditorSelector
-						count={ counted.builders }
-						EDITOR_MAP={ EDITOR_MAP }
-					/>
+					{ isTabbedEditor && (
+						<EditorSelector
+							count={ counted.builders }
+							EDITOR_MAP={ EDITOR_MAP }
+						/>
+					) }
+					{ ! isTabbedEditor && (
+						<CategorySelector
+							count={ counted.categories }
+							categories={ CATEGORIES }
+							showCount={ showCount }
+						/>
+					) }
 
 					<Search
 						count={
@@ -135,6 +149,7 @@ const Filters = ( {
 						categories={ CATEGORIES }
 						editors={ EDITOR_MAP }
 						onlyProSites={ onlyProBuilders }
+						showCount={ showCount }
 					/>
 
 					{ isTabbedEditor && (
@@ -148,6 +163,7 @@ const Filters = ( {
 						<CategoriesTabs
 							categories={ CATEGORIES }
 							count={ counted.categories }
+							showCount={ showCount }
 						/>
 					) }
 					{ ! tiobDash.isValidLicense && (

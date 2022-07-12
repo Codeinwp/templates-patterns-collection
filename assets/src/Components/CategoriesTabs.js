@@ -8,6 +8,7 @@ const CategoriesTabs = ( {
 	count,
 	category,
 	setCurrentCategory,
+	showCount = false,
 } ) => {
 	return (
 		<div className="editor-tabs">
@@ -31,7 +32,9 @@ const CategoriesTabs = ( {
 						} }
 					>
 						<span className="editor">{ categories[ key ] }</span>
-						<span className="count">{ count[ key ] }</span>
+						{ showCount && (
+							<span className="count">{ count[ key ] }</span>
+						) }
 					</a>
 				);
 			} ) }
