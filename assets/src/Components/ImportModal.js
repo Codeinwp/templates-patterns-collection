@@ -31,13 +31,22 @@ import {
 	PanelRow,
 } from '@wordpress/components';
 
-const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
+const ImportModal = ( {
+	setModal,
+	setThemeAction,
+	editor,
+	siteData,
+	themeData,
+	runTemplateImport,
+} ) => {
 	const [ general, setGeneral ] = useState( {
+		theme_install: true,
 		content: true,
 		customizer: true,
 		widgets: true,
 		cleanup: false,
 	} );
+	const [ themeInstallProgress, setThemeInstallProgress ] = useState( false );
 	const [ cleanupProgress, setCleanupProgress ] = useState( false );
 	const [ pluginsProgress, setPluginsProgress ] = useState( false );
 	const [ contentProgress, setContentProgress ] = useState( false );
@@ -53,12 +62,17 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 	const [ pluginsOpened, setPluginsOpened ] = useState( true );
 	const [ optionsOpened, setOptionsOpened ] = useState( true );
 
-	const { license, cleanupAllowed } = tiobDash;
+	const { license, cleanupAllowed, themesURL } = tiobDash;
 	const [ isCleanupAllowed, setIsCleanupAllowed ] = useState(
 		cleanupAllowed
 	);
 
+	console.log( themeData );
+	console.log( importing );
+	console.log( fetching );
+
 	useEffect( () => {
+		console.log( 'Use effect call' );
 		const fetchAddress = siteData.remote_url || siteData.url;
 		// Use the line below if testing in a staging env:
 		// const fetchAddress = siteData.url || siteData.remote_url;
@@ -169,6 +183,20 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 			},
 		};
 
+		if ( themeData !== false ) {
+			map = {
+				theme_install: {
+					icon: 'admin-appearance',
+					title: __( 'Neve', 'templates-patterns-collection' ),
+					tooltip: __(
+						'In order to import the starter site, Neve theme has to be installed and activated.',
+						'templates-patterns-collection'
+					),
+				},
+				...map,
+			};
+		}
+
 		if ( isCleanupAllowed === 'yes' ) {
 			map = {
 				cleanup: {
@@ -206,6 +234,9 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 					} );
 					const { icon, title, tooltip } = map[ id ];
 
+					console.log( id );
+					console.log( index );
+
 					return (
 						<PanelRow className={ rowClass } key={ index }>
 							<Icon icon={ icon } />
@@ -213,17 +244,19 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 							{ tooltip && (
 								<CustomTooltip>{ tooltip }</CustomTooltip>
 							) }
-							<div className="toggle-wrapper">
-								<ToggleControl
-									checked={ general[ id ] }
-									onChange={ () => {
-										setGeneral( {
-											...general,
-											[ id ]: ! general[ id ],
-										} );
-									} }
-								/>
-							</div>
+							{ id !== 'theme_install' && (
+								<div className="toggle-wrapper">
+									<ToggleControl
+										checked={ general[ id ] }
+										onChange={ () => {
+											setGeneral( {
+												...general,
+												[ id ]: ! general[ id ],
+											} );
+										} }
+									/>
+								</div>
+							) }
 						</PanelRow>
 					);
 				} ) }
@@ -308,7 +341,67 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 			);
 	}
 
+	function handleThemeInstall() {
+		wp.updates.installTheme( {
+			slug: 'neve',
+			success: () => {
+				setThemeAction( { ...themeData, action: 'activate' } );
+				console.log( '[D] Theme Install.' );
+				handleActivate();
+			},
+			error: ( err ) => {
+				setThemeAction( { ...themeData, action: 'activate' } );
+				handleError(
+					err.errorMessage ||
+						__(
+							'Could not install theme.',
+							'templates-patterns-collection'
+						),
+					'theme_install'
+				);
+			},
+		} );
+	}
+
+	function handleActivate() {
+		const url = `${ themesURL }?action=activate&stylesheet=${ themeData.slug }&_wpnonce=${ themeData.nonce }`;
+		get( url, true ).then( ( response ) => {
+			if ( response.status !== 200 ) {
+				handleError(
+					__(
+						'Could not activate theme.',
+						'templates-patterns-collection'
+					),
+					'theme_install'
+				);
+				return false;
+			}
+			console.log( '[D] Theme Activate.' );
+			setThemeInstallProgress( 'done' );
+			setThemeAction( false );
+			runImportPlugins();
+		} );
+	};
+
 	function runImport() {
+		// console.clear();
+		if ( ! themeData ) {
+			console.log( '[S] Theme.' );
+			runImportPlugins();
+			return false;
+		}
+		if ( themeData.action === 'install' ) {
+			setCurrentStep( 'theme_install' );
+			console.log( '[P] Theme Install.' );
+			handleThemeInstall();
+			return false;
+		}
+		setCurrentStep( 'theme_install' );
+		console.log( '[P] Theme Activate.' );
+		handleActivate();
+	}
+
+	function runImportPlugins() {
 		// console.clear();
 		if ( ! pluginOptions ) {
 			console.log( '[S] Plugins.' );
@@ -489,6 +582,8 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 	}
 
 	const closeModal = () => {
+		console.log( 'Close request' );
+		console.log( importing );
 		if ( importing ) {
 			return false;
 		}
@@ -546,6 +641,7 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 								{ null !== currentStep && (
 									<ImportStepper
 										progress={ {
+											theme_install: themeInstallProgress,
 											cleanup: cleanupProgress,
 											plugins: pluginsProgress,
 											content: contentProgress,
@@ -648,12 +744,13 @@ const ImportModal = ( { setModal, editor, siteData, runTemplateImport } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentEditor, getCurrentSite } = select(
+		const { getCurrentEditor, getCurrentSite, getThemeAction } = select(
 			'neve-onboarding'
 		);
 		return {
 			editor: getCurrentEditor(),
 			siteData: getCurrentSite(),
+			themeData: getThemeAction() || false,
 		};
 	} ),
 	withDispatch( ( dispatch, { siteData } ) => {
@@ -661,6 +758,7 @@ export default compose(
 			setTemplateModal,
 			setSingleTemplateImport,
 			setImportModalStatus,
+			setThemeAction,
 		} = dispatch( 'neve-onboarding' );
 
 		const runTemplateImport = () => {
@@ -671,6 +769,7 @@ export default compose(
 
 		return {
 			setModal: ( status ) => setImportModalStatus( status ),
+			setThemeAction: ( status ) => setThemeAction( status ),
 			runTemplateImport,
 		};
 	} )

@@ -35,6 +35,7 @@ const ListItem = ( {
 	const [ itemName, setItemName ] = useState( item.template_name );
 
 	const importItem = async () => {
+		console.log( 'Here' );
 		setLoading( 'importing' );
 		const data = await importTemplate( item.template_id );
 

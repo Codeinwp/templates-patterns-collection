@@ -25,6 +25,8 @@ use FLBuilderModel;
 class Rest_Server {
 	/**
 	 * Initialize the rest functionality.
+	 *
+	 * @return void
 	 */
 	public function init() {
 		add_action( 'rest_api_init', array( $this, 'register_endpoints' ) );

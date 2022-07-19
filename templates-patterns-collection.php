@@ -15,7 +15,8 @@
  * @package templates-patterns-collection
  */
 
-add_action( 'admin_notices', 'ti_tpc_plugins_page_notice' );
+// Remove entirely this notice for Independent TPC
+//add_action( 'admin_notices', 'ti_tpc_plugins_page_notice' );
 add_action( 'init', 'ti_tpc_load_textdomain' );
 add_action( 'init', 'ti_tpc_flush_premalinks' );
 

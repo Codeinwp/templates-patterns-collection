@@ -63,6 +63,8 @@ const DemoSiteTemplatesImport = ( {
 	};
 
 	const handleSingleImport = ( item ) => {
+		console.log( item );
+		console.log( 'Handle Import Single' );
 		if ( themeStatus ) {
 			setInstallModal( true );
 
@@ -75,6 +77,7 @@ const DemoSiteTemplatesImport = ( {
 
 	const launchImport = ( e ) => {
 		e.preventDefault();
+		console.log( 'Launch Import' );
 
 		if ( themeStatus ) {
 			setInstallModal( true );

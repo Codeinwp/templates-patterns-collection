@@ -28,13 +28,14 @@ const StarterSiteCard = ( {
 
 	const launchImport = ( e ) => {
 		e.preventDefault();
+		console.log( 'Launch Import StarterSiteCard.js' );
 		setSite();
 
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
+		// if ( themeStatus ) {
+		// 	setInstallModal( true );
+		//
+		// 	return false;
+		// }
 		setModal( true );
 	};
 

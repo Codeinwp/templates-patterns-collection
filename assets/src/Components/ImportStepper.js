@@ -5,9 +5,20 @@ import { Dashicon } from '@wordpress/components';
 const ImportStepper = ( { currentStep, progress, willDo } ) => {
 	const stepsMap = {
 		cleanup: {
-			label: __( 'Cleanup previous Import', 'templates-patterns-collection' ),
+			label: __(
+				'Cleanup previous Import',
+				'templates-patterns-collection'
+			),
 			status: progress.cleanup,
 			willDo: willDo.cleanup,
+		},
+		theme_install: {
+			label: __(
+				'Install and Activate Theme',
+				'templates-patterns-collection'
+			),
+			status: progress.theme_install,
+			willDo: willDo.theme_install,
 		},
 		plugins: {
 			label: __( 'Installing Plugins', 'templates-patterns-collection' ),
