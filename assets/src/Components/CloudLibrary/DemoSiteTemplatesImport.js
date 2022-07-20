@@ -52,12 +52,13 @@ const DemoSiteTemplatesImport = ( {
 
 	const handleBulk = ( e ) => {
 		e.preventDefault();
+		console.log( 'Handle Import Bulk' );
 
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
+		// if ( themeStatus ) {
+		// 	setInstallModal( true );
+		//
+		// 	return false;
+		// }
 		setToImport( templates );
 		setTemplateModal( true );
 	};
@@ -65,11 +66,11 @@ const DemoSiteTemplatesImport = ( {
 	const handleSingleImport = ( item ) => {
 		console.log( item );
 		console.log( 'Handle Import Single' );
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
+		// if ( themeStatus ) {
+		// 	setInstallModal( true );
+		//
+		// 	return false;
+		// }
 		setToImport( [ item ] );
 
 		setTemplateModal( true );

@@ -6,6 +6,8 @@ import {
 	importMods,
 	importWidgets,
 	installPlugins,
+	installTheme,
+	activateTheme,
 } from '../utils/site-import';
 import { get } from '../utils/rest';
 import { trailingSlashIt } from '../utils/common';
@@ -26,7 +28,6 @@ import {
 	ToggleControl,
 	Modal,
 	Panel,
-	Tooltip,
 	PanelBody,
 	PanelRow,
 } from '@wordpress/components';
@@ -40,11 +41,11 @@ const ImportModal = ( {
 	runTemplateImport,
 } ) => {
 	const [ general, setGeneral ] = useState( {
-		theme_install: true,
 		content: true,
 		customizer: true,
 		widgets: true,
 		cleanup: false,
+		theme_install: themeData !== false,
 	} );
 	const [ themeInstallProgress, setThemeInstallProgress ] = useState( false );
 	const [ cleanupProgress, setCleanupProgress ] = useState( false );
@@ -342,46 +343,47 @@ const ImportModal = ( {
 	}
 
 	function handleThemeInstall() {
-		wp.updates.installTheme( {
-			slug: 'neve',
-			success: () => {
-				setThemeAction( { ...themeData, action: 'activate' } );
-				console.log( '[D] Theme Install.' );
-				handleActivate();
-			},
-			error: ( err ) => {
-				setThemeAction( { ...themeData, action: 'activate' } );
-				handleError(
-					err.errorMessage ||
-						__(
-							'Could not install theme.',
-							'templates-patterns-collection'
-						),
-					'theme_install'
-				);
-			},
-		} );
+		const callbackSuccess = () => {
+			setThemeAction( { ...themeData, action: 'activate' } );
+			console.log( '[D] Theme Install.' );
+			handleActivate();
+		};
+
+		const callbackError = ( err ) => {
+			setThemeAction( { ...themeData, action: 'activate' } );
+			handleError(
+				err.errorMessage ||
+					__(
+						'Could not install theme.',
+						'templates-patterns-collection'
+					),
+				'theme_install'
+			);
+		};
+
+		installTheme( 'neve', callbackSuccess, callbackError );
 	}
 
 	function handleActivate() {
-		const url = `${ themesURL }?action=activate&stylesheet=${ themeData.slug }&_wpnonce=${ themeData.nonce }`;
-		get( url, true ).then( ( response ) => {
-			if ( response.status !== 200 ) {
-				handleError(
-					__(
-						'Could not activate theme.',
-						'templates-patterns-collection'
-					),
-					'theme_install'
-				);
-				return false;
-			}
+		const callbackSuccess = () => {
 			console.log( '[D] Theme Activate.' );
 			setThemeInstallProgress( 'done' );
 			setThemeAction( false );
 			runImportPlugins();
-		} );
-	};
+		};
+
+		const callbackError = () => {
+			handleError(
+				__(
+					'Could not activate theme.',
+					'templates-patterns-collection'
+				),
+				'theme_install'
+			);
+		};
+
+		activateTheme( themeData, callbackSuccess, callbackError );
+	}
 
 	function runImport() {
 		// console.clear();

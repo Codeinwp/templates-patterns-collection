@@ -90,6 +90,7 @@ class Admin {
 	 */
 	private function is_agency_plan() {
 		$category         = apply_filters( 'product_neve_license_plan', - 1 );
+		error_log( var_export( $category, true ) );
 		$category_mapping = array(
 			1 => 1,
 			2 => 1,
