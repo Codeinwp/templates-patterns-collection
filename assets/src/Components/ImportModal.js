@@ -68,12 +68,7 @@ const ImportModal = ( {
 		cleanupAllowed
 	);
 
-	console.log( themeData );
-	console.log( importing );
-	console.log( fetching );
-
 	useEffect( () => {
-		console.log( 'Use effect call' );
 		const fetchAddress = siteData.remote_url || siteData.url;
 		// Use the line below if testing in a staging env:
 		// const fetchAddress = siteData.url || siteData.remote_url;
@@ -581,8 +576,6 @@ const ImportModal = ( {
 	}
 
 	const closeModal = () => {
-		console.log( 'Close request' );
-		console.log( importing );
 		if ( importing ) {
 			return false;
 		}
