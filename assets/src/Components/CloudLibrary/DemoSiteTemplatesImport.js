@@ -50,35 +50,23 @@ const DemoSiteTemplatesImport = ( {
 		setPreviewUrl( url );
 	};
 
-	const handleBulk = ( e ) => {
-		e.preventDefault();
-		console.log( 'Handle Import Bulk' );
-
-		// if ( themeStatus ) {
-		// 	setInstallModal( true );
-		//
-		// 	return false;
-		// }
-		setToImport( templates );
+	const doImport = ( templatesToImport ) => {
+		setToImport( templatesToImport );
 		setTemplateModal( true );
 	};
 
-	const handleSingleImport = ( item ) => {
-		console.log( item );
-		console.log( 'Handle Import Single' );
-		// if ( themeStatus ) {
-		// 	setInstallModal( true );
-		//
-		// 	return false;
-		// }
-		setToImport( [ item ] );
+	const handleBulk = ( e ) => {
+		e.preventDefault();
 
-		setTemplateModal( true );
+		doImport( templates );
+	};
+
+	const handleSingleImport = ( item ) => {
+		doImport( [ item ] );
 	};
 
 	const launchImport = ( e ) => {
 		e.preventDefault();
-		console.log( 'Launch Import' );
 
 		if ( themeStatus ) {
 			setInstallModal( true );

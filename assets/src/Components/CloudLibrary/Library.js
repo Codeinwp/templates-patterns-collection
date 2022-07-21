@@ -203,12 +203,6 @@ const Library = ( {
 	};
 
 	const handleImport = ( id ) => {
-		console.log( 'Page template import' );
-		// if ( themeStatus ) {
-		// 	setInstallModal( true );
-		//
-		// 	return false;
-		// }
 		setToImport( [ id ] );
 		setTemplateModal( true );
 	};

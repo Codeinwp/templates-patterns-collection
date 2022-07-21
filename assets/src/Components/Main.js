@@ -44,8 +44,6 @@ const Onboarding = ( {
 					</div>
 				</div>
 			</div>
-			{/*{ installModal && <InstallModal /> }*/}
-			{/*{ importModal && currentSiteData && <ImportModal /> }*/}
 			{ importModal && currentSiteData && <ImportModal /> }
 		</Fragment>
 	);

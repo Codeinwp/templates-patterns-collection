@@ -15,46 +15,8 @@
  * @package templates-patterns-collection
  */
 
-// Remove entirely this notice for Independent TPC
-//add_action( 'admin_notices', 'ti_tpc_plugins_page_notice' );
 add_action( 'init', 'ti_tpc_load_textdomain' );
 add_action( 'init', 'ti_tpc_flush_premalinks' );
-
-/**
- * Plugins page notice if we don't have neve activated.
- */
-function ti_tpc_plugins_page_notice() {
-	if ( defined( 'NEVE_VERSION' ) ) {
-		return;
-	}
-
-	$screen = get_current_screen();
-	if ( ! isset( $screen->id ) ) {
-		return;
-	}
-
-	if ( $screen->id !== 'plugins' ) {
-		return;
-	}
-
-	$notice  = '<div class="notice notice-warning">';
-	$notice .= '<p>';
-	$notice .= sprintf(
-		__( 'You need to have %1$s installed and activated to use %2$s.', 'templates-patterns-collection' ),
-		'<strong>' . ( 'Neve Theme' ) . '</strong>',
-		'<strong>' . ( 'Templates Patterns Collection' ) . '</strong>'
-	);
-	$notice .= '</p>';
-	$notice .= '<p class="actions">';
-	$notice .= '<a class="button button-primary" href="' . esc_url( admin_url( 'theme-install.php?theme=neve' ) ) . '">';
-	/* translators: %s Neve theme name. */
-	$notice .= sprintf( __( 'Install and Activate %s', 'templates-patterns-collection' ), 'Neve' );
-	$notice .= '</a>';
-	$notice .= '</p>';
-	$notice .= '</div>';
-
-	echo wp_kses_post( $notice );
-}
 
 /**
  * Flush the permalinks after import

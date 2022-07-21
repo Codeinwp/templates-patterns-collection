@@ -235,9 +235,6 @@ const ImportModal = ( {
 					} );
 					const { icon, title, tooltip } = map[ id ];
 
-					console.log( id );
-					console.log( index );
-
 					return (
 						<PanelRow className={ rowClass } key={ index }>
 							<Icon icon={ icon } />

@@ -50,6 +50,13 @@ class Admin {
 		}
 	}
 
+	/**
+	 * Hook into editor data to add Neve plan if available.
+	 *
+	 * @param array $data tiTpc exported data.
+	 *
+	 * @return array
+	 */
 	public function add_tpc_editor_data( $data ) {
 		$plan = $this->neve_license_plan();
 
@@ -92,6 +99,11 @@ class Admin {
 		}
 	}
 
+	/**
+	 * Map license plan from Neve if available.
+	 *
+	 * @return int
+	 */
 	private function neve_license_plan() {
 		$category = apply_filters( 'product_neve_license_plan', - 1 );
 

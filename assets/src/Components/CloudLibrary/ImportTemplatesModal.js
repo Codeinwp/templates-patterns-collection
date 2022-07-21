@@ -117,14 +117,11 @@ const ImportTemplatesModal = ( {
 	};
 
 	const runTemplatesImport = () => {
-		console.log( 'runTemplatesImport' );
 		setImporting( true );
 		const data = templatesData.map( ( item, index ) => {
 			return { ...item, ...templates[ index ] };
 		} );
-		// console.log( data );
-		// console.log( templatesData );
-		// return false;
+
 		const callbackImportTemplate = () => {
 			try {
 				importTemplates( data ).then( ( r ) => {
@@ -132,8 +129,6 @@ const ImportTemplatesModal = ( {
 						console.log( r.message );
 						return false;
 					}
-					console.log( 'import done' );
-					console.log( data );
 
 					setImported( r.pages );
 					setImporting( 'done' );
