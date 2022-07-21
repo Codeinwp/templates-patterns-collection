@@ -39,6 +39,7 @@ class Admin {
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
 		add_action( 'admin_menu', array( $this, 'register' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
 
 		$white_label_module = get_option( 'nv_pro_white_label_status' );
 		if ( ! empty( $white_label_module ) && (bool) $white_label_module === true ) {
@@ -47,6 +48,14 @@ class Admin {
 				$this->wl_config = json_decode( $branding, true );
 			}
 		}
+	}
+
+	public function add_tpc_editor_data( $data ) {
+		$plan = $this->neve_license_plan();
+
+		$data['tier'] = $plan;
+
+		return $data;
 	}
 
 	/**
@@ -83,14 +92,9 @@ class Admin {
 		}
 	}
 
-	/**
-	 * Check if current subscription is agency.
-	 *
-	 * @return bool
-	 */
-	private function is_agency_plan() {
-		$category         = apply_filters( 'product_neve_license_plan', - 1 );
-		error_log( var_export( $category, true ) );
+	private function neve_license_plan() {
+		$category = apply_filters( 'product_neve_license_plan', - 1 );
+
 		$category_mapping = array(
 			1 => 1,
 			2 => 1,
@@ -103,7 +107,18 @@ class Admin {
 			9 => 3,
 		);
 
-		return isset( $category_mapping[ $category ] ) && $category_mapping[ $category ] === 3;
+		return $category > -1 && isset( $category_mapping[ $category ] ) ? $category_mapping[ $category ] : -1;
+	}
+
+	/**
+	 * Check if current subscription is agency.
+	 *
+	 * @return bool
+	 */
+	private function is_agency_plan() {
+		$plan = $this->neve_license_plan();
+
+		return $plan === 3;
 	}
 
 	/**
@@ -267,6 +282,22 @@ class Admin {
 				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'templates-patterns-collection' ),
 				'cta'  => sprintf( __( 'Open %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
 				'url'  => 'themes.php?page=' . $this->page_slug . '&dismiss_notice=yes#library',
+			);
+		}
+
+		$index = apply_filters( 'product_neve_license_plan', -1 );
+		if ( $index !== -1 && defined( 'NEVE_PRO_REST_NAMESPACE' ) ) {
+			$array = array_merge(
+				$array,
+				array(
+					'pro'     => true,
+					'proApi'  => rest_url( NEVE_PRO_REST_NAMESPACE ),
+					'license' => array(
+						'key'   => apply_filters( 'product_neve_license_key', 'free' ),
+						'valid' => apply_filters( 'product_neve_license_status', false ),
+						'tier'  => $this->neve_license_plan(),
+					),
+				)
 			);
 		}
 
