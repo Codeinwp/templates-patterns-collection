@@ -15,8 +15,6 @@ const DemoSiteTemplatesImport = ( {
 	slug,
 	cancel,
 	setModal,
-	setInstallModal,
-	themeStatus,
 	site,
 	editor,
 	setTemplateModal,
@@ -67,12 +65,6 @@ const DemoSiteTemplatesImport = ( {
 
 	const launchImport = ( e ) => {
 		e.preventDefault();
-
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
 		setModal( true );
 	};
 
@@ -268,7 +260,6 @@ export default compose(
 		const {
 			setSingleTemplateImport,
 			setImportModalStatus,
-			setInstallModalStatus,
 			setTemplateModal,
 		} = dispatch( 'neve-onboarding' );
 
@@ -279,21 +270,16 @@ export default compose(
 		return {
 			cancel,
 			setModal: ( status ) => setImportModalStatus( status ),
-			setInstallModal: ( status ) => setInstallModalStatus( status ),
 			setTemplateModal,
 		};
 	} ),
 	withSelect( ( select ) => {
-		const {
-			getTemplateModal,
-			getThemeAction,
-			getCurrentSite,
-			getCurrentEditor,
-		} = select( 'neve-onboarding' );
+		const { getTemplateModal, getCurrentSite, getCurrentEditor } = select(
+			'neve-onboarding'
+		);
 
 		return {
 			templateModal: getTemplateModal(),
-			themeStatus: getThemeAction().action || false,
 			site: getCurrentSite(),
 			editor: getCurrentEditor(),
 		};

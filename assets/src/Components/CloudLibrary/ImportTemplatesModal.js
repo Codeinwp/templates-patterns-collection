@@ -18,9 +18,7 @@ const ImportTemplatesModal = ( {
 	templatesData,
 	cancel,
 	siteData,
-	themeStatus,
 	themeData,
-	setInstallModal,
 	setModal,
 	isUserTemplate = false,
 	generalTemplates = false,
@@ -105,14 +103,6 @@ const ImportTemplatesModal = ( {
 
 	const launchImport = ( e ) => {
 		e.preventDefault();
-
-		console.log( 'Launch Import' );
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
-
 		setModal( true );
 	};
 
@@ -374,7 +364,6 @@ export default compose(
 	withSelect( ( select ) => {
 		const { getThemeAction, getCurrentSite } = select( 'neve-onboarding' );
 		return {
-			themeStatus: getThemeAction().action || false,
 			siteData: getCurrentSite(),
 			themeData: getThemeAction() || false,
 		};
@@ -383,7 +372,6 @@ export default compose(
 		const {
 			setTemplateModal,
 			setImportModalStatus,
-			setInstallModalStatus,
 		} = dispatch( 'neve-onboarding' );
 
 		return {
@@ -391,7 +379,6 @@ export default compose(
 				setTemplateModal( null );
 			},
 			setModal: ( status ) => setImportModalStatus( status ),
-			setInstallModal: ( status ) => setInstallModalStatus( status ),
 		};
 	} )
 )( ImportTemplatesModal );
