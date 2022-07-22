@@ -135,6 +135,9 @@ class Content_Importer {
 		$this->logger->log( 'Busting elementor cache', 'progress' );
 		$this->maybe_bust_elementor_cache();
 
+		$this->logger->log( 'Busting woo cache', 'progress' );
+		$this->maybe_rebuild_woo_product();
+
 		// Set front page.
 		if ( isset( $body['frontPage'] ) ) {
 			$frontpage_id = $this->setup_front_page( $body['frontPage'], $body['demoSlug'] );
@@ -267,6 +270,32 @@ class Content_Importer {
 			return;
 		}
 		\Elementor\Plugin::instance()->files_manager->clear_cache();
+	}
+
+	/**
+	 * Update products to rebuild missing data not set on import.
+	 *
+	 * @return void
+	 */
+	public function maybe_rebuild_woo_product() {
+		if ( ! class_exists( '\WC_Product' ) ) {
+			return;
+		}
+
+		$args = array(
+			'post_type'      => 'product',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+		);
+
+		$results = new \WP_Query( $args );
+		if ( empty( $results->posts ) ) {
+			return;
+		}
+		foreach ( $results->posts as $post_id ) {
+			$product_object = new \WC_Product( $post_id );
+			$product_object->save();
+		}
 	}
 
 	/**
