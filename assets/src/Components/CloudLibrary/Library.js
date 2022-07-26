@@ -19,12 +19,11 @@ import Logo from '../Icon';
 const Library = ( {
 	isGeneral,
 	setPreview,
-	setInstallModal,
 	setTemplateModal,
 	templateModal,
-	themeStatus,
 	currentTab,
 	userStatus,
+	themeData,
 } ) => {
 	const [ library, setLibrary ] = useState( {
 		gutenberg: [],
@@ -282,7 +281,7 @@ const Library = ( {
 		} );
 	};
 
-	if ( ! userStatus && ! isGeneral ) {
+	const UpsellModal = ( { title, description } ) => {
 		return (
 			<div className={ wrapClasses }>
 				<div className="table">
@@ -302,15 +301,9 @@ const Library = ( {
 					<div className="upsell-modal">
 						<div className="upsell-modal-content">
 							<div className="info">
-								<h3>
-									{ __( 'Templates Cloud is a PRO Feature' ) }
-								</h3>
+								<h3>{ title }</h3>
 
-								<p>
-									{ __(
-										'Unlock the Templates Cloud features and save your pages or posts in the cloud.'
-									) }
-								</p>
+								<p>{ description }</p>
 
 								<Button
 									variant="primary"
@@ -329,6 +322,32 @@ const Library = ( {
 					</div>
 				</div>
 			</div>
+		);
+	};
+
+	if ( themeData !== false ) {
+		return (
+			<UpsellModal
+				title={
+					isGeneral
+						? __( 'Coming soon' )
+						: __( 'Templates Cloud is a PRO Feature' )
+				}
+				description={ __(
+					'Right now this feature is not available with your current setup. if you want to use it, you need to install Neve + Neve Pro'
+				) }
+			/>
+		);
+	}
+
+	if ( ! userStatus && ! isGeneral ) {
+		return (
+			<UpsellModal
+				title={ __( 'Templates Cloud is a PRO Feature' ) }
+				description={ __(
+					'Unlock the Templates Cloud features and save your pages or posts in the cloud.'
+				) }
+			/>
 		);
 	}
 
@@ -532,7 +551,7 @@ export default compose(
 
 		return {
 			templateModal: getTemplateModal(),
-			themeStatus: getThemeAction().action || false,
+			themeData: getThemeAction() || false,
 			editor: getCurrentEditor(),
 			currentTab: getCurrentTab(),
 			userStatus: getUserStatus(),

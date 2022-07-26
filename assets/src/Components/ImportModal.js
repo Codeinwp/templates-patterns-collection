@@ -62,8 +62,9 @@ const ImportModal = ( {
 	const [ fetching, setFetching ] = useState( true );
 	const [ pluginsOpened, setPluginsOpened ] = useState( true );
 	const [ optionsOpened, setOptionsOpened ] = useState( true );
+	const [ themeOpened, setThemeOpened ] = useState( true );
 
-	const { license, cleanupAllowed, themesURL } = tiobDash;
+	const { license, cleanupAllowed } = tiobDash;
 	const [ isCleanupAllowed, setIsCleanupAllowed ] = useState(
 		cleanupAllowed
 	);
@@ -155,6 +156,39 @@ const ImportModal = ( {
 			</p>
 		</div>
 	);
+	const Theme = () => {
+		const toggleOpen = () => {
+			setThemeOpened( ! themeOpened );
+		};
+		const rowClass = classnames( 'option-row', 'active' );
+		const { icon, title, tooltip } = {
+			icon: 'admin-appearance',
+			title: __( 'Neve', 'templates-patterns-collection' ),
+			tooltip: __(
+				'In order to import the starter site, Neve theme has to be installed and activated.',
+				'templates-patterns-collection'
+			),
+		};
+
+		return (
+			<PanelBody
+				onToggle={ toggleOpen }
+				opened={ themeOpened }
+				className="options general"
+				title={ __(
+					'Install required theme',
+					'templates-patterns-collection'
+				) }
+			>
+				<PanelRow className={ rowClass }>
+					<Icon icon={ icon } />
+					<span>{ title }</span>
+					{ tooltip && <CustomTooltip>{ tooltip }</CustomTooltip> }
+				</PanelRow>
+			</PanelBody>
+		);
+	};
+
 	const Options = () => {
 		let map = {
 			content: {
@@ -178,20 +212,6 @@ const ImportModal = ( {
 				),
 			},
 		};
-
-		if ( themeData !== false ) {
-			map = {
-				theme_install: {
-					icon: 'admin-appearance',
-					title: __( 'Neve', 'templates-patterns-collection' ),
-					tooltip: __(
-						'In order to import the starter site, Neve theme has to be installed and activated.',
-						'templates-patterns-collection'
-					),
-				},
-				...map,
-			};
-		}
 
 		if ( isCleanupAllowed === 'yes' ) {
 			map = {
@@ -615,6 +635,7 @@ const ImportModal = ( {
 								<ModalHead />
 								<Note />
 								<Panel className="modal-toggles">
+									{ themeData !== false && <Theme /> }
 									<Options />
 									<Plugins />
 								</Panel>

@@ -11,12 +11,7 @@ import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { addUrlHash, getTabHash } from '../utils/common';
 
-const TabNavigation = ( {
-	setCurrentTab,
-	currentTab,
-	isFetching,
-	themeData,
-} ) => {
+const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 	const buttons = {
 		starterSites: __( 'Starter Sites', 'templates-patterns-collection' ),
 		pageTemplates: __( 'Page Templates', 'templates-patterns-collection' ),
@@ -76,10 +71,6 @@ const TabNavigation = ( {
 	return (
 		<div className="header-nav">
 			{ Object.keys( buttons ).map( ( slug ) => {
-				// We hide the Page Templates if Neve is not present
-				if ( slug === 'pageTemplates' && themeData !== false ) {
-					return '';
-				}
 				return (
 					<Button
 						href={ '#' + slug }
@@ -167,17 +158,13 @@ export default compose(
 		};
 	} ),
 	withSelect( ( select ) => {
-		const {
-			getOnboardingStatus,
-			getCurrentTab,
-			getFetching,
-			getThemeAction,
-		} = select( 'neve-onboarding' );
+		const { getOnboardingStatus, getCurrentTab, getFetching } = select(
+			'neve-onboarding'
+		);
 		return {
 			isOnboarding: getOnboardingStatus(),
 			currentTab: getCurrentTab(),
 			isFetching: getFetching(),
-			themeData: getThemeAction() || false,
 		};
 	} )
 )( Header );
