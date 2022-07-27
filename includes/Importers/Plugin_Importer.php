@@ -47,6 +47,7 @@ class Plugin_Importer {
 		'wpforms-lite'                     => 'wpforms.php',
 		'beaver-builder-lite-version'      => 'fl-builder.php',
 		'wpzoom-addons-for-beaver-builder' => 'wpzoom-bb-addon-pack.php',
+		'recipe-card-blocks-by-wpzoom'     => 'wpzoom-recipe-card.php',
 	);
 
 	public function __construct() {
