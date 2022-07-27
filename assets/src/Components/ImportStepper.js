@@ -14,7 +14,7 @@ const ImportStepper = ( { currentStep, progress, willDo } ) => {
 		},
 		theme_install: {
 			label: __(
-				'Install and Activate Theme',
+				'Installing and Activating the Theme',
 				'templates-patterns-collection'
 			),
 			status: progress.theme_install,
