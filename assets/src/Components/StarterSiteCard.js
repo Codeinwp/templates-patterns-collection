@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { withDispatch, withSelect } from '@wordpress/data';
+import { withDispatch } from '@wordpress/data';
 import { Button, Dashicon } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
@@ -12,8 +12,6 @@ const StarterSiteCard = ( {
 	setSite,
 	setPreview,
 	setModal,
-	themeStatus,
-	setInstallModal,
 	setImportingPages,
 } ) => {
 	const { upsell, screenshot, title, has_templates, isNew } = data;
@@ -28,13 +26,8 @@ const StarterSiteCard = ( {
 
 	const launchImport = ( e ) => {
 		e.preventDefault();
+
 		setSite();
-
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
 		setModal( true );
 	};
 
@@ -131,27 +124,18 @@ const StarterSiteCard = ( {
 };
 
 export default compose(
-	withSelect( ( select ) => {
-		const { getThemeAction } = select( 'neve-onboarding' );
-
-		return {
-			themeStatus: getThemeAction().action || false,
-		};
-	} ),
 	withDispatch( ( dispatch, { data } ) => {
 		const { slug } = data;
 		const {
 			setCurrentSite,
 			setPreviewStatus,
 			setImportModalStatus,
-			setInstallModalStatus,
 			setSingleTemplateImport,
 		} = dispatch( 'neve-onboarding' );
 		return {
 			setSite: () => setCurrentSite( data ),
 			setPreview: ( status ) => setPreviewStatus( status ),
 			setModal: ( status ) => setImportModalStatus( status ),
-			setInstallModal: ( status ) => setInstallModalStatus( status ),
 			setImportingPages: () => setSingleTemplateImport( slug ),
 		};
 	} )

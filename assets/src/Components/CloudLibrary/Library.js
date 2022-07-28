@@ -6,7 +6,7 @@ import { useEffect, useState, Fragment } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Spinner, Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
-import { __, isRTL } from '@wordpress/i18n';
+import { __, isRTL, sprintf } from '@wordpress/i18n';
 
 import { fetchLibrary } from './common';
 import ListItem from './ListItem';
@@ -19,12 +19,11 @@ import Logo from '../Icon';
 const Library = ( {
 	isGeneral,
 	setPreview,
-	setInstallModal,
 	setTemplateModal,
 	templateModal,
-	themeStatus,
 	currentTab,
 	userStatus,
+	themeData,
 } ) => {
 	const [ library, setLibrary ] = useState( {
 		gutenberg: [],
@@ -203,11 +202,6 @@ const Library = ( {
 	};
 
 	const handleImport = ( id ) => {
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
 		setToImport( [ id ] );
 		setTemplateModal( true );
 	};
@@ -220,7 +214,7 @@ const Library = ( {
 		library[ type ].find( ( item ) => previewUrl === item.link );
 	const wrapClasses = classnames( 'cloud-items', {
 		'is-grid': isGrid || ( ! userStatus && ! isGeneral ),
-		'is-dummy': ! userStatus && ! isGeneral,
+		'is-dummy': ( ! userStatus && ! isGeneral ) || themeData !== false,
 	} );
 
 	const handlePrevious = () => {
@@ -287,7 +281,11 @@ const Library = ( {
 		} );
 	};
 
-	if ( ! userStatus && ! isGeneral ) {
+	const themeURL = 'https://wordpress.org/themes/neve/';
+	const upgradeURL =
+		'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=upgradetoprobtn and https://themeisle.com/themes/neve/neve-upgrade-new/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=changeplanbtn';
+
+	const UpsellModal = ( { title, description, showUpgradeBtn = true } ) => {
 		return (
 			<div className={ wrapClasses }>
 				<div className="table">
@@ -307,25 +305,25 @@ const Library = ( {
 					<div className="upsell-modal">
 						<div className="upsell-modal-content">
 							<div className="info">
-								<h3>
-									{ __( 'Templates Cloud is a PRO Feature' ) }
-								</h3>
+								<h3>{ title }</h3>
 
-								<p>
-									{ __(
-										'Unlock the Templates Cloud features and save your pages or posts in the cloud.'
-									) }
-								</p>
+								<p
+									dangerouslySetInnerHTML={ {
+										__html: description,
+									} }
+								></p>
 
-								<Button
-									variant="primary"
-									isPrimary
-									href="https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=upgradetoprobtn and
+								{ showUpgradeBtn && (
+									<Button
+										variant="primary"
+										isPrimary
+										href="https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=upgradetoprobtn and
 									https://themeisle.com/themes/neve/neve-upgrade-new/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=changeplanbtn"
-									target="_blank"
-								>
-									{ __( 'Upgrade to PRO' ) }
-								</Button>
+										target="_blank"
+									>
+										{ __( 'Upgrade to PRO' ) }
+									</Button>
+								) }
 							</div>
 							<div className="icon">
 								<Icon icon={ Logo } />
@@ -334,6 +332,35 @@ const Library = ( {
 					</div>
 				</div>
 			</div>
+		);
+	};
+
+	if ( themeData !== false ) {
+		return (
+			<UpsellModal
+				title={ __( 'Coming soon' ) }
+				description={ sprintf(
+					// translators: %1$s: Theme Name %2$s Plugin Name.
+					__(
+						'Right now this feature is not available with your current setup. if you want to use it, you need to install %1$s theme and %2$s plugin',
+						'template-patterns-collection'
+					),
+					`<a href="${ themeURL }" target="_blank" rel="noreferrer">Neve</a>`,
+					`<a href="${ upgradeURL }" target="_blank" rel="noreferrer">Neve Pro Addon</a>`
+				) }
+				showUpgradeBtn={ false }
+			/>
+		);
+	}
+
+	if ( ! userStatus && ! isGeneral ) {
+		return (
+			<UpsellModal
+				title={ __( 'Templates Cloud is a PRO Feature' ) }
+				description={ __(
+					'Unlock the Templates Cloud features and save your pages or posts in the cloud.'
+				) }
+			/>
 		);
 	}
 
@@ -537,7 +564,7 @@ export default compose(
 
 		return {
 			templateModal: getTemplateModal(),
-			themeStatus: getThemeAction().action || false,
+			themeData: getThemeAction() || false,
 			editor: getCurrentEditor(),
 			currentTab: getCurrentTab(),
 			userStatus: getUserStatus(),

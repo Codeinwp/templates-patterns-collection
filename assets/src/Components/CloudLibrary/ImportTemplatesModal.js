@@ -4,12 +4,13 @@ import { Modal, Button, Icon } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
 import { page as pageIcon } from '@wordpress/icons';
-import {
-	useEffect,
-	useState,
-} from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 
-import { importTemplates } from '../../utils/site-import';
+import {
+	importTemplates,
+	installTheme,
+	activateTheme,
+} from '../../utils/site-import';
 import { fetchBulkData, getUserTemplateData } from './common';
 import classnames from 'classnames';
 
@@ -17,8 +18,7 @@ const ImportTemplatesModal = ( {
 	templatesData,
 	cancel,
 	siteData,
-	themeStatus,
-	setInstallModal,
+	themeData,
 	setModal,
 	isUserTemplate = false,
 	generalTemplates = false,
@@ -103,13 +103,6 @@ const ImportTemplatesModal = ( {
 
 	const launchImport = ( e ) => {
 		e.preventDefault();
-
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
-
 		setModal( true );
 	};
 
@@ -118,19 +111,52 @@ const ImportTemplatesModal = ( {
 		const data = templatesData.map( ( item, index ) => {
 			return { ...item, ...templates[ index ] };
 		} );
-		try {
-			importTemplates( data ).then( ( r ) => {
-				if ( ! r.success ) {
-					console.log( r.message );
-					return false;
-				}
 
-				setImported( r.pages );
-				setImporting( 'done' );
-			} );
-		} catch ( e ) {
-			console.log( error );
+		const callbackImportTemplate = () => {
+			try {
+				importTemplates( data ).then( ( r ) => {
+					if ( ! r.success ) {
+						console.log( r.message );
+						return false;
+					}
+
+					setImported( r.pages );
+					setImporting( 'done' );
+				} );
+			} catch ( e ) {
+				console.log( e );
+			}
+		};
+
+		if (
+			! themeData ||
+			( data[ 0 ].template_site_slug === 'general' &&
+				data[ 0 ].premade === 'yes' )
+		) {
+			callbackImportTemplate();
+			return false;
 		}
+
+		const callbackError = ( err ) => {
+			console.error( err );
+		};
+
+		if ( themeData.action === 'install' ) {
+			installTheme(
+				'neve',
+				() => {
+					activateTheme(
+						themeData,
+						callbackImportTemplate,
+						callbackError
+					);
+				},
+				callbackError
+			);
+			return false;
+		}
+
+		activateTheme( themeData, callbackImportTemplate, callbackError );
 	};
 
 	const ImportDone = () => {
@@ -152,7 +178,7 @@ const ImportTemplatesModal = ( {
 								  )
 								: __(
 									'Templates were successfully imported!',
-										'templates-patterns-collection'
+									'templates-patterns-collection'
 								  ) }
 						</p>
 					</div>
@@ -336,19 +362,16 @@ const ImportTemplatesModal = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getThemeAction, getCurrentSite } = select(
-			'neve-onboarding'
-		);
+		const { getThemeAction, getCurrentSite } = select( 'neve-onboarding' );
 		return {
-			themeStatus: getThemeAction().action || false,
 			siteData: getCurrentSite(),
+			themeData: getThemeAction() || false,
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
 		const {
 			setTemplateModal,
 			setImportModalStatus,
-			setInstallModalStatus,
 		} = dispatch( 'neve-onboarding' );
 
 		return {
@@ -356,7 +379,6 @@ export default compose(
 				setTemplateModal( null );
 			},
 			setModal: ( status ) => setImportModalStatus( status ),
-			setInstallModal: ( status ) => setInstallModalStatus( status ),
 		};
 	} )
 )( ImportTemplatesModal );
