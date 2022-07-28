@@ -1,3 +1,4 @@
+/* global tiobDash */
 import classnames from 'classnames';
 
 import { withDispatch, withSelect } from '@wordpress/data';
@@ -14,6 +15,13 @@ const CategoriesTabs = ( {
 		<div className="editor-tabs">
 			{ Object.keys( categories ).map( ( key, index ) => {
 				if ( 1 > count[ key ] ) {
+					return null;
+				}
+				if (
+					tiobDash &&
+					tiobDash.isValidLicense === '1' &&
+					'free' === key
+				) {
 					return null;
 				}
 				const classes = classnames( [
