@@ -345,14 +345,8 @@ const Library = ( {
 						'Right now this feature is not available with your current setup. if you want to use it, you need to install %1$s theme and %2$s plugin',
 						'template-patterns-collection'
 					),
-					`<a href="${ themeURL }" target="_blank" rel="noreferrer">${ __(
-						'Neve',
-						'template-patterns-collection'
-					) }</a>`,
-					`<a href="${ upgradeURL }" target="_blank" rel="noreferrer">${ __(
-						'Neve Pro Addon',
-						'template-patterns-collection'
-					) }</a>`
+					`<a href="${ themeURL }" target="_blank" rel="noreferrer">Neve</a>`,
+					`<a href="${ upgradeURL }" target="_blank" rel="noreferrer">Neve Pro Addon</a>`
 				) }
 				showUpgradeBtn={ false }
 			/>
