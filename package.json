@@ -54,6 +54,7 @@
     "replace-in-file": "^6.1.0",
     "rtlcss": "^2.6.2",
     "semantic-release": "^17.3.7",
+    "semantic-release-slack-bot": "^3.5.3",
     "whatwg-fetch": "^3.4.1"
   },
   "dependencies": {

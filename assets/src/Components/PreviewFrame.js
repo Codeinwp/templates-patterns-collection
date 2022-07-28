@@ -12,16 +12,9 @@ const PreviewFrame = ( {
 	setSite,
 	setPreview,
 	setModal,
-	themeStatus,
-	setInstallModal,
 } ) => {
 	const handleImport = ( e ) => {
 		e.preventDefault();
-		if ( themeStatus ) {
-			setInstallModal( true );
-
-			return false;
-		}
 		setModal( true );
 	};
 	const handleNext = ( e ) => {
@@ -110,10 +103,9 @@ const PreviewFrame = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentSite, getThemeAction } = select( 'neve-onboarding' );
+		const { getCurrentSite } = select( 'neve-onboarding' );
 		return {
 			siteData: getCurrentSite(),
-			themeStatus: getThemeAction().action || false,
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
@@ -121,13 +113,11 @@ export default compose(
 			setCurrentSite,
 			setPreviewStatus,
 			setImportModalStatus,
-			setInstallModalStatus,
 		} = dispatch( 'neve-onboarding' );
 		return {
 			setSite: ( data ) => setCurrentSite( data ),
 			setPreview: ( status ) => setPreviewStatus( status ),
 			setModal: ( status ) => setImportModalStatus( status ),
-			setInstallModal: ( status ) => setInstallModalStatus( status ),
 		};
 	} )
 )( PreviewFrame );

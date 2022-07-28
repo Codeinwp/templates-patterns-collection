@@ -1,6 +1,6 @@
 /* global tiobDash */
 const { onboarding } = tiobDash;
-import { send } from './rest';
+import {get, send} from './rest';
 
 export const importWidgets = ( data ) => {
 	return send( onboarding.root + '/import_widgets', data );
@@ -12,7 +12,7 @@ export const importMods = ( data ) => {
 
 export const cleanupImport = ( data ) => {
 	return send( onboarding.root + '/cleanup', data );
-}
+};
 
 export const installPlugins = ( pluginArray ) => {
 	return send( onboarding.root + '/install_plugins', pluginArray );
@@ -23,13 +23,13 @@ export const importContent = ( data ) => {
 };
 
 export const importTemplates = async ( data ) => {
-	let plugins = {};
+	const plugins = {};
 
-	data.forEach( template => {
+	data.forEach( ( template ) => {
 		if ( 'elementor' === template.template_type ) {
 			plugins.elementor = true;
 		} else if ( 'beaver' === template.template_type ) {
-			plugins['beaver-builder-lite-version'] = true;
+			plugins[ 'beaver-builder-lite-version' ] = true;
 		}
 	} );
 
@@ -37,9 +37,33 @@ export const importTemplates = async ( data ) => {
 		try {
 			await installPlugins( plugins );
 		} catch ( e ) {
-			return error;
+			return e;
 		}
 	}
 
 	return send( onboarding.root + '/import_single_templates', data );
+};
+
+export const installTheme = (
+	slug = 'neve',
+	callbackSuccess,
+	callbackError
+) => {
+	wp.updates.installTheme( {
+		slug,
+		success: callbackSuccess,
+		error: callbackError,
+	} );
+};
+
+export const activateTheme = ( themeData, callbackSuccess, callbackError ) => {
+	const { themesURL } = tiobDash;
+	const url = `${ themesURL }?action=activate&stylesheet=${ themeData.slug }&_wpnonce=${ themeData.nonce }`;
+	get( url, true ).then( ( response ) => {
+		if ( response.status !== 200 ) {
+			callbackError( response );
+			return false;
+		}
+		callbackSuccess();
+	} );
 };

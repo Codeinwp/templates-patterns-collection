@@ -1,8 +1,7 @@
 /* global tiobDash, localStorage */
 import { withSelect, withDispatch } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { Button, Icon } from '@wordpress/components';
-import { useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import { update } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
@@ -33,51 +32,55 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 	};
 
 	const onHashChanged = () => {
-		const hash = getTabHash(buttons);
-		if (null === hash) {
+		const hash = getTabHash( buttons );
+		if ( null === hash ) {
 			return;
 		}
 
-		const menu = document.getElementById('menu-appearance');
-		const libraryLink = menu.querySelector('a[href="themes.php?page=tiob-starter-sites#library"]');
-		const starterLink = menu.querySelector('a[href="themes.php?page=tiob-starter-sites"]');
+		const menu = document.getElementById( 'menu-appearance' );
+		const libraryLink = menu.querySelector(
+			'a[href="themes.php?page=tiob-starter-sites#library"]'
+		);
+		const starterLink = menu.querySelector(
+			'a[href="themes.php?page=tiob-starter-sites"]'
+		);
 
 		// This is used only to set the active state of the links from the left admin nav.
 		// So we check that those items exist before trying to mutate them.
 		if ( libraryLink && starterLink ) {
 			const libraryItem = libraryLink.parentElement;
 			const starterSitesItem = starterLink.parentElement;
-			const activeItem = menu.querySelector('.current');
+			const activeItem = menu.querySelector( '.current' );
 
-			activeItem.classList.remove('current');
-			libraryItem.classList.remove('current');
-			if ( hash === 'library' ){
-				libraryItem.classList.add('current');
+			activeItem.classList.remove( 'current' );
+			libraryItem.classList.remove( 'current' );
+			if ( hash === 'library' ) {
+				libraryItem.classList.add( 'current' );
 			} else {
-				starterSitesItem.classList.add('current');
+				starterSitesItem.classList.add( 'current' );
 			}
 		}
-		setCurrentTab(hash);
-	}
+		setCurrentTab( hash );
+	};
 
-	useEffect(() => {
+	useEffect( () => {
 		onHashChanged();
-		window.addEventListener('hashchange', onHashChanged)
-	}, []);
+		window.addEventListener( 'hashchange', onHashChanged );
+	}, [] );
 
 	return (
 		<div className="header-nav">
 			{ Object.keys( buttons ).map( ( slug ) => {
 				return (
 					<Button
-						href={'#' + slug}
+						href={ '#' + slug }
 						key={ slug }
 						isTertiary
 						isPressed={ slug === currentTab }
-						onClick={ (e) => {
+						onClick={ ( e ) => {
 							e.preventDefault();
 							setCurrentTab( slug );
-							addUrlHash(slug);
+							addUrlHash( slug );
 						} }
 					>
 						{ buttons[ slug ] }

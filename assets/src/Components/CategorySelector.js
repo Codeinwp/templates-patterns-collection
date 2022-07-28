@@ -1,5 +1,5 @@
+/* global tiobDash */
 import classnames from 'classnames';
-import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { Button, Dashicon, Popover } from '@wordpress/components';
 import { withDispatch, withSelect } from '@wordpress/data';
@@ -39,6 +39,13 @@ const CategorySelector = ( {
 								{ Object.keys( categories ).map(
 									( key, index ) => {
 										if ( key === category ) {
+											return null;
+										}
+										if (
+											tiobDash &&
+											tiobDash.isValidLicense === '1' &&
+											'free' === key
+										) {
 											return null;
 										}
 										if ( 1 > count[ key ] ) {
