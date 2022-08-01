@@ -182,7 +182,15 @@ const Exporter = () => {
 				const res = await response.json();
 
 				if ( res.message ) {
-					createErrorNotice( res.message, {
+					let message = res.message;
+					if (
+						message === 'Sorry, you are not allowed to do that.'
+					) {
+						message = __(
+							'Could not save template, check that the template is not empty.'
+						);
+					}
+					createErrorNotice( message, {
 						type: 'snackbar',
 					} );
 				} else {
@@ -263,7 +271,15 @@ const Exporter = () => {
 				const res = await response.json();
 
 				if ( res.message ) {
-					createErrorNotice( res.message, {
+					let message = res.message;
+					if (
+						message === 'Sorry, you are not allowed to do that.'
+					) {
+						message = __(
+							'Could not save template, check that the template is not empty.'
+						);
+					}
+					createErrorNotice( message, {
 						type: 'snackbar',
 					} );
 				} else {
