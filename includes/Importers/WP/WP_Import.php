@@ -179,7 +179,7 @@ class WP_Import extends WP_Importer {
 				$this->logger->log( $id->get_error_message() );
 				continue;
 			}
-			$this->process_termmeta( $cat, $id['term_id'] );
+			$this->process_termmeta( $cat, $id );
 		}
 		unset( $this->categories );
 		$this->logger->log( 'Processed categories.', 'success' );

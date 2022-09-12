@@ -48,6 +48,7 @@ class Plugin_Importer {
 		'beaver-builder-lite-version'      => 'fl-builder.php',
 		'wpzoom-addons-for-beaver-builder' => 'wpzoom-bb-addon-pack.php',
 		'recipe-card-blocks-by-wpzoom'     => 'wpzoom-recipe-card.php',
+		'restrict-content'                 => 'restrictcontent.php',
 	);
 
 	public function __construct() {
