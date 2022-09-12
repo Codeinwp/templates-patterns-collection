@@ -283,7 +283,7 @@ const Library = ( {
 
 	const themeURL = 'https://wordpress.org/themes/neve/';
 	const upgradeURL =
-		'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=upgradetoprobtn and https://themeisle.com/themes/neve/neve-upgrade-new/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=changeplanbtn';
+		'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=wpadmin&utm_campaign=templatecloud&utm_content=neve';
 
 	const UpsellModal = ( { title, description, showUpgradeBtn = true } ) => {
 		return (
@@ -317,8 +317,7 @@ const Library = ( {
 									<Button
 										variant="primary"
 										isPrimary
-										href="https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=upgradetoprobtn and
-									https://themeisle.com/themes/neve/neve-upgrade-new/?utm_medium=nevedashboard&utm_source=neve&utm_campaign=templatecloud&utm_content=changeplanbtn"
+										href="https://themeisle.com/themes/neve/upgrade/?utm_medium=templatecloud&utm_source=wpadmin&utm_campaign=upgradetoprobtn&utm_content=neve"
 										target="_blank"
 									>
 										{ __( 'Upgrade to PRO' ) }
@@ -475,7 +474,7 @@ const Library = ( {
 							<Button
 								variant="secondary"
 								isSecondary
-								href="https://docs.themeisle.com/article/1354-neve-template-cloud-library?utm_medium=nevedashboard&utm_source=templatecloud&utm_campaign=neve&utm_content=learnmore"
+								href="https://docs.themeisle.com/article/1354-neve-template-cloud-library?utm_medium=nevedashboard&utm_source=wpadmin&utm_campaign=templatescloud&utm_content=neve"
 								target="_blank"
 							>
 								{ __( 'Learn more' ) }
