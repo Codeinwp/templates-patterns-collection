@@ -177,7 +177,7 @@ class Admin {
 		return array(
 			'nonce'               => wp_create_nonce( 'wp_rest' ),
 			'assets'              => TIOB_URL . '/assets/',
-			'upgradeURL'          => esc_url( apply_filters( 'neve_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/neve/upgrade/?utm_medium=aboutneve&utm_source=freevspro&utm_campaign=neve' ) ),
+			'upgradeURL'          => apply_filters( 'neve_upgrade_link_from_child_theme_filter', tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'freevspro' ) ),
 			'strings'             => array(
 				/* translators: %s - Theme name */
 				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
@@ -208,7 +208,7 @@ class Admin {
 			// We use these strings in Neve already so lets reuse the translations here.
 			'text' => esc_html__( 'Purchase the Business plan or higher to get instant access to all Premium Starter Site Templates — including Expert Sites — and much more.', 'neve' ), //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 			'cta'  => __( 'Get Neve Business', 'neve' ), //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
-			'url'  => 'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=templatecloud&utm_campaign=neve&utm_content=<builder_name>notice',
+			'url'  => tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', '<builder_name>notice', 'nevedashboard' ),
 		);
 
 		return $notifications;
@@ -340,8 +340,9 @@ class Admin {
 						'ti_onboarding_outbound_query_args',
 						array(
 							'utm_medium'   => 'about-' . get_template(),
-							'utm_source'   => $slug,
-							'utm_campaign' => 'siteslibrary',
+							'utm_source'   => 'wpadmin',
+							'utm_content'  => 'neve',
+							'utm_campaign' => $slug,
 						)
 					),
 					$theme_support['pro_link']

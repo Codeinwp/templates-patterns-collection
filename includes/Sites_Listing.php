@@ -60,7 +60,7 @@ class Sites_Listing {
 					),
 				),
 			),
-			'pro_link'    => 'https://themeisle.com/themes/neve/upgrade/',
+			'pro_link'    => tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding' ),
 		);
 		$this->add_sites_library_support();
 	}
