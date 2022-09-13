@@ -1,3 +1,26 @@
+##### [Version 1.1.25](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.24...v1.1.25) (2022-07-28)
+
+- Improvements to Workflow
+- Fixed plugin activation for recipe card plugin on import
+- Better support for WooCommerce blocks after product import
+- Better support for themes
+- Remove Neve dependencies from Template Patterns Collection
+- Improve display on categories for PRO licenses
+
+##### [Version 1.1.24](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.23...v1.1.24) (2022-07-12)
+
+Release
+
+##### [Version 1.1.23](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.22...v1.1.23) (2022-06-30)
+
+Removed unsupported builders from the list
+Enhanced and changed layout
+
+##### [Version 1.1.22](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.21...v1.1.22) (2022-05-27)
+
+Enhance compatibility with Woocommerce Starter Sites
+Enhance compatibility with Mega menus import
+
 ##### [Version 1.1.21](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.20...v1.1.21) (2022-02-21)
 
 - Remove upsell from Gutenberg tab
