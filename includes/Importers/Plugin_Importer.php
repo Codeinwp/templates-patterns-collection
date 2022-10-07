@@ -8,6 +8,7 @@
 namespace TIOB\Importers;
 
 use Plugin_Upgrader;
+use ThemeisleSDK\Product;
 use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Quiet_Skin;
 use TIOB\Importers\Helpers\Quiet_Skin_Legacy;
@@ -104,6 +105,59 @@ class Plugin_Importer {
 				'log'     => $this->log,
 			)
 		);
+	}
+
+	/**
+	 * Wrapper for wp_remote_get.
+	 *
+	 * Usage: for available $args, look WP_Http::request doc (https://developer.wordpress.org/reference/classes/wp_http/request/)
+	 */
+	private function remote_get( $url, $args = array() ) {
+		$vip_default_fallback  = '';
+		$vip_default_threshold = 3;
+		$vip_default_timeout   = 1;
+		$vip_default_retry     = 20;
+
+		return function_exists( 'vip_safe_wp_remote_get' )
+			? vip_safe_wp_remote_get(
+				$url,
+				$vip_default_fallback,
+				$vip_default_threshold,
+				array_key_exists( 'timeout', $args ) ? $args['timeout'] : $vip_default_timeout, // The timeout argument was overwritten because it was in the intersection set of vip and default request args
+				$vip_default_retry,
+				$args
+			) : wp_remote_get( $url, $args ); //phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get
+	}
+
+	/**
+	 * Return sparks download URL
+	 * @return false|string
+	 */
+	private function get_sparks_download_url_from_themeisle() {
+		$response = $this->remote_get(
+			sprintf(
+				'%slicense/version/%s/%s/%s/%s',
+				Product::API_URL,
+				rawurlencode( 'Sparks for WooCommerce' ),
+				apply_filters( 'product_neve_license_key', 'free' ),
+				'latest',
+				rawurlencode( home_url() )
+			),
+			array(
+				'timeout'   => 15, //phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout, Inherited by wp_remote_get only, for vip environment we use defaults.
+				'sslverify' => false,
+			)
+		);
+
+		if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
+			return false;
+		}
+
+		$update_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+		$cache_token = sprintf( '%s-tpc-v-%s', time(), NEVE_PRO_VERSION );
+
+		return $update_data->download_link . $cache_token;
 	}
 
 	/**
@@ -220,7 +274,10 @@ class Plugin_Importer {
 			);
 		}
 		$upgrader = new Plugin_Upgrader( $skin );
-		$install  = $upgrader->install( $api->download_link );
+		if ( $plugin_slug === 'sparks-for-woocommerce' && empty( $api->download_link ) ) {
+			$api->download_link = $this->get_sparks_download_url_from_themeisle();
+		}
+		$install = $upgrader->install( $api->download_link );
 		if ( $install !== true ) {
 			$this->log .= 'Error: Install process failed (' . ucwords( $plugin_slug ) . ').' . "\n";
 
