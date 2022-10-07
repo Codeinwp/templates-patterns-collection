@@ -274,8 +274,14 @@ class Plugin_Importer {
 			);
 		}
 		$upgrader = new Plugin_Upgrader( $skin );
+		// this is a special case for sparks to download the plugin.
 		if ( $plugin_slug === 'sparks-for-woocommerce' && empty( $api->download_link ) ) {
-			$api->download_link = $this->get_sparks_download_url_from_themeisle();
+			$download_url = $this->get_sparks_download_url_from_themeisle();
+			if ( empty( $download_url ) ) {
+				$this->log .= 'Error: Could not retrieve download URL for (' . ucwords( $plugin_slug ) . ').' . "\n";
+				return false;
+			}
+			$api->download_link = $download_url;
 		}
 		$install = $upgrader->install( $api->download_link );
 		if ( $install !== true ) {
