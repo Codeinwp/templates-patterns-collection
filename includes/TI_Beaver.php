@@ -138,7 +138,7 @@ class TI_Beaver extends FLBuilderModule {
 		$url = add_query_arg(
 			array(
 				'site_url'   => get_site_url(),
-				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+				'license_id' => apply_filters( 'product_tiob_license_key', 'free' ),
 				'cache'      => uniqid(),
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . $template_id . '/import'
@@ -183,7 +183,7 @@ class TI_Beaver extends FLBuilderModule {
 		$url = add_query_arg(
 			array(
 				'site_url'   => get_site_url(),
-				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+				'license_id' => apply_filters( 'product_tiob_license_key', 'free' ),
 				'cache'      => uniqid(),
 			),
 			TPC_TEMPLATES_CLOUD_ENDPOINT . 'templates/' . esc_attr( $template_id )
@@ -228,7 +228,7 @@ class TI_Beaver extends FLBuilderModule {
 		$url = add_query_arg(
 			array(
 				'site_url'      => get_site_url(),
-				'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
+				'license_id'    => apply_filters( 'product_tiob_license_key', 'free' ),
 				'template_name' => esc_attr( $title ),
 				'template_type' => 'beaver',
 				'link'          => $is_page ? get_permalink( $post_id ) : '',
@@ -287,7 +287,7 @@ class TI_Beaver extends FLBuilderModule {
 		$url = add_query_arg(
 			array(
 				'site_url'           => get_site_url(),
-				'license_id'         => apply_filters( 'product_neve_license_key', 'free' ),
+				'license_id'         => apply_filters( 'product_tiob_license_key', 'free' ),
 				'template_site_slug' => $slug,
 				'template_thumbnail' => $screenshot,
 				'premade'            => $premade,
@@ -350,7 +350,7 @@ class TI_Beaver extends FLBuilderModule {
 		add_action( 'wp_head', array( $this, 'inline_script' ), 9 );
 		add_action( 'fl_builder_before_save_layout', array( $this, 'update_published_template' ), 10, 4 );
 
-		$is_pro = apply_filters( 'product_neve_license_key', 'free' );
+		$is_pro = apply_filters( 'product_tiob_license_key', 'free' );
 
 		if ( $is_pro === 'free' ) {
 			return;
@@ -369,7 +369,7 @@ class TI_Beaver extends FLBuilderModule {
 				'endpoint'     => TPC_TEMPLATES_CLOUD_ENDPOINT,
 				'params'       => array(
 					'site_url'   => get_site_url(),
-					'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+					'license_id' => apply_filters( 'product_tiob_license_key', 'free' ),
 					'type'       => 'beaver',
 				),
 				'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
@@ -507,7 +507,7 @@ class TI_Beaver extends FLBuilderModule {
 		$url = add_query_arg(
 			array(
 				'site_url'      => get_site_url(),
-				'license_id'    => apply_filters( 'product_neve_license_key', 'free' ),
+				'license_id'    => apply_filters( 'product_tiob_license_key', 'free' ),
 				'template_name' => esc_attr( $title ),
 				'template_type' => 'beaver',
 				'link'          => get_permalink( $post_id ),

@@ -34,6 +34,7 @@ class Admin {
 	 * Initialize the Admin.
 	 */
 	public function init() {
+		License::get_instance();
 		add_filter( 'query_vars', array( $this, 'add_onboarding_query_var' ) );
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
@@ -51,7 +52,8 @@ class Admin {
 	}
 
 	/**
-	 * Hook into editor data to add Neve plan if available.
+	 * Hook into editor data to add Neve plan if available
+	 * or return the proper tier if stand-alone license is valid.
 	 *
 	 * @param array $data tiTpc exported data.
 	 *
@@ -60,7 +62,7 @@ class Admin {
 	public function add_tpc_editor_data( $data ) {
 		$plan = $this->neve_license_plan();
 
-		$data['tier'] = $plan;
+		$data['tier'] = apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? $plan : 3;
 
 		return $data;
 	}
@@ -123,12 +125,15 @@ class Admin {
 	}
 
 	/**
-	 * Check if current subscription is agency.
+	 * Check if current subscription is agency
+	 * or if we have a valid license for the standalone product.
 	 *
 	 * @return bool
 	 */
 	private function is_agency_plan() {
 		$plan = $this->neve_license_plan();
+
+		$plan = apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? $plan : 3;
 
 		return $plan === 3;
 	}
@@ -191,10 +196,15 @@ class Admin {
 			'endpoint'            => TPC_TEMPLATES_CLOUD_ENDPOINT,
 			'params'              => array(
 				'site_url'   => get_site_url(),
-				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+				'license_id' => apply_filters( 'product_tiob_license_key', 'free' ),
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
-			'isValidLicense'      => $this->has_valid_addons(),
+			'isValidLicense'      => $this->get_license_status(),
+			'license'             => array(
+				'key'   => apply_filters( 'product_tiob_license_key', 'free' ),
+				'valid' => apply_filters( 'product_tiob_license_status', false ),
+				'tier'  => apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? -1 : 3,
+			),
 		);
 	}
 
@@ -492,16 +502,16 @@ class Admin {
 	}
 
 	/**
-	 * Check validity of addons plugin.
+	 * Check license status.
 	 *
 	 * @return bool
 	 */
-	private function has_valid_addons() {
-		if ( ! defined( 'NEVE_PRO_BASEFILE' ) ) {
+	private function get_license_status() {
+		if ( ! defined( 'TIOB_BASE_FILE' ) ) {
 			return false;
 		}
 
-		$option_name = basename( dirname( NEVE_PRO_BASEFILE ) );
+		$option_name = basename( dirname( TIOB_BASE_FILE ) );
 		$option_name = str_replace( '-', '_', strtolower( trim( $option_name ) ) );
 		$status      = get_option( $option_name . '_license_data' );
 

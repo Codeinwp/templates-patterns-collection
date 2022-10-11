@@ -9,11 +9,13 @@
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.en.html
  * Text Domain:       templates-patterns-collection
  * Domain Path:       /languages
- * WordPress Available:  yes
- * Requires License:    no
+ * WordPress Available: no
+ * Requires License:    yes
  *
  * @package templates-patterns-collection
  */
+
+define( 'TIOB_BASE_FILE', __FILE__ );
 
 add_action( 'init', 'ti_tpc_load_textdomain' );
 add_action( 'init', 'ti_tpc_flush_premalinks' );
@@ -48,6 +50,24 @@ function tpc_load_sdk( $products ) {
 	$products[] = __FILE__;
 	return $products;
 }
+
+add_filter(
+	'themesle_sdk_namespace_' . md5( __FILE__ ),
+	function () {
+		return 'tiob';
+	}
+);
+
+add_filter(
+	'themesle_sdk_product_name_' . md5( __FILE__ ),
+	function () {
+		return 'Templates Cloud';
+	}
+);
+
+// TODO: remove this once the pop-up for adding license is added.
+//add_filter( 'templates_patterns_collection_hide_license_field', '__return_true' );
+
 /**
  * Load the localisation file.
  */
