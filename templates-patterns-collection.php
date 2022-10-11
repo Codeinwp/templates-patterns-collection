@@ -50,7 +50,6 @@ add_filter( 'themeisle_sdk_products', 'tpc_load_sdk' );
 function tpc_load_sdk( $products ) {
 	$products[] = __FILE__;
 	if ( defined( 'TIOB_TC_FILE' ) ) {
-		error_log( var_export( TIOB_TC_FILE, true ) );
 		$products[] = TIOB_TC_FILE;
 	}
 	return $products;
