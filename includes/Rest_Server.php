@@ -161,7 +161,7 @@ class Rest_Server {
 							return (string) esc_attr( $key );
 						},
 						'validate_callback' => function ( $key ) {
-							return in_array( $key, [ 'activate', 'deactivate' ], true );
+							return in_array( $key, array( 'activate', 'deactivate' ), true );
 						},
 					),
 				),
@@ -209,10 +209,10 @@ class Rest_Server {
 				'success' => true,
 				'message' => 'activate' === $fields['action'] ? __( 'Activated.', 'templates-patterns-collection' ) : __( 'Deactivated', 'templates-patterns-collection' ),
 				'license' => array(
-					'key'   => apply_filters( 'product_tiob_license_key', 'free' ),
-					'valid' => apply_filters( 'product_tiob_license_status', false ),
-					'tier'  => apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? -1 : 3,
-					'expiration' => License::get_license_expiration_date()
+					'key'        => apply_filters( 'product_tiob_license_key', 'free' ),
+					'valid'      => apply_filters( 'product_tiob_license_status', false ),
+					'tier'       => apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? -1 : 3,
+					'expiration' => License::get_license_expiration_date(),
 				),
 			)
 		);
