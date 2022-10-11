@@ -39,4 +39,7 @@ export default {
 			acceptedTiers.includes( window.tiobDash.license.tier )
 		);
 	},
+	getlicenseStatus: ( state ) => {
+		return state.licenseStatus;
+	},
 };

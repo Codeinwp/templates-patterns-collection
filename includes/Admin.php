@@ -204,6 +204,7 @@ class Admin {
 				'key'   => apply_filters( 'product_tiob_license_key', 'free' ),
 				'valid' => apply_filters( 'product_tiob_license_status', false ),
 				'tier'  => apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? -1 : 3,
+				'expiration' => License::get_license_expiration_date()
 			),
 		);
 	}

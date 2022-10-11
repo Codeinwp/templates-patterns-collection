@@ -3,13 +3,14 @@ import { withSelect, withDispatch } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 import { Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
-import { update } from '@wordpress/icons';
+import { update, lock, close } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 import Logo from './Icon';
 import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { addUrlHash, getTabHash } from '../utils/common';
+import License from './License';
 
 const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 	const buttons = {
@@ -19,6 +20,7 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 	};
 
 	const [ isSyncing, setSyncing ] = useState( false );
+	const [ isLicenseOpen, setLicenseOpen ] = useState( false );
 
 	const sync = () => {
 		setSyncing( true );
@@ -98,6 +100,20 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 					disabled={ isFetching || isSyncing }
 					data-content={ __( 'Sync' ) }
 				/>
+			) }
+			{ currentTab === 'starterSites' && (
+				<>
+					<Button
+						icon={ ! isLicenseOpen ? lock : close }
+						onClick={ () => {
+							setLicenseOpen( ! isLicenseOpen );
+						} }
+						label={ __( 'License' ) }
+						className={ 'is-sync' }
+						data-content={ __( 'License' ) }
+					/>
+					{ isLicenseOpen && <License /> }
+				</>
 			) }
 		</div>
 	);

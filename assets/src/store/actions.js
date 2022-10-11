@@ -98,4 +98,10 @@ export default {
 			payload: { query },
 		};
 	},
+	setLicenseStatus( status ) {
+		return {
+			type: 'SET_LICENSE_STATUS',
+			payload: { status },
+		};
+	},
 };

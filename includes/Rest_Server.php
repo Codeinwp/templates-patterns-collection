@@ -138,6 +138,84 @@ class Rest_Server {
 				},
 			)
 		);
+
+		register_rest_route(
+			Main::API_ROOT,
+			'/toggle_license',
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => array( $this, 'toggle_license' ),
+				'args'                => array(
+					'key'    => array(
+						'type'              => 'string',
+						'sanitize_callback' => function ( $key ) {
+							return (string) esc_attr( $key );
+						},
+						'validate_callback' => function ( $key ) {
+							return is_string( $key );
+						},
+					),
+					'action' => array(
+						'type'              => 'string',
+						'sanitize_callback' => function ( $key ) {
+							return (string) esc_attr( $key );
+						},
+						'validate_callback' => function ( $key ) {
+							return in_array( $key, [ 'activate', 'deactivate' ], true );
+						},
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
+	}
+
+	/**
+	 * Toggle License
+	 *
+	 * Toggle license based on the license key.
+	 *
+	 * @param mixed $request REST request.
+	 * @since 2.0.1
+	 * @return mixed|\WP_REST_Response
+	 */
+	public function toggle_license( $request ) {
+		$fields = $request->get_json_params();
+
+		if ( ! isset( $fields['key'] ) || ! isset( $fields['action'] ) ) {
+			return new \WP_REST_Response(
+				array(
+					'message' => __( 'Invalid Action. Please refresh the page and try again.', 'templates-patterns-collection' ),
+					'success' => false,
+				)
+			);
+		}
+
+		$response = apply_filters( 'themeisle_sdk_license_process_tiob', $fields['key'], $fields['action'] );
+
+		if ( is_wp_error( $response ) ) {
+			return new \WP_REST_Response(
+				array(
+					'message' => $response->get_error_message(),
+					'success' => false,
+				)
+			);
+		}
+
+		return new \WP_REST_Response(
+			array(
+				'success' => true,
+				'message' => 'activate' === $fields['action'] ? __( 'Activated.', 'templates-patterns-collection' ) : __( 'Deactivated', 'templates-patterns-collection' ),
+				'license' => array(
+					'key'   => apply_filters( 'product_tiob_license_key', 'free' ),
+					'valid' => apply_filters( 'product_tiob_license_status', false ),
+					'tier'  => apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? -1 : 3,
+					'expiration' => License::get_license_expiration_date()
+				),
+			)
+		);
 	}
 
 	public function run_cleanup() {
