@@ -9,14 +9,13 @@
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.en.html
  * Text Domain:       templates-patterns-collection
  * Domain Path:       /languages
- * WordPress Available: yes
- * Requires License:    no
+ * WordPress Available: no
+ * Requires License:    yes
  *
  * @package templates-patterns-collection
  */
 
 define( 'TIOB_BASE_FILE', __FILE__ );
-define( 'TIOB_TC_FILE', __DIR__ . '/templates-patterns-collection/templates-cloud.php' );
 
 add_action( 'init', 'ti_tpc_load_textdomain' );
 add_action( 'init', 'ti_tpc_flush_premalinks' );
@@ -49,14 +48,11 @@ add_filter( 'themeisle_sdk_products', 'tpc_load_sdk' );
  */
 function tpc_load_sdk( $products ) {
 	$products[] = __FILE__;
-	if ( defined( 'TIOB_TC_FILE' ) ) {
-		$products[] = TIOB_TC_FILE;
-	}
 	return $products;
 }
 
 add_filter(
-	'themesle_sdk_namespace_' . md5( TIOB_TC_FILE ),
+	'themesle_sdk_namespace_' . md5( __FILE__ ),
 	function () {
 		return 'tiob';
 	}
