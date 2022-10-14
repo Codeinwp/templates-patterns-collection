@@ -196,16 +196,11 @@ class Admin {
 			'endpoint'            => TPC_TEMPLATES_CLOUD_ENDPOINT,
 			'params'              => array(
 				'site_url'   => get_site_url(),
-				'license_id' => apply_filters( 'product_tiob_license_key', 'free' ),
+				'license_id' => apply_filters( 'tiob_license_key', 'free' ),
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
 			'isValidLicense'      => $this->get_license_status(),
-			'license'             => array(
-				'key'        => apply_filters( 'product_tiob_license_key', 'free' ),
-				'valid'      => apply_filters( 'product_tiob_license_status', false ),
-				'tier'       => apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? -1 : 3,
-				'expiration' => License::get_license_expiration_date(),
-			),
+			'licenseTIOB'         => License::get_license_data(),
 		);
 	}
 
@@ -305,22 +300,6 @@ class Admin {
 				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'templates-patterns-collection' ),
 				'cta'  => sprintf( __( 'Open %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
 				'url'  => 'themes.php?page=' . $this->page_slug . '&dismiss_notice=yes#library',
-			);
-		}
-
-		$index = apply_filters( 'product_neve_license_plan', -1 );
-		if ( $index !== -1 && defined( 'NEVE_PRO_REST_NAMESPACE' ) ) {
-			$array = array_merge(
-				$array,
-				array(
-					'pro'     => true,
-					'proApi'  => rest_url( NEVE_PRO_REST_NAMESPACE ),
-					'license' => array(
-						'key'   => apply_filters( 'product_neve_license_key', 'free' ),
-						'valid' => apply_filters( 'product_neve_license_status', false ),
-						'tier'  => $this->neve_license_plan(),
-					),
-				)
 			);
 		}
 

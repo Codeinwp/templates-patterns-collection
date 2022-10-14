@@ -13,7 +13,7 @@ import {
 } from '@wordpress/components';
 
 const License = ( { setLicenseStatus } ) => {
-	const [ license, setLicense ] = useState( window.tiobDash.license );
+	const [ license, setLicense ] = useState( window.tiobDash.licenseTIOB );
 	const [ licenseKey, setLicenseKey ] = useState( '' );
 	const [ loading, setLoading ] = useState( false );
 	const [ resultMsg, setResultMsg ] = useState( {} );
@@ -57,11 +57,11 @@ const License = ( { setLicenseStatus } ) => {
 					setLicense( res.license );
 					setLicenseKey( res.license.key );
 					setLicenseStatus( res.license.valid );
-					window.tiobDash.license = res.license;
+					window.tiobDash.licenseTIOB = res.license;
 					console.log( res.license );
-					console.log( window.tiobDash.license );
+					console.log( window.tiobDash.licenseTIOB );
 				} else {
-					window.tiobDash.license = res.license;
+					window.tiobDash.licenseTIOB = res.license;
 					setLicense( {} );
 					setLicenseKey( '' );
 				}

@@ -34,9 +34,9 @@ export default {
 		];
 
 		return (
-			window.tiobDash.license &&
-			window.tiobDash.license.tier &&
-			acceptedTiers.includes( window.tiobDash.license.tier )
+			window.tiobDash.licenseTIOB &&
+			window.tiobDash.licenseTIOB.tier &&
+			acceptedTiers.includes( window.tiobDash.licenseTIOB.tier )
 		);
 	},
 	getlicenseStatus: ( state ) => {

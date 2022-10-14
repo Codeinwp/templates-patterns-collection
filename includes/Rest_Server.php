@@ -193,12 +193,15 @@ class Rest_Server {
 			);
 		}
 
-		$response = apply_filters( 'themeisle_sdk_license_process_tiob', $fields['key'], $fields['action'] );
+		$status = delete_option( License::LICENSE_KEY_OPTION_KEY ) && delete_transient( License::LICENSE_DATA_TRANSIENT_KEY );
+		if ( 'activate' === $fields['action'] ) {
+			$status = License::get_instance()->check_license( $fields['key'] );
+		}
 
-		if ( is_wp_error( $response ) ) {
+		if ( ! $status ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => $response->get_error_message(),
+					'message' => 'activate' === $fields['action'] ? __( 'Can\'t activate the license.', 'templates-patterns-collection' ) : __( 'Can\'t deactivate the license.', 'templates-patterns-collection' ),
 					'success' => false,
 				)
 			);
@@ -208,12 +211,7 @@ class Rest_Server {
 			array(
 				'success' => true,
 				'message' => 'activate' === $fields['action'] ? __( 'Activated.', 'templates-patterns-collection' ) : __( 'Deactivated', 'templates-patterns-collection' ),
-				'license' => array(
-					'key'        => apply_filters( 'product_tiob_license_key', 'free' ),
-					'valid'      => apply_filters( 'product_tiob_license_status', false ),
-					'tier'       => apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? -1 : 3,
-					'expiration' => License::get_license_expiration_date(),
-				),
+				'license' => License::get_license_data(),
 			)
 		);
 	}

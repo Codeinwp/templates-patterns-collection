@@ -13,7 +13,10 @@ namespace TIOB;
  * Class License
  */
 final class License {
-	const LICENSE_DATA_OPTION_KEY = 'templates_patterns_collection_license_data';
+	//const API_URL = 'https://api.themeisle.com/templates-cloud/';
+	const API_URL                    = 'https://templates-cloud.test/wp-json/templates-cloud/v1/';
+	const LICENSE_DATA_TRANSIENT_KEY = 'templates_patterns_collection_license_data';
+	const LICENSE_KEY_OPTION_KEY     = 'templates_patterns_collection_license';
 
 	/**
 	 * The main instance var.
@@ -29,6 +32,12 @@ final class License {
 	 */
 	private function __construct() {
 		add_action( 'admin_init', array( $this, 'inherit_license_from_neve' ) );
+		add_filter(
+			'tiob_license_key',
+			function () {
+				return isset( self::get_license_data()->key ) ? self::get_license_data()->key : 'free';
+			}
+		);
 	}
 
 	/**
@@ -44,18 +53,57 @@ final class License {
 		return self::$instance;
 	}
 
+	private function safe_get( $url, $args = array() ) {
+		return function_exists( 'vip_safe_wp_remote_get' )
+			? vip_safe_wp_remote_get( $url )
+			: wp_remote_get( //phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get, Already used.
+				$url,
+				$args
+			);
+	}
+
 	/**
 	 * Inherit license from Neve
 	 */
 	public function inherit_license_from_neve() {
-		delete_option( 'tiob_inherited_autoactivate' );
 		$should_inherit = ! get_option( 'tiob_inherited_autoactivate', false );
 
 		if ( $should_inherit && false === self::has_active_license() && 'valid' === apply_filters( 'product_neve_license_status', false ) ) {
 			$neve_license = apply_filters( 'product_neve_license_key', 'free' );
-			apply_filters( 'themeisle_sdk_license_process_tiob', $neve_license, 'activate' );
+			$this->check_license( $neve_license );
 			update_option( 'tiob_inherited_autoactivate', true );
 		}
+
+	}
+
+	private function set_license( $license, $license_data ) {
+		update_option( self::LICENSE_KEY_OPTION_KEY, $license );
+		set_transient( self::LICENSE_DATA_TRANSIENT_KEY, $license_data, 12 * HOUR_IN_SECONDS );
+	}
+
+	public function check_license( $license ) {
+		$license_url = sprintf( '%stemplates/?license_id=%s&site_url=%s&license_check=1', self::API_URL, $license, rawurlencode( home_url() ) );
+		$response    = $this->safe_get( $license_url );
+		error_log( var_export( $license_url, true ) );
+
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+
+		$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+		$code         = wp_remote_retrieve_response_code( $response );
+
+		if ( $code !== 200 ) {
+			return false;
+		}
+
+		if ( ! empty( $license_data ) && ( isset( $license_data->code ) || isset( $license_data->message ) ) ) {
+			return false;
+		}
+
+		error_log( var_export( $license_data, true ) );
+		$this->set_license( $license, $license_data );
+		return true;
 	}
 
 	/**
@@ -130,7 +178,7 @@ final class License {
 	 * @return bool|\stdClass
 	 */
 	public static function get_license_data() {
-		return get_option( self::LICENSE_DATA_OPTION_KEY );
+		return get_transient( self::LICENSE_DATA_TRANSIENT_KEY );
 	}
 
 	/**
