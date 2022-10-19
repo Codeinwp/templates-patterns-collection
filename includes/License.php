@@ -13,7 +13,7 @@ namespace TIOB;
  * Class License
  */
 final class License {
-	const API_URL = 'https://api.themeisle.com/templates-cloud/';
+	const API_URL                    = 'https://api.themeisle.com/templates-cloud/';
 	const LICENSE_DATA_TRANSIENT_KEY = 'templates_patterns_collection_license_data';
 	const LICENSE_KEY_OPTION_KEY     = 'templates_patterns_collection_license';
 
