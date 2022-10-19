@@ -83,7 +83,6 @@ final class License {
 	public function check_license( $license ) {
 		$license_url = sprintf( '%stemplates/?license_id=%s&site_url=%s&license_check=1', self::API_URL, $license, rawurlencode( home_url() ) );
 		$response    = $this->safe_get( $license_url );
-		error_log( var_export( $license_url, true ) );
 
 		if ( is_wp_error( $response ) ) {
 			return false;
@@ -100,7 +99,6 @@ final class License {
 			return false;
 		}
 
-		error_log( var_export( $license_data, true ) );
 		$this->set_license( $license, $license_data );
 		return true;
 	}
