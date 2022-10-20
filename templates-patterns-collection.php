@@ -9,7 +9,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.en.html
  * Text Domain:       templates-patterns-collection
  * Domain Path:       /languages
- * WordPress Available: yes
+ * WordPress Available:  yes
  * Requires License:    no
  *
  * @package templates-patterns-collection
