@@ -15,8 +15,6 @@
  * @package templates-patterns-collection
  */
 
-define( 'TIOB_BASE_FILE', __FILE__ );
-
 add_action( 'init', 'ti_tpc_load_textdomain' );
 add_action( 'init', 'ti_tpc_flush_premalinks' );
 
@@ -50,16 +48,6 @@ function tpc_load_sdk( $products ) {
 	$products[] = __FILE__;
 	return $products;
 }
-
-add_filter(
-	'themesle_sdk_namespace_' . md5( __FILE__ ),
-	function () {
-		return 'tiob';
-	}
-);
-
-add_filter( 'templates_patterns_collection_hide_license_field', '__return_true' );
-
 /**
  * Load the localisation file.
  */
