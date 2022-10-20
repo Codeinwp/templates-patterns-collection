@@ -199,7 +199,7 @@ class Admin {
 				'license_id' => apply_filters( 'tiob_license_key', 'free' ),
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
-			'isValidLicense'      => $this->get_license_status(),
+			'isValidLicense'      => License::has_active_license(),
 			'licenseTIOB'         => License::get_license_data(),
 		);
 	}
@@ -480,34 +480,4 @@ class Admin {
 			),
 		);
 	}
-
-	/**
-	 * Check license status.
-	 *
-	 * @return bool
-	 */
-	private function get_license_status() {
-		if ( ! defined( 'TIOB_BASE_FILE' ) ) {
-			return false;
-		}
-
-		$option_name = basename( dirname( TIOB_BASE_FILE ) );
-		$option_name = str_replace( '-', '_', strtolower( trim( $option_name ) ) );
-		$status      = get_option( $option_name . '_license_data' );
-
-		if ( ! $status ) {
-			return false;
-		}
-
-		if ( ! isset( $status->license ) ) {
-			return false;
-		}
-
-		if ( $status->license === 'not_active' || $status->license === 'invalid' ) {
-			return false;
-		}
-
-		return true;
-	}
-
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
-import { withDispatch } from '@wordpress/data';
+import { withDispatch, withSelect } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import Card from './Card';
 import {
@@ -11,65 +11,54 @@ import {
 	Notice,
 	Icon,
 } from '@wordpress/components';
+import { loadPromise, models } from '@wordpress/api';
+import { fetchLibrary as licenseCheck } from './CloudLibrary/common';
 
-const License = ( { setLicenseStatus } ) => {
-	const [ license, setLicense ] = useState( window.tiobDash.licenseTIOB );
-	const [ licenseKey, setLicenseKey ] = useState( '' );
+const License = ( { setLicense, license } ) => {
+	const keyValue = license?.key !== '' && license?.key !== 'free' ? license?.key : '';
+	const [ licenseKey, setLicenseKey ] = useState( keyValue );
 	const [ loading, setLoading ] = useState( false );
 	const [ resultMsg, setResultMsg ] = useState( {} );
 
-	useEffect( () => {
-		if (
-			license.key &&
-			( 'valid' === license.valid || 'active_expired' === license.valid )
-		) {
-			setLicenseKey( license.key );
-		}
-	}, [ license ] );
 
 	const isValid = 'valid' === license?.valid || 'valid' === license?.license;
 
-	const delay = ( time ) =>
-		new Promise( ( resolve ) => setTimeout( resolve, time ) );
+	const updateKey = ( value ) => {
+		const optionName = 'templates_patterns_collection_license';
+		const model = new models.Settings({
+			[optionName]: value,
+		});
 
-	const createNotice = ( type, message ) => {
-		setResultMsg( { type, message } );
-
-		delay( 3000 ).then( () => setResultMsg( {} ) );
-	};
-
-	const onSaveLicense = ( data ) => {
-		setLoading( true );
-		apiFetch( {
-			path: 'ti-sites-lib/v1/toggle_license',
-			method: 'POST',
-			data,
-		} )
-			.then( ( res ) => {
-				setLoading( false );
-				createNotice( res.success ? 'success' : 'error', res.message );
-
-				if (
-					res?.success &&
-					res.license &&
-					'free' !== res.license.key
-				) {
-					setLicense( res.license );
-					setLicenseKey( res.license.key );
-					setLicenseStatus( res.license.valid );
-					window.tiobDash.licenseTIOB = res.license;
-					console.log( res.license );
-					console.log( window.tiobDash.licenseTIOB );
-				} else {
-					window.tiobDash.licenseTIOB = res.license;
-					setLicense( {} );
-					setLicenseKey( '' );
+		return new Promise((resolve) => {
+			model.save().then((r) => {
+				if (!r || !r[optionName] === value) {
+					resolve({ success: false });
 				}
-			} )
-			.catch( ( err ) => {
-				setLoading( false );
-				console.log( err );
+				resolve({ success: true });
+			});
+		});
+	}
+
+	const onSaveLicense = async ( data ) => {
+		setLoading( true );
+		if ( data.action === 'deactivate' ) {
+			setLicense( {
+				key: 'free',
+				valid: 'invalid',
+				expiration: '',
+				tier: 0,
 			} );
+			setLicenseKey('');
+			await updateKey( '' );
+			setLoading( false );
+			return;
+		}
+		const { success, templates } = await licenseCheck( false, { license_id: data.key, license_check: 1 } );
+		if ( success ) {
+			setLicense( templates );
+			await updateKey( data.key );
+		}
+		setLoading( false );
 	};
 
 	const toggleLicense = ( event ) => {
@@ -84,7 +73,7 @@ const License = ( { setLicenseStatus } ) => {
 	const licenseStatusMsg = isValid ? (
 		<>
 			<Icon size={ 32 } className="verified" icon="yes-alt" />{ ' ' }
-			{ 'Verified - Expires at' } { license.expiration }
+			{ 'Verified - Expires at'} { new Date( license.expires ).toDateString() }
 		</>
 	) : (
 		''
@@ -154,10 +143,17 @@ const License = ( { setLicenseStatus } ) => {
 
 export default compose(
 	withDispatch( ( dispatch ) => {
-		const { setLicenseStatus } = dispatch( 'neve-onboarding' );
+		const { setLicense } = dispatch( 'neve-onboarding' );
 
 		return {
-			setLicenseStatus,
+			setLicense,
+		};
+	} ),
+	withSelect( ( select ) => {
+		const { getLicense } = select( 'neve-onboarding' );
+
+		return {
+			license: getLicense(),
 		};
 	} )
 )( License );

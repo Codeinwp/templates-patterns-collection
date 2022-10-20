@@ -13,9 +13,11 @@ namespace TIOB;
  * Class License
  */
 final class License {
-	const API_URL                    = 'https://api.themeisle.com/templates-cloud/';
-	const LICENSE_DATA_TRANSIENT_KEY = 'templates_patterns_collection_license_data';
-	const LICENSE_KEY_OPTION_KEY     = 'templates_patterns_collection_license';
+	//  const API_URL                    = 'https://api.themeisle.com/templates-cloud/';
+	const API_URL                  = 'https://templates-cloud.test/wp-json/templates-cloud/v1/';
+	const LICENSE_DATA_OPTIONS_KEY = 'templates_patterns_collection_license_data';
+	const LICENSE_KEY_OPTION_KEY   = 'templates_patterns_collection_license';
+	const LICENSE_TRANSIENT_KEY    = 'templates_patterns_collection_license_check';
 
 	/**
 	 * The main instance var.
@@ -34,8 +36,31 @@ final class License {
 		add_filter(
 			'tiob_license_key',
 			function () {
-				return isset( self::get_license_data()->key ) ? self::get_license_data()->key : 'free';
+				return get_option( self::LICENSE_KEY_OPTION_KEY );
 			}
+		);
+		add_filter(
+			'pre_update_option',
+			function ( $value, $option, $old_value ) {
+				if ( $option === self::LICENSE_KEY_OPTION_KEY ) {
+					if ( $value !== $old_value ) {
+						delete_transient( self::LICENSE_TRANSIENT_KEY );
+					}
+				}
+				return $value;
+			},
+			10,
+			3
+		);
+
+		register_setting(
+			'tpc_license_settings',
+			self::LICENSE_KEY_OPTION_KEY,
+			array(
+				'type'         => 'string',
+				'show_in_rest' => true,
+				'default'      => '',
+			)
 		);
 	}
 
@@ -71,13 +96,20 @@ final class License {
 			$neve_license = apply_filters( 'product_neve_license_key', 'free' );
 			$this->check_license( $neve_license );
 			update_option( 'tiob_inherited_autoactivate', true );
+			return;
+		}
+
+		if ( ! get_transient( self::LICENSE_TRANSIENT_KEY ) ) {
+			$tiob_license = apply_filters( 'tiob_license_key', 'free' );
+			$this->check_license( $tiob_license );
 		}
 
 	}
 
 	private function set_license( $license, $license_data ) {
 		update_option( self::LICENSE_KEY_OPTION_KEY, $license );
-		set_transient( self::LICENSE_DATA_TRANSIENT_KEY, $license_data, 12 * HOUR_IN_SECONDS );
+		update_option( self::LICENSE_DATA_OPTIONS_KEY, $license_data );
+		set_transient( self::LICENSE_TRANSIENT_KEY, true, 12 * HOUR_IN_SECONDS );
 	}
 
 	public function check_license( $license ) {
@@ -96,6 +128,15 @@ final class License {
 		}
 
 		if ( ! empty( $license_data ) && ( isset( $license_data->code ) || isset( $license_data->message ) ) ) {
+			$this->set_license(
+				$license,
+				array(
+					'key'        => 'free',
+					'valid'      => 'invalid',
+					'expiration' => '',
+					'tier'       => 0,
+				)
+			);
 			return false;
 		}
 
@@ -127,55 +168,12 @@ final class License {
 	}
 
 	/**
-	 * Check if license is expired.
-	 *
-	 * @return bool
-	 */
-	public static function has_expired_license(): bool {
-		$status = self::get_license_data();
-
-		if ( ! $status ) {
-			return false;
-		}
-
-		if ( ! isset( $status->license ) ) {
-			return false;
-		}
-
-		if ( 'active_expired' !== $status->license ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Get the license expiration date.
-	 *
-	 * @param string $format format of the date.
-	 *
-	 * @return false|string
-	 */
-	public static function get_license_expiration_date( $format = 'F Y' ) {
-		$data = self::get_license_data();
-
-		if ( isset( $data->expires ) ) {
-			$parsed = date_parse( $data->expires );
-			$time   = mktime( $parsed['hour'], $parsed['minute'], $parsed['second'], $parsed['month'], $parsed['day'], $parsed['year'] );
-
-			return gmdate( $format, $time );
-		}
-
-		return false;
-	}
-
-	/**
 	 * Get the license data.
 	 *
 	 * @return bool|\stdClass
 	 */
 	public static function get_license_data() {
-		return get_transient( self::LICENSE_DATA_TRANSIENT_KEY );
+		return get_option( self::LICENSE_DATA_OPTIONS_KEY );
 	}
 
 	/**

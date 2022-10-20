@@ -27,7 +27,8 @@ class Editor {
 	 * Initialize the Admin.
 	 */
 	public function init() {
-		define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-cloud/' );
+		//define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-cloud/' );
+		define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://templates-cloud.test/wp-json/templates-cloud/v1/' );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_block' ), 11 );
 		$this->register_post_meta();
 	}

@@ -1,5 +1,5 @@
 /* global tiobDash  */
-const { onboarding, themeAction } = tiobDash;
+const { onboarding, themeAction, licenseTIOB } = tiobDash;
 
 const firstEditor =
 	'undefined' !== typeof onboarding.sites &&
@@ -8,6 +8,13 @@ const firstEditor =
 		: 'gutenberg';
 const selectedEditor =
 	localStorage.getItem( 'neve-onboarding-editor' ) || firstEditor;
+
+const initialLicense = licenseTIOB || {
+	key: 'free',
+	valid: 'invalid',
+	expiration: '',
+	tier: 0,
+};
 
 const initialState = {
 	sites: onboarding.sites || {},
@@ -26,6 +33,7 @@ const initialState = {
 	singleTemplateImport: null,
 	templateModal: null,
 	searchQuery: '',
+	license: initialLicense,
 };
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
@@ -55,7 +63,7 @@ export default ( state = initialState, action ) => {
 				currentSite: siteData,
 			};
 		case 'SET_PREVIEW_STATUS':
-				const { previewStatus } = action.payload;
+		const { previewStatus } = action.payload;
 			return {
 				...state,
 				previewStatus,
@@ -109,17 +117,17 @@ export default ( state = initialState, action ) => {
 				...state,
 				templateModal: data,
 			};
-		case 'SET_LICENSE_STATUS':
-			const { lStatus } = action.payload;
-			return {
-				...state,
-				licenseStatus: lStatus,
-			};
 		case 'SET_SEARCH_QUERY':
 			const { query } = action.payload;
 			return {
 				...state,
 				searchQuery: query,
+			};
+		case 'SET_LICENSE':
+			const { license } = action.payload;
+			return {
+				...state,
+				license,
 			};
 	}
 	return state;

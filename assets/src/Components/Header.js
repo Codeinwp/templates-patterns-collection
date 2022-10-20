@@ -101,7 +101,7 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 					data-content={ __( 'Sync' ) }
 				/>
 			) }
-			{ currentTab === 'starterSites' && (
+			{ currentTab !== 'starterSites' && (
 				<>
 					<Button
 						icon={ ! isLicenseOpen ? lock : close }
