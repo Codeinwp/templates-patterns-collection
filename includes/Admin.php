@@ -60,9 +60,8 @@ class Admin {
 	 * @return array
 	 */
 	public function add_tpc_editor_data( $data ) {
-		$plan = $this->neve_license_plan();
-
-		$data['tier'] = apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? $plan : 3;
+		$plan         = $this->neve_license_plan();
+		$data['tier'] = License::get_license_tier( $plan );
 
 		return $data;
 	}
@@ -132,8 +131,7 @@ class Admin {
 	 */
 	private function is_agency_plan() {
 		$plan = $this->neve_license_plan();
-
-		$plan = apply_filters( 'product_tiob_license_status', false ) !== 'valid' ? $plan : 3;
+		$plan = License::get_license_tier( $plan );
 
 		return $plan === 3;
 	}

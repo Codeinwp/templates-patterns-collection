@@ -176,6 +176,20 @@ final class License {
 	}
 
 	/**
+	 * Get the license tier.
+	 *
+	 * @param int $default_tier The default tier.
+	 * @return int
+	 */
+	public static function get_license_tier( $default_tier = 0 ) {
+		$license = self::get_license_data();
+		if ( isset( $license['tier'] ) && ! empty( $license['tier'] ) ) {
+			return (int) $license['tier'];
+		}
+		return $default_tier;
+	}
+
+	/**
 	 * Throw error on object clone
 	 *
 	 * @return void
@@ -186,12 +200,12 @@ final class License {
 	}
 
 	/**
-	 * Disable unserializing of the class
+	 * Disable un-serializing of the class
 	 *
 	 * @return void
 	 */
 	public function __wakeup() {
-		// Unserializing instances of the class is forbidden.
+		// Un-serializing instances of the class is forbidden.
 		_doing_it_wrong( __FUNCTION__, '', '1.0.0' );
 	}
 }
