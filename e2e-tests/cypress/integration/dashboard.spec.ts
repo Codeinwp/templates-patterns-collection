@@ -164,7 +164,7 @@ describe('Importer Works', function () {
       );
     });
 
-    cy.get('.ob-import-modal').find('button').contains('Import entire site').click();
+    cy.get('.ob-import-modal').wait(1000).find('button').contains('Import entire site').click();
 
     cy.wait('@installPlugins', { timeout: 20000 }).then((req) => {
       expect(req.response.statusCode).to.equal(200);
