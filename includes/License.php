@@ -129,7 +129,7 @@ final class License {
 		if ( ! empty( $license_data ) && ( isset( $license_data->code ) || isset( $license_data->message ) ) ) {
 			$this->set_license(
 				$license,
-				array(
+				(object) array(
 					'key'        => 'free',
 					'valid'      => 'invalid',
 					'expiration' => '',
@@ -183,8 +183,8 @@ final class License {
 	 */
 	public static function get_license_tier( $default_tier = 0 ) {
 		$license = self::get_license_data();
-		if ( isset( $license['tier'] ) && ! empty( $license['tier'] ) ) {
-			return (int) $license['tier'];
+		if ( isset( $license->tier ) && absint( $license->tier ) >= 0 ) {
+			return (int) $license->tier;
 		}
 		return $default_tier;
 	}

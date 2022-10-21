@@ -2,7 +2,6 @@ import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
-import apiFetch from '@wordpress/api-fetch';
 import Card from './Card';
 import {
 	ExternalLink,
@@ -11,7 +10,7 @@ import {
 	Notice,
 	Icon,
 } from '@wordpress/components';
-import { loadPromise, models } from '@wordpress/api';
+import { models } from '@wordpress/api';
 import { fetchLibrary as licenseCheck } from './CloudLibrary/common';
 
 const License = ( { setLicense, license } ) => {
@@ -22,6 +21,14 @@ const License = ( { setLicense, license } ) => {
 
 
 	const isValid = 'valid' === license?.valid || 'valid' === license?.license;
+
+	const delay = (time) => new Promise(resolve => setTimeout(resolve, time));
+
+	const createNotice = (type, message) => {
+		setResultMsg({type, message});
+
+		delay(3000).then(()=>setResultMsg({}));
+	}
 
 	const updateKey = ( value ) => {
 		const optionName = 'templates_patterns_collection_license';
@@ -53,10 +60,17 @@ const License = ( { setLicense, license } ) => {
 			setLoading( false );
 			return;
 		}
+
 		const { success, templates } = await licenseCheck( false, { license_id: data.key, license_check: 1 } );
+
 		if ( success ) {
 			setLicense( templates );
 			await updateKey( data.key );
+		} else {
+			createNotice(
+				'error',
+				__( 'Can not activate this license!', 'templates-patterns-collection' ),
+			);
 		}
 		setLoading( false );
 	};
