@@ -64,7 +64,7 @@ const ImportModal = ( {
 	const [ optionsOpened, setOptionsOpened ] = useState( true );
 	const [ themeOpened, setThemeOpened ] = useState( true );
 
-	const { licenseTIOB, cleanupAllowed } = tiobDash;
+	const { license, cleanupAllowed } = tiobDash;
 	const [ isCleanupAllowed, setIsCleanupAllowed ] = useState(
 		cleanupAllowed
 	);
@@ -76,10 +76,7 @@ const ImportModal = ( {
 		const url = new URL(
 			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
 		);
-		url.searchParams.append(
-			'license',
-			licenseTIOB ? licenseTIOB.key : 'free'
-		);
+		url.searchParams.append( 'license', license ? license.key : 'free' );
 		get( url, true, false )
 			.then( ( response ) => {
 				if ( ! response.ok ) {
