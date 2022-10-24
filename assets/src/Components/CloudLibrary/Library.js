@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import VizSensor from 'react-visibility-sensor';
 
 import { chevronLeft, chevronRight, close } from '@wordpress/icons';
-import { useEffect, useState, Fragment } from '@wordpress/element';
+import {useEffect, useState, Fragment, useContext} from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Spinner, Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
@@ -15,6 +15,7 @@ import Filters from './Filters';
 import PreviewFrame from './PreviewFrame';
 import ImportTemplatesModal from './ImportTemplatesModal';
 import Logo from '../Icon';
+import { LicensePanelContext } from '../LicensePanelContext';
 
 const Library = ( {
 	isGeneral,
@@ -285,7 +286,10 @@ const Library = ( {
 	const upgradeURL =
 		'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=wpadmin&utm_campaign=templatecloud&utm_content=neve';
 
-	const UpsellModal = ( { title, description, showUpgradeBtn = true } ) => {
+	const UpsellModal = ( { title, description, showUpgradeBtn = true, showLicenseToggle = true } ) => {
+
+		const { isLicenseOpen, setLicenseOpen } = useContext( LicensePanelContext );
+
 		return (
 			<div className={ wrapClasses }>
 				<div className="table">
@@ -323,6 +327,12 @@ const Library = ( {
 										{ __( 'Upgrade to PRO' ) }
 									</Button>
 								) }
+
+								{ showLicenseToggle && (
+									<Button isLink style={{ marginLeft: '12px' }} onClick={ () => { setLicenseOpen(true) } }>
+										{ __( 'I already have a key.', 'template-patterns-collection' ) }
+									</Button>
+								) }
 							</div>
 							<div className="icon">
 								<Icon icon={ Logo } />
@@ -357,8 +367,9 @@ const Library = ( {
 			<UpsellModal
 				title={ __( 'Templates Cloud is a PRO Feature' ) }
 				description={ __(
-					'Unlock the Templates Cloud features and save your pages or posts in the cloud.'
-				) }
+						'Unlock the Templates Cloud features and save your pages or posts in the cloud.',
+						'template-patterns-collection'
+					) }
 			/>
 		);
 	}
