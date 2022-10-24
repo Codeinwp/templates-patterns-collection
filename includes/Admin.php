@@ -95,9 +95,7 @@ class Admin {
 				'render_starter_sites',
 			)
 		);
-		if ( $this->is_agency_plan() ) {
-			add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
-		}
+		add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
 	}
 
 	/**
