@@ -136,7 +136,7 @@ const License = ( { setLicense, license } ) => {
 		<>
 			<span>Enter your license from </span>
 			<ExternalLink href="https://store.themeisle.com/login/">
-				ThemeIsle
+				Themeisle
 			</ExternalLink>
 			<span> purchase history in order to get plugin updates</span>
 		</>
