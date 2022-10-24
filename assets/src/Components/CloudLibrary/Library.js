@@ -282,7 +282,7 @@ const Library = ( {
 		} );
 	};
 
-	const { upgradeURL } = window.tiobDash;
+	const { upgradeURLTpc } = window.tiobDash;
 
 	const UpsellModal = ( { title, description, showUpgradeBtn = true, showLicenseToggle = true } ) => {
 
@@ -319,7 +319,7 @@ const Library = ( {
 									<Button
 										variant="primary"
 										isPrimary
-										href={upgradeURL}
+										href={upgradeURLTpc}
 										target="_blank"
 									>
 										{ __( 'Upgrade to PRO' ) }

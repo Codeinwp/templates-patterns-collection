@@ -173,13 +173,26 @@ class Admin {
 	 * @return array
 	 */
 	private function get_localization() {
-		$theme_name  = apply_filters( 'ti_wl_theme_name', 'Neve' );
-		$upgrade_url = defined( 'NEVE_VERSION' ) ? apply_filters( 'neve_upgrade_link_from_child_theme_filter', tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'freevspro' ) ) : tsdk_utmify( 'https://themeisle.com/plugins/teamplates-cloud', 'tcupgrade' );
+		$theme_name = apply_filters( 'ti_wl_theme_name', 'Neve' );
+
+		$neve_upgrade_link = 'https://themeisle.com/themes/neve/upgrade/';
+		$upgrade_url       = apply_filters(
+			'neve_upgrade_link_from_child_theme_filter',
+			tsdk_utmify( $neve_upgrade_link, 'freevspro' )
+		);
+		$upgrade_url_tpc   = tsdk_utmify( 'https://themeisle.com/plugins/teamplates-cloud', 'tcupgrade' );
+		if ( defined( 'NEVE_VERSION' ) ) {
+			$upgrade_url_tpc = apply_filters(
+				'neve_upgrade_link_from_child_theme_filter',
+				tsdk_utmify( $neve_upgrade_link, 'templatecloud' )
+			);
+		}
 
 		return array(
 			'nonce'               => wp_create_nonce( 'wp_rest' ),
 			'assets'              => TIOB_URL . '/assets/',
 			'upgradeURL'          => $upgrade_url,
+			'upgradeURLTpc'       => $upgrade_url_tpc,
 			'strings'             => array(
 				/* translators: %s - Theme name */
 				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
