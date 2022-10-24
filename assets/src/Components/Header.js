@@ -96,7 +96,7 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching, license } ) => 
 					icon={ update }
 					onClick={ sync }
 					label={ __( 'Re-sync Library' ) }
-					className={ classnames( 'is-sync', {
+					className={ classnames( 'is-icon-btn', {
 						'is-loading': isSyncing,
 					} ) }
 					disabled={ isFetching || isSyncing }
@@ -111,7 +111,7 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching, license } ) => 
 							setLicenseOpen( ! isLicenseOpen );
 						} }
 						label={ __( 'License' ) }
-						className={ classnames( 'is-sync', {
+						className={ classnames( 'is-icon-btn', {
 							'is-not-valid': ! isLicenseOpen && ! isValid,
 							'is-valid': ! isLicenseOpen && isValid,
 						} ) }

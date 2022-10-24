@@ -87,21 +87,13 @@
 }
 
 
-.is-sync {
+.is-icon-btn {
 	background-color: #f1f1f1;
 	color: #0073aa !important;
 	border-radius: 6px;
 
-	&:before {
-		padding: 0 5px 0 15px;
-		content: attr(data-content);
-		margin-right: 5px;
-		font-size: 15px;
-		display: none;
-	}
-
-	&:hover:before {
-		display: block;
+	&:hover {
+		background-color: #f7f7f7;
 	}
 }
 

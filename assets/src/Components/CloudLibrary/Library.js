@@ -282,13 +282,11 @@ const Library = ( {
 		} );
 	};
 
-	const themeURL = 'https://wordpress.org/themes/neve/';
-	const upgradeURL =
-		'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=wpadmin&utm_campaign=templatecloud&utm_content=neve';
+	const { upgradeURL } = window.tiobDash;
 
 	const UpsellModal = ( { title, description, showUpgradeBtn = true, showLicenseToggle = true } ) => {
 
-		const { isLicenseOpen, setLicenseOpen } = useContext( LicensePanelContext );
+		const { setLicenseOpen } = useContext( LicensePanelContext );
 
 		return (
 			<div className={ wrapClasses }>
@@ -321,7 +319,7 @@ const Library = ( {
 									<Button
 										variant="primary"
 										isPrimary
-										href="https://themeisle.com/themes/neve/upgrade/?utm_medium=templatecloud&utm_source=wpadmin&utm_campaign=upgradetoprobtn&utm_content=neve"
+										href={upgradeURL}
 										target="_blank"
 									>
 										{ __( 'Upgrade to PRO' ) }
@@ -330,7 +328,7 @@ const Library = ( {
 
 								{ showLicenseToggle && (
 									<Button isLink style={{ marginLeft: '12px' }} onClick={ () => { setLicenseOpen(true) } }>
-										{ __( 'I already have a key.', 'template-patterns-collection' ) }
+										{ __( 'I already have a key', 'template-patterns-collection' ) }
 									</Button>
 								) }
 							</div>
@@ -343,24 +341,6 @@ const Library = ( {
 			</div>
 		);
 	};
-
-	if ( themeData !== false ) {
-		return (
-			<UpsellModal
-				title={ __( 'Coming soon' ) }
-				description={ sprintf(
-					// translators: %1$s: Theme Name %2$s Plugin Name.
-					__(
-						'Right now this feature is not available with your current setup. if you want to use it, you need to install %1$s theme and %2$s plugin',
-						'template-patterns-collection'
-					),
-					`<a href="${ themeURL }" target="_blank" rel="noreferrer">Neve</a>`,
-					`<a href="${ upgradeURL }" target="_blank" rel="noreferrer">Neve Pro Addon</a>`
-				) }
-				showUpgradeBtn={ false }
-			/>
-		);
-	}
 
 	if ( ! userStatus && ! isGeneral ) {
 		return (
