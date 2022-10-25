@@ -72,13 +72,27 @@ class WP_Import extends WP_Importer {
 		$this->process_categories();
 		$this->process_tags();
 		$this->process_terms();
+		add_filter( 'upload_mimes', array( $this, 'enable_svg_import' ) );
 		$this->process_posts();
+		remove_filter( 'upload_mimes', array( $this, 'enable_svg_import' ) );
 		wp_suspend_cache_invalidation( false );
 		// update incorrect/missing information in the DB
 		$this->backfill_parents();
 		$this->backfill_attachment_urls();
 		$this->remap_featured_images();
 		$this->import_end();
+	}
+
+	/**
+	 * Filter the allowed mime types and add SVG support.
+	 *
+	 * @param array $mimes List of allowed mime types.
+	 *
+	 * @return array
+	 */
+	public function enable_svg_import( $mimes ) {
+		$mimes['svg'] = 'image/svg+xml';
+		return $mimes;
 	}
 
 	/**
