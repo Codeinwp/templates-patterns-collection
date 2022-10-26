@@ -31,6 +31,7 @@ import {
 	PanelBody,
 	PanelRow,
 } from '@wordpress/components';
+import {removeImportType, setImportType} from "./SettingsApi";
 
 const ImportModal = ( {
 	setModal,
@@ -346,8 +347,10 @@ const ImportModal = ( {
 					return false;
 				}
 				console.log( '[D] Cleanup.' );
-				setCleanupProgress( 'done' );
-				runImport();
+				removeImportType().then( r => {
+					setCleanupProgress( 'done' );
+					runImport();
+				} );
 			} )
 			.catch( ( incomingError ) =>
 				handleError( incomingError, 'cleanup' )
@@ -464,8 +467,10 @@ const ImportModal = ( {
 				if ( response.frontpage_id ) {
 					setFrontPageID( response.frontpage_id );
 				}
-				setContentProgress( 'done' );
-				runImportCustomizer();
+				setImportType( siteData ).then( r => {
+					setContentProgress( 'done' );
+					runImportCustomizer();
+				} );
 			} )
 			.catch( ( incomingError ) =>
 				handleError( incomingError, 'content' )

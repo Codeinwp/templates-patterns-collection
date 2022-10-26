@@ -115,6 +115,16 @@ class Main {
 		$this->setup_admin();
 		$this->setup_api();
 		$this->setup_active_state();
+
+		register_setting(
+			'tpc_premium_import',
+			'templates_patterns_collection_pro_import',
+			array(
+				'type'         => 'boolean',
+				'show_in_rest' => true,
+				'default'      => false,
+			)
+		);
 	}
 
 	/**
