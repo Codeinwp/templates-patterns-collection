@@ -168,7 +168,7 @@ class Admin {
 			'neve_upgrade_link_from_child_theme_filter',
 			tsdk_utmify( $neve_upgrade_link, 'freevspro' )
 		);
-		$upgrade_url_tpc   = tsdk_utmify( 'https://themeisle.com/plugins/teamplates-cloud', 'tcupgrade' );
+		$upgrade_url_tpc   = tsdk_utmify( 'https://themeisle.com/plugins/templates-cloud', 'tcupgrade' );
 		if ( defined( 'NEVE_VERSION' ) ) {
 			$upgrade_url_tpc = apply_filters(
 				'neve_upgrade_link_from_child_theme_filter',
