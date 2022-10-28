@@ -196,6 +196,7 @@ final class License {
 	public static function get_license_tier( $default_tier = 0 ) {
 		$license = self::get_license_data();
 		if ( isset( $license->tier ) && absint( $license->tier ) >= 0 ) {
+			$tier = $license->tier;
 			if ( $license->tier !== 3 ) {
 				$tier = isset( self::NEVE_CATEGORY_MAPPING[ $license->tier ] ) ? self::NEVE_CATEGORY_MAPPING[ $license->tier ] : $license->tier;
 			}
