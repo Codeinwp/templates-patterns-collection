@@ -106,19 +106,7 @@ class Admin {
 	private function neve_license_plan() {
 		$category = apply_filters( 'product_neve_license_plan', - 1 );
 
-		$category_mapping = array(
-			1 => 1,
-			2 => 1,
-			3 => 2,
-			4 => 2,
-			5 => 3,
-			6 => 3,
-			7 => 1,
-			8 => 2,
-			9 => 3,
-		);
-
-		return $category > -1 && isset( $category_mapping[ $category ] ) ? $category_mapping[ $category ] : -1;
+		return $category > -1 && isset( License::NEVE_CATEGORY_MAPPING[ $category ] ) ? License::NEVE_CATEGORY_MAPPING[ $category ] : -1;
 	}
 
 	/**

@@ -18,6 +18,18 @@ final class License {
 	const LICENSE_KEY_OPTION_KEY   = 'templates_patterns_collection_license';
 	const LICENSE_TRANSIENT_KEY    = 'templates_patterns_collection_license_check';
 
+	const NEVE_CATEGORY_MAPPING = array(
+		1 => 1,
+		2 => 1,
+		3 => 2,
+		4 => 2,
+		5 => 3,
+		6 => 3,
+		7 => 1,
+		8 => 2,
+		9 => 3,
+	);
+
 	/**
 	 * The main instance var.
 	 *
@@ -184,7 +196,10 @@ final class License {
 	public static function get_license_tier( $default_tier = 0 ) {
 		$license = self::get_license_data();
 		if ( isset( $license->tier ) && absint( $license->tier ) >= 0 ) {
-			return (int) $license->tier;
+			if ( $license->tier !== 3 ) {
+				$tier = isset( self::NEVE_CATEGORY_MAPPING[ $license->tier ] ) ? self::NEVE_CATEGORY_MAPPING[ $license->tier ] : $license->tier;
+			}
+			return (int) $tier;
 		}
 		return $default_tier;
 	}

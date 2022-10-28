@@ -31,6 +31,10 @@ const ImportTemplatesModal = ( {
 
 	const isSingle = templatesData.length === 1;
 
+	console.log( themeData );
+	console.log( isUserTemplate );
+	console.log( generalTemplates );
+
 	useEffect( () => {
 		if ( isUserTemplate && isSingle ) {
 			getUserTemplateData( templatesData[ 0 ].template_id ).then(
@@ -140,6 +144,12 @@ const ImportTemplatesModal = ( {
 		const callbackError = ( err ) => {
 			console.error( err );
 		};
+
+		// skip activation or install for user templates
+		if ( isUserTemplate ) {
+			callbackImportTemplate();
+			return false;
+		}
 
 		if ( themeData.action === 'install' ) {
 			installTheme(
