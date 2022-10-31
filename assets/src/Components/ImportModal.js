@@ -285,6 +285,10 @@ const ImportModal = ( {
 			...( importData.mandatory_plugins || {} ),
 		};
 
+		if ( Object.keys( allPlugins ).length < 1 ) {
+			return null;
+		}
+
 		const toggleOpen = () => {
 			setPluginsOpened( ! pluginsOpened );
 		};
