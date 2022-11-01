@@ -21,6 +21,8 @@ class Manager {
 	 */
 	protected static $instance = null;
 
+	const OPTIMOLE_SLUG = 'optimole-wp';
+
 	/**
 	 * Instantiate the class.
 	 *
@@ -81,7 +83,9 @@ class Manager {
 	 */
 	private function get_plugin_key_by_slug( $plugin_slug, $plugin_list ) {
 		foreach ( $plugin_list as $key => $data ) {
-			if ( isset( $data['Name'] ) && sanitize_title( $data['Name'] ) === $plugin_slug ) {
+			$parts = explode( '/', $key );
+
+			if ( isset( $parts[0] ) && $parts[0] === $plugin_slug ) {
 				return $key;
 			}
 		}
@@ -96,6 +100,10 @@ class Manager {
 		if ( isset( $state[ Active_State::PLUGINS_NSP ] ) ) {
 			$plugin_list = get_plugins();
 			foreach ( $state[ Active_State::PLUGINS_NSP ] as $plugin_slug => $info ) {
+				if ( $plugin_slug === self::OPTIMOLE_SLUG ) {
+					return;
+				}
+
 				$plugin = $this->get_plugin_key_by_slug( $plugin_slug, $plugin_list );
 				if ( empty( $plugin ) ) {
 					continue;
