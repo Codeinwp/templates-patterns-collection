@@ -20,6 +20,9 @@ use WP_REST_Response;
  */
 class Plugin_Importer {
 
+	const OPTIMOLE_FRESH_INSTALL_FLAG = 'optml_fresh_install';
+	const OPTIMOLE_SLUG               = 'optimole-wp';
+
 	/**
 	 * Log
 	 *
@@ -206,7 +209,7 @@ class Plugin_Importer {
 			)
 		);
 
-		if ( version_compare( PHP_VERSION, '5.6' ) === -1 ) {
+		if ( version_compare( PHP_VERSION, '5.6' ) === - 1 ) {
 			$skin = new Quiet_Skin_Legacy(
 				array(
 					'api' => $api,
@@ -323,6 +326,10 @@ class Plugin_Importer {
 		activate_plugin( $plugin_path );
 		$this->log .= 'Activated ' . ucwords( $plugin_slug ) . '.' . "\n";
 
+		if ( $plugin_slug === self::OPTIMOLE_SLUG ) {
+			delete_transient( self::OPTIMOLE_FRESH_INSTALL_FLAG );
+		}
+
 		do_action( 'themeisle_ob_after_single_plugin_activation', $plugin_slug );
 
 		return true;
@@ -347,6 +354,7 @@ class Plugin_Importer {
 	 * Filter pages from woocommerce activation.
 	 *
 	 * @param array $pages List of pages to be created on activation.
+	 *
 	 * @return array
 	 */
 	public function woocommerce_activation_pages( $pages ) {
