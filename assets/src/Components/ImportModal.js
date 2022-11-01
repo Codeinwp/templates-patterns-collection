@@ -480,10 +480,7 @@ const ImportModal = ( {
 		}
 		setCurrentStep( 'plugins' );
 		console.log( '[P] Plugins.' );
-		installPlugins( {
-			...pluginOptions,
-			'optimole-wp': general.performanceAddon,
-		} )
+		installPlugins( pluginOptions )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					handleError( response, 'plugins' );
@@ -581,7 +578,6 @@ const ImportModal = ( {
 			);
 	}
 	function runPerformanceAddonInstall() {
-		importDone();
 		if ( ! general.performanceAddon ) {
 			console.log( '[S] Performance Addon.' );
 			importDone();
