@@ -1,13 +1,13 @@
 /*global tiobDash*/
 /* eslint-disable no-console */
 import {
+	activateTheme,
 	cleanupImport,
 	importContent,
 	importMods,
 	importWidgets,
 	installPlugins,
 	installTheme,
-	activateTheme,
 } from '../utils/site-import';
 import { get } from '../utils/rest';
 import { trailingSlashIt } from '../utils/common';
@@ -17,19 +17,24 @@ import classnames from 'classnames';
 import ImportModalError from './ImportModalError';
 import ImportModalMock from './ImportModalMock';
 import CustomTooltip from './CustomTooltip';
-import { useState, useEffect } from '@wordpress/element';
-import { withSelect, withDispatch } from '@wordpress/data';
+
+import {
+	createInterpolateElement,
+	useEffect,
+	useState,
+} from '@wordpress/element';
+import { withDispatch, withSelect } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
 
 import {
 	Button,
 	Icon,
-	ToggleControl,
 	Modal,
 	Panel,
 	PanelBody,
 	PanelRow,
+	ToggleControl,
 } from '@wordpress/components';
 
 const ImportModal = ( {
@@ -45,9 +50,14 @@ const ImportModal = ( {
 		customizer: true,
 		widgets: true,
 		cleanup: false,
+		performanceAddon: true,
 		theme_install: themeData !== false,
 	} );
+
 	const [ themeInstallProgress, setThemeInstallProgress ] = useState( false );
+	const [ performanceAddonProgress, setPerformanceAddonProgress ] = useState(
+		false
+	);
 	const [ cleanupProgress, setCleanupProgress ] = useState( false );
 	const [ pluginsProgress, setPluginsProgress ] = useState( false );
 	const [ contentProgress, setContentProgress ] = useState( false );
@@ -56,7 +66,7 @@ const ImportModal = ( {
 	const [ frontPageID, setFrontPageID ] = useState( null );
 	const [ currentStep, setCurrentStep ] = useState( null );
 	const [ importing, setImporting ] = useState( false );
-	const [ pluginOptions, setPluginOptions ] = useState( null );
+	const [ pluginOptions, setPluginOptions ] = useState( {} );
 	const [ error, setError ] = useState( null );
 	const [ importData, setImportData ] = useState( null );
 	const [ fetching, setFetching ] = useState( true );
@@ -211,6 +221,44 @@ const ImportModal = ( {
 					'templates-patterns-collection'
 				),
 			},
+			performanceAddon: {
+				title: __(
+					'Enable performance features for my site',
+					'templates-patterns-collection'
+				),
+				icon: 'dashboard',
+				tooltip: createInterpolateElement(
+					__(
+						sprintf(
+							// translators: %s is Optimole plugin name.
+							'Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free.',
+							'Optimole'
+						),
+						'templates-patterns-collection'
+					),
+					{
+						a: (
+							<a
+								href="https://wordpress.org/plugins/optimole-wp/"
+								target={ '_blank' }
+								style={ {
+									textDecoration: 'none',
+									display: 'inline-flex',
+									alignItems: 'center',
+								} }
+							/>
+						),
+						icon: (
+							<Icon
+								size={ 10 }
+								icon="external"
+								style={ { marginLeft: 0 } }
+							/>
+						),
+						span: <div />,
+					}
+				),
+			},
 		};
 
 		if ( isCleanupAllowed === 'yes' ) {
@@ -255,7 +303,11 @@ const ImportModal = ( {
 							<Icon icon={ icon } />
 							<span>{ title }</span>
 							{ tooltip && (
-								<CustomTooltip>{ tooltip }</CustomTooltip>
+								<CustomTooltip
+									toLeft={ id === 'performanceAddon' }
+								>
+									{ tooltip }
+								</CustomTooltip>
 							) }
 							{ id !== 'theme_install' && (
 								<div className="toggle-wrapper">
@@ -421,14 +473,17 @@ const ImportModal = ( {
 
 	function runImportPlugins() {
 		// console.clear();
-		if ( ! pluginOptions ) {
+		if ( ! pluginOptions && ! general.performanceAddon ) {
 			console.log( '[S] Plugins.' );
 			runImportContent();
 			return false;
 		}
 		setCurrentStep( 'plugins' );
 		console.log( '[P] Plugins.' );
-		installPlugins( pluginOptions )
+		installPlugins( {
+			...pluginOptions,
+			'optimole-wp': general.performanceAddon,
+		} )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					handleError( response, 'plugins' );
@@ -506,7 +561,7 @@ const ImportModal = ( {
 	function runImportWidgets() {
 		if ( ! general.widgets ) {
 			console.log( '[S] Widgets.' );
-			importDone();
+			runPerformanceAddonInstall();
 			return false;
 		}
 		setCurrentStep( 'widgets' );
@@ -519,10 +574,34 @@ const ImportModal = ( {
 				}
 				console.log( '[D] Widgets.' );
 				setWidgetsProgress( 'done' );
-				importDone();
+				runPerformanceAddonInstall();
 			} )
 			.catch( ( incomingError ) =>
 				handleError( incomingError, 'widgets' )
+			);
+	}
+	function runPerformanceAddonInstall() {
+		importDone();
+		if ( ! general.performanceAddon ) {
+			console.log( '[S] Performance Addon.' );
+			importDone();
+			return false;
+		}
+		setCurrentStep( 'performanceAddon' );
+		console.log( '[P] Performance Addon.' );
+
+		installPlugins( { 'optimole-wp': true } )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					handleError( response, 'performanceAddon' );
+					return false;
+				}
+				console.log( '[D] Performance Addon.' );
+				setPerformanceAddonProgress( 'done' );
+				importDone();
+			} )
+			.catch( ( incomingError ) =>
+				handleError( incomingError, 'performanceAddon' )
 			);
 	}
 
@@ -570,6 +649,10 @@ const ImportModal = ( {
 				'Something went wrong while importing the widgets.',
 				'templates-patterns-collection'
 			),
+			performanceAddon: __(
+				'Something went wrong while installing the performance addon.',
+				'templates-patterns-collection'
+			),
 		};
 
 		switch ( step ) {
@@ -587,6 +670,9 @@ const ImportModal = ( {
 				break;
 			case 'widgets':
 				setWidgetsProgress( 'error' );
+				break;
+			case 'performanceAddon':
+				setPerformanceAddonProgress( 'error' );
 				break;
 		}
 		setError(
@@ -664,6 +750,7 @@ const ImportModal = ( {
 											content: contentProgress,
 											customizer: customizerProgress,
 											widgets: widgetsProgress,
+											performanceAddon: performanceAddonProgress,
 										} }
 										currentStep={ currentStep }
 										willDo={ general }
