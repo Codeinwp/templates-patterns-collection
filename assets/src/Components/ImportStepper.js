@@ -2,6 +2,7 @@ import classnames from 'classnames';
 
 import { __ } from '@wordpress/i18n';
 import { Dashicon } from '@wordpress/components';
+
 const ImportStepper = ( { currentStep, progress, willDo } ) => {
 	const stepsMap = {
 		cleanup: {
@@ -42,6 +43,14 @@ const ImportStepper = ( { currentStep, progress, willDo } ) => {
 			label: __( 'Importing Widgets', 'templates-patterns-collection' ),
 			status: progress.widgets,
 			willDo: willDo.widgets,
+		},
+		performanceAddon: {
+			label: __(
+				'Installing Performance Features',
+				'templates-patterns-collection'
+			),
+			status: progress.performanceAddon,
+			willDo: willDo.performanceAddon,
 		},
 	};
 
