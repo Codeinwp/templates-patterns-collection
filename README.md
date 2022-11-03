@@ -39,6 +39,17 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 ## Changelog ##
 
+##### [Version 1.1.27](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.26...v1.1.27) (2022-11-03)
+
+- Feat Map for Restrict Content plugin
+- Feat Allow SVG during import
+- Feat Added performance features step
+- Fix plugin removal reliability
+- Fix the Import template button language in Elementor
+
+
+
+
 ##### [Version 1.1.26](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.25...v1.1.26) (2022-09-13)
 
 - Fix warding on toast message when saving empty templates
