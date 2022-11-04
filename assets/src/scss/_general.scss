@@ -22,12 +22,14 @@
 @media screen and (min-width: #{$tablet}) {
 	.ob-import-modal {
 		width: 630px !important;
+		max-height: 90vh;
 	}
 }
 
 @media screen and (min-width: #{$laptop}) {
 	.ob-import-modal {
 		width: 700px !important;
+		max-height: 90vh;
 	}
 }
 
