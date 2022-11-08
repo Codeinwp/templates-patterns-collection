@@ -70,7 +70,6 @@ const ImportModal = ( {
 	const [ error, setError ] = useState( null );
 	const [ importData, setImportData ] = useState( null );
 	const [ fetching, setFetching ] = useState( true );
-	const [ pluginsOpened, setPluginsOpened ] = useState( true );
 	const [ optionsOpened, setOptionsOpened ] = useState( true );
 	const [ themeOpened, setThemeOpened ] = useState( true );
 
@@ -341,48 +340,68 @@ const ImportModal = ( {
 			return null;
 		}
 
+		const [ pluginsOpened, setPluginsOpened ] = useState( Object.keys( allPlugins ).length < 3 );
+
 		const toggleOpen = () => {
 			setPluginsOpened( ! pluginsOpened );
 		};
 
+		const pluginsList = Object.keys( allPlugins ).map( ( slug, index ) => {
+			return allPlugins[ slug ];
+		} ).join( ', ' );
+
 		return (
-			<PanelBody
-				onToggle={ toggleOpen }
-				opened={ pluginsOpened }
-				className="options plugins"
-				title={ __( 'Plugins', 'templates-patterns-collection' ) }
-			>
-				{ Object.keys( allPlugins ).map( ( slug, index ) => {
-					const rowClass = classnames( 'option-row', {
-						active: pluginOptions[ slug ],
-					} );
-					return (
-						<PanelRow className={ rowClass } key={ index }>
-							<Icon icon="admin-plugins" />
-							<span
-								dangerouslySetInnerHTML={ {
-									__html: allPlugins[ slug ],
-								} }
-							/>
-							{ slug in importData.recommended_plugins && (
-								<div className="toggle-wrapper">
-									<ToggleControl
-										checked={ pluginOptions[ slug ] }
-										onChange={ () => {
-											setPluginOptions( {
-												...pluginOptions,
-												[ slug ]: ! pluginOptions[
-													slug
-												],
-											} );
-										} }
-									/>
-								</div>
-							) }
-						</PanelRow>
-					);
-				} ) }
-			</PanelBody>
+			<>
+				<PanelBody
+					onToggle={ toggleOpen }
+					opened={ pluginsOpened }
+					className="options plugins"
+					title={ __( 'Plugins', 'templates-patterns-collection' ) }
+				>
+					{ Object.keys( allPlugins ).map( ( slug, index ) => {
+						const rowClass = classnames( 'option-row', {
+							active: pluginOptions[ slug ],
+						} );
+						return (
+							<PanelRow className={ rowClass } key={ index }>
+								<Icon icon="admin-plugins" />
+								<span
+									dangerouslySetInnerHTML={ {
+										__html: allPlugins[ slug ],
+									} }
+								/>
+								{ slug in importData.recommended_plugins && (
+									<div className="toggle-wrapper">
+										<ToggleControl
+											checked={ pluginOptions[ slug ] }
+											onChange={ () => {
+												setPluginOptions( {
+													...pluginOptions,
+													[ slug ]: ! pluginOptions[
+														slug
+													],
+												} );
+											} }
+										/>
+									</div>
+								) }
+							</PanelRow>
+						);
+					} ) }
+				</PanelBody>
+				{ ! pluginsOpened && (<i className="plugin-summary">
+					<CustomTooltip
+						toLeft={false}
+					>
+						<span
+							dangerouslySetInnerHTML={ {
+								__html: pluginsList,
+							} }
+						/>
+					</CustomTooltip>
+					{ __( 'Additional plugins are required for this Starter Site in order to work properly. ', 'templates-patterns-collection' ) }
+				</i>) }
+			</>
 		);
 	};
 
