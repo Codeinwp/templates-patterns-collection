@@ -122,14 +122,14 @@ class Plugin_Importer {
 		foreach ( $plugins_array as $plugin_slug => $true ) {
 			$this->logger->log( "Installing {$plugin_slug}.", 'progress' );
 			$install = $this->install_single_plugin( $plugin_slug );
-			if ( ! $install ) {
+			if ( $install !== true ) {
 				$this->logger->log( 'Current user cannot install plugins.' );
 
 				return new WP_REST_Response(
 					array(
 						'success' => false,
 						'log'     => $this->log,
-						'data'    => 'no_plugin_install_permission',
+						'data'    => sprintf( 'no_plugin_install_permission %s', $install ),
 					)
 				);
 			}
@@ -183,7 +183,7 @@ class Plugin_Importer {
 
 		// User doesn't have permissions.
 		if ( ! current_user_can( 'install_plugins' ) && ! class_exists( 'WP_CLI' ) ) {
-			return false;
+			return 'debug - c1 - user does not have install plugin cap';
 		}
 
 		do_action( 'themeisle_ob_before_single_plugin_install', $plugin_slug );
@@ -227,7 +227,7 @@ class Plugin_Importer {
 		if ( $install !== true ) {
 			$this->log .= 'Error: Install process failed (' . ucwords( $plugin_slug ) . ').' . "\n";
 
-			return false;
+			return sprintf( 'debug - c2 - %s', $install->get_error_message() );
 		}
 		$this->log .= 'Installed "' . ucwords( $plugin_slug ) . '"' . "\n ";
 
