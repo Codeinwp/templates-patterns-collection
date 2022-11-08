@@ -147,16 +147,6 @@ const ImportModal = ( {
 
 	const ModalHead = () => (
 		<div className="header">
-			<h1>
-				{ sprintf(
-					/* translators: name of starter site */
-					__(
-						'Import %s as a complete site',
-						'templates-patterns-collection'
-					),
-					importData.title
-				) }
-			</h1>
 			<p className="description">
 				{ __(
 					'Import the entire site including customizer options, pages, content and plugins.',
@@ -729,6 +719,16 @@ const ImportModal = ( {
 			onRequestClose={ closeModal }
 			shouldCloseOnClickOutside={ ! importing && ! fetching }
 			isDismissible={ ! importing && ! fetching }
+			title={ importData ?
+				sprintf(
+					/* translators: name of starter site */
+					__(
+						'Import %s as a complete site',
+						'templates-patterns-collection'
+					),
+					importData.title
+				) : ''
+			}
 		>
 			{ fetching ? (
 				<ImportModalMock />
