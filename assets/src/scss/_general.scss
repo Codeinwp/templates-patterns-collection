@@ -28,6 +28,7 @@
 @media screen and (min-width: #{$laptop}) {
 	.ob-import-modal {
 		width: 700px !important;
+		max-height: 90vh;
 	}
 }
 

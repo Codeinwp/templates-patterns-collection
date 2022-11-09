@@ -34,6 +34,11 @@ $base-index: 100000;
 	}
 	.components-modal__header {
 		border: none;
+
+		h1 {
+			font-size: 22px;
+			font-weight: 700;
+		}
 	}
 
 	.header {
@@ -49,9 +54,9 @@ $base-index: 100000;
 		}
 
 		p.description {
-			font-size: 17px;
+			font-size: 15px;
 			line-height: 34px;
-			color: #000;
+			color: #333;
 		}
 	}
 
@@ -129,10 +134,35 @@ $base-index: 100000;
 		font-size: 15px;
 	}
 
+	.modal-body {
+		padding-bottom: 42px;
+
+		.plugin-summary {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			.tiob-tooltip-content {
+				left: 25px;
+				top: 0;
+			}
+		}
+	}
+
 	.modal-footer {
 		margin-top: 25px;
 		display: flex;
 		align-items: center;
+		position: absolute;
+		bottom: 0;
+		background: #fff;
+		width: calc( 100% - 72px );
+		padding: 12px 36px;
+		z-index: 10;
+		left: 0;
+		border-top: 1px solid #d9d9d9;
+
+		-webkit-box-shadow: 0px -24px 12px 0px rgba(255,255,255,0.8);
+		box-shadow: 0px -24px 12px 0px rgba(255,255,255,0.8);
 
 		.import {
 			padding: 10px 30px;
