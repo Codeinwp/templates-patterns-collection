@@ -9,6 +9,10 @@
 
 		.components-modal__content {
 			padding: 0;
+			margin-top: 0;
+			&:before {
+				margin-bottom: 0;
+			}
 
 			.components-modal__header {
 				display: none;

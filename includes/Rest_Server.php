@@ -185,6 +185,9 @@ class Rest_Server {
 		$content_importer = new Content_Importer();
 		$import           = $content_importer->import_remote_xml( $request );
 		set_transient( 'ti_tpc_should_flush_permalinks', 'yes', 12 * HOUR_IN_SECONDS );
+		if ( get_option( 'neve_notice_dismissed', 'no' ) !== 'yes' ) {
+			update_option( 'neve_notice_dismissed', 'yes' );
+		}
 
 		return $import;
 	}
