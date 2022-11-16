@@ -31,6 +31,13 @@ class Admin {
 	private $wl_config = null;
 
 	/**
+	 * Option and transient namespace for email skip.
+	 *
+	 * @var string
+	 */
+	private $skip_email_subscribe_namespace = 'tpc_skip_email_subscribe';
+
+	/**
 	 * Initialize the Admin.
 	 */
 	public function init() {
@@ -48,6 +55,70 @@ class Admin {
 				$this->wl_config = json_decode( $branding, true );
 			}
 		}
+
+		add_action( 'wp_ajax_skip_subscribe', array( $this, 'skip_subscribe' ) );
+		add_action( 'wp_ajax_nopriv_skip_subscribe', array( $this, 'skip_subscribe' ) );
+	}
+
+	/**
+	 * Return the skip subscribe status.
+	 * Used to determine if email form should be displayed.
+	 *
+	 * @return bool
+	 */
+	private function get_skip_subscribe_status() {
+		$status = false;
+		if ( 'yes' === get_option( $this->skip_email_subscribe_namespace, 'no' ) ) {
+			$status = true;
+		}
+
+		if ( get_transient( $this->skip_email_subscribe_namespace ) ) {
+			$status = true;
+		}
+
+		return $status;
+	}
+
+	/**
+	 * Utility method to ensure proper response for ajax call.
+	 *
+	 * @param array $response
+	 */
+	private function ensure_ajax_response( $response ) {
+		echo json_encode( $response );
+		die();
+	}
+
+	/**
+	 * Handles the `skip_subscribe` ajax action.
+	 */
+	public function skip_subscribe() {
+		$response = array(
+			'success' => false,
+			'code'    => 'ti__ob_not_allowed',
+			'message' => 'Not allowed!',
+		);
+		if ( ! isset( $_REQUEST['nonce'] ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'skip_subscribe_nonce' ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		unset( $response['code'] );
+		unset( $response['message'] );
+		$response['success'] = true;
+		if ( isset( $_REQUEST['isTempSkip'] ) ) {
+			set_transient( $this->skip_email_subscribe_namespace, 'yes', 7 * DAY_IN_SECONDS );
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		update_option( $this->skip_email_subscribe_namespace, 'yes' );
+		$this->ensure_ajax_response( $response );
 	}
 
 	/**
@@ -173,6 +244,7 @@ class Admin {
 	 */
 	private function get_localization() {
 		$theme_name = apply_filters( 'ti_wl_theme_name', 'Neve' );
+		$user       = wp_get_current_user();
 
 		return array(
 			'nonce'               => wp_create_nonce( 'wp_rest' ),
@@ -195,6 +267,12 @@ class Admin {
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
 			'isValidLicense'      => $this->has_valid_addons(),
+			'emailSubscribe'      => array(
+				'ajaxURL'    => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'nonce'      => wp_create_nonce( 'skip_subscribe_nonce' ),
+				'skipStatus' => $this->get_skip_subscribe_status() ? 'yes' : 'no',
+				'email'      => ( ! empty( $user ) ) ? $user->user_email : '',
+			),
 		);
 	}
 

@@ -9,7 +9,7 @@ import {
 	installPlugins,
 	installTheme,
 } from '../utils/site-import';
-import { get } from '../utils/rest';
+import { get, ajaxAction } from '../utils/rest';
 import { trailingSlashIt } from '../utils/common';
 import ImportStepper from './ImportStepper';
 import ImportModalNote from './ImportModalNote';
@@ -35,6 +35,7 @@ import {
 	PanelBody,
 	PanelRow,
 	ToggleControl,
+	TextControl,
 } from '@wordpress/components';
 
 const ImportModal = ( {
@@ -53,6 +54,7 @@ const ImportModal = ( {
 		performanceAddon: true,
 		theme_install: themeData !== false,
 	} );
+	const site = tiobDash.onboarding.homeUrl || '';
 
 	const [ themeInstallProgress, setThemeInstallProgress ] = useState( false );
 	const [ performanceAddonProgress, setPerformanceAddonProgress ] = useState(
@@ -77,6 +79,9 @@ const ImportModal = ( {
 	const [ isCleanupAllowed, setIsCleanupAllowed ] = useState(
 		cleanupAllowed
 	);
+	const [ email, setEmail ] = useState( tiobDash.emailSubscribe.email || '' );
+	const [ skipSubscribe, setSkipSubscribe ] = useState( 'yes' === tiobDash?.emailSubscribe?.skipStatus );
+	const [ processingSub, setProcessingSub ] = useState( false );
 
 	useEffect( () => {
 		const fetchAddress = siteData.remote_url || siteData.url;
@@ -713,22 +718,101 @@ const ImportModal = ( {
 	};
 	const editLink = editLinkMap[ editor ];
 
+	let viewWebsiteText = __(
+		'View Website & Subscribe',
+		'templates-patterns-collection'
+	);
+	let skipText = __(
+		'Skip and add your own content',
+		'templates-patterns-collection'
+	);
+	if ( skipSubscribe ) {
+		viewWebsiteText = __(
+			'View Website',
+			'templates-patterns-collection'
+		);
+		skipText = __(
+			'Add your own content',
+			'templates-patterns-collection'
+		);
+	}
+
+	const markSubscribeSkip = ( redirect, data = {} ) => {
+		ajaxAction( tiobDash.emailSubscribe.ajaxURL, 'skip_subscribe',  tiobDash.emailSubscribe.nonce, data )
+			.then(() => {
+				setSkipSubscribe(true);
+				setProcessingSub( false );
+				window.location.href = redirect;
+			});
+	}
+
+	const goToEditContent = () => {
+		if ( skipSubscribe ) {
+			window.location.href = editLink;
+			return;
+		}
+		setProcessingSub( true );
+		markSubscribeSkip( editLink, { isTempSkip: true } );
+	};
+
+	const viewWebsiteAndSubscribe = () => {
+		if ( skipSubscribe ) {
+			window.location.href = site;
+			return;
+		}
+
+		setProcessingSub( true );
+
+		if ( '' === email.trim() ) {
+			markSubscribeSkip( site, { isTempSkip: true } );
+			return;
+		}
+
+		fetch( 'https://api.themeisle.com/tracking/subscribe', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				slug: 'templates-patterns-collection',
+				site,
+				email
+			})
+		})
+			.then( r => r.json() )
+			.then( ( response ) => {
+				if ( 'success' === response.code ) {
+					markSubscribeSkip( site )
+				}
+			})?.catch( ( error ) => {
+				console.error( error );
+			markSubscribeSkip( site, { isTempSkip: true } )
+		});
+	}
+
+	let modalTitle = importData ?
+		sprintf(
+			/* translators: name of starter site */
+			__(
+				'Import %s as a complete site',
+				'templates-patterns-collection'
+			),
+			importData.title
+		) : '';
+	if ( 'done' === currentStep && ! error ) {
+		modalTitle = __(
+			'Content was successfully imported',
+			'templates-patterns-collection'
+		);
+	}
+
 	return (
 		<Modal
 			className={ classnames( [ 'ob-import-modal', { fetching } ] ) }
 			onRequestClose={ closeModal }
 			shouldCloseOnClickOutside={ ! importing && ! fetching }
 			isDismissible={ ! importing && ! fetching }
-			title={ importData ?
-				sprintf(
-					/* translators: name of starter site */
-					__(
-						'Import %s as a complete site',
-						'templates-patterns-collection'
-					),
-					importData.title
-				) : ''
-			}
+			title={ modalTitle }
 		>
 			{ fetching ? (
 				<ImportModalMock />
@@ -771,17 +855,22 @@ const ImportModal = ( {
 										willDo={ general }
 									/>
 								) }
-								{ 'done' === currentStep && (
+								{ 'done' === currentStep && ! skipSubscribe && (
 									<>
-										<hr />
-										<p className="import-result">
-											{ __(
-												'Content was successfully imported. Enjoy your new site!',
-												'templates-patterns-collection'
-											) }
-										</p>
-										<hr />
+										<p className="tpc-subscribe-email-text">{ __( 'Stay up-to-date on news, tips and product updates', 'templates-patterns-collection' ) }</p>
+
+										<TextControl
+											aria-label={ __( 'Enter your email', 'templates-patterns-collection' ) }
+
+											type="email"
+											value={ email }
+											onChange={ setEmail }
+											className="tpc-email-input"
+										/>
 									</>
+								) }
+								{ 'done' === currentStep && skipSubscribe && (
+									<span style={{display: 'block', marginBottom: '60px'}}/>
 								) }
 							</>
 						) }
@@ -824,32 +913,19 @@ const ImportModal = ( {
 								<div className="import-done-actions">
 									<Button
 										isLink
-										className="close"
-										onClick={ closeModal }
+										className={ classnames( 'close', { 'is-grayed': ! skipSubscribe } ) }
+										disabled={ processingSub }
+										onClick={ goToEditContent }
 									>
-										{ __(
-											'Back to Sites Library',
-											'templates-patterns-collection'
-										) }
-									</Button>
-									<Button
-										isSecondary
-										href={ tiobDash.onboarding.homeUrl }
-									>
-										{ __(
-											'View Website',
-											'templates-patterns-collection'
-										) }
+										{ skipText }
 									</Button>
 									<Button
 										isPrimary
-										className="import"
-										href={ editLink }
+										className="import import-full-w"
+										disabled={ processingSub }
+										onClick={ viewWebsiteAndSubscribe }
 									>
-										{ __(
-											'Add your own content',
-											'templates-patterns-collection'
-										) }
+										{ viewWebsiteText }
 									</Button>
 								</div>
 							) }

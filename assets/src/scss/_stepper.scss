@@ -2,8 +2,8 @@
 	li {
 		display: flex;
 		align-items: center;
-		margin-bottom: 25px;
-		font-size: 15px;
+		margin-bottom: 20px;
+		font-size: 14px;
 
 		.icon {
 			margin-right: 20px;
@@ -11,6 +11,13 @@
 			color: #fff;
 			padding: 5px;
 			border-radius: 100%;
+			line-height: 14px;
+
+			.dashicon {
+				font-size: 14px;
+				width: 14px;
+				height: 14px;
+			}
 
 			&.success {
 				background-color: $success;
@@ -42,8 +49,8 @@
 		}
 
 		svg {
-			width: 20px;
-			height: 20px;
+			width: 15px;
+			height: 15px;
 			display: block;
 		}
 	}
