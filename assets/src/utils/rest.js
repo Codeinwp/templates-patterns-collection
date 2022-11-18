@@ -33,3 +33,25 @@ const requestData = async (
 		return simple ? response : response.json();
 	} );
 };
+
+export const ajaxAction = async (route, action = '', useNonce = '', data = {} ) => {
+	const formData = new FormData();
+	formData.append('nonce', useNonce);
+	formData.append('action', action);
+	if ( Object.keys( data ).length > 0 ) {
+		for ( const [key, value] of Object.entries( data ) ) {
+			formData.append( key, value );
+		}
+	}
+	const options = {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+		},
+		body: formData,
+	};
+
+	return await fetch(route, options).then(() => {
+		return true;
+	});
+};

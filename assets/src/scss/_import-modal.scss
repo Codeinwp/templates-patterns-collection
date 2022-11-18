@@ -36,7 +36,7 @@ $base-index: 100000;
 		border: none;
 
 		h1 {
-			font-size: 22px;
+			font-size: 18px;
 			font-weight: 700;
 		}
 	}
@@ -46,7 +46,7 @@ $base-index: 100000;
 
 		h1 {
 			margin-top: 0;
-			font-size: 22px;
+			font-size: 18px;
 			font-weight: 700;
 			color: #000;
 			line-height: normal;
@@ -54,8 +54,8 @@ $base-index: 100000;
 		}
 
 		p.description {
-			font-size: 15px;
-			line-height: 34px;
+			font-size: 14px;
+			line-height: 24px;
 			color: #333;
 		}
 	}
@@ -89,7 +89,7 @@ $base-index: 100000;
 
 			li {
 				margin-bottom: 10px;
-				font-size: 15px;
+				font-size: 14px;
 
 				&:last-child {
 					margin-bottom: 0;
@@ -103,7 +103,7 @@ $base-index: 100000;
 			list-style: disc;
 
 			li {
-				font-size: 15px;
+				font-size: 14px;
 				margin-bottom: 10px;
 				font-weight: 400;
 
@@ -131,7 +131,7 @@ $base-index: 100000;
 	}
 
 	.import-result {
-		font-size: 15px;
+		font-size: 14px;
 	}
 
 	.modal-body {
@@ -144,6 +144,20 @@ $base-index: 100000;
 			.tiob-tooltip-content {
 				left: 25px;
 				top: 0;
+			}
+		}
+
+		.tpc-subscribe-email-text {
+			font-size: 14px;
+			margin-top: 20px;
+		}
+		.tpc-email-input {
+			margin-bottom: 60px;
+			input {
+				padding: 12px;
+				font-size: 13px;
+				color: #2C3338;
+				border-radius: 2px;
 			}
 		}
 	}
@@ -299,7 +313,7 @@ $base-index: 100000;
 		}
 
 		button {
-			font-size: 17px;
+			font-size: 16px;
 			font-weight: 700;
 			line-height: 30px;
 		}
@@ -309,13 +323,13 @@ $base-index: 100000;
 		justify-content: flex-start;
 		border-bottom: 1px solid transparentize($black, .9);
 		margin: 0;
-		padding: 10px 0;
+		padding: 8px 0;
 		display: flex;
 		align-items: center;
 
 		span {
-			font-size: 15px;
-			margin-left: 20px;
+			font-size: 14px;
+			margin-left: 10px;
 			color: $black;
 		}
 
@@ -349,6 +363,9 @@ $base-index: 100000;
 	display: flex;
 	align-items: center;
 	width: 100%;
+	flex-direction: column-reverse;
+	gap: 10px;
+	padding: 12px 0;
 
 	.components-button.is-secondary {
 		margin-left: auto;
@@ -361,6 +378,14 @@ $base-index: 100000;
 	}
 
 	.import {
-		margin-left: 20px !important;
+		margin-left: 0 !important;
+	}
+	.import-full-w {
+		width: 100%;
+		justify-content: center;
+		padding: 12px 30px;
+	}
+	.is-grayed {
+		color: #757575;
 	}
 }
