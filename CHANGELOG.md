@@ -1,3 +1,8 @@
+##### [Version 1.1.29](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.28...v1.1.29) (2022-11-18)
+
+- Feat: Allow Independent license
+- Feat: Add subscription form after importing
+
 ##### [Version 1.1.28](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.27...v1.1.28) (2022-11-10)
 
 - Fix dismiss Neve notice after Starter Site import
