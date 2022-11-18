@@ -1,3 +1,9 @@
+##### [Version 1.1.28](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.27...v1.1.28) (2022-11-10)
+
+- Fix dismiss Neve notice after Starter Site import
+- Fix import modal white space
+- Fix modal UX
+
 ##### [Version 1.1.27](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.26...v1.1.27) (2022-11-03)
 
 - Feat Map for Restrict Content plugin

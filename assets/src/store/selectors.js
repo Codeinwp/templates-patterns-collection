@@ -14,7 +14,7 @@ export default {
 	getSingleImport: ( state ) => state.singleTemplateImport,
 	getTemplateModal: ( state ) => state.templateModal,
 	getSearchQuery: ( state ) => state.searchQuery,
-	getUserStatus: () => {
+	getUserStatus: ( state ) => {
 		const acceptedTiers = [
 			6,
 			17,
@@ -34,9 +34,12 @@ export default {
 		];
 
 		return (
-			window.tiobDash.license &&
-			window.tiobDash.license.tier &&
-			acceptedTiers.includes( window.tiobDash.license.tier )
+			state.license &&
+			state.license.tier &&
+			acceptedTiers.includes( state.license.tier )
 		);
+	},
+	getLicense: ( state ) => {
+		return state.license;
 	},
 };

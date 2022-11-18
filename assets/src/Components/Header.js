@@ -1,17 +1,19 @@
 /* global tiobDash, localStorage */
 import { withSelect, withDispatch } from '@wordpress/data';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useState, useContext } from '@wordpress/element';
 import { Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
-import { update } from '@wordpress/icons';
+import { update, cloud, close } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 import Logo from './Icon';
 import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { addUrlHash, getTabHash } from '../utils/common';
+import License from './License';
+import { LicensePanelContext } from './LicensePanelContext';
 
-const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
+const TabNavigation = ( { setCurrentTab, currentTab, isFetching, license } ) => {
 	const buttons = {
 		starterSites: __( 'Starter Sites', 'templates-patterns-collection' ),
 		pageTemplates: __( 'Page Templates', 'templates-patterns-collection' ),
@@ -19,6 +21,8 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 	};
 
 	const [ isSyncing, setSyncing ] = useState( false );
+	const { isLicenseOpen, setLicenseOpen } = useContext( LicensePanelContext );
+	const isValid = 'valid' === license?.valid || 'valid' === license?.license;
 
 	const sync = () => {
 		setSyncing( true );
@@ -92,12 +96,29 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching } ) => {
 					icon={ update }
 					onClick={ sync }
 					label={ __( 'Re-sync Library' ) }
-					className={ classnames( 'is-sync', {
+					className={ classnames( 'is-icon-btn', {
 						'is-loading': isSyncing,
 					} ) }
 					disabled={ isFetching || isSyncing }
 					data-content={ __( 'Sync' ) }
 				/>
+			) }
+			{ currentTab !== 'starterSites' && (
+				<>
+					<Button
+						icon={ ! isLicenseOpen ? cloud : close }
+						onClick={ () => {
+							setLicenseOpen( ! isLicenseOpen );
+						} }
+						label={ __( 'License' ) }
+						className={ classnames( 'is-icon-btn', {
+							'is-not-valid': ! isLicenseOpen && ! isValid,
+							'is-valid': ! isLicenseOpen && isValid,
+						} ) }
+						data-content={ __( 'License' ) }
+					/>
+					{ isLicenseOpen && <License /> }
+				</>
 			) }
 		</div>
 	);
@@ -108,6 +129,7 @@ const Header = ( {
 	cancelOnboarding,
 	setCurrentTab,
 	currentTab,
+	license,
 } ) => {
 	return (
 		<div className="ob-head">
@@ -128,6 +150,7 @@ const Header = ( {
 						<TabNavigation
 							setCurrentTab={ setCurrentTab }
 							currentTab={ currentTab }
+							license={ license }
 						/>
 					</div>
 				</>
@@ -158,13 +181,14 @@ export default compose(
 		};
 	} ),
 	withSelect( ( select ) => {
-		const { getOnboardingStatus, getCurrentTab, getFetching } = select(
+		const { getOnboardingStatus, getCurrentTab, getFetching, getLicense } = select(
 			'neve-onboarding'
 		);
 		return {
 			isOnboarding: getOnboardingStatus(),
 			currentTab: getCurrentTab(),
 			isFetching: getFetching(),
+			license: getLicense(),
 		};
 	} )
 )( Header );

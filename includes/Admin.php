@@ -41,6 +41,7 @@ class Admin {
 	 * Initialize the Admin.
 	 */
 	public function init() {
+		License::get_instance();
 		add_filter( 'query_vars', array( $this, 'add_onboarding_query_var' ) );
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
@@ -122,16 +123,16 @@ class Admin {
 	}
 
 	/**
-	 * Hook into editor data to add Neve plan if available.
+	 * Hook into editor data to add Neve plan if available
+	 * or return the proper tier if stand-alone license is valid.
 	 *
 	 * @param array $data tiTpc exported data.
 	 *
 	 * @return array
 	 */
 	public function add_tpc_editor_data( $data ) {
-		$plan = $this->neve_license_plan();
-
-		$data['tier'] = $plan;
+		$plan         = $this->neve_license_plan();
+		$data['tier'] = License::get_license_tier( $plan );
 
 		return $data;
 	}
@@ -165,9 +166,7 @@ class Admin {
 				'render_starter_sites',
 			)
 		);
-		if ( $this->is_agency_plan() ) {
-			add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
-		}
+		add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
 	}
 
 	/**
@@ -178,28 +177,18 @@ class Admin {
 	private function neve_license_plan() {
 		$category = apply_filters( 'product_neve_license_plan', - 1 );
 
-		$category_mapping = array(
-			1 => 1,
-			2 => 1,
-			3 => 2,
-			4 => 2,
-			5 => 3,
-			6 => 3,
-			7 => 1,
-			8 => 2,
-			9 => 3,
-		);
-
-		return $category > -1 && isset( $category_mapping[ $category ] ) ? $category_mapping[ $category ] : -1;
+		return $category > -1 && isset( License::NEVE_CATEGORY_MAPPING[ $category ] ) ? License::NEVE_CATEGORY_MAPPING[ $category ] : -1;
 	}
 
 	/**
-	 * Check if current subscription is agency.
+	 * Check if current subscription is agency
+	 * or if we have a valid license for the standalone product.
 	 *
 	 * @return bool
 	 */
 	private function is_agency_plan() {
 		$plan = $this->neve_license_plan();
+		$plan = License::get_license_tier( $plan );
 
 		return $plan === 3;
 	}
@@ -246,10 +235,24 @@ class Admin {
 		$theme_name = apply_filters( 'ti_wl_theme_name', 'Neve' );
 		$user       = wp_get_current_user();
 
+		$neve_upgrade_link = 'https://themeisle.com/themes/neve/upgrade/';
+		$upgrade_url       = apply_filters(
+			'neve_upgrade_link_from_child_theme_filter',
+			tsdk_utmify( $neve_upgrade_link, 'freevspro' )
+		);
+		$upgrade_url_tpc   = tsdk_utmify( 'https://themeisle.com/plugins/templates-cloud', 'tcupgrade' );
+		if ( defined( 'NEVE_VERSION' ) ) {
+			$upgrade_url_tpc = apply_filters(
+				'neve_upgrade_link_from_child_theme_filter',
+				tsdk_utmify( $neve_upgrade_link, 'templatecloud' )
+			);
+		}
+
 		return array(
 			'nonce'               => wp_create_nonce( 'wp_rest' ),
 			'assets'              => TIOB_URL . '/assets/',
-			'upgradeURL'          => apply_filters( 'neve_upgrade_link_from_child_theme_filter', tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'freevspro' ) ),
+			'upgradeURL'          => $upgrade_url,
+			'upgradeURLTpc'       => $upgrade_url_tpc,
 			'strings'             => array(
 				/* translators: %s - Theme name */
 				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
@@ -267,6 +270,7 @@ class Admin {
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
 			'isValidLicense'      => $this->has_valid_addons(),
+			'licenseTIOB'         => License::get_license_data(),
 			'emailSubscribe'      => array(
 				'ajaxURL'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'      => wp_create_nonce( 'skip_subscribe_nonce' ),
@@ -372,22 +376,6 @@ class Admin {
 				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'templates-patterns-collection' ),
 				'cta'  => sprintf( __( 'Open %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
 				'url'  => 'themes.php?page=' . $this->page_slug . '&dismiss_notice=yes#library',
-			);
-		}
-
-		$index = apply_filters( 'product_neve_license_plan', -1 );
-		if ( $index !== -1 && defined( 'NEVE_PRO_REST_NAMESPACE' ) ) {
-			$array = array_merge(
-				$array,
-				array(
-					'pro'     => true,
-					'proApi'  => rest_url( NEVE_PRO_REST_NAMESPACE ),
-					'license' => array(
-						'key'   => apply_filters( 'product_neve_license_key', 'free' ),
-						'valid' => apply_filters( 'product_neve_license_status', false ),
-						'tier'  => $this->neve_license_plan(),
-					),
-				)
 			);
 		}
 
