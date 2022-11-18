@@ -98,4 +98,10 @@ export default {
 			payload: { query },
 		};
 	},
+	setLicense( license ) {
+		return {
+			type: 'SET_LICENSE',
+			payload: { license },
+		};
+	},
 };

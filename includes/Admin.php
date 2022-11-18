@@ -31,9 +31,17 @@ class Admin {
 	private $wl_config = null;
 
 	/**
+	 * Option and transient namespace for email skip.
+	 *
+	 * @var string
+	 */
+	private $skip_email_subscribe_namespace = 'tpc_skip_email_subscribe';
+
+	/**
 	 * Initialize the Admin.
 	 */
 	public function init() {
+		License::get_instance();
 		add_filter( 'query_vars', array( $this, 'add_onboarding_query_var' ) );
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
@@ -48,19 +56,83 @@ class Admin {
 				$this->wl_config = json_decode( $branding, true );
 			}
 		}
+
+		add_action( 'wp_ajax_skip_subscribe', array( $this, 'skip_subscribe' ) );
+		add_action( 'wp_ajax_nopriv_skip_subscribe', array( $this, 'skip_subscribe' ) );
 	}
 
 	/**
-	 * Hook into editor data to add Neve plan if available.
+	 * Return the skip subscribe status.
+	 * Used to determine if email form should be displayed.
+	 *
+	 * @return bool
+	 */
+	private function get_skip_subscribe_status() {
+		$status = false;
+		if ( 'yes' === get_option( $this->skip_email_subscribe_namespace, 'no' ) ) {
+			$status = true;
+		}
+
+		if ( get_transient( $this->skip_email_subscribe_namespace ) ) {
+			$status = true;
+		}
+
+		return $status;
+	}
+
+	/**
+	 * Utility method to ensure proper response for ajax call.
+	 *
+	 * @param array $response
+	 */
+	private function ensure_ajax_response( $response ) {
+		echo json_encode( $response );
+		die();
+	}
+
+	/**
+	 * Handles the `skip_subscribe` ajax action.
+	 */
+	public function skip_subscribe() {
+		$response = array(
+			'success' => false,
+			'code'    => 'ti__ob_not_allowed',
+			'message' => 'Not allowed!',
+		);
+		if ( ! isset( $_REQUEST['nonce'] ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'skip_subscribe_nonce' ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		unset( $response['code'] );
+		unset( $response['message'] );
+		$response['success'] = true;
+		if ( isset( $_REQUEST['isTempSkip'] ) ) {
+			set_transient( $this->skip_email_subscribe_namespace, 'yes', 7 * DAY_IN_SECONDS );
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		update_option( $this->skip_email_subscribe_namespace, 'yes' );
+		$this->ensure_ajax_response( $response );
+	}
+
+	/**
+	 * Hook into editor data to add Neve plan if available
+	 * or return the proper tier if stand-alone license is valid.
 	 *
 	 * @param array $data tiTpc exported data.
 	 *
 	 * @return array
 	 */
 	public function add_tpc_editor_data( $data ) {
-		$plan = $this->neve_license_plan();
-
-		$data['tier'] = $plan;
+		$plan         = $this->neve_license_plan();
+		$data['tier'] = License::get_license_tier( $plan );
 
 		return $data;
 	}
@@ -94,9 +166,7 @@ class Admin {
 				'render_starter_sites',
 			)
 		);
-		if ( $this->is_agency_plan() ) {
-			add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
-		}
+		add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
 	}
 
 	/**
@@ -107,28 +177,18 @@ class Admin {
 	private function neve_license_plan() {
 		$category = apply_filters( 'product_neve_license_plan', - 1 );
 
-		$category_mapping = array(
-			1 => 1,
-			2 => 1,
-			3 => 2,
-			4 => 2,
-			5 => 3,
-			6 => 3,
-			7 => 1,
-			8 => 2,
-			9 => 3,
-		);
-
-		return $category > -1 && isset( $category_mapping[ $category ] ) ? $category_mapping[ $category ] : -1;
+		return $category > -1 && isset( License::NEVE_CATEGORY_MAPPING[ $category ] ) ? License::NEVE_CATEGORY_MAPPING[ $category ] : -1;
 	}
 
 	/**
-	 * Check if current subscription is agency.
+	 * Check if current subscription is agency
+	 * or if we have a valid license for the standalone product.
 	 *
 	 * @return bool
 	 */
 	private function is_agency_plan() {
 		$plan = $this->neve_license_plan();
+		$plan = License::get_license_tier( $plan );
 
 		return $plan === 3;
 	}
@@ -173,11 +233,26 @@ class Admin {
 	 */
 	private function get_localization() {
 		$theme_name = apply_filters( 'ti_wl_theme_name', 'Neve' );
+		$user       = wp_get_current_user();
+
+		$neve_upgrade_link = 'https://themeisle.com/themes/neve/upgrade/';
+		$upgrade_url       = apply_filters(
+			'neve_upgrade_link_from_child_theme_filter',
+			tsdk_utmify( $neve_upgrade_link, 'freevspro' )
+		);
+		$upgrade_url_tpc   = tsdk_utmify( 'https://themeisle.com/plugins/templates-cloud', 'tcupgrade' );
+		if ( defined( 'NEVE_VERSION' ) ) {
+			$upgrade_url_tpc = apply_filters(
+				'neve_upgrade_link_from_child_theme_filter',
+				tsdk_utmify( $neve_upgrade_link, 'templatecloud' )
+			);
+		}
 
 		return array(
 			'nonce'               => wp_create_nonce( 'wp_rest' ),
 			'assets'              => TIOB_URL . '/assets/',
-			'upgradeURL'          => apply_filters( 'neve_upgrade_link_from_child_theme_filter', tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'freevspro' ) ),
+			'upgradeURL'          => $upgrade_url,
+			'upgradeURLTpc'       => $upgrade_url_tpc,
 			'strings'             => array(
 				/* translators: %s - Theme name */
 				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
@@ -191,10 +266,17 @@ class Admin {
 			'endpoint'            => TPC_TEMPLATES_CLOUD_ENDPOINT,
 			'params'              => array(
 				'site_url'   => get_site_url(),
-				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+				'license_id' => License::get_license_data()->key,
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
 			'isValidLicense'      => $this->has_valid_addons(),
+			'licenseTIOB'         => License::get_license_data(),
+			'emailSubscribe'      => array(
+				'ajaxURL'    => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'nonce'      => wp_create_nonce( 'skip_subscribe_nonce' ),
+				'skipStatus' => $this->get_skip_subscribe_status() ? 'yes' : 'no',
+				'email'      => ( ! empty( $user ) ) ? $user->user_email : '',
+			),
 		);
 	}
 
@@ -294,22 +376,6 @@ class Admin {
 				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'templates-patterns-collection' ),
 				'cta'  => sprintf( __( 'Open %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
 				'url'  => 'themes.php?page=' . $this->page_slug . '&dismiss_notice=yes#library',
-			);
-		}
-
-		$index = apply_filters( 'product_neve_license_plan', -1 );
-		if ( $index !== -1 && defined( 'NEVE_PRO_REST_NAMESPACE' ) ) {
-			$array = array_merge(
-				$array,
-				array(
-					'pro'     => true,
-					'proApi'  => rest_url( NEVE_PRO_REST_NAMESPACE ),
-					'license' => array(
-						'key'   => apply_filters( 'product_neve_license_key', 'free' ),
-						'valid' => apply_filters( 'product_neve_license_status', false ),
-						'tier'  => $this->neve_license_plan(),
-					),
-				)
 			);
 		}
 

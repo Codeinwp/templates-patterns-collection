@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import VizSensor from 'react-visibility-sensor';
 
 import { chevronLeft, chevronRight, close } from '@wordpress/icons';
-import { useEffect, useState, Fragment } from '@wordpress/element';
+import {useEffect, useState, Fragment, useContext} from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Spinner, Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
@@ -15,6 +15,7 @@ import Filters from './Filters';
 import PreviewFrame from './PreviewFrame';
 import ImportTemplatesModal from './ImportTemplatesModal';
 import Logo from '../Icon';
+import { LicensePanelContext } from '../LicensePanelContext';
 
 const Library = ( {
 	isGeneral,
@@ -281,11 +282,12 @@ const Library = ( {
 		} );
 	};
 
-	const themeURL = 'https://wordpress.org/themes/neve/';
-	const upgradeURL =
-		'https://themeisle.com/themes/neve/upgrade/?utm_medium=nevedashboard&utm_source=wpadmin&utm_campaign=templatecloud&utm_content=neve';
+	const { upgradeURLTpc } = window.tiobDash;
 
-	const UpsellModal = ( { title, description, showUpgradeBtn = true } ) => {
+	const UpsellModal = ( { title, description, showUpgradeBtn = true, showLicenseToggle = true } ) => {
+
+		const { setLicenseOpen } = useContext( LicensePanelContext );
+
 		return (
 			<div className={ wrapClasses }>
 				<div className="table">
@@ -317,10 +319,16 @@ const Library = ( {
 									<Button
 										variant="primary"
 										isPrimary
-										href="https://themeisle.com/themes/neve/upgrade/?utm_medium=templatecloud&utm_source=wpadmin&utm_campaign=upgradetoprobtn&utm_content=neve"
+										href={upgradeURLTpc}
 										target="_blank"
 									>
 										{ __( 'Upgrade to PRO' ) }
+									</Button>
+								) }
+
+								{ showLicenseToggle && (
+									<Button isLink style={{ marginLeft: '12px' }} onClick={ () => { setLicenseOpen(true) } }>
+										{ __( 'I already have a key', 'template-patterns-collection' ) }
 									</Button>
 								) }
 							</div>
@@ -334,31 +342,14 @@ const Library = ( {
 		);
 	};
 
-	if ( themeData !== false ) {
-		return (
-			<UpsellModal
-				title={ __( 'Coming soon' ) }
-				description={ sprintf(
-					// translators: %1$s: Theme Name %2$s Plugin Name.
-					__(
-						'Right now this feature is not available with your current setup. if you want to use it, you need to install %1$s theme and %2$s plugin',
-						'template-patterns-collection'
-					),
-					`<a href="${ themeURL }" target="_blank" rel="noreferrer">Neve</a>`,
-					`<a href="${ upgradeURL }" target="_blank" rel="noreferrer">Neve Pro Addon</a>`
-				) }
-				showUpgradeBtn={ false }
-			/>
-		);
-	}
-
 	if ( ! userStatus && ! isGeneral ) {
 		return (
 			<UpsellModal
 				title={ __( 'Templates Cloud is a PRO Feature' ) }
 				description={ __(
-					'Unlock the Templates Cloud features and save your pages or posts in the cloud.'
-				) }
+						'Unlock the Templates Cloud features and save your pages or posts in the cloud.',
+						'template-patterns-collection'
+					) }
 			/>
 		);
 	}

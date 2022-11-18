@@ -27,7 +27,7 @@
 
 @media screen and (min-width: #{$laptop}) {
 	.ob-import-modal {
-		width: 700px !important;
+		width: 540px !important;
 		max-height: 90vh;
 	}
 }
@@ -271,6 +271,7 @@ svg.is-loading, button.is-loading svg {
 				display: flex;
 				justify-content: flex-end;
 				align-items: center;
+				position: relative;
 
 				.components-button {
 					font-size: 18px;
