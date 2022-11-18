@@ -266,7 +266,7 @@ class Admin {
 			'endpoint'            => TPC_TEMPLATES_CLOUD_ENDPOINT,
 			'params'              => array(
 				'site_url'   => get_site_url(),
-				'license_id' => apply_filters( 'product_neve_license_key', 'free' ),
+				'license_id' => License::get_license_data()->key,
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
 			'isValidLicense'      => $this->has_valid_addons(),
