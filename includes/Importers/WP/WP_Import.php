@@ -621,6 +621,7 @@ class WP_Import extends WP_Importer {
 		} else {
 			$menu_id = is_array( $menu_id ) ? $menu_id['term_id'] : $menu_id;
 		}
+		$nv_mm_options = '';
 		foreach ( $item['postmeta'] as $meta ) {
 			${$meta['key']} = $meta['value'];
 		}
@@ -672,6 +673,9 @@ class WP_Import extends WP_Importer {
 
 		$id = wp_update_nav_menu_item( $menu_id, 0, $args );
 		if ( $id && ! is_wp_error( $id ) ) {
+			if ( ! empty( $nv_mm_options ) ) {
+				update_post_meta( $id, 'nv_mm_options', $nv_mm_options );
+			}
 			$this->processed_menu_items[ intval( $item['post_id'] ) ] = (int) $id;
 		}
 		$this->logger->log( 'Processed single menu item.', 'success' );
