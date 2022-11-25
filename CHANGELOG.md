@@ -1,3 +1,7 @@
+##### [Version 1.1.30](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.29...v1.1.30) (2022-11-25)
+
+- Fix: mega menu item import settings mapping
+
 ##### [Version 1.1.29](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.28...v1.1.29) (2022-11-18)
 
 - Feat: Allow Independent license
