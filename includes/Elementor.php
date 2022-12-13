@@ -56,7 +56,7 @@ class Elementor {
 					'postType'         => get_post_type(),
 					'placeholderIndex' => '-1',
 					'exporter'         => array(
-						'exportLabel'         => sprintf( __( 'Save to %s', 'templates-patterns-collection' ), 'Neve Cloud' ),
+						'exportLabel'         => sprintf( __( 'Save to %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
 						'modalLabel'          => __( 'Save Templates', 'templates-patterns-collection' ),
 						'textLabel'           => __( 'Template Name', 'templates-patterns-collection' ),
 						'textPlaceholder'     => __( 'Template', 'templates-patterns-collection' ),
@@ -67,16 +67,28 @@ class Elementor {
 						'templateUnpublished' => __( 'Template Unpublished.', 'templates-patterns-collection' ),
 					),
 					'library'          => array(
-						'libraryButton'  => sprintf( __( 'Import from %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
+						'libraryButton'  => sprintf(
+							// translators: %s: Templates Cloud
+							__( 'Import from %s', 'templates-patterns-collection' ),
+							'Templates Cloud'
+						),
 						'templatesCloud' => 'Templates Cloud',
-						'historyMessage' => sprintf( __( 'Add Template from %s:', 'templates-patterns-collection' ), 'Templates Cloud' ),
+						'historyMessage' => sprintf(
+							// translators: %s: Templates Cloud
+							__( 'Add Template from %s:', 'templates-patterns-collection' ),
+							'Templates Cloud'
+						),
 						'tabs'           => array(
 							'templates' => __( 'Page Templates', 'templates-patterns-collection' ),
 							'library'   => __( 'My Library', 'templates-patterns-collection' ),
 						),
 						'actions'        => array(
 							'sync'      => __( 'Sync Library', 'templates-patterns-collection' ),
-							'save'      => sprintf( __( 'Save to %s', 'templates-patterns-collection' ), 'Neve Cloud' ),
+							'save'      => sprintf(
+								// translators: %s: Templates Cloud
+								__( 'Save to %s', 'templates-patterns-collection' ),
+								'Templates Cloud'
+							),
 							'close'     => __( 'Close', 'templates-patterns-collection' ),
 							'cancel'    => __( 'Cancel', 'templates-patterns-collection' ),
 							'edit'      => __( 'Edit', 'templates-patterns-collection' ),
@@ -98,7 +110,11 @@ class Elementor {
 						),
 						'export'         => array(
 							'save'            => __( 'Save', 'templates-patterns-collection' ),
-							'title'           => sprintf( __( 'Save your page to %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
+							'title'           => sprintf(
+								// translators: %s: Templates Cloud
+								__( 'Save your page to %s', 'templates-patterns-collection' ),
+								'Templates Cloud'
+							),
 							'placeholder'     => __( 'Enter Template Name', 'templates-patterns-collection' ),
 							'labelScreenshot' => __( 'Screenshot URL', 'templates-patterns-collection' ),
 							'labelSlug'       => __( 'Site Slug', 'templates-patterns-collection' ),
