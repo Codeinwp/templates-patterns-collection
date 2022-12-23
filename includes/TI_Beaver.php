@@ -450,7 +450,7 @@ class TI_Beaver extends FLBuilderModule {
 	public function add_export_menu( $views ) {
 		if ( in_array( get_post_type(), FLBuilderModel::get_post_types() ) ) {
 			$views['main']['items'][15] = array(
-				'label'     => __( 'Save to Neve Cloud', 'templates-patterns-collection' ),
+				'label'     => __( 'Save to Templates Cloud', 'templates-patterns-collection' ),
 				'type'      => 'event',
 				'eventName' => 'tiTpcExport',
 			);
