@@ -97,7 +97,7 @@ const DemoSiteTemplatesImport = ( {
 			return <Spinner />;
 		}
 		if ( templates.length < 1 ) {
-			return __( 'No templates for this starter site.' );
+			return __( 'No templates for this starter site.', 'templates-patterns-collection' );
 		}
 
 		return (
@@ -126,7 +126,7 @@ const DemoSiteTemplatesImport = ( {
 				<div className="breadcrumb">
 					<Button isTertiary onClick={ cancel }>
 						<Icon icon={chevronLeft} />
-						{ __( 'Back to Starter Sites' ) }
+						{ __( 'Back to Starter Sites', 'templates-patterns-collection' ) }
 					</Button>
 				</div>
 				<div className="header">
@@ -147,7 +147,7 @@ const DemoSiteTemplatesImport = ( {
 						</h1>
 						<p className="description">
 							{ __(
-								'You can import individual pages or bulk-import all of them.'
+								'You can import individual pages or bulk-import all of them.', 'templates-patterns-collection'
 							) }
 						</p>
 					</div>
@@ -156,14 +156,14 @@ const DemoSiteTemplatesImport = ( {
 						{ ! upsell && (
 							<>
 								<Button isSecondary onClick={ launchImport }>
-									{ __( 'Import Starter Site' ) }
+									{ __( 'Import Starter Site', 'templates-patterns-collection' ) }
 								</Button>
 								<Button
 									isPrimary
 									disabled={ templates.length < 1 }
 									onClick={ handleBulk }
 								>
-									{ __( 'Import All Pages' ) }
+									{ __( 'Import All Pages', 'templates-patterns-collection' ) }
 								</Button>
 							</>
 						) }
@@ -172,7 +172,7 @@ const DemoSiteTemplatesImport = ( {
 								href={ utmOutboundLink || tiobDash.upgradeURL }
 								isSecondary
 							>
-								{ __( 'Upgrade' ) }
+								{ __( 'Upgrade', 'templates-patterns-collection' ) }
 							</Button>
 						) }
 					</div>
@@ -219,7 +219,7 @@ const DemoSiteTemplatesImport = ( {
 										isSecondary
 										onClick={ launchImport }
 									>
-										{ __( 'Import Starter Site' ) }
+										{ __( 'Import Starter Site', 'templates-patterns-collection' ) }
 									</Button>
 									<Button
 										isPrimary
@@ -230,7 +230,7 @@ const DemoSiteTemplatesImport = ( {
 											)
 										}
 									>
-										{ __( 'Import Page' ) }
+										{ __( 'Import Page', 'templates-patterns-collection' ) }
 									</Button>
 								</>
 							) }
@@ -241,7 +241,7 @@ const DemoSiteTemplatesImport = ( {
 									}
 									isSecondary
 								>
-									{ __( 'Upgrade' ) }
+									{ __( 'Upgrade', 'templates-patterns-collection' ) }
 								</Button>
 							) }
 						</>

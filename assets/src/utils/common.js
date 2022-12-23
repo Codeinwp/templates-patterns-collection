@@ -33,14 +33,14 @@ const TAGS = [
 	__( 'Photography', 'templates-patterns-collection' ),
 ];
 const CATEGORIES = {
-	all: __( 'All Categories' ),
-	free: __( 'Free' ),
-	business: __( 'Business' ),
-	portfolio: __( 'Portfolio' ),
-	woocommerce: __( 'WooCommerce' ),
-	blog: __( 'Blog' ),
-	personal: __( 'Personal' ),
-	other: __( 'Other' ),
+	all: __( 'All Categories', 'templates-patterns-collection' ),
+	free: __( 'Free', 'templates-patterns-collection' ),
+	business: __( 'Business', 'templates-patterns-collection' ),
+	portfolio: __( 'Portfolio', 'templates-patterns-collection' ),
+	woocommerce: __( 'WooCommerce', 'templates-patterns-collection' ),
+	blog: __( 'Blog', 'templates-patterns-collection' ),
+	personal: __( 'Personal', 'templates-patterns-collection' ),
+	other: __( 'Other', 'templates-patterns-collection' ),
 };
 const EDITOR_MAP = {
 	gutenberg: {
