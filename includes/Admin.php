@@ -374,7 +374,11 @@ class Admin {
 		if ( $this->is_agency_plan() && ! $page_was_visited ) {
 			$array['notifications']['template-cloud'] = array(
 				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'templates-patterns-collection' ),
-				'cta'  => sprintf( __( 'Open %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
+				'cta'  => sprintf(
+					// translators: %s: Templates Cloud
+					__( 'Open %s', 'templates-patterns-collection' ),
+					'Templates Cloud'
+				),
 				'url'  => 'themes.php?page=' . $this->page_slug . '&dismiss_notice=yes#library',
 			);
 		}

@@ -385,7 +385,7 @@ const Exporter = () => {
 	return (
 		<Fragment>
 			<PluginBlockSettingsMenuItem
-				label={ __( 'Save to Neve Cloud', 'templates-patterns-collection' ) }
+				label={ __( 'Save to Templates Cloud', 'templates-patterns-collection' ) }
 				icon={ 'none' } // We don't want an icon, as new UI of Gutenberg does't have icons for Menu Items, but the component doesn't allow that so we pass an icon which doesn't exist.
 				onClick={ () => setOpen( true ) }
 			/>
@@ -413,7 +413,7 @@ const Exporter = () => {
 						disabled={ isLoading }
 						onClick={ onSavePage }
 					>
-						{ __( 'Save Page to Neve Cloud' ) }
+						{ __( 'Save Page to Templates Cloud' ) }
 					</Button>
 
 					<ToggleControl
