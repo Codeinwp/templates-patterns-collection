@@ -81,15 +81,15 @@ const Library = ( {
 
 	const EDITORS = {
 		gutenberg: {
-			label: __( 'Gutenberg' ),
+			label: __( 'Gutenberg', 'templates-patterns-collection' ),
 			icon: 'gutenberg.jpg',
 		},
 		elementor: {
-			label: __( 'Elementor' ),
+			label: __( 'Elementor', 'templates-patterns-collection' ),
 			icon: 'elementor.jpg',
 		},
 		beaver: {
-			label: __( 'Beaver' ),
+			label: __( 'Beaver', 'templates-patterns-collection' ),
 			icon: 'beaver.jpg',
 		},
 	};
@@ -322,7 +322,7 @@ const Library = ( {
 										href={upgradeURLTpc}
 										target="_blank"
 									>
-										{ __( 'Upgrade to PRO' ) }
+										{ __( 'Upgrade to PRO', 'templates-patterns-collection' ) }
 									</Button>
 								) }
 
@@ -345,7 +345,7 @@ const Library = ( {
 	if ( ! userStatus && ! isGeneral ) {
 		return (
 			<UpsellModal
-				title={ __( 'Templates Cloud is a PRO Feature' ) }
+				title={ __( 'Templates Cloud is a PRO Feature', 'templates-patterns-collection' ) }
 				description={ __(
 						'Unlock the Templates Cloud features and save your pages or posts in the cloud.',
 						'template-patterns-collection'
@@ -454,12 +454,12 @@ const Library = ( {
 								src={
 									window.tiobDash.assets + '/img/layout.jpg'
 								}
-								alt={ __( 'No Templates Found' ) }
+								alt={ __( 'No Templates Found', 'templates-patterns-collection' ) }
 							/>
-							<h3>{ __( 'There are no templates yet' ) }</h3>
+							<h3>{ __( 'There are no templates yet', 'templates-patterns-collection' ) }</h3>
 							<p>
 								{ __(
-									'You can add a page or post to the cloud by accessing it with the WordPress or Elementor/Beaver editor. Learn more about this in our docs.'
+									'You can add a page or post to the cloud by accessing it with the WordPress or Elementor/Beaver editor. Learn more about this in our docs.', 'templates-patterns-collection'
 								) }
 							</p>
 							<Button
@@ -468,7 +468,7 @@ const Library = ( {
 								href="https://docs.themeisle.com/article/1354-neve-template-cloud-library?utm_medium=nevedashboard&utm_source=wpadmin&utm_campaign=templatescloud&utm_content=neve"
 								target="_blank"
 							>
-								{ __( 'Learn more' ) }
+								{ __( 'Learn more', 'templates-patterns-collection' ) }
 							</Button>
 						</div>
 					) ) }
@@ -480,7 +480,7 @@ const Library = ( {
 								isPrimary
 								onClick={ () => handleImport( previewedItem ) }
 							>
-								{ __( 'Import Template' ) }
+								{ __( 'Import Template', 'templates-patterns-collection' ) }
 							</Button>
 						}
 						heading={ previewedItem.template_name }
