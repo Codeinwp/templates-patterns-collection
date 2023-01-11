@@ -15,6 +15,7 @@ use TIOB\Importers\Cleanup\Active_State;
  * @package templates-patterns-collection
  */
 class Admin {
+	const API = 'api.themeisle.com';
 
 	/**
 	 * Admin page slug
@@ -402,6 +403,14 @@ class Admin {
 		foreach ( $sites as $builder => $sites_for_builder ) {
 			foreach ( $sites_for_builder as $slug => $data ) {
 				$sites[ $builder ][ $slug ]['slug'] = $slug;
+				if ( defined( 'TPC_REPLACE_API_SRC' ) && TPC_REPLACE_API_SRC === true ) {
+					$api_src = defined( 'TPC_API_SRC' ) && ! empty( TPC_API_SRC ) ? TPC_API_SRC : self::API;
+
+					if ( isset( $sites[ $builder ][ $slug ]['remote_url'] ) ) {
+						$sites[ $builder ][ $slug ]['remote_url'] = str_replace( self::API, $api_src, $sites[ $builder ][ $slug ]['remote_url'] );
+					}
+					$sites[ $builder ][ $slug ]['screenshot'] = str_replace( self::API, $api_src, $sites[ $builder ][ $slug ]['screenshot'] );
+				}
 				if ( ! isset( $data['upsell'] ) || $data['upsell'] !== true ) {
 					continue;
 				}
