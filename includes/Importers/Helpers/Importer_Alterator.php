@@ -71,7 +71,7 @@ class Importer_Alterator {
 		return array_filter(
 			$new_sizes,
 			function ( $key ) {
-				return in_array( $key, array( 'thumbnail', 'medium', 'medium_large', 'large' ) );
+				return in_array( $key, array( 'thumbnail', 'medium' ) );
 			},
 			ARRAY_FILTER_USE_KEY
 		);
