@@ -428,6 +428,9 @@ const Exporter = () => {
 						<TextControl
 							label={ __( 'Screenshot URL' ) }
 							value={ screenshotURL }
+							help={ __(
+								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.'
+							) }
 							type="url"
 							onChange={ setScreenshotURL }
 						/>
