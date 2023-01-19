@@ -55,9 +55,26 @@ class Importer_Alterator {
 		add_filter( 'wp_import_terms', array( $this, 'skip_terms' ), 10 );
 		add_filter( 'wp_insert_post_data', array( $this, 'encode_post_content' ), 10, 2 );
 		add_filter( 'wp_import_nav_menu_item_args', array( $this, 'change_nav_menu_item_link' ), 10, 2 );
-		add_filter( 'intermediate_image_sizes_advanced', '__return_null' );
+		add_filter( 'intermediate_image_sizes_advanced', array( $this, 'filter_sizes' ), 10, 1 );
 		add_filter( 'tpc_post_content_before_insert', array( $this, 'replace_links' ), 10, 2 );
 		add_filter( 'tpc_post_content_processed_terms', array( $this, 'content_to_import' ), 10, 2 );
+	}
+
+	/**
+	 * Filter the sizes array on image attachment to only default sizes.
+	 *
+	 * @param array $new_sizes The sizes array to use when resizing.
+	 *
+	 * @return array
+	 */
+	public function filter_sizes( $new_sizes ) {
+		return array_filter(
+			$new_sizes,
+			function ( $key ) {
+				return in_array( $key, array( 'thumbnail', 'medium' ) );
+			},
+			ARRAY_FILTER_USE_KEY
+		);
 	}
 
 	/**

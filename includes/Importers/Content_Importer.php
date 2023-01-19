@@ -7,6 +7,7 @@
 
 namespace TIOB\Importers;
 
+use TIOB\Admin;
 use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Helper;
 use TIOB\Importers\Helpers\Importer_Alterator;
@@ -97,9 +98,14 @@ class Content_Importer {
 			$request_args = array(
 				'headers' => array(
 					'User-Agent' => 'WordPress/' . md5( get_site_url() ),
+					'Origin'     => get_site_url(),
 				),
 			);
 
+			if ( defined( 'TPC_REPLACE_API_SRC' ) && TPC_REPLACE_API_SRC === true ) {
+				$api_src          = defined( 'TPC_API_SRC' ) && ! empty( TPC_API_SRC ) ? TPC_API_SRC : Admin::API;
+				$content_file_url = str_replace( Admin::API, $api_src, $content_file_url );
+			}
 			$response_file = wp_remote_get( add_query_arg( 'key', apply_filters( 'product_neve_license_key', 'free' ), $content_file_url ), $request_args );
 
 			if ( is_wp_error( $response_file ) ) {

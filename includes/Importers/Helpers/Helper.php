@@ -105,7 +105,7 @@ trait Helper {
 	 * @return string
 	 */
 	public function cleanup_page_slug( $slug, $demo_slug ) {
-		$unhashed = array( 'shop', 'my-account', 'checkout', 'cart', 'blog', 'news' );
+		$unhashed = array( 'shop', 'my-account', 'checkout', 'cart', 'blog', 'news', 'lifter-courses', 'courses', 'dashboard', 'my-courses' );
 		$slug     = str_replace( $demo_slug, '', $slug );
 		$slug     = str_replace( 'demo', '', $slug );
 		$slug     = ltrim( $slug, '-' );

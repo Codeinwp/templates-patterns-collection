@@ -95,12 +95,12 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching, license } ) => 
 				<Button
 					icon={ update }
 					onClick={ sync }
-					label={ __( 'Re-sync Library' ) }
+					label={ __( 'Re-sync Library', 'templates-patterns-collection' ) }
 					className={ classnames( 'is-icon-btn', {
 						'is-loading': isSyncing,
 					} ) }
 					disabled={ isFetching || isSyncing }
-					data-content={ __( 'Sync' ) }
+					data-content={ __( 'Sync', 'templates-patterns-collection' ) }
 				/>
 			) }
 			{ currentTab !== 'starterSites' && (
@@ -110,12 +110,12 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching, license } ) => 
 						onClick={ () => {
 							setLicenseOpen( ! isLicenseOpen );
 						} }
-						label={ __( 'License' ) }
+						label={ __( 'License', 'templates-patterns-collection' ) }
 						className={ classnames( 'is-icon-btn', {
 							'is-not-valid': ! isLicenseOpen && ! isValid,
 							'is-valid': ! isLicenseOpen && isValid,
 						} ) }
-						data-content={ __( 'License' ) }
+						data-content={ __( 'License', 'templates-patterns-collection' ) }
 					/>
 					{ isLicenseOpen && <License /> }
 				</>

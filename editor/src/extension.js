@@ -110,7 +110,7 @@ const Exporter = () => {
 		link: select( 'core/editor' ).getEditedPostAttribute( 'link' ),
 		postTitle:
 			select( 'core/editor' ).getEditedPostAttribute( 'title' ) ||
-			__( 'Template' ),
+			__( 'Template', 'templates-patterns-collection' ),
 	} ) );
 
 	const isPostSaving = useSelect( ( select, { forceIsSaving } ) => {
@@ -187,7 +187,7 @@ const Exporter = () => {
 						message === 'Sorry, you are not allowed to do that.'
 					) {
 						message = __(
-							'Could not save template, check that the template is not empty.'
+							'Could not save template, check that the template is not empty.', 'templates-patterns-collection'
 						);
 					}
 					createErrorNotice( message, {
@@ -196,7 +196,7 @@ const Exporter = () => {
 				} else {
 					window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
-					createSuccessNotice( __( 'Template saved.' ), {
+					createSuccessNotice( __( 'Template saved.', 'templates-patterns-collection' ), {
 						type: 'snackbar',
 					} );
 				}
@@ -276,7 +276,7 @@ const Exporter = () => {
 						message === 'Sorry, you are not allowed to do that.'
 					) {
 						message = __(
-							'Could not save template, check that the template is not empty.'
+							'Could not save template, check that the template is not empty.', 'templates-patterns-collection'
 						);
 					}
 					createErrorNotice( message, {
@@ -285,7 +285,7 @@ const Exporter = () => {
 				} else {
 					window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
-					createSuccessNotice( __( 'Template saved.' ), {
+					createSuccessNotice( __( 'Template saved.', 'templates-patterns-collection' ), {
 						type: 'snackbar',
 					} );
 
@@ -327,8 +327,8 @@ const Exporter = () => {
 					saveMeta();
 					createSuccessNotice(
 						published
-							? __( 'Template Unpublished.' )
-							: __( 'Template Published.' ),
+							? __( 'Template Unpublished.', 'templates-patterns-collection' )
+							: __( 'Template Published.', 'templates-patterns-collection' ),
 						{
 							type: 'snackbar',
 						}
@@ -349,12 +349,12 @@ const Exporter = () => {
 			>
 				{ published &&
 					( 'publishing' === isLoading
-						? __( 'Unpublishing' )
-						: __( 'Unpublish' ) ) }
+						? __( 'Unpublishing', 'templates-patterns-collection' )
+						: __( 'Unpublish', 'templates-patterns-collection' ) ) }
 				{ ! published &&
 					( 'publishing' === isLoading
-						? __( 'Publishing' )
-						: __( 'Publish' ) ) }
+						? __( 'Publishing', 'templates-patterns-collection' )
+						: __( 'Publish', 'templates-patterns-collection' ) ) }
 			</Button>
 		);
 	};
@@ -385,7 +385,7 @@ const Exporter = () => {
 	return (
 		<Fragment>
 			<PluginBlockSettingsMenuItem
-				label={ __( 'Save to Neve Cloud' ) }
+				label={ __( 'Save to Templates Cloud', 'templates-patterns-collection' ) }
 				icon={ 'none' } // We don't want an icon, as new UI of Gutenberg does't have icons for Menu Items, but the component doesn't allow that so we pass an icon which doesn't exist.
 				onClick={ () => setOpen( true ) }
 			/>
@@ -413,7 +413,7 @@ const Exporter = () => {
 						disabled={ isLoading }
 						onClick={ onSavePage }
 					>
-						{ __( 'Save Page to Neve Cloud' ) }
+						{ __( 'Save Page to Templates Cloud' ) }
 					</Button>
 
 					<ToggleControl

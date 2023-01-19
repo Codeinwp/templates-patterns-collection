@@ -53,7 +53,7 @@ if ( parseInt( window.tiTpc.tier ) === 3 ) {
 			// eslint-disable-next-line prettier/prettier
 			'<li><a class=\"fl-block-row-reset\" href=\"javascript:void(0);\">Reset Row Width</a></li>',
 			// eslint-disable-next-line prettier/prettier
-			'<li><a class=\"fl-block-row-reset\" href=\"javascript:void(0);\">Reset Row Width</a></li><li><a class=\"fl-block-row-tpc-export\" onclick="window.tiTpc.tpcExport(this)" href=\"javascript:void(0);\">Save to Neve Cloud</a></li>'
+			'<li><a class=\"fl-block-row-reset\" href=\"javascript:void(0);\">Reset Row Width</a></li><li><a class=\"fl-block-row-tpc-export\" onclick="window.tiTpc.tpcExport(this)" href=\"javascript:void(0);\">Save to Templates Cloud</a></li>'
 		);
 	}
 
