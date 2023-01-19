@@ -39,6 +39,15 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 == Changelog ==
 
+##### [Version 1.1.31](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.30...v1.1.31) (2023-01-19)
+
+- Fix: text changes
+- Fix: image size generation on import
+- Fix: Improved text translations
+
+
+
+
 ##### [Version 1.1.30](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.29...v1.1.30) (2022-11-25)
 
 - Fix: mega menu item import settings mapping
