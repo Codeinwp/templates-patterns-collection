@@ -39,6 +39,13 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 ## Changelog ##
 
+##### [Version 1.1.32](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.31...v1.1.32) (2023-01-20)
+
+- Fix: Estatik plugin install
+
+
+
+
 ##### [Version 1.1.31](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.30...v1.1.31) (2023-01-19)
 
 - Fix: text changes
