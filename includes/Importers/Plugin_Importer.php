@@ -348,6 +348,10 @@ class Plugin_Importer {
 			// hook into this filter to remove pages on activation of woocommerce
 			add_filter( 'woocommerce_create_pages', array( $this, 'woocommerce_activation_pages' ) );
 		}
+
+		if ( $slug === 'estatik' ) {
+			update_option( 'es_is_demo_executed', 1 );
+		}
 	}
 
 	/**
