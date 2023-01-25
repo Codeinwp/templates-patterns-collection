@@ -321,18 +321,24 @@ const Exporter = () => {
 				_ti_tpc_screenshot_url,
 				! _ti_tpc_published,
 				link
-			).then( ( r ) => {
+			).then( async ( r ) => {
 				if ( r.success ) {
-					setPublished( ! published );
-					saveMeta();
-					createSuccessNotice(
-						published
-							? __( 'Template Unpublished.', 'templates-patterns-collection' )
-							: __( 'Template Published.', 'templates-patterns-collection' ),
-						{
-							type: 'snackbar',
+					await getTemplate( _ti_tpc_template_id ).then( ( results ) => {
+						if ( _ti_tpc_template_id === results.template_id ) {
+							setScreenshotURL( results.template_thumbnail );
+							setPublished( ! published );
+							saveMeta();
+							createSuccessNotice(
+								published
+									? __( 'Template Unpublished.', 'templates-patterns-collection' )
+									: __( 'Template Published.', 'templates-patterns-collection' ),
+								{
+									type: 'snackbar',
+								}
+							);
 						}
-					);
+					} );
+
 				}
 			} );
 			setLoading( false );
