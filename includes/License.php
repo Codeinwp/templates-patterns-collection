@@ -77,7 +77,7 @@ final class License {
 		// fix existing malformed data
 		$license = self::get_license_key();
 		$license_data = self::get_license_data();
-		if ( is_null( $license_data->key ) && ! empty( $license ) ) {
+		if ( ! empty( $license_data ) && is_null( $license_data->key ) && ! empty( $license ) ) {
 			$license_data->key = ! empty( $license_data->key ) ? $license_data->key : $license;
 			$this->set_license( $license, $license_data );
 		}
