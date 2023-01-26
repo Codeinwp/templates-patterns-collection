@@ -267,7 +267,7 @@ class Admin {
 			'endpoint'            => TPC_TEMPLATES_CLOUD_ENDPOINT,
 			'params'              => array(
 				'site_url'   => get_site_url(),
-				'license_id' => License::get_license_data()->key,
+				'license_id' => License::get_license_key(),
 			),
 			'upsellNotifications' => $this->get_upsell_notifications(),
 			'isValidLicense'      => $this->has_valid_addons(),

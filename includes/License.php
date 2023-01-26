@@ -188,6 +188,15 @@ final class License {
 	}
 
 	/**
+	 * Get the license key.
+	 *
+	 * @return string
+	 */
+	public static function get_license_key() {
+		return get_option( self::LICENSE_KEY_OPTION_KEY, 'free' );
+	}
+
+	/**
 	 * Get the license tier.
 	 *
 	 * @param int $default_tier The default tier.
