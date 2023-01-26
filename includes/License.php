@@ -73,6 +73,14 @@ final class License {
 				'default'      => '',
 			)
 		);
+
+		// fix existing malformed data
+		$license = self::get_license_key();
+		$license_data = self::get_license_data();
+		if ( is_null( $license_data->key ) && ! empty( $license ) ) {
+			$license_data->key = ! empty( $license_data->key ) ? $license_data->key : $license;
+			$this->set_license( $license, $license_data );
+		}
 	}
 
 	/**
@@ -119,7 +127,16 @@ final class License {
 
 	private function set_license( $license, $license_data ) {
 		update_option( self::LICENSE_KEY_OPTION_KEY, $license );
-		update_option( self::LICENSE_DATA_OPTIONS_KEY, $license_data );
+		$fixed_license_data = $license_data;
+		if ( isset( $license_data->license ) ) {
+			$fixed_license_data = (object) array(
+				'key'        => ! empty( $license_data->key ) ? $license_data->key : $license,
+				'valid'      => $license_data->license,
+				'expiration' => $license_data->expires,
+				'tier'       => $license_data->tier,
+			);
+		}
+		update_option( self::LICENSE_DATA_OPTIONS_KEY, $fixed_license_data );
 		set_transient( self::LICENSE_TRANSIENT_KEY, true, 12 * HOUR_IN_SECONDS );
 	}
 
