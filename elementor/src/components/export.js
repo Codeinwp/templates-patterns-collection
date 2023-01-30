@@ -95,39 +95,44 @@ const Export = ( { updateCurrentTab } ) => {
 
 	const publishPage = async () => {
 		setLoading( true );
+		try {
+			await publishTemplate( {
+				template_id: templateID,
+				template_site_slug: siteSlug,
+				template_thumbnail: screenshotURL,
+				premade: ! isPublished ? 'yes' : 'no',
+				link: elementor.config.initial_document.urls.permalink,
+			} ).then( async ( r ) => {
+				if ( r.success ) {
+					await getTemplate( templateID ).then( ( results ) => {
+						if ( templateID === results.template_id ) {
+							setScreenshotURL( results.template_thumbnail );
+							elementor.notifications.showToast( {
+								message: ! isPublished
+									? window.tiTpc.exporter.templatePublished
+									: window.tiTpc.exporter.templateUnpublished,
+							} );
 
-		await publishTemplate( {
-			template_id: templateID,
-			template_site_slug: siteSlug,
-			template_thumbnail: screenshotURL,
-			premade: ! isPublished ? 'yes' : 'no',
-			link: elementor.config.initial_document.urls.permalink,
-		} ).then( async ( r ) => {
-			if ( r.success ) {
-				await getTemplate( templateID ).then( ( results ) => {
-					if ( templateID === results.template_id ) {
-						setScreenshotURL( results.template_thumbnail );
-						elementor.notifications.showToast( {
-							message: ! isPublished
-								? window.tiTpc.exporter.templatePublished
-								: window.tiTpc.exporter.templateUnpublished,
-						} );
+							setPublished( ! isPublished );
 
-						setPublished( ! isPublished );
+							window.tiTpc.postModel.set( 'meta', {
+								_ti_tpc_template_id: templateID,
+								_ti_tpc_template_sync: templateSync,
+								_ti_tpc_screenshot_url: screenshotURL,
+								_ti_tpc_site_slug: siteSlug,
+								_ti_tpc_published: ! isPublished,
+							} );
 
-						window.tiTpc.postModel.set( 'meta', {
-							_ti_tpc_template_id: templateID,
-							_ti_tpc_template_sync: templateSync,
-							_ti_tpc_screenshot_url: screenshotURL,
-							_ti_tpc_site_slug: siteSlug,
-							_ti_tpc_published: ! isPublished,
-						} );
-
-						window.tiTpc.postModel.save();
-					}
-				} );
-			}
-		} );
+							window.tiTpc.postModel.save();
+						}
+					} );
+				}
+			} );
+		} catch ( error ) {
+			elementor.notifications.showToast( {
+				message: 'Something happened when publishing the template.',
+			} );
+		}
 
 		setLoading( false );
 	};
