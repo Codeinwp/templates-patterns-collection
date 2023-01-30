@@ -105,10 +105,6 @@ const Export = ( { updateCurrentTab } ) => {
 		} ).then( async ( r ) => {
 			if ( r.success ) {
 				await getTemplate( templateID ).then( ( results ) => {
-					console.log( templateID );
-					console.log( results );
-					console.log( results.template_id );
-					console.log( results.template_thumbnail );
 					if ( templateID === results.template_id ) {
 						setScreenshotURL( results.template_thumbnail );
 						elementor.notifications.showToast( {

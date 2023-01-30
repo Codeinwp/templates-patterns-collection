@@ -315,32 +315,36 @@ const Exporter = () => {
 
 		const onPublish = async () => {
 			setLoading( 'publishing' );
-			await publishTemplate(
-				_ti_tpc_template_id,
-				_ti_tpc_site_slug,
-				_ti_tpc_screenshot_url,
-				! _ti_tpc_published,
-				link
-			).then( async ( r ) => {
-				if ( r.success ) {
-					await getTemplate( _ti_tpc_template_id ).then( ( results ) => {
-						if ( _ti_tpc_template_id === results.template_id ) {
-							setScreenshotURL( results.template_thumbnail );
-							setPublished( ! published );
-							saveMeta();
-							createSuccessNotice(
-								published
-									? __( 'Template Unpublished.', 'templates-patterns-collection' )
-									: __( 'Template Published.', 'templates-patterns-collection' ),
-								{
-									type: 'snackbar',
-								}
-							);
-						}
-					} );
+			try {
+				await publishTemplate(
+					_ti_tpc_template_id,
+					_ti_tpc_site_slug,
+					_ti_tpc_screenshot_url,
+					!_ti_tpc_published,
+					link
+				).then(async (r) => {
+					if (r.success) {
+						await getTemplate(_ti_tpc_template_id).then((results) => {
+							if (_ti_tpc_template_id === results.template_id) {
+								setScreenshotURL(results.template_thumbnail);
+								setPublished(!published);
+								saveMeta();
+								createSuccessNotice(
+									published
+										? __('Template Unpublished.', 'templates-patterns-collection')
+										: __('Template Published.', 'templates-patterns-collection'),
+									{
+										type: 'snackbar',
+									}
+								);
+							}
+						});
 
-				}
-			} );
+					}
+				});
+			} catch ( error ) {
+				createErrorNotice( __( 'Something happened when publishing the template.', 'templates-patterns-collection') )
+			}
 			setLoading( false );
 		};
 
