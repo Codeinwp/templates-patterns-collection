@@ -17,8 +17,11 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching, license } ) => 
 	const buttons = {
 		starterSites: __( 'Starter Sites', 'templates-patterns-collection' ),
 		pageTemplates: __( 'Page Templates', 'templates-patterns-collection' ),
-		library: __( 'My Library', 'templates-patterns-collection' ),
 	};
+
+	if ( ! tiobDash.hideMyLibrary ) {
+		buttons.library = __( 'My Library', 'templates-patterns-collection' );
+	}
 
 	const [ isSyncing, setSyncing ] = useState( false );
 	const { isLicenseOpen, setLicenseOpen } = useContext( LicensePanelContext );
