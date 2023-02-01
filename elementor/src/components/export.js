@@ -220,7 +220,8 @@ const Export = ( { updateCurrentTab } ) => {
 								/>
 							</div>
 							<p style={descriptionStyles}>{ __(
-								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.'
+								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
+								'templates-patterns-collection'
 							) }</p>
 
 							<div className="ti-tpc-template-library-blank-field">
@@ -241,7 +242,8 @@ const Export = ( { updateCurrentTab } ) => {
 								/>
 							</div>
 							<p style={descriptionStyles}>{ __(
-								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.'
+								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.',
+								'templates-patterns-collection'
 							) }</p>
 
 							<div className="ti-tpc-template-library-blank-field">

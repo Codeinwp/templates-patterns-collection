@@ -439,7 +439,8 @@ const Exporter = () => {
 							label={ __( 'Screenshot URL' ) }
 							value={ screenshotURL }
 							help={ __(
-								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.'
+								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
+								'templates-patterns-collection'
 							) }
 							type="url"
 							onChange={ setScreenshotURL }
@@ -448,7 +449,8 @@ const Exporter = () => {
 							label={ __( 'Site Slug' ) }
 							value={ siteSlug }
 							help={ __(
-								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.'
+								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.',
+								'templates-patterns-collection'
 							) }
 							type="url"
 							onChange={ setSiteSlug }
