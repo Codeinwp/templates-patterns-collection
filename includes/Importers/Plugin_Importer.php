@@ -232,7 +232,7 @@ class Plugin_Importer {
 		if ( empty( $download_path ) ) {
 			$download_link = $api->download_link;
 		}
-		
+
 		$upgrader = new Plugin_Upgrader( $skin );
 		$install  = $upgrader->install( $download_link );
 		if ( $install !== true ) {
