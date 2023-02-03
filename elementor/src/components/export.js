@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { Button, ToggleControl } from '@wordpress/components';
 import { withDispatch } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 import {
 	getTemplate,
@@ -94,36 +95,53 @@ const Export = ( { updateCurrentTab } ) => {
 
 	const publishPage = async () => {
 		setLoading( true );
+		try {
+			await publishTemplate( {
+				template_id: templateID,
+				template_site_slug: siteSlug,
+				template_thumbnail: screenshotURL,
+				premade: ! isPublished ? 'yes' : 'no',
+				link: elementor.config.initial_document.urls.permalink,
+			} ).then( async ( r ) => {
+				if ( r.success ) {
+					await getTemplate( templateID ).then( ( results ) => {
+						if ( templateID === results.template_id ) {
+							setScreenshotURL( results.template_thumbnail );
+							elementor.notifications.showToast( {
+								message: ! isPublished
+									? window.tiTpc.exporter.templatePublished
+									: window.tiTpc.exporter.templateUnpublished,
+							} );
 
-		await publishTemplate( {
-			template_id: templateID,
-			template_site_slug: siteSlug,
-			template_thumbnail: screenshotURL,
-			premade: ! isPublished ? 'yes' : 'no',
-			link: elementor.config.initial_document.urls.permalink,
-		} ).then( ( r ) => {
-			if ( r.success ) {
-				elementor.notifications.showToast( {
-					message: ! isPublished
-						? window.tiTpc.exporter.templatePublished
-						: window.tiTpc.exporter.templateUnpublished,
-				} );
+							setPublished( ! isPublished );
 
-				setPublished( ! isPublished );
+							window.tiTpc.postModel.set( 'meta', {
+								_ti_tpc_template_id: templateID,
+								_ti_tpc_template_sync: templateSync,
+								_ti_tpc_screenshot_url: screenshotURL,
+								_ti_tpc_site_slug: siteSlug,
+								_ti_tpc_published: ! isPublished,
+							} );
 
-				window.tiTpc.postModel.set( 'meta', {
-					_ti_tpc_template_id: templateID,
-					_ti_tpc_template_sync: templateSync,
-					_ti_tpc_screenshot_url: screenshotURL,
-					_ti_tpc_site_slug: siteSlug,
-					_ti_tpc_published: ! isPublished,
-				} );
-
-				window.tiTpc.postModel.save();
-			}
-		} );
+							window.tiTpc.postModel.save();
+						}
+					} );
+				}
+			} );
+		} catch ( error ) {
+			elementor.notifications.showToast( {
+				message: 'Something happened when publishing the template.',
+			} );
+		}
 
 		setLoading( false );
+	};
+
+	const descriptionStyles = {
+		width: '650px',
+		margin: 'auto',
+		marginTop: '8px',
+		padding: '0 12px',
 	};
 
 	return (
@@ -201,6 +219,10 @@ const Export = ( { updateCurrentTab } ) => {
 									}
 								/>
 							</div>
+							<p style={descriptionStyles}>{ __(
+								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
+								'templates-patterns-collection'
+							) }</p>
 
 							<div className="ti-tpc-template-library-blank-field">
 								<label
@@ -219,6 +241,10 @@ const Export = ( { updateCurrentTab } ) => {
 									}
 								/>
 							</div>
+							<p style={descriptionStyles}>{ __(
+								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.',
+								'templates-patterns-collection'
+							) }</p>
 
 							<div className="ti-tpc-template-library-blank-field">
 								<Button

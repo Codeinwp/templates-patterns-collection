@@ -87,11 +87,13 @@ describe('Dashboard Page - Default', function () {
         return;
       }
       cy.get('@dropdown').click({ force: true });
-      cy.get('.categories-selector li').contains(editorName).click();
+      cy.wait(250);
+      cy.get('.categories-selector li').contains(editorName).click({ force: true });
       cy.get('.categories-selector button').should('contain', editorName);
     });
     cy.get('@dropdown').click({ force: true });
-    cy.get('.categories-selector li').contains(GTB).click();
+    cy.wait(250);
+    cy.get('.categories-selector li').contains(GTB).click({ force: true });
     cy.get('.categories-selector button').should('contain', GTB);
   });
 
