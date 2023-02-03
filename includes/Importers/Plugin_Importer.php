@@ -119,9 +119,14 @@ class Plugin_Importer {
 	 */
 	public function run_plugins_install( $plugins_array ) {
 		$plugin_cleanup = array();
-		foreach ( $plugins_array as $plugin_slug => $true ) {
+		foreach ( $plugins_array as $plugin_slug => $path ) {
 			$this->logger->log( "Installing {$plugin_slug}.", 'progress' );
-			$install = $this->install_single_plugin( $plugin_slug );
+			$download_path = '';
+			if ( $path !== true && is_string( $path ) && ! empty( $path ) ) {
+				$download_path = $path;
+			}
+
+			$install = $this->install_single_plugin( $plugin_slug, $download_path );
 			if ( ! $install ) {
 				$this->logger->log( 'Current user cannot install plugins.' );
 
@@ -175,7 +180,7 @@ class Plugin_Importer {
 	 *
 	 * @return bool
 	 */
-	private function install_single_plugin( $plugin_slug ) {
+	private function install_single_plugin( $plugin_slug, $download_path = '' ) {
 		// Plugin is already there.
 		if ( $this->plugin_dir_exists( $plugin_slug ) ) {
 			return true;
@@ -222,8 +227,14 @@ class Plugin_Importer {
 				)
 			);
 		}
+
+		$download_link = $download_path;
+		if ( empty( $download_path ) ) {
+			$download_link = $api->download_link;
+		}
+		
 		$upgrader = new Plugin_Upgrader( $skin );
-		$install  = $upgrader->install( $api->download_link );
+		$install  = $upgrader->install( $download_link );
 		if ( $install !== true ) {
 			$this->log .= 'Error: Install process failed (' . ucwords( $plugin_slug ) . ').' . "\n";
 
