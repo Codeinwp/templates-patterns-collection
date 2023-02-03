@@ -39,6 +39,15 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 ## Changelog ##
 
+##### [Version 1.1.33](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.32...v1.1.33) (2023-02-03)
+
+- Fix: Modal pagination styles
+- Feat: Premade templates automatic screenshot generation
+- Fix: Individual bulk import
+
+
+
+
 ##### [Version 1.1.32](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.31...v1.1.32) (2023-01-20)
 
 - Fix: Estatik plugin install
