@@ -125,7 +125,7 @@ export const fetchBulkData = async ( templates ) => {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			...tiobDash.params,
 		},
-	} );
+	}, {arrayFormat: 'index'} );
 
 	try {
 		const response = await apiFetch( { url, method: 'GET', parse: false } );
