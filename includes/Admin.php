@@ -376,6 +376,10 @@ class Admin {
 
 		$array['onboarding'] = $api;
 
+		// Do not display the notification if starter sites are disabled
+		if ( isset( $this->wl_config['starter_sites'] ) && (bool) $this->wl_config['starter_sites'] === true ) {
+			return $array;
+		}
 		$page_was_visited = (bool) get_transient( 'tiob_library_visited' );
 		if ( $this->is_agency_plan() && ! $page_was_visited ) {
 			$array['notifications']['template-cloud'] = array(
