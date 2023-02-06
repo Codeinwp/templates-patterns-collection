@@ -1,3 +1,5 @@
+import {trailingSlashIt} from "./common";
+
 export const send = ( route, data, simple = false ) => {
 	return requestData( route, simple, data );
 };
@@ -20,6 +22,12 @@ const requestData = async (
 			'Content-Type': 'application/json',
 		},
 	};
+
+	if ( tiobDash.params.site_url ) {
+		const url = new URL( route );
+		url.searchParams.append( 'site_url', encodeURIComponent( tiobDash.params.site_url ) );
+		route = url;
+	}
 
 	if ( useNonce ) {
 		options.headers[ 'x-wp-nonce' ] = tiobDash.nonce;
