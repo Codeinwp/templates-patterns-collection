@@ -13,7 +13,12 @@ import { addUrlHash, getTabHash } from '../utils/common';
 import License from './License';
 import { LicensePanelContext } from './LicensePanelContext';
 
-const TabNavigation = ( { setCurrentTab, currentTab, isFetching, license } ) => {
+const TabNavigation = ( {
+	setCurrentTab,
+	currentTab,
+	isFetching,
+	license,
+} ) => {
 	const buttons = {
 		starterSites: __( 'Starter Sites', 'templates-patterns-collection' ),
 		pageTemplates: __( 'Page Templates', 'templates-patterns-collection' ),
@@ -94,31 +99,43 @@ const TabNavigation = ( { setCurrentTab, currentTab, isFetching, license } ) => 
 					</Button>
 				);
 			} ) }
-			{ currentTab !== 'starterSites' && (
+			{ currentTab !== 'starterSites' && ! tiobDash.hideMyLibrary && (
 				<Button
 					icon={ update }
 					onClick={ sync }
-					label={ __( 'Re-sync Library', 'templates-patterns-collection' ) }
+					label={ __(
+						'Re-sync Library',
+						'templates-patterns-collection'
+					) }
 					className={ classnames( 'is-icon-btn', {
 						'is-loading': isSyncing,
 					} ) }
 					disabled={ isFetching || isSyncing }
-					data-content={ __( 'Sync', 'templates-patterns-collection' ) }
+					data-content={ __(
+						'Sync',
+						'templates-patterns-collection'
+					) }
 				/>
 			) }
-			{ currentTab !== 'starterSites' && (
+			{ currentTab !== 'starterSites' && ! tiobDash.hideMyLibrary && (
 				<>
 					<Button
 						icon={ ! isLicenseOpen ? cloud : close }
 						onClick={ () => {
 							setLicenseOpen( ! isLicenseOpen );
 						} }
-						label={ __( 'License', 'templates-patterns-collection' ) }
+						label={ __(
+							'License',
+							'templates-patterns-collection'
+						) }
 						className={ classnames( 'is-icon-btn', {
 							'is-not-valid': ! isLicenseOpen && ! isValid,
 							'is-valid': ! isLicenseOpen && isValid,
 						} ) }
-						data-content={ __( 'License', 'templates-patterns-collection' ) }
+						data-content={ __(
+							'License',
+							'templates-patterns-collection'
+						) }
 					/>
 					{ isLicenseOpen && <License /> }
 				</>
@@ -184,9 +201,12 @@ export default compose(
 		};
 	} ),
 	withSelect( ( select ) => {
-		const { getOnboardingStatus, getCurrentTab, getFetching, getLicense } = select(
-			'neve-onboarding'
-		);
+		const {
+			getOnboardingStatus,
+			getCurrentTab,
+			getFetching,
+			getLicense,
+		} = select( 'neve-onboarding' );
 		return {
 			isOnboarding: getOnboardingStatus(),
 			currentTab: getCurrentTab(),
