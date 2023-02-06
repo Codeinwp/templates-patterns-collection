@@ -315,26 +315,36 @@ const Exporter = () => {
 
 		const onPublish = async () => {
 			setLoading( 'publishing' );
-			await publishTemplate(
-				_ti_tpc_template_id,
-				_ti_tpc_site_slug,
-				_ti_tpc_screenshot_url,
-				! _ti_tpc_published,
-				link
-			).then( ( r ) => {
-				if ( r.success ) {
-					setPublished( ! published );
-					saveMeta();
-					createSuccessNotice(
-						published
-							? __( 'Template Unpublished.', 'templates-patterns-collection' )
-							: __( 'Template Published.', 'templates-patterns-collection' ),
-						{
-							type: 'snackbar',
-						}
-					);
-				}
-			} );
+			try {
+				await publishTemplate(
+					_ti_tpc_template_id,
+					_ti_tpc_site_slug,
+					_ti_tpc_screenshot_url,
+					!_ti_tpc_published,
+					link
+				).then(async (r) => {
+					if (r.success) {
+						await getTemplate(_ti_tpc_template_id).then((results) => {
+							if (_ti_tpc_template_id === results.template_id) {
+								setScreenshotURL(results.template_thumbnail);
+								setPublished(!published);
+								saveMeta();
+								createSuccessNotice(
+									published
+										? __('Template Unpublished.', 'templates-patterns-collection')
+										: __('Template Published.', 'templates-patterns-collection'),
+									{
+										type: 'snackbar',
+									}
+								);
+							}
+						});
+
+					}
+				});
+			} catch ( error ) {
+				createErrorNotice( __( 'Something happened when publishing the template.', 'templates-patterns-collection') )
+			}
 			setLoading( false );
 		};
 
@@ -428,6 +438,10 @@ const Exporter = () => {
 						<TextControl
 							label={ __( 'Screenshot URL' ) }
 							value={ screenshotURL }
+							help={ __(
+								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
+								'templates-patterns-collection'
+							) }
 							type="url"
 							onChange={ setScreenshotURL }
 						/>
@@ -435,7 +449,8 @@ const Exporter = () => {
 							label={ __( 'Site Slug' ) }
 							value={ siteSlug }
 							help={ __(
-								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.'
+								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.',
+								'templates-patterns-collection'
 							) }
 							type="url"
 							onChange={ setSiteSlug }

@@ -3,8 +3,11 @@
 
 	.components-button {
 		margin-right: 10px;
+		margin-bottom: 8px;
 		border-radius: 2px;
 		box-shadow: none;
+		min-width: 40px;
+		justify-content: center;
 
 		&:focus {
 			box-shadow: inset 0 0 0 1px #fff, 0 0 0 1.5px #007cba;
