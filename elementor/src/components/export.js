@@ -93,6 +93,34 @@ const Export = ( { updateCurrentTab } ) => {
 		updateCurrentTab( 'library' );
 	};
 
+	const refreshData = async () => {
+		setLoading( true );
+		try {
+			await getTemplate(templateID).then((results) => {
+				if (templateID === results.template_id) {
+					setScreenshotURL( results.template_thumbnail );
+					elementor.notifications.showToast( {
+						message: __('Template Data Refreshed.', 'templates-patterns-collection'),
+					} );
+					window.tiTpc.postModel.set( 'meta', {
+						_ti_tpc_template_id: templateID,
+						_ti_tpc_template_sync: templateSync,
+						_ti_tpc_screenshot_url: screenshotURL,
+						_ti_tpc_site_slug: siteSlug,
+						_ti_tpc_published: isPublished,
+					} );
+
+					window.tiTpc.postModel.save();
+				}
+			});
+		} catch ( error ) {
+			elementor.notifications.showToast( {
+				message: 'Something happened when refreshing the template data.',
+			} );
+		}
+		setLoading( false );
+	};
+
 	const publishPage = async () => {
 		setLoading( true );
 		try {
@@ -264,6 +292,25 @@ const Export = ( { updateCurrentTab } ) => {
 										? window.tiTpc.library.export.unpublish
 										: window.tiTpc.library.export.publish }
 								</Button>
+
+								{ isPublished && (
+									<Button
+										className={ classnames(
+											'elementor-button elementor-button-success',
+											{ 'elementor-button-state': isLoading }
+										) }
+										onClick={ refreshData }
+										style={ { backgroundColor: 'dimgray', marginLeft: '12px' } }
+									>
+									<span className="elementor-state-icon">
+										<i
+											className="eicon-loading eicon-animation-spin"
+											aria-hidden="true"
+										></i>
+									</span>
+										{ __( 'Refresh', 'templates-patterns-collection') }
+									</Button>
+								) }
 							</div>
 						</>
 					) }

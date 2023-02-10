@@ -10,9 +10,6 @@ import {
 	PanelBody,
 	TextControl,
 	ToggleControl,
-	Flex,
-	FlexBlock,
-	FlexItem,
 } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import {
@@ -460,39 +457,16 @@ const Exporter = () => {
 					<PanelBody>
 						<h4>{ __( 'Publish Settings' ) }</h4>
 
-						<Flex
-							gap={2}
-							align="top"
-							justify="space-between"
-						>
-							<FlexBlock>
-								<TextControl
-									label={ __( 'Screenshot URL' ) }
-									value={ screenshotURL }
-									help={ __(
-										'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
-										'templates-patterns-collection'
-									) }
-									type="url"
-									onChange={ setScreenshotURL }
-								/>
-							</FlexBlock>
-							{ published && (
-								<FlexItem>
-									<Button
-										isSecondary
-										icon="image-rotate"
-										iconSize={18}
-										onClick={ refreshData }
-										disabled={ false !== isLoading }
-										className={ classnames( {
-											'is-loading': 'publishing' === isLoading,
-										} ) }
-									/>
-								</FlexItem>
+						<TextControl
+							label={ __( 'Screenshot URL' ) }
+							value={ screenshotURL }
+							help={ __(
+								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
+								'templates-patterns-collection'
 							) }
-						</Flex>
-
+							type="url"
+							onChange={ setScreenshotURL }
+						/>
 						<TextControl
 							label={ __( 'Site Slug' ) }
 							value={ siteSlug }
@@ -504,6 +478,20 @@ const Exporter = () => {
 							onChange={ setSiteSlug }
 						/>
 						<PublishButton />
+						{ published && (
+							<Button
+								isLink
+								icon="image-rotate"
+								onClick={ refreshData }
+								disabled={ false !== isLoading }
+								className={ classnames( {
+									'is-loading': 'publishing' === isLoading,
+								} ) }
+								style={ {marginLeft: '12px', textDecoration: 'none'} }
+							>
+								{ __( 'Refresh', 'templates-patterns-collection') }
+							</Button>
+						) }
 						<Notices />
 					</PanelBody>
 				) }
