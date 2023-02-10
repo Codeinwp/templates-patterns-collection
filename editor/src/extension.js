@@ -10,6 +10,9 @@ import {
 	PanelBody,
 	TextControl,
 	ToggleControl,
+	Flex,
+	FlexBlock,
+	FlexItem,
 } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import {
@@ -151,6 +154,27 @@ const Exporter = () => {
 			onSavePage();
 		}
 	}, [ isPostSaving, templateSync ] );
+
+	const refreshData = async () => {
+		setLoading( 'publishing' );
+		try {
+			await getTemplate(_ti_tpc_template_id).then((results) => {
+				if (_ti_tpc_template_id === results.template_id) {
+					setScreenshotURL(results.template_thumbnail);
+					saveMeta(templateID, false);
+					createSuccessNotice(
+						__('Template Data Refreshed.', 'templates-patterns-collection'),
+						{
+							type: 'snackbar',
+						}
+					);
+				}
+			});
+		} catch ( error ) {
+			createErrorNotice( __( 'Something happened when refreshing the template data.', 'templates-patterns-collection') )
+		}
+		setLoading( false );
+	};
 
 	const onSave = async () => {
 		setLoading( true );
@@ -369,7 +393,7 @@ const Exporter = () => {
 		);
 	};
 
-	const saveMeta = ( ID = templateID ) => {
+	const saveMeta = ( ID = templateID, togglePublish = true ) => {
 		let post = null;
 
 		if ( type === 'post' ) {
@@ -383,7 +407,7 @@ const Exporter = () => {
 			_ti_tpc_template_sync: templateSync,
 			_ti_tpc_screenshot_url: screenshotURL,
 			_ti_tpc_site_slug: siteSlug,
-			_ti_tpc_published: ! published,
+			_ti_tpc_published: togglePublish ? ! published : published,
 		} );
 		return post.save();
 	};
@@ -435,16 +459,40 @@ const Exporter = () => {
 				{ canPredefine && (
 					<PanelBody>
 						<h4>{ __( 'Publish Settings' ) }</h4>
-						<TextControl
-							label={ __( 'Screenshot URL' ) }
-							value={ screenshotURL }
-							help={ __(
-								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
-								'templates-patterns-collection'
+
+						<Flex
+							gap={2}
+							align="top"
+							justify="space-between"
+						>
+							<FlexBlock>
+								<TextControl
+									label={ __( 'Screenshot URL' ) }
+									value={ screenshotURL }
+									help={ __(
+										'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
+										'templates-patterns-collection'
+									) }
+									type="url"
+									onChange={ setScreenshotURL }
+								/>
+							</FlexBlock>
+							{ published && (
+								<FlexItem>
+									<Button
+										isSecondary
+										icon="image-rotate"
+										iconSize={18}
+										onClick={ refreshData }
+										disabled={ false !== isLoading }
+										className={ classnames( {
+											'is-loading': 'publishing' === isLoading,
+										} ) }
+									/>
+								</FlexItem>
 							) }
-							type="url"
-							onChange={ setScreenshotURL }
-						/>
+						</Flex>
+
 						<TextControl
 							label={ __( 'Site Slug' ) }
 							value={ siteSlug }
