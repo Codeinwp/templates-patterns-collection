@@ -167,6 +167,10 @@ class Admin {
 				'render_starter_sites',
 			)
 		);
+
+		if ( isset( $this->wl_config['my_library'] ) && (bool) $this->wl_config['my_library'] === true ) {
+			return false;
+		}
 		add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
 	}
 
@@ -264,6 +268,7 @@ class Admin {
 			'themesURL'           => admin_url( 'themes.php' ),
 			'themeAction'         => $this->get_theme_action(),
 			'brandedTheme'        => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
+			'hideMyLibrary'       => isset( $this->wl_config['my_library'] ) ? $this->wl_config['my_library'] : false,
 			'endpoint'            => TPC_TEMPLATES_CLOUD_ENDPOINT,
 			'params'              => array(
 				'site_url'   => get_site_url(),
@@ -371,6 +376,10 @@ class Admin {
 
 		$array['onboarding'] = $api;
 
+		// Do not display the notification if starter sites are disabled
+		if ( isset( $this->wl_config['starter_sites'] ) && (bool) $this->wl_config['starter_sites'] === true ) {
+			return $array;
+		}
 		$page_was_visited = (bool) get_transient( 'tiob_library_visited' );
 		if ( $this->is_agency_plan() && ! $page_was_visited ) {
 			$array['notifications']['template-cloud'] = array(
