@@ -1,3 +1,9 @@
+##### [Version 1.1.34](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.33...v1.1.34) (2023-02-15)
+
+- Fix: Hide the "My Library" button when Neve white-label option is set.
+- Fix: Validation on Premium requests on some edge cases.
+- Fix: Automatic screenshot generation on premade templates
+
 ##### [Version 1.1.33](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.32...v1.1.33) (2023-02-03)
 
 - Fix: Modal pagination styles
