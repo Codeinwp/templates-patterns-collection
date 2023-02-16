@@ -99,6 +99,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                 }
 
                 setFeedbackStatus( 'submitted' );
+                dismissFeedback();
                 closeModal();
             })?.catch( ( error ) => {
                 console.warn( error.message );

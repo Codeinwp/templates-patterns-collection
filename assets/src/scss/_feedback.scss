@@ -9,7 +9,7 @@
     border-radius: 4px;
     transition: width 0.8s;
     margin: 0;
-    &:not(.error):not(.update) {
+    &:not(.error):not(.updated) {
       border: 1px solid transparent;
     }
 
