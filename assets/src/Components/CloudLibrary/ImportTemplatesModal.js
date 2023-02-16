@@ -31,10 +31,6 @@ const ImportTemplatesModal = ( {
 
 	const isSingle = templatesData.length === 1;
 
-	console.log( themeData );
-	console.log( isUserTemplate );
-	console.log( generalTemplates );
-
 	useEffect( () => {
 		if ( isUserTemplate && isSingle ) {
 			getUserTemplateData( templatesData[ 0 ].template_id ).then(

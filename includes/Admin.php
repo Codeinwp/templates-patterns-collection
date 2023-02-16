@@ -17,6 +17,9 @@ use TIOB\Importers\Cleanup\Active_State;
 class Admin {
 	const API = 'api.themeisle.com';
 
+	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
+	const FEEDBACK_DISMISSED_OPT = 'tiob_feedback_dismiss';
+
 	/**
 	 * Admin page slug
 	 *
@@ -60,6 +63,34 @@ class Admin {
 
 		add_action( 'wp_ajax_skip_subscribe', array( $this, 'skip_subscribe' ) );
 		add_action( 'wp_ajax_nopriv_skip_subscribe', array( $this, 'skip_subscribe' ) );
+
+		$this->register_feedback_settings();
+	}
+
+	/**
+	 * Register feedback settings.
+	 *
+	 * @return void
+	 */
+	private function register_feedback_settings() {
+		register_setting(
+			'tiob_feedback',
+			self::IMPORTED_TEMPLATES_COUNT_OPT,
+			[
+				'type'         => 'integer',
+				'show_in_rest' => true,
+				'default'      => 0,
+			]
+		);
+		register_setting(
+			'tiob_feedback',
+			self::FEEDBACK_DISMISSED_OPT,
+			[
+				'type'         => 'boolean',
+				'show_in_rest' => true,
+				'default'      => false,
+			]
+		);
 	}
 
 	/**
@@ -254,6 +285,7 @@ class Admin {
 		}
 
 		return array(
+			'version'             => TIOB_VERSION,
 			'nonce'               => wp_create_nonce( 'wp_rest' ),
 			'assets'              => TIOB_URL . '/assets/',
 			'upgradeURL'          => $upgrade_url,
@@ -283,6 +315,10 @@ class Admin {
 				'skipStatus' => $this->get_skip_subscribe_status() ? 'yes' : 'no',
 				'email'      => ( ! empty( $user ) ) ? $user->user_email : '',
 			),
+			'feedback' => [
+				'count' => get_option( self::IMPORTED_TEMPLATES_COUNT_OPT, 0 ),
+				'dismissed' => get_option( self::FEEDBACK_DISMISSED_OPT, false ),
+			],
 		);
 	}
 

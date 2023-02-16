@@ -315,6 +315,11 @@ class Rest_Server {
 				),
 			);
 		}
+		
+		$count = get_option( Admin::IMPORTED_TEMPLATES_COUNT_OPT, 0 );
+		update_option( Admin::IMPORTED_TEMPLATES_COUNT_OPT, intval( $count ) + sizeof( $imported ) );
+		
+		error_log( var_export( get_option( Admin::IMPORTED_TEMPLATES_COUNT_OPT, 0 ), true ) );
 
 		return new WP_REST_Response(
 			array(
