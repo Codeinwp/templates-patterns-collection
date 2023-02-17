@@ -351,7 +351,11 @@ class Rest_Server {
 				$page_template = $meta['_wp_page_template'];
 			}
 
-			if ( isset( $meta['postType'] ) && in_array( $meta['postType'], Editor::ALLOWED_POST_TYPES, true ) ) {
+			if (
+				isset( $meta['postType'] ) &&
+				in_array( $meta['postType'], Editor::ALLOWED_POST_TYPES, true ) &&
+				post_type_exists( $meta['postType'] )
+			) {
 				$post_type = $meta['postType'];
 			}
 		}
