@@ -18,7 +18,7 @@ class Admin {
 	const API = 'api.themeisle.com';
 
 	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
-	const FEEDBACK_DISMISSED_OPT = 'tiob_feedback_dismiss';
+	const FEEDBACK_DISMISSED_OPT       = 'tiob_feedback_dismiss';
 
 	/**
 	 * Admin page slug
@@ -76,20 +76,20 @@ class Admin {
 		register_setting(
 			'tiob_feedback',
 			self::IMPORTED_TEMPLATES_COUNT_OPT,
-			[
+			array(
 				'type'         => 'integer',
 				'show_in_rest' => true,
 				'default'      => 0,
-			]
+			)
 		);
 		register_setting(
 			'tiob_feedback',
 			self::FEEDBACK_DISMISSED_OPT,
-			[
+			array(
 				'type'         => 'boolean',
 				'show_in_rest' => true,
 				'default'      => false,
-			]
+			)
 		);
 	}
 
@@ -315,10 +315,10 @@ class Admin {
 				'skipStatus' => $this->get_skip_subscribe_status() ? 'yes' : 'no',
 				'email'      => ( ! empty( $user ) ) ? $user->user_email : '',
 			),
-			'feedback' => [
-				'count' => get_option( self::IMPORTED_TEMPLATES_COUNT_OPT, 0 ),
+			'feedback'            => array(
+				'count'     => get_option( self::IMPORTED_TEMPLATES_COUNT_OPT, 0 ),
 				'dismissed' => get_option( self::FEEDBACK_DISMISSED_OPT, false ),
-			],
+			),
 		);
 	}
 
