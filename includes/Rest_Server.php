@@ -339,6 +339,7 @@ class Rest_Server {
 		);
 
 		$page_template = '';
+		$post_type     = 'page';
 
 		if ( 'gutenberg' !== $template['template_type'] ) {
 			$page_template = 'page-templates/template-pagebuilder-full-width.php';
@@ -348,6 +349,10 @@ class Rest_Server {
 			$meta = json_decode( $template['meta'], true );
 			if ( isset( $meta['_wp_page_template'] ) ) {
 				$page_template = $meta['_wp_page_template'];
+			}
+
+			if ( isset( $meta['postType'] ) && in_array( $meta['postType'], Editor::ALLOWED_POST_TYPES, true ) ) {
+				$post_type = $meta['postType'];
 			}
 		}
 
@@ -404,7 +409,7 @@ class Rest_Server {
 				'post_title'    => wp_strip_all_tags( $template['template_name'] ),
 				'post_content'  => wp_kses_post( $template['content'] ),
 				'post_status'   => 'publish',
-				'post_type'     => 'page',
+				'post_type'     => $post_type,
 				'page_template' => $page_template,
 				'meta_input'    => isset( $template['meta'] ) ? json_decode( $template['meta'], true ) : array(),
 			)
