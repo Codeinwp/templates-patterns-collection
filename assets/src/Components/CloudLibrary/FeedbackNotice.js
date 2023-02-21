@@ -73,6 +73,11 @@ const FeedbackNotice = ( { importTemplate } ) => {
             return;
         }
 
+        let feedback = feedbackDetails.trim();
+        if ( feedbackResponse !== 'other') {
+            feedback = feedbackResponse;
+        }
+
         setFeedbackStatus( 'loading' );
         try {
             fetch( 'https://api.themeisle.com/tracking/feedback', {
@@ -85,7 +90,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                 body: JSON.stringify({
                     slug: 'templates-patterns-collection',
                     version: version,
-                    feedback: feedbackDetails.trim(),
+                    feedback: feedback,
                     data: {
                         'feedback-area': 'template-patterns-collection-page-templates',
                         'feedback-option': feedbackResponse
