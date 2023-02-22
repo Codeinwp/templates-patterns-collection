@@ -353,7 +353,7 @@ class Rest_Server {
 
 			if (
 				isset( $meta['postType'] ) &&
-				in_array( $meta['postType'], Editor::ALLOWED_POST_TYPES, true ) &&
+				in_array( $meta['postType'], Editor::get_allowed_post_types(), true ) &&
 				post_type_exists( $meta['postType'] )
 			) {
 				$post_type = $meta['postType'];
