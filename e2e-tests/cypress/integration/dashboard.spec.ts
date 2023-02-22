@@ -141,10 +141,10 @@ describe('Importer Works', function () {
       'https://api.themeisle.com/sites/web-agency-gb/wp-json/ti-demo-data/data?license=*',
     ).as('getModalData');
 
-    cy.intercept('POST', 'install_plugins').as('installPlugins');
-    cy.intercept('POST', 'import_content').as('importContent');
-    cy.intercept('POST', 'import_theme_mods').as('importCustomizer');
-    cy.intercept('POST', 'import_widgets').as('importWidgets');
+    cy.intercept('POST', '**install_plugins*').as('installPlugins');
+    cy.intercept('POST', '**import_content*').as('importContent');
+    cy.intercept('POST', '**import_theme_mods*').as('importCustomizer');
+    cy.intercept('POST', '**import_widgets*').as('importWidgets');
 
     cy.get('.starter-site-card').first().as('firstCard');
     cy.get('@firstCard').trigger('mouseover');
@@ -169,6 +169,7 @@ describe('Importer Works', function () {
     cy.get('.ob-import-modal').wait(1000).find('button').contains('Import entire site').click();
 
     cy.wait('@installPlugins', { timeout: 20000 }).then((req) => {
+      console.log( req.response.statusCode );
       expect(req.response.statusCode).to.equal(200);
     });
 
