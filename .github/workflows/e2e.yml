@@ -38,4 +38,3 @@ jobs:
           parallel: true
           headless: true
           group: e2e
-          record: true
