@@ -3,6 +3,31 @@ import apiFetch from '@wordpress/api-fetch';
 
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
+import { models, loadPromise } from '@wordpress/api';
+
+export const changeOption = ( option, value ) => {
+	const model = new models.Settings( {
+		[ option ]: value,
+	} );
+
+	return new Promise( ( resolve ) => {
+		model.save().then( ( r ) => {
+			if ( ! r || ! r[ option ] === value ) {
+				resolve( { success: false } );
+			}
+
+			resolve( { success: true } );
+		} );
+	} );
+};
+
+export const fetchOptions = () => {
+	let settings;
+	return loadPromise.then(() => {
+		settings = new models.Settings();
+		return settings.fetch();
+	});
+};
 
 export const fetchLibrary = async (
 	premade = false,

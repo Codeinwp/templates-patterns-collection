@@ -30,6 +30,13 @@ module.exports = function (grunt) {
 						prefix: 'Version:\\s*',
 						flags: ''
 					},
+					src: [ 'templates-patterns-collection.php' ],
+				},
+				php: {
+					options: {
+						prefix: 'TIOB_VERSION\', \'',
+						flags: ''
+					},
 					src: [ 'templates-patterns-collection.php' ]
 				},
 			},
