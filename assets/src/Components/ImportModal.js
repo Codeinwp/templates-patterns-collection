@@ -91,6 +91,7 @@ const ImportModal = ( {
 			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
 		);
 		url.searchParams.append( 'license', license ? license.key : 'free' );
+		url.searchParams.append( 'ti_downloads', 'yes' );
 		get( url, true, false )
 			.then( ( response ) => {
 				if ( ! response.ok ) {
@@ -114,6 +115,10 @@ const ImportModal = ( {
 					const defaultOff =
 						result.default_off_recommended_plugins || [];
 
+					const tiDownloads = {
+						...( result.ti_downloads || {} ),
+					};
+
 					Object.keys( mandatory ).forEach( ( key ) => {
 						mandatory[ key ] = true;
 					} );
@@ -124,6 +129,7 @@ const ImportModal = ( {
 					setPluginOptions( {
 						...optional,
 						...mandatory,
+						...tiDownloads,
 					} );
 
 					setFetching( false );

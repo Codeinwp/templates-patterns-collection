@@ -16,6 +16,7 @@ import PreviewFrame from './PreviewFrame';
 import ImportTemplatesModal from './ImportTemplatesModal';
 import Logo from '../Icon';
 import { LicensePanelContext } from '../LicensePanelContext';
+import FeedbackNotice from "./FeedbackNotice";
 
 const Library = ( {
 	isGeneral,
@@ -387,6 +388,7 @@ const Library = ( {
 							</span>
 						</a>
 					) ) }
+					<FeedbackNotice importTemplate={templateModal} />
 				</div>
 				<Filters
 					currentTab={ currentTab }

@@ -20,6 +20,10 @@ jobs:
     steps:
       - name: Check out source files
         uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/gallium # 16.x
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"

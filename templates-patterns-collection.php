@@ -55,6 +55,7 @@ function ti_tpc_load_textdomain() {
 	load_plugin_textdomain( 'templates-patterns-collection', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
+define( 'TIOB_VERSION', '1.1.34' );
 define( 'TIOB_URL', plugin_dir_url( __FILE__ ) );
 define( 'TIOB_PATH', dirname( __FILE__ ) . '/' );
 

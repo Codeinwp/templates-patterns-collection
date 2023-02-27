@@ -1,0 +1,87 @@
+.tiob-feedback-notice {
+  padding: 8px 4px;
+  .tiob-notice {
+    height: 46px;
+    max-width: 600px;
+    width: auto;
+    background-color: #fff;
+    padding: 0 8px;
+    border-radius: 4px;
+    transition: width 0.8s;
+    margin: 0;
+    &:not(.error):not(.updated) {
+      border: 1px solid transparent;
+    }
+
+    .dashicons-saved {
+      color: #00a32a;
+    }
+
+    button.is-tertiary {
+      color: #1e1e1e;
+      &:hover {
+        color: var(--wp-admin-theme-color);
+        box-shadow: none;
+      }
+    }
+
+    button.error {
+      color: red;
+      &:hover {
+        color: #1e1e1e;
+      }
+    }
+  }
+}
+
+.tiob_feedback_modal {
+  max-width: 500px;
+  border-radius: 4px;
+  .components-modal__header {
+    background-color: var(--wp-admin-theme-color);
+    h1 {
+      color: #fff;
+    }
+    .components-button {
+      color: #fff;
+      &:hover {
+        color: #1e1e1e;
+      }
+    }
+  }
+
+  .feedback_options {
+    margin-top: 16px;
+    .components-flex.components-h-stack  {
+      gap: calc(8px);
+    }
+  }
+
+  .feedback_details {
+    margin-top: 16px;
+    &.invalid textarea {
+      border-color: red;
+    }
+    &.invalid p {
+      color: red;
+    }
+  }
+
+  .tiob_feedback_collect.info {
+    overflow: hidden;
+    transition: height .5s;
+    margin-top: 16px;
+
+    .info-row {
+      padding: 0 12px;
+      background-color: #efefef;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #9e9e9e;
+
+      &:nth-child( odd ) {
+        background-color: #fff;
+      }
+    }
+  }
+}

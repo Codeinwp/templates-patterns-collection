@@ -255,12 +255,17 @@ const Exporter = () => {
 			return;
 		}
 
+		let meta = tiTpc.params.meta;
+		// For Custom Layouts attach additional meta to check on import.
+		if ( type === 'neve_custom_layouts' ) {
+			meta = { ...tiTpc.params.meta, postType: type };
+		}
 		if ( ! doesExist ) {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
 				query: {
 					...omit( tiTpc.params, 'meta' ),
-					meta: JSON.stringify( tiTpc.params.meta ),
+					meta: JSON.stringify( meta ),
 					template_name: postTitle,
 					template_type: 'gutenberg',
 					template_site_slug: _ti_tpc_site_slug || '',
@@ -273,7 +278,7 @@ const Exporter = () => {
 				url: window.tiTpc.endpoint + 'templates/' + templateID,
 				query: {
 					...omit( tiTpc.params, 'meta' ),
-					meta: JSON.stringify( tiTpc.params.meta ),
+					meta: JSON.stringify( meta ),
 					template_name: postTitle,
 					link,
 				},
@@ -397,6 +402,8 @@ const Exporter = () => {
 			post = new wp.api.models.Post( { id: postId } );
 		} else if ( type === 'page' ) {
 			post = new wp.api.models.Page( { id: postId } );
+		} else if ( type === 'neve_custom_layouts' ) {
+			post = new wp.api.models.Neve_custom_layouts( { id: postId } );
 		}
 
 		post.set( 'meta', {
@@ -409,7 +416,8 @@ const Exporter = () => {
 		return post.save();
 	};
 
-	if ( ! [ 'post', 'page' ].includes( type ) ) {
+	const { allowed_post } = window.tiTpc;
+	if ( ! allowed_post.includes( type ) ) {
 		return null;
 	}
 
