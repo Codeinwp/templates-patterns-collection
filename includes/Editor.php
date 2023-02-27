@@ -16,12 +16,23 @@ use TIOB\Main;
  */
 class Editor {
 
+	const ALLOWED_POST_TYPES = array( 'post', 'page', 'neve_custom_layouts' );
+
 	/**
 	 * Assets Handle.
 	 *
 	 * @var string
 	 */
 	private $handle = 'ti-tpc-block';
+
+	/**
+	 * Get allowed post types.
+	 *
+	 * @return array
+	 */
+	public static function get_allowed_post_types() {
+		return apply_filters( 'ti_tpc_allowed_post_types', self::ALLOWED_POST_TYPES );
+	}
 
 	/**
 	 * Initialize the Admin.
@@ -71,6 +82,7 @@ class Editor {
 					),
 					'metaKeys'     => apply_filters( 'ti_tpc_template_meta', array(), $post_id = get_the_ID(), $type = 'gutenberg' ),
 					'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
+					'allowed_post' => self::get_allowed_post_types(),
 				)
 			)
 		);

@@ -126,10 +126,11 @@ const Edit = ( {
 	const importBlocks = ( content, metaFields = [] ) => {
 		updateLibrary( [] );
 		updateTemplates( [] );
+		const { allowed_post } = window.tiTpc;
 
 		if (
 			0 < Object.keys( tryParseJSON( metaFields ) || {} ).length &&
-			[ 'post', 'page' ].includes( type )
+			allowed_post.includes( type )
 		) {
 			const fields = JSON.parse( metaFields );
 			const meta = {
