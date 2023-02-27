@@ -39,6 +39,15 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 == Changelog ==
 
+##### [Version 1.1.35](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.34...v1.1.35) (2023-02-27)
+
+- Feat: Added feedback survey
+- Feat: Allow Sparks installation
+- Feat: Allow Custom Layouts from Neve to be Imported and Exported
+
+
+
+
 ##### [Version 1.1.34](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.33...v1.1.34) (2023-02-15)
 
 - Fix: Hide the My
