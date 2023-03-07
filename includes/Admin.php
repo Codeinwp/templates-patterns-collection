@@ -81,15 +81,15 @@ class Admin {
 
 		// Check if the template ID is used on any other posts or pages
 		// exclude the current post from the query
-		$args = array(
-			'post_type' => Editor::get_allowed_post_types(),
-			'meta_key' => '_ti_tpc_template_id',
-			'meta_value' => $template_id,
-			'post__not_in' => array( $post_id ),
+		$args         = array(
+			'post_type'      => Editor::get_allowed_post_types(),
+			'meta_key'       => '_ti_tpc_template_id',
+			'meta_value'     => $template_id,
+			'post__not_in'   => array( $post_id ),
 			'posts_per_page' => 1,
-			'fields' => 'ids',
+			'fields'         => 'ids',
 		);
-		$query = new \WP_Query( $args );
+		$query        = new \WP_Query( $args );
 		$duplicate_id = $query->get_posts();
 
 		if ( ! empty( $duplicate_id ) ) {
