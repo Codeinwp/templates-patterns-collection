@@ -14,28 +14,55 @@ use TIOB\Admin;
 class Post_Clone_Test extends WP_UnitTestCase {
 
 	private $post_id;
+	private $template_id = 'tpc_template_source_ID';
 
 	/**
 	 * Create a post with _ti_tpc_template_id meta.
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		$admin = new Admin();
-		add_action( 'save_post', array( $admin, 'check_unique_template_id_on_save' ) );
 
-		$this->post_id = $this->factory->post->create(
+		$admin = new Admin();
+		// Only Hook the save_post action from the Admin class.
+		$admin->register_prevent_clone_hooks();
+	}
+
+	/**
+	 * Check meta value is true. Utility function for better readability.
+	 *
+	 * @param mixed $value The meta value.
+	 *
+	 * @return bool
+	 */
+	private function meta_value_is_true( $value ) {
+		return $value === '1' || $value === 'true' || $value === true;
+	}
+
+	/**
+	 * Create a post with meta.
+	 * Utility function to create a post with meta.
+	 *
+	 * @param string $post_title The post title.
+	 * @param string $template_id The template id.
+	 *
+	 * @return int
+	 */
+	private function create_post_with_meta( $post_title = 'A test Post', $template_id = 'tpc_template_test_ID', $published = true ) {
+		$post_id = $this->factory()->post->create(
 			array(
-				'post_title' => 'Test Source Post',
+				'post_title' => $post_title,
 				'post_type'  => 'post',
 			)
 		);
-		update_post_meta( $this->post_id, '_ti_tpc_template_id', 'tpc_template_test_ID' );
-		update_post_meta( $this->post_id, '_ti_tpc_template_sync', true );
-		update_post_meta( $this->post_id, '_ti_tpc_published', true );
+		update_post_meta( $post_id, '_ti_tpc_template_id', $template_id );
+		update_post_meta( $post_id, '_ti_tpc_template_sync', $published );
+		update_post_meta( $post_id, '_ti_tpc_published', $published );
+		return $post_id;
 	}
 
 	/**
 	 * Clone a post and its meta.
+	 * Utility function to clone a post and its meta.
 	 *
 	 * @return int
 	 */
@@ -64,17 +91,33 @@ class Post_Clone_Test extends WP_UnitTestCase {
 	 * Test that the post has the meta defined and if cloned the meta is not the same.
 	 */
 	final public function test_post_meta_and_clone() {
-		$this->assertTrue( get_post_meta( $this->post_id, '_ti_tpc_template_id', true ) === 'tpc_template_test_ID' );
-		$this->assertTrue( ! empty( get_post_meta( $this->post_id, '_ti_tpc_template_sync', true ) ) );
-		$this->assertTrue( ! empty( get_post_meta( $this->post_id, '_ti_tpc_published', true ) ) );
+		$this->post_id = $this->create_post_with_meta( 'The Original Post source', $this->template_id );
+
+		$this->assertTrue( get_post_meta( $this->post_id, '_ti_tpc_template_id', true ) === $this->template_id );
+		$this->assertTrue( $this->meta_value_is_true( get_post_meta( $this->post_id, '_ti_tpc_template_sync', true ) ) );
+		$this->assertTrue( $this->meta_value_is_true( get_post_meta( $this->post_id, '_ti_tpc_published', true ) ) );
 
 		$clone_post_id = $this->clone_post_and_meta();
 
 		// assert that the new cloned post does not have the same meta as the original.
-		var_dump( get_post_meta( $clone_post_id, '_ti_tpc_template_id', true ) );
 		$this->assertTrue( $clone_post_id !== $this->post_id );
-		$this->assertTrue( get_post_meta( $clone_post_id, '_ti_tpc_template_id', true ) !== 'tpc_template_test_ID' );
-		$this->assertTrue( empty( get_post_meta( $clone_post_id, '_ti_tpc_template_sync', true ) ) );
-		$this->assertTrue( empty( get_post_meta( $clone_post_id, '_ti_tpc_published', true ) ) );
+		$this->assertTrue( get_post_meta( $clone_post_id, '_ti_tpc_template_id', true ) !== $this->template_id );
+		$this->assertTrue( ! $this->meta_value_is_true( get_post_meta( $clone_post_id, '_ti_tpc_template_sync', true ) ) );
+		$this->assertTrue( ! $this->meta_value_is_true( get_post_meta( $clone_post_id, '_ti_tpc_published', true ) ) );
 	}
+
+	final public function test_create_new_post_check_meta_is_not_stripped() {
+		$template_id = 'tpcs_new_template_ID_' . time();
+		$new_post_id = $this->create_post_with_meta( 'The New Post', $template_id, true );
+		$this->assertTrue( get_post_meta( $new_post_id, '_ti_tpc_template_id', true ) === $template_id );
+		$this->assertTrue( $this->meta_value_is_true( get_post_meta( $new_post_id, '_ti_tpc_template_sync', true ) ) );
+		$this->assertTrue( $this->meta_value_is_true( get_post_meta( $new_post_id, '_ti_tpc_published', true ) ) );
+
+		// attempt to create a post with same template id.
+		$new_test_post = $this->create_post_with_meta( 'The New Manual Post', $template_id, true );
+		$this->assertTrue( get_post_meta( $new_test_post, '_ti_tpc_template_id', true ) !== $template_id );
+		$this->assertTrue( ! $this->meta_value_is_true( get_post_meta( $new_test_post, '_ti_tpc_template_sync', true ) ) );
+		$this->assertTrue( ! $this->meta_value_is_true( get_post_meta( $new_test_post, '_ti_tpc_published', true ) ) );
+	}
+
 }
