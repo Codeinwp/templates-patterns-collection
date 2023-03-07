@@ -65,6 +65,34 @@ class Admin {
 		add_action( 'wp_ajax_nopriv_skip_subscribe', array( $this, 'skip_subscribe' ) );
 
 		$this->register_feedback_settings();
+
+		add_action( 'save_post', array( $this, 'check_unique_template_id_on_save' ) );
+	}
+
+	public function check_unique_template_id_on_save( $post_id ) {
+		$template_id = get_post_meta( $post_id, '_ti_tpc_template_id', true );
+
+		// Check if the template ID is used on any other posts or pages
+		// exclude the current post from the query
+		$args = array(
+			'post_type' => Editor::get_allowed_post_types(),
+			'meta_key' => '_ti_tpc_template_id',
+			'meta_value' => $template_id,
+			'post__not_in' => array( $post_id ),
+			'posts_per_page' => 1,
+			'fields' => 'ids',
+		);
+		$query = new \WP_Query( $args );
+		$duplicate_id = $query->get_posts();
+
+		if ( ! empty( $duplicate_id ) ) {
+			// Clear the metadata for the current post if the template ID is already used
+			update_post_meta( $post_id, '_ti_tpc_template_sync', false );
+			update_post_meta( $post_id, '_ti_tpc_template_id', '' );
+			update_post_meta( $post_id, '_ti_tpc_screenshot_url', '' );
+			update_post_meta( $post_id, '_ti_tpc_site_slug', '' );
+			update_post_meta( $post_id, '_ti_tpc_published', false );
+		}
 	}
 
 	/**
