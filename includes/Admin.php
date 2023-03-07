@@ -69,6 +69,13 @@ class Admin {
 		add_action( 'save_post', array( $this, 'check_unique_template_id_on_save' ) );
 	}
 
+	/**
+	 * Check that the meta value is unique for the allowed post types that support Templates Cloud.
+	 *
+	 * @param int $post_id The post ID.
+	 *
+	 * @return void
+	 */
 	public function check_unique_template_id_on_save( $post_id ) {
 		$template_id = get_post_meta( $post_id, '_ti_tpc_template_id', true );
 
