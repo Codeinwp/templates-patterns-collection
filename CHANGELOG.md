@@ -1,3 +1,9 @@
+##### [Version 1.1.36](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.35...v1.1.36) (2023-03-17)
+
+- Fix: Admin paths consistency
+- Fix: Prevent cloned posts to inherit template metadata
+- Fix: Improve compatibility for LifterLMS
+
 ##### [Version 1.1.35](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.34...v1.1.35) (2023-02-27)
 
 - Feat: Added feedback survey
