@@ -65,6 +65,100 @@ class Admin {
 		add_action( 'wp_ajax_nopriv_skip_subscribe', array( $this, 'skip_subscribe' ) );
 
 		$this->register_feedback_settings();
+
+		$this->register_prevent_clone_hooks();
+	}
+
+	/**
+	 * Register hooks to prevent meta cloning for the templates.
+	 * This is needed because the template id is unique, and we don't want to clone it.
+	 * @return void
+	 */
+	public function register_prevent_clone_hooks() {
+		$allowed_post_types = Editor::get_allowed_post_types();
+		if ( empty( $allowed_post_types ) ) {
+			return;
+		}
+		foreach ( $allowed_post_types as $post_type ) {
+			add_filter(
+				'update_' . $post_type . '_metadata',
+				function ( $value, $post_id, $meta_key, $meta_value, $prev_value ) use ( $post_type ) {
+					if ( $this->check_unique_template_id_on_meta_change( $post_id, $meta_key, $post_type, $meta_value ) ) {
+						return true;
+					}
+					return $value;
+				},
+				10,
+				5
+			);
+			add_filter(
+				'add_' . $post_type . '_metadata',
+				function ( $value, $post_id, $meta_key, $meta_value, $unique ) use ( $post_type ) {
+					if ( $this->check_unique_template_id_on_meta_change( $post_id, $meta_key, $post_type, $meta_value ) ) {
+						return true;
+					}
+					return $value;
+				},
+				10,
+				5
+			);
+		}
+	}
+
+	/**
+	 * Check that the meta value is unique for the allowed post types that support Templates Cloud.
+	 *
+	 * @param int $post_id The post ID.
+	 * @param string $meta_key The meta key.
+	 * @param string $meta_type The meta type. The post type ( post, page, neve_custom_layouts etc. ).
+	 * @param string $meta_value The meta value.
+	 *
+	 * @return bool
+	 */
+	public function check_unique_template_id_on_meta_change( $post_id, $meta_key, $meta_type, $meta_value ) {
+		// Skip check if the meta key is not one of the allowed ones.
+		if ( ! in_array(
+			$meta_key,
+			array(
+				'_ti_tpc_template_sync',
+				'_ti_tpc_template_id',
+				'_ti_tpc_screenshot_url',
+				'_ti_tpc_site_slug',
+				'_ti_tpc_published',
+			),
+			true
+		)
+		) {
+			return false;
+		}
+
+		if ( empty( $meta_value ) ) {
+			return false;
+		}
+
+		$template_id = get_post_meta( $post_id, '_ti_tpc_template_id', true );
+		if ( empty( $template_id ) && $meta_key === '_ti_tpc_template_id' ) {
+			$template_id = $meta_value;
+		}
+
+		// Check if the template ID is used on any other posts or pages
+		// exclude the current post from the query
+		$args         = array(
+			'post_type'      => $meta_type,
+			'meta_key'       => '_ti_tpc_template_id',
+			'meta_value'     => $template_id,
+			'post__not_in'   => array( $post_id ),
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+		);
+		$query        = new \WP_Query( $args );
+		$duplicate_id = $query->get_posts();
+
+		if ( ! empty( $duplicate_id ) ) {
+			// The template ID is already used on another post
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -253,11 +347,11 @@ class Admin {
 
 		$dependencies = ( include TIOB_PATH . 'assets/build/app.asset.php' );
 
-		wp_register_style( 'tiob', TIOB_URL . '/assets/build/style-app.css', array( 'wp-components' ), $dependencies['version'] );
+		wp_register_style( 'tiob', TIOB_URL . 'assets/build/style-app.css', array( 'wp-components' ), $dependencies['version'] );
 		wp_style_add_data( 'tiob', 'rtl', 'replace' );
 		wp_enqueue_style( 'tiob' );
 
-		wp_register_script( 'tiob', TIOB_URL . '/assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates' ) ), $dependencies['version'], true );
+		wp_register_script( 'tiob', TIOB_URL . 'assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates' ) ), $dependencies['version'], true );
 		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
 		wp_enqueue_script( 'tiob' );
 	}
@@ -287,7 +381,7 @@ class Admin {
 		return array(
 			'version'             => TIOB_VERSION,
 			'nonce'               => wp_create_nonce( 'wp_rest' ),
-			'assets'              => TIOB_URL . '/assets/',
+			'assets'              => TIOB_URL . 'assets/',
 			'upgradeURL'          => $upgrade_url,
 			'upgradeURLTpc'       => $upgrade_url_tpc,
 			'strings'             => array(
@@ -519,8 +613,8 @@ class Admin {
 
 		$options = array(
 			'theme_name'          => ! empty( $data[ $old_theme ]['theme_name'] ) ? esc_html( $data[ $old_theme ]['theme_name'] ) : '',
-			'screenshot'          => TIOB_URL . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.png',
-			'template'            => TIOB_PATH . '/migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.json',
+			'screenshot'          => TIOB_URL . 'migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.png',
+			'template'            => TIOB_PATH . 'migration/' . $folder_name . '/' . $data[ $old_theme ]['template'] . '.json',
 			'template_name'       => $data[ $old_theme ]['template'],
 			'heading'             => $data[ $old_theme ]['heading'],
 			'description'         => $data[ $old_theme ]['description'],
