@@ -35,7 +35,7 @@ describe('Dashboard Page - Default', function () {
       name: /import entire site/i,
     });
     cy.findByRole('button', {
-      name: /close dialog/i,
+      name: /close/i,
     }).click();
 
     cy.findByRole('button', {
