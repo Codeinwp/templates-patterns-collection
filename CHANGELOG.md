@@ -1,3 +1,7 @@
+##### [Version 1.1.37](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.36...v1.1.37) (2023-03-31)
+
+- Updated dependencies and docs
+
 ##### [Version 1.1.36](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.35...v1.1.36) (2023-03-17)
 
 - Fix: Admin paths consistency
