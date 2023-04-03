@@ -4,8 +4,8 @@
 		margin-left: 5px;
 
 		.tpc-template-cloud-icon {
-			width: 12px;
-			height: 12px;
+			width: 18px;
+			height: 18px;
 		}
 	}
 }
@@ -566,6 +566,9 @@
 			}
 
 			.ti-tpc-template-library-export {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 				padding: 50px 0;
 
 				.ti-tpc-template-library-blank-icon {
