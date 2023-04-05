@@ -2,10 +2,10 @@ import { Icon, info } from '@wordpress/icons';
 
 import classnames from 'classnames';
 
-const CustomTooltip = ( { children, className, toLeft = false } ) => {
+const CustomTooltip = ( { children, className, toLeft = false, rightOffset = 0 } ) => {
 	const tooltipClassNames = classnames( [ className, 'tiob-tooltip-wrap' ] );
 
-	const ttStyle = toLeft ? { right: 0, left: 'unset' } : {};
+	const ttStyle = toLeft ? { right: rightOffset, left: 'unset' } : {};
 
 	return (
 		<div className={ tooltipClassNames }>
