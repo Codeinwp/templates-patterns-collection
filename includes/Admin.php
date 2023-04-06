@@ -20,6 +20,8 @@ class Admin {
 	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
 	const FEEDBACK_DISMISSED_OPT       = 'tiob_feedback_dismiss';
 
+	const VISITED_LIBRARY_OPT = 'tiob_library_visited';
+
 	/**
 	 * Admin page slug
 	 *
@@ -342,7 +344,7 @@ class Admin {
 
 		$dismiss_notice = isset( $_GET['dismiss_notice'] ) && $_GET['dismiss_notice'] === 'yes';
 		if ( $dismiss_notice ) {
-			set_transient( 'tiob_library_visited', true );
+			update_option( self::VISITED_LIBRARY_OPT, 'yes' );
 		}
 
 		$dependencies = ( include TIOB_PATH . 'assets/build/app.asset.php' );
@@ -510,8 +512,16 @@ class Admin {
 		if ( isset( $this->wl_config['starter_sites'] ) && (bool) $this->wl_config['starter_sites'] === true ) {
 			return $array;
 		}
-		$page_was_visited = (bool) get_transient( 'tiob_library_visited' );
-		if ( $this->is_agency_plan() && ! $page_was_visited ) {
+
+		// Previously the library was visited check was stored in a transient. To ensure the notification is not displayed anymore once the user has visited the library
+		// the transient was moved to an option and here we check that if the transient is set we also update the option.
+		$visited_transient = (bool) get_transient( self::VISITED_LIBRARY_OPT );
+		$page_was_visited  = get_option( self::VISITED_LIBRARY_OPT, false );
+		if ( $visited_transient && $page_was_visited === false ) {
+			update_option( self::VISITED_LIBRARY_OPT, 'yes' );
+			$page_was_visited = 'yes';
+		}
+		if ( $this->is_agency_plan() && $page_was_visited !== 'yes' ) {
 			$array['notifications']['template-cloud'] = array(
 				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'templates-patterns-collection' ),
 				'cta'  => sprintf(

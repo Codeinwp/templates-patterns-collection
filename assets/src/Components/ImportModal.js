@@ -304,7 +304,8 @@ const ImportModal = ( {
 							<span>{ title }</span>
 							{ tooltip && (
 								<CustomTooltip
-									toLeft={ id === 'performanceAddon' }
+									toLeft={ id === 'performanceAddon' || id === 'cleanup' }
+									rightOffset={ id === 'cleanup' ? -90 : 0 }
 								>
 									{ tooltip }
 								</CustomTooltip>
