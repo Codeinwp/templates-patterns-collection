@@ -1,3 +1,9 @@
+##### [Version 1.1.38](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.37...v1.1.38) (2023-04-25)
+
+- Fix: Alignment title in Elementor
+- Fix: Tooltip for cleanup on import
+- Fix: Notification dismiss
+
 ##### [Version 1.1.37](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.36...v1.1.37) (2023-03-31)
 
 - Updated dependencies and docs
