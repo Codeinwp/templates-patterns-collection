@@ -60,6 +60,12 @@ class Editor {
 			return;
 		}
 
+		// Don't load on site editor. Until FSE support in TPC is added.
+		// We can remove this check once Codeinwp/templates-patterns-collection/issues/248 is implemented.
+		if ( $screen->id === 'site-editor' ) {
+			return;
+		}
+
 		wp_register_script(
 			$this->handle,
 			TIOB_URL . 'editor/build/index.js',
