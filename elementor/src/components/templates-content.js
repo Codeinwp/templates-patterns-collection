@@ -150,7 +150,7 @@ const TemplatesContent = ( {
 				( isGeneral ? (
 					<p>{ 'No templates found. Check again later!' }</p>
 				) : (
-					<p>
+					<p style={ { alignSelf: 'center' } }>
 						{ 'No templates available. Try adding few templates.' }
 					</p>
 				) ) }

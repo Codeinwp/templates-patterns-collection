@@ -183,10 +183,21 @@
 		max-height: 85vh;
 		overflow: auto;
 		padding-top: 25px;
+		background-color: var(--e-a-bg-active, #2f3032);
+		color: var(--e-a-color-txt, #babfc5);
 
 		&.is-dark {
+			background-color: var(--e-a-color-bg-active, #2f3032);
+			color: var(--e-a-color-txt, #babfc5);
 			.dialog-content {
 				.ti-tpc-template-library-templates {
+					.ti-tpc-template-library-templates-header {
+						.ti-tpc-template-library-templates-header-search {
+							input {
+								color: var(--e-a-color-txt);
+							}
+						}
+					}
 					.ti-tpc-template-library-templates-container {
 						.ti-tpc-template-library-templates-table-header {
 							.ti-tpc-template-library-templates-table-column {
@@ -314,6 +325,7 @@
 							font-size: 11px;
 							padding: 8px 15px 8px 0;
 							transition: border .5s;
+							color: var(--e-a-color-txt, #babfc5);
 						}
 
 						i,
@@ -332,6 +344,9 @@
 					display: flex;
 					flex-wrap: wrap;
 					align-items: flex-start;
+					p {
+						padding: 8px 16px;
+					}
 
 					&.is-table {
 						flex-direction: column;
@@ -530,6 +545,7 @@
 
 							.ti-tpc-template-library-template-action {
 								color: #39b54a;
+								background-color: transparent;
 								height: auto;
 								padding: 0;
 								font-size: 11px;
@@ -632,10 +648,11 @@
 				overflow: hidden;
 
 				iframe {
-					height: 150%;
+					height: 145%;
+					width: 145%;
 					position: relative;
 					z-index: 99;
-					transform: scale(.666) translateX(-25%) translateY(-25%);
+					transform: scale(.666) translateX(-24%) translateY(-25%);
 				}
 
 				.is-loading {
