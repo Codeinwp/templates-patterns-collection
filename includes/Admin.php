@@ -318,7 +318,7 @@ class Admin {
 		);
 
 		if ( isset( $this->wl_config['starter_sites'] ) && (bool) $this->wl_config['starter_sites'] === true &&
-			 ( ! isset( $this->wl_config['my_library'] ) || (bool) $this->wl_config['my_library'] !== true )
+			( ! isset( $this->wl_config['my_library'] ) || (bool) $this->wl_config['my_library'] !== true )
 		) {
 			$library_data['menu_slug'] = $this->page_slug;
 			$library_data['callback']  = array(
