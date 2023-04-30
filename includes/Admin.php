@@ -266,15 +266,28 @@ class Admin {
 	}
 
 	/**
+	 * Utility method to add a theme page from an array.
+	 *
+	 * @param array $page_data Page data.
+	 *
+	 * @return void
+	 */
+	private function add_theme_page_for_tiob( $page_data ) {
+		add_theme_page(
+			$page_data['page_title'],
+			$page_data['menu_title'],
+			$page_data['capability'],
+			$page_data['menu_slug'],
+			$page_data['callback']
+		);
+	}
+
+	/**
 	 * Register theme options page.
 	 *
 	 * @return bool|void
 	 */
 	public function register() {
-		if ( isset( $this->wl_config['starter_sites'] ) && (bool) $this->wl_config['starter_sites'] === true ) {
-			return false;
-		}
-
 		$style = 'display:inline-block;';
 
 		if ( ! is_rtl() ) {
@@ -284,21 +297,43 @@ class Admin {
 		}
 
 		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="' . esc_attr( $style ) . '">&crarr;</span>' : '';
-		add_theme_page(
-			__( 'Starter Sites', 'templates-patterns-collection' ),
-			$prefix . __( 'Starter Sites', 'templates-patterns-collection' ),
-			'activate_plugins',
-			$this->page_slug,
-			array(
+
+		$starter_site_data = array(
+			'page_title' => __( 'Starter Sites', 'templates-patterns-collection' ),
+			'menu_title' => $prefix . __( 'Starter Sites', 'templates-patterns-collection' ),
+			'capability' => 'activate_plugins',
+			'menu_slug'  => $this->page_slug,
+			'callback'   => array(
 				$this,
 				'render_starter_sites',
-			)
+			),
 		);
+
+		$library_data = array(
+			'page_title' => __( 'My Library', 'templates-patterns-collection' ),
+			'menu_title' => $prefix . __( 'My Library', 'templates-patterns-collection' ),
+			'capability' => 'activate_plugins',
+			'menu_slug'  => 'themes.php?page=' . $this->page_slug . '#library',
+			'callback'   => '',
+		);
+
+		if ( isset( $this->wl_config['starter_sites'] ) && (bool) $this->wl_config['starter_sites'] === true &&
+			 ( ! isset( $this->wl_config['my_library'] ) || (bool) $this->wl_config['my_library'] !== true )
+		) {
+			$library_data['menu_slug'] = $this->page_slug;
+			$library_data['callback']  = array(
+				$this,
+				'render_starter_sites',
+			);
+			$this->add_theme_page_for_tiob( $library_data );
+			return false;
+		}
+		$this->add_theme_page_for_tiob( $starter_site_data );
 
 		if ( isset( $this->wl_config['my_library'] ) && (bool) $this->wl_config['my_library'] === true ) {
 			return false;
 		}
-		add_theme_page( __( 'My Library', 'templates-patterns-collection' ), $prefix . __( 'My Library', 'templates-patterns-collection' ), 'activate_plugins', 'themes.php?page=' . $this->page_slug . '#library' );
+		$this->add_theme_page_for_tiob( $library_data );
 	}
 
 	/**
@@ -396,6 +431,7 @@ class Admin {
 			'themesURL'           => admin_url( 'themes.php' ),
 			'themeAction'         => $this->get_theme_action(),
 			'brandedTheme'        => isset( $this->wl_config['theme_name'] ) ? $this->wl_config['theme_name'] : false,
+			'hideStarterSites'    => isset( $this->wl_config['starter_sites'] ) ? $this->wl_config['starter_sites'] : false,
 			'hideMyLibrary'       => isset( $this->wl_config['my_library'] ) ? $this->wl_config['my_library'] : false,
 			'endpoint'            => TPC_TEMPLATES_CLOUD_ENDPOINT,
 			'params'              => array(

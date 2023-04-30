@@ -19,10 +19,12 @@ const TabNavigation = ( {
 	isFetching,
 	license,
 } ) => {
-	const buttons = {
-		starterSites: __( 'Starter Sites', 'templates-patterns-collection' ),
-		pageTemplates: __( 'Page Templates', 'templates-patterns-collection' ),
-	};
+	const buttons = {};
+
+	if ( ! tiobDash.hideStarterSites ) {
+		buttons.starterSites = __( 'Starter Sites', 'templates-patterns-collection' );
+		buttons.pageTemplates = __( 'Page Templates', 'templates-patterns-collection' );
+	}
 
 	if ( ! tiobDash.hideMyLibrary ) {
 		buttons.library = __( 'My Library', 'templates-patterns-collection' );

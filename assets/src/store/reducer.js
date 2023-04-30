@@ -28,7 +28,7 @@ const initialState = {
 	isOnboarding: onboarding.onboarding || false,
 	migrationData: null,
 	themeAction,
-	currentTab: 'starterSites',
+	currentTab: tiobDash.hideStarterSites ? 'library' : 'starterSites',
 	fetching: false,
 	singleTemplateImport: null,
 	templateModal: null,

@@ -16,6 +16,13 @@ use TIOB\Main;
  */
 class Editor {
 
+	/**
+	 * White label config
+	 *
+	 * @var array
+	 */
+	private $wl_config = null;
+
 	const ALLOWED_POST_TYPES = array( 'post', 'page', 'neve_custom_layouts' );
 
 	/**
@@ -38,6 +45,18 @@ class Editor {
 	 * Initialize the Admin.
 	 */
 	public function init() {
+		$white_label_module = get_option( 'nv_pro_white_label_status' );
+		if ( ! empty( $white_label_module ) && (bool) $white_label_module === true ) {
+			$branding = get_option( 'ti_white_label_inputs' );
+			if ( ! empty( $branding ) ) {
+				$this->wl_config = json_decode( $branding, true );
+			}
+		}
+
+		if ( isset( $this->wl_config['my_library'] ) && (bool) $this->wl_config['my_library'] === true ) {
+			return false;
+		}
+
 		if ( ! defined( 'TPC_TEMPLATES_CLOUD_ENDPOINT' ) ) {
 			define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-cloud/' );
 		}
