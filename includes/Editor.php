@@ -15,13 +15,7 @@ use TIOB\Main;
  * @package templates-patterns-collection
  */
 class Editor {
-
-	/**
-	 * White label config
-	 *
-	 * @var array
-	 */
-	private $wl_config = null;
+	use White_Label_Config;
 
 	const ALLOWED_POST_TYPES = array( 'post', 'page', 'neve_custom_layouts' );
 
@@ -45,20 +39,14 @@ class Editor {
 	 * Initialize the Admin.
 	 */
 	public function init() {
-		$white_label_module = get_option( 'nv_pro_white_label_status' );
-		if ( ! empty( $white_label_module ) && (bool) $white_label_module === true ) {
-			$branding = get_option( 'ti_white_label_inputs' );
-			if ( ! empty( $branding ) ) {
-				$this->wl_config = json_decode( $branding, true );
-			}
-		}
+		$this->setup_white_label();
 
-		if ( isset( $this->wl_config['my_library'] ) && (bool) $this->wl_config['my_library'] === true ) {
-			return false;
+		if ( $this->is_library_disabled() ) {
+			return;
 		}
 
 		if ( ! defined( 'TPC_TEMPLATES_CLOUD_ENDPOINT' ) ) {
-			define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-cloud/' );
+			define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', Admin::get_templates_cloud_endpoint() );
 		}
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_block' ), 11 );
 		$this->register_post_meta();
