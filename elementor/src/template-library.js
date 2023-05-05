@@ -155,6 +155,14 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 			} );
 		}
 
+		if ( undefined === window.tiTpc.postModel ) {
+			if ( 'page' === window.tiTpc.postType ) {
+				window.tiTpc.postModel = await new wp.api.models.Page( { id } );
+			} else {
+				window.tiTpc.postModel = await new wp.api.models.Post( { id } );
+			}
+		}
+
 		if (
 			undefined !== meta &&
 			0 < Object.keys( tryParseJSON( meta ) || {} ).length
