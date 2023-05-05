@@ -7,6 +7,7 @@ import { Fragment, useState } from '@wordpress/element';
 import Header from './components/header.js';
 import Content from './components/content.js';
 import { importTemplate } from './data/templates-cloud/index.js';
+import { setPostModel } from './data/utils';
 
 const { omit } = lodash;
 
@@ -155,13 +156,8 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 			} );
 		}
 
-		if ( undefined === window.tiTpc.postModel ) {
-			if ( 'page' === window.tiTpc.postType ) {
-				window.tiTpc.postModel = await new wp.api.models.Page( { id } );
-			} else {
-				window.tiTpc.postModel = await new wp.api.models.Post( { id } );
-			}
-		}
+		const elementorId = elementor.config.document.id;
+		await setPostModel( elementorId );
 
 		if (
 			undefined !== meta &&
