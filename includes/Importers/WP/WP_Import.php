@@ -375,15 +375,15 @@ class WP_Import extends WP_Importer {
 	 * @return bool
 	 */
 	private function is_post_type_of_pods_plugin( $post_type ) {
-		if (! ( function_exists( 'pods_api' ) && class_exists( 'Pod', true ) ) ) {
+		if ( ! ( function_exists( 'pods_api' ) && class_exists( 'Pod', true ) ) ) {
 			return false;
 		}
 		$api             = pods_api();
 		$pods_post_types = $api->load_pods(
-			[
+			array(
 				'type'    => 'post_type',
 				'refresh' => true,
-			]
+			)
 		);
 		foreach ( $pods_post_types as $pod_post_type ) {
 			if ( $pod_post_type['name'] === $post_type ) {
