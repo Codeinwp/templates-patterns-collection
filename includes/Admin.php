@@ -259,6 +259,15 @@ class Admin {
 	}
 
 	/**
+	 * Use the Neve builtin compatibility to check for specific support.
+	 *
+	 * @return bool
+	 */
+	private function neve_theme_has_support( $feature ) {
+		return defined( 'NEVE_COMPATIBILITY_FEATURES' ) && isset( NEVE_COMPATIBILITY_FEATURES[ $feature ] );
+	}
+
+	/**
 	 * Utility method to add a theme page from an array.
 	 *
 	 * @param array $page_data Page data.
@@ -266,6 +275,31 @@ class Admin {
 	 * @return void
 	 */
 	private function add_theme_page_for_tiob( $page_data ) {
+
+		if ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ) {
+			global $submenu;
+
+			$theme_page = 'neve-welcome';
+			$capability = 'activate_plugins';
+			add_submenu_page(
+				$theme_page,
+				$page_data['page_title'],
+				$page_data['page_title'],
+				$capability,
+				$page_data['menu_slug'],
+				$page_data['callback']
+			);
+
+			$offset = 2;
+			if ( $this->page_slug !== $page_data['menu_slug'] ) {
+				$offset = 3;
+			}
+
+			$item = array_pop( $submenu[ $theme_page ] );
+			array_splice( $submenu[ $theme_page ], $offset, 0, [ $item ] );
+			return;
+		}
+
 		add_theme_page(
 			$page_data['page_title'],
 			$page_data['menu_title'],
@@ -310,7 +344,7 @@ class Admin {
 			'page_title' => __( 'My Library', 'templates-patterns-collection' ),
 			'menu_title' => $prefix . __( 'My Library', 'templates-patterns-collection' ),
 			'capability' => 'activate_plugins',
-			'menu_slug'  => 'themes.php?page=' . $this->page_slug . '#library',
+			'menu_slug'  => ( $this->neve_theme_has_support('theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '#library',
 			'callback'   => '',
 		);
 
@@ -368,7 +402,9 @@ class Admin {
 			return;
 		}
 
-		if ( $screen->id !== 'appearance_page_' . $this->page_slug ) {
+		$allowed_screen = $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'neve_page_' : 'appearance_page_';
+
+		if ( $screen->id !== $allowed_screen . $this->page_slug ) {
 			return;
 		}
 
