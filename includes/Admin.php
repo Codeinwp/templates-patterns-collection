@@ -296,7 +296,7 @@ class Admin {
 			}
 
 			$item = array_pop( $submenu[ $theme_page ] );
-			array_splice( $submenu[ $theme_page ], $offset, 0, [ $item ] );
+			array_splice( $submenu[ $theme_page ], $offset, 0, array( $item ) );
 			return;
 		}
 
@@ -344,7 +344,7 @@ class Admin {
 			'page_title' => __( 'My Library', 'templates-patterns-collection' ),
 			'menu_title' => $prefix . __( 'My Library', 'templates-patterns-collection' ),
 			'capability' => 'activate_plugins',
-			'menu_slug'  => ( $this->neve_theme_has_support('theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '#library',
+			'menu_slug'  => ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '#library',
 			'callback'   => '',
 		);
 
@@ -597,7 +597,7 @@ class Admin {
 					__( 'Open %s', 'templates-patterns-collection' ),
 					'Templates Cloud'
 				),
-				'url'  => ( $this->neve_theme_has_support('theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '&dismiss_notice=yes#library',
+				'url'  => ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '&dismiss_notice=yes#library',
 			);
 		}
 
