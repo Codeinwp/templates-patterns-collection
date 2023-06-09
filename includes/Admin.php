@@ -589,6 +589,7 @@ class Admin {
 			$page_was_visited = 'yes';
 		}
 		if ( $this->is_agency_plan() && $page_was_visited !== 'yes' ) {
+
 			$array['notifications']['template-cloud'] = array(
 				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'templates-patterns-collection' ),
 				'cta'  => sprintf(
@@ -596,7 +597,7 @@ class Admin {
 					__( 'Open %s', 'templates-patterns-collection' ),
 					'Templates Cloud'
 				),
-				'url'  => 'themes.php?page=' . $this->page_slug . '&dismiss_notice=yes#library',
+				'url'  => ( $this->neve_theme_has_support('theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '&dismiss_notice=yes#library',
 			);
 		}
 
