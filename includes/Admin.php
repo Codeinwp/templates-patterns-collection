@@ -402,9 +402,7 @@ class Admin {
 			return;
 		}
 
-		$allowed_screen = $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'neve_page_' : 'appearance_page_';
-
-		if ( $screen->id !== $allowed_screen . $this->page_slug ) {
+		if (strpos( $screen->id, '_page_' . $this->page_slug ) === false ) {
 			return;
 		}
 
