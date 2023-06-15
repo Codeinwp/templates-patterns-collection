@@ -402,7 +402,7 @@ class Admin {
 			return;
 		}
 
-		if (strpos( $screen->id, '_page_' . $this->page_slug ) === false ) {
+		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false ) {
 			return;
 		}
 
