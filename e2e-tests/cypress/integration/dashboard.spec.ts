@@ -16,7 +16,7 @@ describe('Dashboard Page - Default', function () {
   });
 
   beforeEach(function () {
-    cy.visit('/wp-admin/themes.php?page=tiob-starter-sites');
+    cy.visit('/wp-admin/admin.php?page=tiob-starter-sites');
   });
 
   it('Preview Works', function () {
@@ -48,7 +48,7 @@ describe('Dashboard Page - Default', function () {
     cy.findByRole('button', {
       name: /close/i,
     }).click();
-    cy.url().should('contain', '/wp-admin/themes.php?page=tiob-starter-sites');
+    cy.url().should('contain', '/wp-admin/admin.php?page=tiob-starter-sites');
   });
 
   it('Infinite Scroll', function () {
@@ -118,7 +118,7 @@ describe('Dashboard Page - Default', function () {
 describe('Dashboard Page - Onboarding', function () {
   before(function () {
     cy.visit('/');
-    cy.visit('/wp-admin/themes.php?page=tiob-starter-sites&onboarding=yes');
+    cy.visit('/wp-admin/admin.php?page=tiob-starter-sites&onboarding=yes');
   });
 
   it('Onboarding Works Properly', function () {
@@ -132,7 +132,7 @@ describe('Dashboard Page - Onboarding', function () {
 describe('Importer Works', function () {
   before(function () {
     cy.visit('/');
-    cy.visit('/wp-admin/themes.php?page=tiob-starter-sites');
+    cy.visit('/wp-admin/admin.php?page=tiob-starter-sites');
   });
 
   it('Imports Site', function () {
