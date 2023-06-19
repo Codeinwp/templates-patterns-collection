@@ -368,6 +368,32 @@ class WP_Import extends WP_Importer {
 	}
 
 	/**
+	 * Check whether the post type is a Pods plugin post type.
+	 *
+	 * @param string $post_type The post type.
+	 *
+	 * @return bool
+	 */
+	private function is_post_type_of_pods_plugin( $post_type ) {
+		if ( ! ( function_exists( 'pods_api' ) && class_exists( 'Pod', true ) ) ) {
+			return false;
+		}
+		$api             = pods_api();
+		$pods_post_types = $api->load_pods(
+			array(
+				'type'    => 'post_type',
+				'refresh' => true,
+			)
+		);
+		foreach ( $pods_post_types as $pod_post_type ) {
+			if ( $pod_post_type['name'] === $post_type ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Create new posts based on import information
 	 *
 	 * Posts marked as having a parent which doesn't exist will become top level items.
@@ -381,9 +407,11 @@ class WP_Import extends WP_Importer {
 		foreach ( $this->posts as $post ) {
 			$post = apply_filters( 'wp_import_post_data_raw', $post );
 			if ( ! post_type_exists( $post['post_type'] ) ) {
-				$this->logger->log( "Failed to import {$post['post_title']}. Invalid post type {$post['post_type']}" );
-				do_action( 'wp_import_post_exists', $post );
-				continue;
+				if ( ! $this->is_post_type_of_pods_plugin( $post['post_type'] ) ) {
+					$this->logger->log( "Failed to import {$post['post_title']}. Invalid post type {$post['post_type']}" );
+					do_action( 'wp_import_post_exists', $post );
+					continue;
+				}
 			}
 			if ( isset( $this->processed_posts[ $post['post_id'] ] ) && ! empty( $post['post_id'] ) ) {
 				continue;

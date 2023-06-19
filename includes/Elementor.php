@@ -15,11 +15,18 @@ use TIOB\Main;
  * @package templates-patterns-collection
  */
 class Elementor {
+	use White_Label_Config;
 
 	/**
 	 * Initialize the Admin.
 	 */
 	public function init() {
+		$this->setup_white_label();
+
+		if ( $this->is_library_disabled() ) {
+			return;
+		}
+
 		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'register_script' ), 999 );
 		add_action( 'elementor/editor/before_enqueue_styles', array( $this, 'register_style' ) );
 		add_action( 'elementor/preview/enqueue_styles', array( $this, 'register_style' ) );
@@ -45,7 +52,7 @@ class Elementor {
 			apply_filters(
 				'ti_tpc_editor_data',
 				array(
-					'endpoint'         => TPC_TEMPLATES_CLOUD_ENDPOINT,
+					'endpoint'         => ( defined( 'TPC_TEMPLATES_CLOUD_ENDPOINT' ) ) ? TPC_TEMPLATES_CLOUD_ENDPOINT : Admin::get_templates_cloud_endpoint(),
 					'params'           => array(
 						'site_url'   => get_site_url(),
 						'license_id' => apply_filters( 'tiob_license_key', 'free' ),

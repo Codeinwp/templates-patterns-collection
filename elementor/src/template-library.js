@@ -7,6 +7,7 @@ import { Fragment, useState } from '@wordpress/element';
 import Header from './components/header.js';
 import Content from './components/content.js';
 import { importTemplate } from './data/templates-cloud/index.js';
+import { setPostModel } from './data/utils';
 
 const { omit } = lodash;
 
@@ -154,6 +155,9 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 				options: index >= 0 ? { at: index++ } : {},
 			} );
 		}
+
+		const elementorId = elementor.config.document.id;
+		await setPostModel( elementorId );
 
 		if (
 			undefined !== meta &&

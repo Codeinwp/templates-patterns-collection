@@ -10,6 +10,7 @@ import {
 	exportTemplate,
 	updateTemplate,
 } from './data/templates-cloud/index.js';
+import { setPostModel } from './data/utils';
 
 if ( parseInt( window.tiTpc.tier ) === 3 ) {
 	elementor.on( 'document:loaded', () => {
@@ -23,13 +24,7 @@ if ( parseInt( window.tiTpc.tier ) === 3 ) {
 			}
 
 			const id = elementor.config.document.id;
-			if ( 'page' === window.tiTpc.postType ) {
-				window.tiTpc.postModel = await new wp.api.models.Page( { id } );
-			} else {
-				window.tiTpc.postModel = await new wp.api.models.Post( { id } );
-			}
-
-			await window.tiTpc.postModel.fetch();
+			await setPostModel( id );
 
 			const publishButton = document.querySelector(
 				'button#elementor-panel-saver-button-publish'

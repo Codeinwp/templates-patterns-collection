@@ -15,6 +15,7 @@ use TIOB\Main;
  * @package templates-patterns-collection
  */
 class Editor {
+	use White_Label_Config;
 
 	const ALLOWED_POST_TYPES = array( 'post', 'page', 'neve_custom_layouts' );
 
@@ -38,8 +39,14 @@ class Editor {
 	 * Initialize the Admin.
 	 */
 	public function init() {
+		$this->setup_white_label();
+
+		if ( $this->is_library_disabled() ) {
+			return;
+		}
+
 		if ( ! defined( 'TPC_TEMPLATES_CLOUD_ENDPOINT' ) ) {
-			define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', 'https://api.themeisle.com/templates-cloud/' );
+			define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', Admin::get_templates_cloud_endpoint() );
 		}
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_block' ), 11 );
 		$this->register_post_meta();
@@ -57,6 +64,12 @@ class Editor {
 		}
 
 		if ( $screen->id === 'widgets' ) {
+			return;
+		}
+
+		// Don't load on site editor. Until FSE support in TPC is added.
+		// We can remove this check once Codeinwp/templates-patterns-collection/issues/248 is implemented.
+		if ( $screen->id === 'site-editor' ) {
 			return;
 		}
 
