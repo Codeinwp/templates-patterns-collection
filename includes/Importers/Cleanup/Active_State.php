@@ -117,6 +117,9 @@ class Active_State {
 	 * @return void
 	 */
 	final public function add( $key, $data ) {
+		if ( empty( $this->state ) ) {
+			$this->state = array();
+		}
 		$this->state[ $key ] = $data;
 		set_transient( self::STATE_NAME, $this->state, 24 * self::HOUR_IN_SECONDS );
 	}
