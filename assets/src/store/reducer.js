@@ -34,6 +34,7 @@ const initialState = {
 	templateModal: null,
 	searchQuery: '',
 	license: initialLicense,
+	onboardingStep: 1,
 };
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
@@ -128,6 +129,12 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				license,
+			};
+		case 'SET_ONBOARDING_STEP':
+			const { step } = action.payload;
+			return {
+				...state,
+				onboardingStep: step,
 			};
 	}
 	return state;

@@ -1,0 +1,29 @@
+.search-container {
+  margin-top: 80px;
+}
+
+.search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+input.search-input {
+  background-color: #f4f4f4;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px 10px 46px;
+  width: 100%;
+  max-width: 275px;
+  line-height: 26px;
+}
+
+.search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  left: 12px;
+  top:12px;
+  line-height: 0;
+}

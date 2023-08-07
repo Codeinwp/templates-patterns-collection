@@ -1,0 +1,27 @@
+.is-onboarding {
+  background: #fff!important;
+}
+
+h1 {
+  font-size: 40px;
+  line-height: 54px;
+}
+
+p {
+  font-size: 18px;
+  line-height: 30.6px;
+  color: #848484;
+  font-weight: 300;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(100vh - 65px);
+  padding: 0 50px;
+  &.narrow {
+    max-width: 559px;
+    margin: 0 auto;
+  }
+}

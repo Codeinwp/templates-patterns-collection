@@ -104,4 +104,10 @@ export default {
 			payload: { license },
 		};
 	},
+	setOnboardingStep( step ) {
+		return {
+			type: 'SET_ONBOARDING_STEP',
+			payload: { step },
+		};
+	},
 };
