@@ -5,8 +5,8 @@ import { withDispatch, withSelect } from '@wordpress/data';
 
 const Search = ( { onSearch, onSubmit, query } ) => {
 	const handleSubmit = ( e ) => {
+		e.preventDefault();
 		if ( onSubmit ) {
-			e.preventDefault(); // Prevent form submission
 			onSubmit( e );
 		}
 	};

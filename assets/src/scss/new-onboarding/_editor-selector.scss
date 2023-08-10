@@ -1,0 +1,47 @@
+.ob-editor-selector {
+  overflow: visible;
+  display: inline-block;
+  position: relative;
+
+  img {
+    border-radius: 100%;
+    margin-right: 5px;
+    max-width: 38px;
+    max-height: 38px;
+  }
+
+  .options {
+    margin: 0;
+
+    li {
+      border-bottom: 1px solid $light-border;
+      margin: 0;
+    }
+
+    a {
+      height: 35px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      color: $dark-text;
+      cursor: pointer;
+      padding: 5px 10px;
+      text-decoration: none;
+      white-space: nowrap;
+
+      > span:not(.count) {
+        margin-right: 20px;
+      }
+
+      .count {
+        margin-left: auto;
+      }
+
+      &:hover {
+        background-color: $dark-bg;
+        color: $light-text;
+      }
+    }
+  }
+}

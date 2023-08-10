@@ -3,6 +3,7 @@ import { Fragment, useState } from '@wordpress/element';
 import Header from './Header';
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
+import StepThree from './StepThree';
 
 import { withSelect, withDispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -22,21 +23,14 @@ const NewOnboarding = ( {
 	importModal,
 	currentSiteData,
 } ) => {
-	const isNarrowContainerStep = [ 1, 5, 6 ].includes( step );
-
 	const { migration } = getSites;
 
 	return (
 		<Fragment>
 			<Header />
-			<div
-				className={ `container ${
-					isNarrowContainerStep ? 'narrow' : ''
-				}` }
-			>
 				{ step === 1 && <StepOne /> }
 				{ step === 2 && <StepTwo /> }
-			</div>
+				{ step === 3 && <StepThree /> }
 		</Fragment>
 	);
 };

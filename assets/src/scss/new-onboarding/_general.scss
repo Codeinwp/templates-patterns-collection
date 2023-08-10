@@ -1,8 +1,20 @@
-.is-onboarding {
-  background: #fff!important;
+.ob-new {
+  color: $dark-text;
+}
+
+.content-wrap.is-onboarding {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100000;
+  overflow: auto;
+  background: #fff;
 }
 
 h1 {
+  color: inherit;
   font-size: 40px;
   line-height: 54px;
 }
@@ -10,18 +22,134 @@ h1 {
 p {
   font-size: 18px;
   line-height: 30.6px;
-  color: #848484;
+  color: $light-text-1;
   font-weight: 300;
 }
 
-.container {
+button.ob-button {
   display: flex;
+  height: 48px;
+  padding: 16px 32px;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  &.is-primary{
+    background: $primary;
+  }
+}
+
+.ob-container {
   justify-content: center;
   flex-direction: column;
   height: calc(100vh - 65px);
-  padding: 0 50px;
+  display: flex;
+  &.row {
+    flex-direction: row;
+  }
+  &.wide {
+    display: block;
+    padding: 0 50px;
+  }
   &.narrow {
     max-width: 559px;
     margin: 0 auto;
+  }
+}
+
+.ob-sites {
+  margin-top: 30px;
+
+  &.is-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 22px;
+    grid-row-gap: 24px;
+  }
+}
+
+.ob-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+
+
+
+
+
+
+
+
+.ob-commands {
+  width: 323px;
+  height: 100%;
+  background-color: $light-bg;
+  transition: width 0.3s ease;
+  z-index: 2;
+  .ob-commands-toggle{
+    position: inherit;
+  }
+  &.retracted {
+    width: 0;
+  }
+}
+
+.ob-commands-toggle {
+  font-size: 40px;
+  &.fixed {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 1;
+  }
+}
+
+.iframe-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.toggle-button {
+  //align-self: ${showPanel ? 'flex-end' : 'center'};
+  //position: ${showPanel ? 'fixed' : 'unset'};
+  bottom: 20px;
+  //right: ${showPanel ? '20px' : 'unset'};
+  z-index: 999;
+}
+
+
+
+
+
+
+
+
+@mixin ob-general--laptop() {
+  .ob-sites {
+    &.is-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+}
+
+@mixin ob-general--tablet() {
+  .ob-sites {
+    &.is-grid {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 }

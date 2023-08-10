@@ -1,36 +1,20 @@
-import { CATEGORIES } from '../../utils/common';
-import CategoryButtons from './CategoryButtons';
-import Search from './Search';
+import { EDITOR_MAP } from '../../utils/common';
 import { __ } from '@wordpress/i18n';
-import { withSelect, withDispatch } from '@wordpress/data';
-import { compose } from '@wordpress/compose';
-import OnboardingContent from '../OnboardingContent';
+import Filters from './Filters';
+import Sites from './Sites';
+import EditorSelector from './EditorSelector';
 
-const StepTwo = ( { handleNextStep } ) => {
-
+const StepTwo = () => {
 	return (
-		<>
-			<h1>{ __( 'Choose a design', 'neve' ) }</h1>
-			<Search onSubmit={ handleNextStep } />
-			<CategoryButtons categories={ CATEGORIES } />
-			<OnboardingContent />
-		</>
+		<div className="ob-container wide">
+			<div className="ob-title-wrap">
+				<h1>{ __( 'Choose a design', 'neve' ) }</h1>
+				<EditorSelector EDITOR_MAP={ EDITOR_MAP } />
+			</div>
+			<Filters />
+			<Sites />
+		</div>
 	);
 };
 
-export default compose(
-	withSelect( ( select ) => {
-		const { getCurrentStep } = select( 'neve-onboarding' );
-		return {
-			step: getCurrentStep(),
-		};
-	} ),
-	withDispatch( ( dispatch, { step } ) => {
-		const { setOnboardingStep } = dispatch( 'neve-onboarding' );
-		return {
-			handleNextStep: () => {
-				setOnboardingStep( step + 1 );
-			},
-		};
-	} )
-)( StepTwo );
+export default StepTwo;

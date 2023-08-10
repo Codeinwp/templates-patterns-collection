@@ -3,12 +3,17 @@ import classnames from 'classnames';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 
-const CategoryButtons = ( { categories, onClick, category, setCurrentCategory } ) => {
+const CategoryButtons = ( {
+	categories,
+	onClick,
+	category,
+	setCurrentCategory,
+} ) => {
 	return (
-		<div className="category-tabs">
+		<div className="ob-tabs">
 			{ Object.keys( categories ).map( ( key, index ) => {
 				const classes = classnames( [
-					'tab',
+					'cat',
 					key,
 					{ active: key === category },
 				] );

@@ -1,12 +1,13 @@
+import { withDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
+import { Tooltip, Button } from '@wordpress/components';
+
 import SVG from '../../utils/svg';
 
-import { __ } from '@wordpress/i18n';
-import { Tooltip } from '@wordpress/components';
-
-const Header = () => {
+const Header = ( { handleLogoClick } ) => {
 	return (
-		<div className="ti-onboarding-header">
-			<div>{ SVG.logo }</div>
+		<div className="ob-header">
+			<Button onClick={ handleLogoClick }>{ SVG.logo }</Button>
 			<Tooltip text={ __( 'Exit to dashboard', 'neve' ) }>
 				<a href="/wp-admin/">{ SVG.close }</a>
 			</Tooltip>
@@ -14,4 +15,11 @@ const Header = () => {
 	);
 };
 
-export default Header;
+export default withDispatch( ( dispatch ) => {
+	const { setOnboardingStep } = dispatch( 'neve-onboarding' );
+	return {
+		handleLogoClick: () => {
+			setOnboardingStep( 1 );
+		},
+	};
+} )( Header );
