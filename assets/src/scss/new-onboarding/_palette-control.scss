@@ -1,0 +1,20 @@
+.ob-palette {
+  background: none;
+  border: none;
+  padding: 16px;
+  display: flex;
+  column-gap: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &.active {
+    outline: 2px solid $primary;
+  }
+
+  .color {
+    width: 30px;
+    height: 30px;
+    border: 1px solid $light-border;
+    border-radius: 50%;
+  }
+}

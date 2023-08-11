@@ -1,7 +1,7 @@
 import { Icon } from '@wordpress/components';
-import SVG from '../../utils/svg';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
+import SVG from '../../utils/svg';
 
 const Search = ( { onSearch, onSubmit, query } ) => {
 	const handleSubmit = ( e ) => {

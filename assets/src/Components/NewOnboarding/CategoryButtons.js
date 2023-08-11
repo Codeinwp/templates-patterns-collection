@@ -1,7 +1,6 @@
-import classnames from 'classnames';
-
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
+import classnames from 'classnames';
 
 const CategoryButtons = ( {
 	categories,
@@ -12,11 +11,11 @@ const CategoryButtons = ( {
 	return (
 		<div className="ob-tabs">
 			{ Object.keys( categories ).map( ( key, index ) => {
-				const classes = classnames( [
-					'cat',
-					key,
-					{ active: key === category },
-				] );
+				const classes = classnames( {
+					cat: true,
+					[ key ]: true,
+					active: key === category,
+				} );
 
 				return (
 					<button

@@ -1,0 +1,23 @@
+.ob-preview-settings {
+  width: 323px;
+  height: 100%;
+  transition: width 0.3s ease;
+  z-index: 2;
+  overflow: hidden;
+  padding: 45px 24px;
+  &.retracted {
+    width: 0;
+  }
+
+  .back {
+    color: $primary;
+    line-height: 23.8px;
+    font-weight: 400;
+    margin-bottom: 11px;
+    padding: 0;
+  }
+
+  //.ob-commands-toggle{
+  //  position: inherit;
+  //}
+}

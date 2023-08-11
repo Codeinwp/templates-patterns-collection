@@ -2,7 +2,7 @@ import { withSelect, withDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import { Button, Dashicon } from '@wordpress/components';
-import {arrowRight} from "@wordpress/icons";
+import PreviewSettings from './PreviewSettings';
 
 const StepThree = ( { siteData } ) => {
 	const [ showPanel, setShowPanel ] = useState( true );
@@ -17,14 +17,10 @@ const StepThree = ( { siteData } ) => {
 				className="ob-commands-toggle fixed"
 				onClick={ togglePanel }
 			>
-				<Dashicon icon="arrow-right" size={30}/>
+				<Dashicon icon="arrow-right" size={ 30 } />
 			</Button>
 
-			<div className={ `ob-commands ${ showPanel ? '' : 'retracted' }` }>
-				<Button className="ob-commands-toggle" onClick={ togglePanel }>
-					<Dashicon icon="arrow-left" size={30} />
-				</Button>
-			</div>
+			<PreviewSettings />
 
 			<div
 				className={ `iframe-container ${

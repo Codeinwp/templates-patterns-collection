@@ -1,6 +1,6 @@
 import { useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
-import { withSelect, withDispatch } from '@wordpress/data';
+import { withSelect } from '@wordpress/data';
 import StarterSiteCard from './StarterSiteCard';
 import VizSensor from 'react-visibility-sensor';
 import Fuse from 'fuse.js/dist/fuse.min';
@@ -85,48 +85,18 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 };
 
 export default compose(
-	withDispatch( ( dispatch ) => {
-		const {
-			setOnboardingState,
-			setCurrentCategory,
-			setCurrentTab,
-			setSearchQuery,
-		} = dispatch( 'neve-onboarding' );
-		return {
-			cancelOnboarding: () => {
-				setOnboardingState( false );
-			},
-			resetCategory: () => {
-				setCurrentCategory( 'all' );
-			},
-			setCurrentTab,
-			setSearchQuery,
-		};
-	} ),
 	withSelect( ( select ) => {
 		const {
 			getCurrentEditor,
 			getCurrentCategory,
-			getPreviewStatus,
-			getCurrentSite,
-			getImportModalStatus,
-			getOnboardingStatus,
 			getSites,
-			getInstallModalStatus,
-			getCurrentTab,
 			getSearchQuery,
 		} = select( 'neve-onboarding' );
 		return {
 			editor: getCurrentEditor(),
 			category: getCurrentCategory(),
-			previewOpen: getPreviewStatus(),
-			currentSiteData: getCurrentSite(),
-			importModal: getImportModalStatus(),
-			installModal: getInstallModalStatus(),
-			isOnboarding: getOnboardingStatus(),
-			getSites: getSites(),
-			currentTab: getCurrentTab(),
 			searchQuery: getSearchQuery(),
+			getSites: getSites(),
 		};
 	} )
 )( Sites );
