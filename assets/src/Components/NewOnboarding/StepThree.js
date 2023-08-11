@@ -17,12 +17,12 @@ const StepThree = ( { siteData } ) => {
 				className="ob-commands-toggle fixed"
 				onClick={ togglePanel }
 			>
-				<Dashicon icon="arrow-right" />
+				<Dashicon icon="arrow-right" size={30}/>
 			</Button>
 
 			<div className={ `ob-commands ${ showPanel ? '' : 'retracted' }` }>
 				<Button className="ob-commands-toggle" onClick={ togglePanel }>
-					<Dashicon icon="arrow-left" />
+					<Dashicon icon="arrow-left" size={30} />
 				</Button>
 			</div>
 

@@ -93,6 +93,7 @@ button.ob-button {
   background-color: $light-bg;
   transition: width 0.3s ease;
   z-index: 2;
+  overflow: hidden;
   .ob-commands-toggle{
     position: inherit;
   }
@@ -103,6 +104,10 @@ button.ob-button {
 
 .ob-commands-toggle {
   font-size: 40px;
+  background: $primary;
+  &:hover {
+    color: $light-text;
+  }
   &.fixed {
     position: fixed;
     left: 20px;
