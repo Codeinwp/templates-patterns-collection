@@ -1,10 +1,12 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import { trailingSlashIt } from '../../utils/common';
-import { get } from '../../utils/rest';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
+import { Button } from '@wordpress/components';
 import classnames from 'classnames';
+import { get } from '../../utils/rest';
+import SVG from '../../utils/svg';
 
 const PaletteControl = ( { siteData, setPalette, palette } ) => {
 	const [ palettes, setPalettes ] = useState( null );
@@ -57,8 +59,12 @@ const PaletteControl = ( { siteData, setPalette, palette } ) => {
 	};
 
 	return (
+		palettes &&
 		<div className="ob-palette-selector">
-			<h3>{ __( 'Color Palette', 'templates-patterns-collection' ) }</h3>
+			<div className="ob-palette-header-wrap">
+				<h3>{ __( 'Color Palette', 'templates-patterns-collection' ) }</h3>
+				<Button icon={SVG.redo} onClick={() => setPalette('base')} />
+			</div>
 			{ palettes &&
 				Object.keys( palettes ).map( ( paletteKey ) => (
 					<button

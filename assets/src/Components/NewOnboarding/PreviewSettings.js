@@ -6,6 +6,7 @@ import { useEffect, useState } from '@wordpress/element';
 import { get } from '../../utils/rest';
 import { trailingSlashIt } from '../../utils/common';
 import PaletteControl from "./PaletteControl";
+import TypographyControl from "./TypographyControl";
 
 export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 	const [ palette, setPalette ] = useState( 'base' );
@@ -29,6 +30,7 @@ export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 				) }
 			</p>
 			<PaletteControl palette={ palette } setPalette={ setPalette } />
+			<TypographyControl />
 		</div>
 	);
 };

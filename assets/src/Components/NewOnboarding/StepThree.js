@@ -13,15 +13,7 @@ const StepThree = ( { siteData } ) => {
 
 	return (
 		<div className="ob-container row">
-			<Button
-				className="ob-commands-toggle fixed"
-				onClick={ togglePanel }
-			>
-				<Dashicon icon="arrow-right" size={ 30 } />
-			</Button>
-
 			<PreviewSettings />
-
 			<div
 				className={ `iframe-container ${
 					showPanel ? '' : 'expanded'

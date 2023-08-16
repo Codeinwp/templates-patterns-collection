@@ -38,6 +38,20 @@ class Admin {
 	 */
 	private $skip_email_subscribe_namespace = 'tpc_skip_email_subscribe';
 
+	/**
+	 * Neve font pairs
+	 *
+	 * @var array
+	 */
+	private $font_pairs_neve = [];
+
+	/**
+	 * Google fonts
+	 *
+	 * @var array
+	 */
+	private $google_fonts = [];
+
 	public static function get_templates_cloud_endpoint() {
 		return 'https://' . self::API . '/templates-cloud/';
 	}
@@ -62,6 +76,8 @@ class Admin {
 		$this->register_feedback_settings();
 
 		$this->register_prevent_clone_hooks();
+
+		$this->get_font_parings();
 	}
 
 	/**
@@ -420,6 +436,18 @@ class Admin {
 		wp_register_script( 'tiob', TIOB_URL . 'assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates' ) ), $dependencies['version'], true );
 		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
 		wp_enqueue_script( 'tiob' );
+
+		if ( ! empty( $this->google_fonts ) ) {
+			$font_chunks = array_chunk( $this->google_fonts, absint( count( $this->google_fonts ) / 5 ) );
+			foreach ( $font_chunks as $index => $fonts_chunk ) {
+				wp_enqueue_style(
+					'tiob-google-fonts-' . $index,
+					'https://fonts.googleapis.com/css?family=' . join( '|', $fonts_chunk ) . '&display=swap"',
+					[],
+					$dependencies['version']
+				);
+			}
+		}
 	}
 
 	/**
@@ -462,6 +490,7 @@ class Admin {
 			'brandedTheme'        => $this->get_whitelabel_name(),
 			'hideStarterSites'    => $this->is_starter_sites_disabled(),
 			'hideMyLibrary'       => $this->is_library_disabled(),
+			'fontParings'         => $this->font_pairs_neve,
 			'endpoint'            => ( defined( 'TPC_TEMPLATES_CLOUD_ENDPOINT' ) ) ? TPC_TEMPLATES_CLOUD_ENDPOINT : self::get_templates_cloud_endpoint(),
 			'params'              => array(
 				'site_url'   => get_site_url(),
@@ -525,6 +554,84 @@ class Admin {
 			'slug'   => 'neve',
 			'nonce'  => wp_create_nonce( 'switch-theme_neve' ),
 		);
+	}
+
+	/**
+	 * Check if we can use the font pair to check for Google fonts.
+	 *
+	 * @param array $font_pair The font pair.
+	 * @param string $key The key to check.
+	 *
+	 * @return bool
+	 */
+	private function font_array_key_is_defined( $font_pair, $key = 'bodyFont' ) {
+		return isset( $font_pair[ $key ] ) && isset( $font_pair[ $key ]['fontSource'] ) && isset( $font_pair[ $key ]['font'] );
+	}
+
+	/**
+	 * Check if the font pair is `Prata` and `Hanken Grotesk`.
+	 *
+	 * @param $font_pair
+	 *
+	 * @return bool
+	 */
+	private function is_font_prata_and_hanke( $font_pair ) {
+		return $this->font_array_key_is_defined( $font_pair, 'bodyFont' ) &&
+		       $this->font_array_key_is_defined( $font_pair, 'headingFont' ) &&
+		       'Prata' === $font_pair['headingFont']['font'] &&
+		       'Hanken Grotesk' === $font_pair['bodyFont']['font'];
+	}
+
+	/**
+	 * Get the slug from the font pair.
+	 *
+	 * @param array $font_pair The font pair.
+	 *
+	 * @return string
+	 */
+	private function get_slug_from_font_pair( $font_pair ) {
+		return strtolower( str_replace( ' ', '', $font_pair['headingFont']['font'] ) ) . '-' . strtolower( str_replace( ' ', '', $font_pair['bodyFont']['font'] ) );
+	}
+
+	/**
+	 * Get font parings
+	 *
+	 * @return array
+	 */
+	private function get_font_parings() {
+		if ( ! class_exists( '\Neve\Core\Settings\Mods', false ) ) {
+			return;
+		}
+
+		$font_pair_neve = apply_filters(
+			'neve_font_pairings',
+			\Neve\Core\Settings\Mods::get( \Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS, \Neve\Core\Settings\Config::$typography_default_pairs )
+		);
+		$index = 0;
+		foreach ( $font_pair_neve as $font_pair ) {
+			// limit the number of font pairs to first 5 and `Prata` and `Hanken Grotesk`.
+			if ( $index > 4 && ! $this->is_font_prata_and_hanke( $font_pair ) ) {
+				continue;
+			}
+			$slug = $this->get_slug_from_font_pair( $font_pair ) . '-' . $index;
+			$this->font_pairs_neve[ $slug ] = $font_pair;
+
+			if ( $this->font_array_key_is_defined( $font_pair, 'bodyFont' ) &&
+			     'Google' === $font_pair['bodyFont']['fontSource'] &&
+			     ! in_array( $font_pair['bodyFont']['font'], $this->google_fonts, true )
+			) {
+				$this->google_fonts[] = $font_pair['bodyFont']['font'];
+			}
+
+			if ( $this->font_array_key_is_defined( $font_pair, 'headingFont' ) &&
+			     'Google' === $font_pair['headingFont']['fontSource'] &&
+			     ! in_array( $font_pair['headingFont']['font'], $this->google_fonts, true )
+			) {
+				$this->google_fonts[] = $font_pair['headingFont']['font'];
+			}
+
+			$index++;
+		}
 	}
 
 	/**
