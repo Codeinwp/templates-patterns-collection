@@ -9,7 +9,6 @@
   left: 0;
   right: 0;
   z-index: 100000;
-  overflow: auto;
   background: #fff;
 }
 
@@ -57,8 +56,9 @@ button.ob-button {
 .ob-container {
   justify-content: center;
   flex-direction: column;
-  height: calc(100vh - 65px);
   display: flex;
+  overflow: scroll;
+  height: calc(100vh - 61px);
   &.row {
     flex-direction: row;
   }
@@ -69,6 +69,9 @@ button.ob-button {
   &.narrow {
     max-width: 559px;
     margin: 0 auto;
+  }
+  &.ovf-initial{
+    overflow: initial;
   }
 }
 

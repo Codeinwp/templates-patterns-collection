@@ -12,7 +12,7 @@ const StepThree = ( { siteData } ) => {
 	};
 
 	return (
-		<div className="ob-container row">
+		<div className="ob-container row ovf-initial">
 			<PreviewSettings />
 			<div
 				className={ `iframe-container ${

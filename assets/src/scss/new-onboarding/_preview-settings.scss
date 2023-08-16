@@ -1,9 +1,8 @@
 .ob-preview-settings {
-  width: 323px;
-  height: 100%;
+  width: 275px;
   transition: width 0.3s ease;
   z-index: 2;
-  overflow: hidden;
+  overflow: scroll;
   padding: 45px 24px;
   &.retracted {
     width: 0;
@@ -16,8 +15,4 @@
     margin-bottom: 11px;
     padding: 0;
   }
-
-  //.ob-commands-toggle{
-  //  position: inherit;
-  //}
 }

@@ -10,6 +10,7 @@ import TypographyControl from "./TypographyControl";
 
 export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 	const [ palette, setPalette ] = useState( 'base' );
+	const [ font, setFont ] = useState( '' );
 
 	return (
 		<div className="ob-preview-settings">
@@ -30,7 +31,7 @@ export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 				) }
 			</p>
 			<PaletteControl palette={ palette } setPalette={ setPalette } />
-			<TypographyControl />
+			<TypographyControl font={ font } setFont={ setFont } />
 		</div>
 	);
 };

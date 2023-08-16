@@ -60,16 +60,17 @@ const PaletteControl = ( { siteData, setPalette, palette } ) => {
 
 	return (
 		palettes &&
-		<div className="ob-palette-selector">
-			<div className="ob-palette-header-wrap">
+		<div className="ob-control">
+			<div className="header-wrap">
 				<h3>{ __( 'Color Palette', 'templates-patterns-collection' ) }</h3>
 				<Button icon={SVG.redo} onClick={() => setPalette('base')} />
 			</div>
+			<div className="container type-color">
 			{ palettes &&
 				Object.keys( palettes ).map( ( paletteKey ) => (
 					<button
 						className={ classnames( [
-							'ob-palette',
+							'palette',
 							{ active: paletteKey === palette },
 						] ) }
 						title={ palettes[ paletteKey ].name }
@@ -80,6 +81,7 @@ const PaletteControl = ( { siteData, setPalette, palette } ) => {
 						{ renderColorDivs( palettes[ paletteKey ] ) }
 					</button>
 				) ) }
+			</div>
 		</div>
 	);
 };

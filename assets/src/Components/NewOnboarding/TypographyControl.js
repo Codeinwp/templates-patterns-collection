@@ -8,62 +8,52 @@ import classnames from 'classnames';
 import { get } from '../../utils/rest';
 import SVG from '../../utils/svg';
 
-const TypographyControl = ( { siteData, setPalette, palette } ) => {
-  const [ fontParings, setFontParings ] = useState( null );
+const TypographyControl = ( { siteData, font, setFont } ) => {
+
+  const handleFontClick = ( event ) => {
+    const fontKey = event.currentTarget.getAttribute( 'data-slug' );
+    setFont( fontKey );
+  };
+
+  if ( ! tiobDash || ! tiobDash.fontParings ) {
+    return ;
+  }
 
   console.log( tiobDash.fontParings );
-  useEffect( () => {
-    const fetchAddress = siteData.url || siteData.remote_url;
-    const url = new URL(
-      `${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
-    );
-    get( url, true, false ).then( ( response ) => {
-      if ( ! response.ok ) {
-        return;
-      }
-
-      response.json().then( ( result ) => {
-        const themeMods = result.theme_mods;
-        console.log( themeMods.neve_font_pairings );
-        if ( themeMods && themeMods.neve_font_pairings ) {
-        }
-      } );
-    } );
-  }, [] );
-
-  const renderColorDivs = ( currentPalette ) => {
-    if ( ! currentPalette.colors ) {
-      return null; // Skip palettes with null colors
-    }
-
-    const colorKeys = Object.keys( currentPalette.colors );
-    const excludedColorKeys = colorKeys.slice( 0, colorKeys.length - 2 );
-
-    return (
-      <>
-        { excludedColorKeys.map( ( colorKey ) => (
-          <div
-            className="color"
-            key={ colorKey }
-            style={ {
-              backgroundColor: currentPalette.colors[ colorKey ],
-            } }
-          ></div>
-        ) ) }
-      </>
-    );
-  };
-
-  const handlePaletteClick = ( event ) => {
-    const paletteKey = event.currentTarget.getAttribute( 'data-slug' );
-    setPalette( paletteKey );
-  };
 
   return (
-    <div className="ob-palette-selector">
-      <div className="ob-palette-header-wrap">
-        <h3>{ __( 'Typography Palette', 'templates-patterns-collection' ) }</h3>
-        <Button icon={SVG.redo} onClick={() => setPalette('base')} />
+    <div className="ob-control">
+      <div className="header-wrap">
+        <h3>{ __( 'Typography', 'templates-patterns-collection' ) }</h3>
+        <Button icon={SVG.redo} onClick={() => setFont('')} />
+      </div>
+      <div className="container type-fonts">
+      {
+        Object.keys(tiobDash.fontParings).map((slug) => {
+          const { headingFont, bodyFont } = tiobDash.fontParings[slug];
+          const headingStyle = {
+            fontFamily: headingFont.font,
+          };
+          const bodyStyle = {
+            fontFamily: bodyFont.font,
+          };
+
+          return (
+            <Button
+              key={slug}
+              data-slug={slug}
+              className={ classnames( [
+                'font-pair',
+                { active: slug === font },
+              ] ) }
+              style={headingStyle}
+              title={`${headingFont.font} / ${bodyFont.font}`}
+              onClick={ handleFontClick }
+            >
+              Abc
+            </Button>
+          );
+      })}
       </div>
     </div>
   );
