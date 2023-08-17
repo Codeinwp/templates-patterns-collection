@@ -35,6 +35,10 @@ const initialState = {
 	searchQuery: '',
 	license: initialLicense,
 	onboardingStep: 1,
+	importSettings: {
+		palette: 'base',
+		font: '',
+	},
 };
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
@@ -135,6 +139,12 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				onboardingStep: step,
+			};
+		case 'SET_IMPORT_SETTINGS':
+			const { importSettings } = action.payload;
+			return {
+				...state,
+				importSettings,
 			};
 	}
 	return state;

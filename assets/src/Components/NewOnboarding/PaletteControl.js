@@ -8,8 +8,9 @@ import classnames from 'classnames';
 import { get } from '../../utils/rest';
 import SVG from '../../utils/svg';
 
-const PaletteControl = ( { siteData, setPalette, palette } ) => {
+const PaletteControl = ( { siteData, importSettings, handlePaletteChange } ) => {
 	const [ palettes, setPalettes ] = useState( null );
+	const { palette } = importSettings;
 
 	useEffect( () => {
 		const fetchAddress = siteData.url || siteData.remote_url;
@@ -55,7 +56,7 @@ const PaletteControl = ( { siteData, setPalette, palette } ) => {
 
 	const handlePaletteClick = ( event ) => {
 		const paletteKey = event.currentTarget.getAttribute( 'data-slug' );
-		setPalette( paletteKey );
+		handlePaletteChange( paletteKey );
 	};
 
 	return (
@@ -63,7 +64,7 @@ const PaletteControl = ( { siteData, setPalette, palette } ) => {
 		<div className="ob-control">
 			<div className="header-wrap">
 				<h3>{ __( 'Color Palette', 'templates-patterns-collection' ) }</h3>
-				<Button icon={SVG.redo} onClick={() => setPalette('base')} />
+				<Button icon={SVG.redo} onClick={() => handlePaletteChange( 'base' )} />
 			</div>
 			<div className="container type-color">
 			{ palettes &&
@@ -88,17 +89,25 @@ const PaletteControl = ( { siteData, setPalette, palette } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentSite } = select( 'neve-onboarding' );
+		const { getCurrentSite, getImportSettings } = select( 'neve-onboarding' );
 		return {
 			siteData: getCurrentSite(),
+			importSettings: getImportSettings(),
 		};
 	} ),
-	withDispatch( ( dispatch ) => {
-		const { setOnboardingStep } = dispatch( 'neve-onboarding' );
+	withDispatch( ( dispatch, { importSettings } ) => {
+		const { setOnboardingStep, setImportSettings } = dispatch( 'neve-onboarding' );
 		return {
 			handlePrevStepClick: () => {
 				setOnboardingStep( 2 );
 			},
+			handlePaletteChange: ( newPalette ) => {
+				const updatedSettings = {
+					...importSettings,
+					palette: newPalette,
+				};
+				setImportSettings(updatedSettings);
+			}
 		};
 	} )
 )( PaletteControl );

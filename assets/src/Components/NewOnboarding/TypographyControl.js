@@ -8,24 +8,24 @@ import classnames from 'classnames';
 import { get } from '../../utils/rest';
 import SVG from '../../utils/svg';
 
-const TypographyControl = ( { siteData, font, setFont } ) => {
+const TypographyControl = ( { importSettings, handleFontChange } ) => {
+
+  const { font } = importSettings;
 
   const handleFontClick = ( event ) => {
     const fontKey = event.currentTarget.getAttribute( 'data-slug' );
-    setFont( fontKey );
+    handleFontChange( fontKey );
   };
 
   if ( ! tiobDash || ! tiobDash.fontParings ) {
     return ;
   }
 
-  console.log( tiobDash.fontParings );
-
   return (
     <div className="ob-control">
       <div className="header-wrap">
         <h3>{ __( 'Typography', 'templates-patterns-collection' ) }</h3>
-        <Button icon={SVG.redo} onClick={() => setFont('')} />
+        <Button icon={SVG.redo} onClick={() => handleFontChange('')} />
       </div>
       <div className="container type-fonts">
       {
@@ -61,17 +61,21 @@ const TypographyControl = ( { siteData, font, setFont } ) => {
 
 export default compose(
   withSelect( ( select ) => {
-    const { getCurrentSite } = select( 'neve-onboarding' );
+    const { getImportSettings } = select( 'neve-onboarding' );
     return {
-      siteData: getCurrentSite(),
+      importSettings: getImportSettings(),
     };
   } ),
-  withDispatch( ( dispatch ) => {
-    const { setOnboardingStep } = dispatch( 'neve-onboarding' );
+  withDispatch( ( dispatch, { importSettings } ) => {
+    const { setOnboardingStep, setImportSettings } = dispatch( 'neve-onboarding' );
     return {
-      handlePrevStepClick: () => {
-        setOnboardingStep( 2 );
-      },
+      handleFontChange: ( newFont ) => {
+        const updatedSettings = {
+          ...importSettings,
+          font: newFont,
+        };
+        setImportSettings(updatedSettings);
+      }
     };
   } )
 )( TypographyControl );

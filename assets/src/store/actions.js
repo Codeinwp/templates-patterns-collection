@@ -110,4 +110,10 @@ export default {
 			payload: { step },
 		};
 	},
+	setImportSettings( importSettings ) {
+		return {
+			type: 'SET_IMPORT_SETTINGS',
+			payload: { importSettings },
+		};
+	},
 };

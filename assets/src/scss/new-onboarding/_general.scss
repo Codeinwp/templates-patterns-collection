@@ -51,6 +51,9 @@ button.ob-button {
   &.is-primary{
     background: $primary;
   }
+  &.full {
+    width: 100%;
+  }
 }
 
 .ob-container {

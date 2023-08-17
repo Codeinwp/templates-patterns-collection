@@ -9,29 +9,58 @@ import PaletteControl from "./PaletteControl";
 import TypographyControl from "./TypographyControl";
 
 export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
-	const [ palette, setPalette ] = useState( 'base' );
-	const [ font, setFont ] = useState( '' );
-
+	const [ settingsPage, setSettingsPage ] = useState(1);
 	return (
 		<div className="ob-preview-settings">
 			<Button
 				className="back"
 				type="link"
-				onClick={ handlePrevStepClick }
+				onClick={ () => {
+					if ( settingsPage === 2) {
+						setSettingsPage(1);
+					} else {
+						handlePrevStepClick();
+					}
+				} }
 			>
 				{ __( 'Go back', 'templates-patterns-collection' ) }
 			</Button>
-			<h2>
-				{ __( 'Customise design', 'templates-patterns-collection' ) }
-			</h2>
-			<p>
-				{ __(
-					'Customise the design of your site, such as color and typography.',
-					'templates-patterns-collection'
-				) }
-			</p>
-			<PaletteControl palette={ palette } setPalette={ setPalette } />
-			<TypographyControl font={ font } setFont={ setFont } />
+			{ settingsPage === 1 &&
+				<>
+					<h2>
+						{ __( 'Customise design', 'templates-patterns-collection' ) }
+					</h2>
+					<p>
+						{ __(
+							'Customise the design of your site, such as color and typography.',
+							'templates-patterns-collection'
+						) }
+					</p>
+					<PaletteControl />
+					<TypographyControl />
+					<Button
+						isPrimary
+						className="ob-button full"
+						onClick={() => setSettingsPage(2)}
+					>
+						{ __( 'Continue', 'neve' ) }
+					</Button>
+				</>
+			}
+
+			{ settingsPage === 2 &&
+				<>
+					<h2>
+						{ __( 'Site details', 'templates-patterns-collection' ) }
+					</h2>
+					<p>
+						{ __(
+							'Optionally add your business name and logo. You can change these later.',
+							'templates-patterns-collection'
+						) }
+					</p>
+				</>
+			}
 		</div>
 	);
 };
