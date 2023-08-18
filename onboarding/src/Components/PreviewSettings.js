@@ -5,19 +5,19 @@ import { Button } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { get } from '../../../assets/src/utils/rest';
 import { trailingSlashIt } from '../../../assets/src/utils/common';
-import PaletteControl from "./CustomizeControls/PaletteControl";
-import TypographyControl from "./CustomizeControls/TypographyControl";
+import PaletteControl from './CustomizeControls/PaletteControl';
+import TypographyControl from './CustomizeControls/TypographyControl';
 
 export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
-	const [ settingsPage, setSettingsPage ] = useState(1);
+	const [ settingsPage, setSettingsPage ] = useState( 1 );
 	return (
 		<div className="ob-preview-settings">
 			<Button
 				className="back"
 				type="link"
 				onClick={ () => {
-					if ( settingsPage === 2) {
-						setSettingsPage(1);
+					if ( settingsPage === 2 ) {
+						setSettingsPage( 1 );
 					} else {
 						handlePrevStepClick();
 					}
@@ -25,10 +25,13 @@ export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 			>
 				{ __( 'Go back', 'templates-patterns-collection' ) }
 			</Button>
-			{ settingsPage === 1 &&
+			{ settingsPage === 1 && (
 				<>
 					<h2>
-						{ __( 'Customise design', 'templates-patterns-collection' ) }
+						{ __(
+							'Customise design',
+							'templates-patterns-collection'
+						) }
 					</h2>
 					<p>
 						{ __(
@@ -41,17 +44,20 @@ export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 					<Button
 						isPrimary
 						className="ob-button full"
-						onClick={() => setSettingsPage(2)}
+						onClick={ () => setSettingsPage( 2 ) }
 					>
 						{ __( 'Continue', 'neve' ) }
 					</Button>
 				</>
-			}
+			) }
 
-			{ settingsPage === 2 &&
+			{ settingsPage === 2 && (
 				<>
 					<h2>
-						{ __( 'Site details', 'templates-patterns-collection' ) }
+						{ __(
+							'Site details',
+							'templates-patterns-collection'
+						) }
 					</h2>
 					<p>
 						{ __(
@@ -60,7 +66,7 @@ export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 						) }
 					</p>
 				</>
-			}
+			) }
 		</div>
 	);
 };

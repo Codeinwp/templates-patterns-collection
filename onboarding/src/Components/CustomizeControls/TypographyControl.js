@@ -4,6 +4,7 @@ import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
 import classnames from 'classnames';
 import SVG from '../../utils/svg';
+import { sendPostMessage } from '../../utils/common';
 
 const TypographyControl = ( { importSettings, handleFontChange } ) => {
 	const { font } = importSettings;
@@ -75,6 +76,10 @@ export default compose(
 					font: newFont,
 				};
 				setImportSettings( updatedSettings );
+				sendPostMessage( {
+					type: 'styleChange',
+					data: updatedSettings,
+				} );
 			},
 		};
 	} )

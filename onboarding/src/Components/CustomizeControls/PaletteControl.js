@@ -60,10 +60,6 @@ const PaletteControl = ( {
 
 	const handlePaletteClick = ( event ) => {
 		const paletteKey = event.currentTarget.getAttribute( 'data-slug' );
-		sendPostMessage( {
-			param: 'colorPalette',
-			data: paletteKey,
-		} );
 		handlePaletteChange( paletteKey );
 	};
 
@@ -128,6 +124,10 @@ export default compose(
 					palette: newPalette,
 				};
 				setImportSettings( updatedSettings );
+				sendPostMessage( {
+					type: 'styleChange',
+					data: updatedSettings,
+				} );
 			},
 		};
 	} )

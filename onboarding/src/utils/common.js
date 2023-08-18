@@ -95,7 +95,6 @@ const sendPostMessage = ( data ) => {
 		return;
 	}
 
-	console.log( frame.contentWindow );
 	frame.contentWindow.postMessage(
 		{
 			call: 'starterTemplatePreviewDispatch',

@@ -453,6 +453,18 @@ class Admin {
 			wp_localize_script( 'tiobObd', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
 			wp_enqueue_script( 'tiobObd' );
 
+			if ( ! empty( $this->google_fonts ) ) {
+				$font_chunks = array_chunk( $this->google_fonts, absint( count( $this->google_fonts ) / 5 ) );
+				foreach ( $font_chunks as $index => $fonts_chunk ) {
+					wp_enqueue_style(
+						'tiob-google-fonts-' . $index,
+						'https://fonts.googleapis.com/css?family=' . join( '|', $fonts_chunk ) . '&display=swap"',
+						[],
+						$onboarding_dependencies['version']
+					);
+				}
+			}
+
 		}
 
 		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false ) {
@@ -473,18 +485,6 @@ class Admin {
 		wp_register_script( 'tiob', TIOB_URL . 'assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates' ) ), $dependencies['version'], true );
 		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
 		wp_enqueue_script( 'tiob' );
-
-		if ( ! empty( $this->google_fonts ) ) {
-			$font_chunks = array_chunk( $this->google_fonts, absint( count( $this->google_fonts ) / 5 ) );
-			foreach ( $font_chunks as $index => $fonts_chunk ) {
-				wp_enqueue_style(
-					'tiob-google-fonts-' . $index,
-					'https://fonts.googleapis.com/css?family=' . join( '|', $fonts_chunk ) . '&display=swap"',
-					[],
-					$dependencies['version']
-				);
-			}
-		}
 	}
 
 	/**
@@ -632,8 +632,6 @@ class Admin {
 
 	/**
 	 * Get font parings
-	 *
-	 * @return array
 	 */
 	private function get_font_parings() {
 		if ( ! class_exists( '\Neve\Core\Settings\Mods', false ) ) {
