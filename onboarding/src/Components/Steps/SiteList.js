@@ -1,10 +1,10 @@
 import { __ } from '@wordpress/i18n';
-import Filters from './Filters';
-import Sites from './Sites';
-import EditorSelector from './EditorSelector';
+import Filters from '../Filters';
+import Sites from '../Sites';
+import EditorSelector from '../EditorSelector';
 import { EDITOR_MAP } from '../../utils/common';
 
-const StepTwo = () => {
+const SiteList = () => {
 	return (
 		<div className="ob-container wide">
 			<div className="ob-title-wrap">
@@ -19,4 +19,4 @@ const StepTwo = () => {
 	);
 };
 
-export default StepTwo;
+export default SiteList;

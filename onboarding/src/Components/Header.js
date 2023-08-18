@@ -2,7 +2,7 @@ import { withDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Tooltip, Button } from '@wordpress/components';
 
-import SVG from '../../utils/svg';
+import SVG from '../utils/svg';
 
 const Header = ( { handleLogoClick } ) => {
 	return (
@@ -16,7 +16,7 @@ const Header = ( { handleLogoClick } ) => {
 };
 
 export default withDispatch( ( dispatch ) => {
-	const { setOnboardingStep } = dispatch( 'neve-onboarding' );
+	const { setOnboardingStep } = dispatch( 'ti-onboarding' );
 	return {
 		handleLogoClick: () => {
 			setOnboardingStep( 1 );

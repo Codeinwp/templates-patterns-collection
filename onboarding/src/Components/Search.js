@@ -1,7 +1,7 @@
 import { Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
-import SVG from '../../utils/svg';
+import SVG from '../utils/svg';
 
 const Search = ( { onSearch, onSubmit, query } ) => {
 	const handleSubmit = ( e ) => {
@@ -30,13 +30,13 @@ const Search = ( { onSearch, onSubmit, query } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getSearchQuery } = select( 'neve-onboarding' );
+		const { getSearchQuery } = select( 'ti-onboarding' );
 		return {
 			query: getSearchQuery(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { setSearchQuery } = dispatch( 'neve-onboarding' );
+		const { setSearchQuery } = dispatch( 'ti-onboarding' );
 		return {
 			onSearch: ( query ) => setSearchQuery( query ),
 		};

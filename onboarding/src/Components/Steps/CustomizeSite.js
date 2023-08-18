@@ -2,9 +2,9 @@ import { withSelect, withDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import { Button, Dashicon } from '@wordpress/components';
-import PreviewSettings from './PreviewSettings';
+import PreviewSettings from '../PreviewSettings';
 
-const StepThree = ( { siteData } ) => {
+const CustomizeSite = ( { siteData } ) => {
 	const [ showPanel, setShowPanel ] = useState( true );
 
 	const togglePanel = () => {
@@ -20,10 +20,11 @@ const StepThree = ( { siteData } ) => {
 				}` }
 			>
 				<iframe
-					id="iframe-id"
+					id="ti-ss-preview"
 					className="iframe"
 					title="Your Iframe"
-					src={ siteData.url }
+					// src={ siteData.url }
+					src="https://neve.test"
 				></iframe>
 			</div>
 		</div>
@@ -32,7 +33,7 @@ const StepThree = ( { siteData } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentSite } = select( 'neve-onboarding' );
+		const { getCurrentSite } = select( 'ti-onboarding' );
 		return {
 			siteData: getCurrentSite(),
 		};
@@ -42,11 +43,11 @@ export default compose(
 			setCurrentSite,
 			setPreviewStatus,
 			setImportModalStatus,
-		} = dispatch( 'neve-onboarding' );
+		} = dispatch( 'ti-onboarding' );
 		return {
 			setSite: ( data ) => setCurrentSite( data ),
 			setPreview: ( status ) => setPreviewStatus( status ),
 			setModal: ( status ) => setImportModalStatus( status ),
 		};
 	} )
-)( StepThree );
+)( CustomizeSite );

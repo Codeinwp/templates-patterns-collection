@@ -375,6 +375,21 @@ class Admin {
 		}
 		$this->add_theme_page_for_tiob( $starter_site_data );
 
+		$onboarding_data = array(
+			'page_title' => __( 'Onboarding', 'templates-patterns-collection' ),
+			'menu_title' => $prefix . __( 'Onboarding', 'templates-patterns-collection' ),
+			'capability' => 'activate_plugins',
+			'menu_slug'  => 'neve-onboarding',
+			'callback'   => array(
+				$this,
+				'render_onboarding',
+			),
+		);
+		$is_new_user = true; // TODO: Actually check for new user
+		if ( $is_new_user ) {
+			$this->add_theme_page_for_tiob( $onboarding_data );
+		}
+
 		if ( $this->is_library_disabled() ) {
 			return false;
 		}
@@ -412,10 +427,32 @@ class Admin {
 		echo '<div id="tpc-app"/>';
 	}
 
+	/**
+	 * Render method for the onboarding page.
+	 */
+	public function render_onboarding() {
+		echo '<div id="ti-app"/>';
+	}
+
 	public function enqueue() {
 		$screen = get_current_screen();
 		if ( ! isset( $screen->id ) ) {
 			return;
+		}
+
+		// TODO: Check if new user.
+		if ( strpos( $screen->id, '_page_neve-onboarding' ) ) {
+
+			$onboarding_dependencies = ( include TIOB_PATH . 'onboarding/build/index.asset.php' );
+
+			wp_register_style( 'tiobObd', TIOB_URL . 'onboarding/build/style-index.css', array( 'wp-components' ), $onboarding_dependencies['version'] );
+			wp_style_add_data( 'tiobObd', 'rtl', 'replace' );
+			wp_enqueue_style( 'tiobObd' );
+
+			wp_register_script( 'tiobObd', TIOB_URL . 'onboarding/build/index.js', array_merge( $onboarding_dependencies['dependencies'], array( 'updates' ) ), $onboarding_dependencies['version'], true );
+			wp_localize_script( 'tiobObd', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
+			wp_enqueue_script( 'tiobObd' );
+
 		}
 
 		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false ) {

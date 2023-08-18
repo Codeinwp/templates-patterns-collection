@@ -1,5 +1,4 @@
 import { useState } from '@wordpress/element';
-import { compose } from '@wordpress/compose';
 import { withSelect } from '@wordpress/data';
 import StarterSiteCard from './StarterSiteCard';
 import VizSensor from 'react-visibility-sensor';
@@ -84,19 +83,17 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 	);
 };
 
-export default compose(
-	withSelect( ( select ) => {
-		const {
-			getCurrentEditor,
-			getCurrentCategory,
-			getSites,
-			getSearchQuery,
-		} = select( 'neve-onboarding' );
-		return {
-			editor: getCurrentEditor(),
-			category: getCurrentCategory(),
-			searchQuery: getSearchQuery(),
-			getSites: getSites(),
-		};
-	} )
-)( Sites );
+export default withSelect( ( select ) => {
+	const {
+		getCurrentEditor,
+		getCurrentCategory,
+		getSites,
+		getSearchQuery,
+	} = select( 'ti-onboarding' );
+	return {
+		editor: getCurrentEditor(),
+		category: getCurrentCategory(),
+		searchQuery: getSearchQuery(),
+		getSites: getSites(),
+	};
+} )( Sites );

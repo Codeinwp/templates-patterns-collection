@@ -46,7 +46,7 @@ const StarterSiteCard = ( { data, setSite, handleNextStep } ) => {
 };
 
 export default withDispatch( ( dispatch, { data } ) => {
-	const { setCurrentSite, setOnboardingStep } = dispatch( 'neve-onboarding' );
+	const { setCurrentSite, setOnboardingStep } = dispatch( 'ti-onboarding' );
 	return {
 		setSite: () => setCurrentSite( data ),
 		handleNextStep: () => setOnboardingStep( 3 ),

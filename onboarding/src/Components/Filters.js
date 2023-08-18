@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import Search from './Search';
 import CategoryButtons from './CategoryButtons';
-import { ONBOARDING_CAT } from '../../utils/common';
+import { ONBOARDING_CAT } from '../utils/common';
 
 const categories = {
 	all: __( 'All', 'templates-patterns-collection' ),

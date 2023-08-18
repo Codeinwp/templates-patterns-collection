@@ -38,13 +38,13 @@ const CategoryButtons = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentCategory } = select( 'neve-onboarding' );
+		const { getCurrentCategory } = select( 'ti-onboarding' );
 		return {
 			category: getCurrentCategory(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { setCurrentCategory } = dispatch( 'neve-onboarding' );
+		const { setCurrentCategory } = dispatch( 'ti-onboarding' );
 		return {
 			setCurrentCategory: ( category ) => {
 				setCurrentCategory( category );

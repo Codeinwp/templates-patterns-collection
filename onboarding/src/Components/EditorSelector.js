@@ -79,14 +79,14 @@ const EditorSelector = ( { EDITOR_MAP, editor, setCurrentEditor, sites } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentEditor, getSites } = select( 'neve-onboarding' );
+		const { getCurrentEditor, getSites } = select( 'ti-onboarding' );
 		return {
 			editor: getCurrentEditor(),
 			sites: getSites().sites,
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { setCurrentEditor } = dispatch( 'neve-onboarding' );
+		const { setCurrentEditor } = dispatch( 'ti-onboarding' );
 		return {
 			setCurrentEditor: ( editor ) => setCurrentEditor( editor ),
 		};

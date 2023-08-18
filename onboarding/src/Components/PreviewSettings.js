@@ -3,10 +3,10 @@ import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
-import { get } from '../../utils/rest';
-import { trailingSlashIt } from '../../utils/common';
-import PaletteControl from "./PaletteControl";
-import TypographyControl from "./TypographyControl";
+import { get } from '../../../assets/src/utils/rest';
+import { trailingSlashIt } from '../../../assets/src/utils/common';
+import PaletteControl from "./CustomizeControls/PaletteControl";
+import TypographyControl from "./CustomizeControls/TypographyControl";
 
 export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 	const [ settingsPage, setSettingsPage ] = useState(1);
@@ -67,13 +67,13 @@ export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentSite } = select( 'neve-onboarding' );
+		const { getCurrentSite } = select( 'ti-onboarding' );
 		return {
 			siteData: getCurrentSite(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { setOnboardingStep } = dispatch( 'neve-onboarding' );
+		const { setOnboardingStep } = dispatch( 'ti-onboarding' );
 		return {
 			handlePrevStepClick: () => {
 				setOnboardingStep( 2 );

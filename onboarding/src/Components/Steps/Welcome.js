@@ -1,10 +1,10 @@
 import { __ } from '@wordpress/i18n';
 import { withDispatch } from '@wordpress/data';
-import CategoryButtons from './CategoryButtons';
-import Search from './Search';
+import CategoryButtons from '../CategoryButtons';
+import Search from '../Search';
 import { ONBOARDING_CAT } from '../../utils/common';
 
-const StepOne = ( { handleNextStep } ) => {
+const Welcome = ( { handleNextStep } ) => {
 	return (
 		<div className="ob-container narrow">
 			<h1>
@@ -38,10 +38,10 @@ const StepOne = ( { handleNextStep } ) => {
 };
 
 export default withDispatch( ( dispatch ) => {
-	const { setOnboardingStep } = dispatch( 'neve-onboarding' );
+	const { setOnboardingStep } = dispatch( 'ti-onboarding' );
 	return {
 		handleNextStep: () => {
 			setOnboardingStep( 2 );
 		},
 	};
-} )( StepOne );
+} )( Welcome );

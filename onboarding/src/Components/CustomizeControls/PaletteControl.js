@@ -1,14 +1,18 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
-import { trailingSlashIt } from '../../utils/common';
+import { trailingSlashIt, sendPostMessage } from '../../utils/common';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
 import classnames from 'classnames';
-import { get } from '../../utils/rest';
+import { get } from '../../../../assets/src/utils/rest';
 import SVG from '../../utils/svg';
 
-const PaletteControl = ( { siteData, importSettings, handlePaletteChange } ) => {
+const PaletteControl = ( {
+	siteData,
+	importSettings,
+	handlePaletteChange,
+} ) => {
 	const [ palettes, setPalettes ] = useState( null );
 	const { palette } = importSettings;
 
@@ -56,47 +60,64 @@ const PaletteControl = ( { siteData, importSettings, handlePaletteChange } ) => 
 
 	const handlePaletteClick = ( event ) => {
 		const paletteKey = event.currentTarget.getAttribute( 'data-slug' );
+		sendPostMessage( {
+			param: 'colorPalette',
+			data: paletteKey,
+		} );
 		handlePaletteChange( paletteKey );
 	};
 
 	return (
-		palettes &&
-		<div className="ob-control">
-			<div className="header-wrap">
-				<h3>{ __( 'Color Palette', 'templates-patterns-collection' ) }</h3>
-				<Button icon={SVG.redo} onClick={() => handlePaletteChange( 'base' )} />
+		palettes && (
+			<div className="ob-control">
+				<div className="header-wrap">
+					<h3>
+						{ __(
+							'Color Palette',
+							'templates-patterns-collection'
+						) }
+					</h3>
+					<Button
+						icon={ SVG.redo }
+						onClick={ () => handlePaletteChange( 'base' ) }
+					/>
+				</div>
+				<div className="container type-color">
+					{ palettes &&
+						Object.keys( palettes ).map( ( paletteKey ) => (
+							<button
+								className={ classnames( [
+									'palette',
+									{ active: paletteKey === palette },
+								] ) }
+								title={ palettes[ paletteKey ].name }
+								data-slug={ paletteKey }
+								key={ paletteKey }
+								onClick={ handlePaletteClick }
+							>
+								{ renderColorDivs( palettes[ paletteKey ] ) }
+							</button>
+						) ) }
+				</div>
 			</div>
-			<div className="container type-color">
-			{ palettes &&
-				Object.keys( palettes ).map( ( paletteKey ) => (
-					<button
-						className={ classnames( [
-							'palette',
-							{ active: paletteKey === palette },
-						] ) }
-						title={ palettes[ paletteKey ].name }
-						data-slug={ paletteKey }
-						key={ paletteKey }
-						onClick={ handlePaletteClick }
-					>
-						{ renderColorDivs( palettes[ paletteKey ] ) }
-					</button>
-				) ) }
-			</div>
-		</div>
+		)
 	);
 };
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentSite, getImportSettings } = select( 'neve-onboarding' );
+		const { getCurrentSite, getImportSettings } = select(
+			'ti-onboarding'
+		);
 		return {
 			siteData: getCurrentSite(),
 			importSettings: getImportSettings(),
 		};
 	} ),
 	withDispatch( ( dispatch, { importSettings } ) => {
-		const { setOnboardingStep, setImportSettings } = dispatch( 'neve-onboarding' );
+		const { setOnboardingStep, setImportSettings } = dispatch(
+			'ti-onboarding'
+		);
 		return {
 			handlePrevStepClick: () => {
 				setOnboardingStep( 2 );
@@ -106,8 +127,8 @@ export default compose(
 					...importSettings,
 					palette: newPalette,
 				};
-				setImportSettings(updatedSettings);
-			}
+				setImportSettings( updatedSettings );
+			},
 		};
 	} )
 )( PaletteControl );
