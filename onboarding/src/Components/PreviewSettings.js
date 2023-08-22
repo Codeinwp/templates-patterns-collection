@@ -2,14 +2,15 @@ import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
-import { get } from '../../../assets/src/utils/rest';
-import { trailingSlashIt } from '../../../assets/src/utils/common';
+import { useState } from '@wordpress/element';
 import PaletteControl from './CustomizeControls/PaletteControl';
 import TypographyControl from './CustomizeControls/TypographyControl';
+import SiteNameControl from './CustomizeControls/SiteNameControl';
+import LogoControl from "./CustomizeControls/LogoControl";
 
-export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
+export const PreviewSettings = ( { handlePrevStepClick, isProUser } ) => {
 	const [ settingsPage, setSettingsPage ] = useState( 1 );
+
 	return (
 		<div className="ob-preview-settings">
 			<Button
@@ -51,7 +52,7 @@ export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 				</>
 			) }
 
-			{ settingsPage === 2 && (
+			{ settingsPage === 2 && isProUser && (
 				<>
 					<h2>
 						{ __(
@@ -65,6 +66,8 @@ export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 							'templates-patterns-collection'
 						) }
 					</p>
+					<SiteNameControl />
+					<LogoControl />
 				</>
 			) }
 		</div>
@@ -73,9 +76,9 @@ export const PreviewSettings = ( { handlePrevStepClick, siteData } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentSite } = select( 'ti-onboarding' );
+		const { getUserStatus } = select( 'ti-onboarding' );
 		return {
-			siteData: getCurrentSite(),
+			isProUser: getUserStatus(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {

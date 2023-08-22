@@ -37,6 +37,13 @@ const initialState = {
 	importSettings: {
 		palette: 'base',
 		font: '',
+		siteName: '',
+		siteLogo: {
+			id: '',
+			thumbnail: '',
+			url: '',
+			width: 120,
+		},
 	},
 };
 export default ( state = initialState, action ) => {

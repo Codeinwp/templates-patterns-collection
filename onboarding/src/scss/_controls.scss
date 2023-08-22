@@ -65,4 +65,44 @@
     height: 60px;
     justify-content: center;
   }
+
+  input[type="text"] {
+    border-radius: 6px;
+    border: 1px solid $light-border;
+    font-weight: 400;
+    font-size:16px;
+    line-height: 39px;
+    color: $light-text-1;
+  }
+
+  .ob-media-controls{
+    position: relative;
+    margin-bottom: 12px;
+    input {
+      padding-right: 77px;
+      width: 100%;
+      line-height: 55px;
+    }
+    button {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      text-decoration: none;
+    }
+  }
+
+  .ob-media-preview{
+    border: 1px dashed #8D8D8D;
+    border-radius: 8px;
+    min-height: 56px;
+    outline: none;
+    &.active {
+      border: none;
+      border-radius: 0;
+    }
+    img {
+      width: 100%;
+    }
+  }
 }

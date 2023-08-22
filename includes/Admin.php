@@ -443,6 +443,8 @@ class Admin {
 		// TODO: Check if new user.
 		if ( strpos( $screen->id, '_page_neve-onboarding' ) ) {
 
+			wp_enqueue_media();
+
 			$onboarding_dependencies = ( include TIOB_PATH . 'onboarding/build/index.asset.php' );
 
 			wp_register_style( 'tiobObd', TIOB_URL . 'onboarding/build/style-index.css', array( 'wp-components' ), $onboarding_dependencies['version'] );

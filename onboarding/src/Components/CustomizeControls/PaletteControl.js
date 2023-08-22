@@ -102,9 +102,7 @@ const PaletteControl = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentSite, getImportSettings } = select(
-			'ti-onboarding'
-		);
+		const { getCurrentSite, getImportSettings } = select( 'ti-onboarding' );
 		return {
 			siteData: getCurrentSite(),
 			importSettings: getImportSettings(),
