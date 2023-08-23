@@ -104,16 +104,4 @@ export default {
 			payload: { license },
 		};
 	},
-	setOnboardingStep( step ) {
-		return {
-			type: 'SET_ONBOARDING_STEP',
-			payload: { step },
-		};
-	},
-	setImportSettings( importSettings ) {
-		return {
-			type: 'SET_IMPORT_SETTINGS',
-			payload: { importSettings },
-		};
-	},
 };

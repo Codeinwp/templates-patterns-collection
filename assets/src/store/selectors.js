@@ -42,6 +42,4 @@ export default {
 	getLicense: ( state ) => {
 		return state.license;
 	},
-	getCurrentStep: ( state ) => state.onboardingStep,
-	getImportSettings: ( state ) => state.importSettings,
 };

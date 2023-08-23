@@ -43,14 +43,6 @@ const CATEGORIES = {
 	other: __( 'Other', 'templates-patterns-collection' ),
 };
 
-const ONBOARDING_CAT = {
-	business: __( 'Business', 'templates-patterns-collection' ),
-	personal: __( 'Personal', 'templates-patterns-collection' ),
-	blog: __( 'Blogging', 'templates-patterns-collection' ),
-	portfolio: __( 'Portfolio', 'templates-patterns-collection' ),
-	woocommerce: __( 'E-Shop', 'templates-patterns-collection' ),
-};
-
 const EDITOR_MAP = {
 	gutenberg: {
 		icon: 'gutenberg.jpg',
@@ -89,4 +81,4 @@ const EDITOR_MAP_ARCHIVED = {
 	},
 };
 
-export { addUrlHash, getTabHash, trailingSlashIt, untrailingSlashIt, isTabbedEditor, CATEGORIES, EDITOR_MAP, EDITOR_MAP_ARCHIVED, TAGS, ONBOARDING_CAT };
+export { addUrlHash, getTabHash, trailingSlashIt, untrailingSlashIt, isTabbedEditor, CATEGORIES, EDITOR_MAP, EDITOR_MAP_ARCHIVED, TAGS };
