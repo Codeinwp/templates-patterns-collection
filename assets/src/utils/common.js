@@ -42,7 +42,6 @@ const CATEGORIES = {
 	personal: __( 'Personal', 'templates-patterns-collection' ),
 	other: __( 'Other', 'templates-patterns-collection' ),
 };
-
 const EDITOR_MAP = {
 	gutenberg: {
 		icon: 'gutenberg.jpg',
