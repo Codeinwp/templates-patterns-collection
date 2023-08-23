@@ -10,6 +10,7 @@
   right: 0;
   z-index: 100000;
   background: #fff;
+  overflow: auto;
 }
 
 h1 {
@@ -60,7 +61,6 @@ button.ob-button {
   justify-content: center;
   flex-direction: column;
   display: flex;
-  overflow: scroll;
   height: calc(100vh - 61px);
   &.row {
     flex-direction: row;

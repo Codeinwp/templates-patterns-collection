@@ -42,8 +42,8 @@
     cursor: pointer;
 
     .color {
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       border: 1px solid $light-border;
       border-radius: 50%;
     }
@@ -104,5 +104,34 @@
     img {
       width: 100%;
     }
+  }
+}
+
+
+
+
+
+.site-options-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  height: 36px;
+  background: #fff;
+  overflow: hidden;
+  transition-property: height, top, padding;
+  transition-duration: .3s;
+  transition-timing-function:linear;
+  padding: 0;
+  .site-options-toggle{
+    width: 100%;
+    font-size: 16px;
+    padding: 29px 24px;
+    margin-bottom: 10px;
+  }
+  &.is-opened {
+    padding: 24px;
+    overflow: auto;
+    top: 50px;
+    height: calc( 100% - 110px );
   }
 }

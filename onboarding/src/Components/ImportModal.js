@@ -30,7 +30,6 @@ import { compose } from '@wordpress/compose';
 import {
 	Button,
 	Icon,
-	Modal,
 	Panel,
 	PanelBody,
 	PanelRow,
@@ -44,7 +43,6 @@ const ImportModal = ( {
 	editor,
 	siteData,
 	themeData,
-	runTemplateImport,
 } ) => {
 	const [ general, setGeneral ] = useState( {
 		content: true,
@@ -158,16 +156,6 @@ const ImportModal = ( {
 		);
 	};
 
-	const ModalHead = () => (
-		<div className="header">
-			<p className="description">
-				{ __(
-					'Import the entire site including customizer options, pages, content and plugins.',
-					'templates-patterns-collection'
-				) }
-			</p>
-		</div>
-	);
 	const Theme = () => {
 		const toggleOpen = () => {
 			setThemeOpened( ! themeOpened );
@@ -829,7 +817,7 @@ const ImportModal = ( {
 	}
 
 	return (
-		<Modal
+		<div
 			className={ classnames( [ 'ob-import-modal', { fetching } ] ) }
 			onRequestClose={ closeModal }
 			shouldCloseOnClickOutside={ ! importing && ! fetching }
@@ -843,7 +831,6 @@ const ImportModal = ( {
 					<div className="modal-body">
 						{ ! importing && 'done' !== currentStep && ! error ? (
 							<>
-								<ModalHead />
 								<Note />
 								<Panel className="modal-toggles">
 									{ themeData !== false && <Theme /> }
@@ -913,16 +900,6 @@ const ImportModal = ( {
 						<div className="modal-footer">
 							{ 'done' !== currentStep ? (
 								<>
-									<Button
-										className="import-templates"
-										isLink
-										onClick={ runTemplateImport }
-									>
-										{ __(
-											'I want to import just the templates',
-											'templates-patterns-collection'
-										) }
-									</Button>
 									{ ! error && (
 										<Button
 											className="import"
@@ -969,14 +946,14 @@ const ImportModal = ( {
 					) }
 				</>
 			) }
-		</Modal>
+		</div>
 	);
 };
 
 export default compose(
 	withSelect( ( select ) => {
 		const { getCurrentEditor, getCurrentSite, getThemeAction } = select(
-			'neve-onboarding'
+			'ti-onboarding'
 		);
 		return {
 			editor: getCurrentEditor(),
@@ -986,22 +963,14 @@ export default compose(
 	} ),
 	withDispatch( ( dispatch, { siteData } ) => {
 		const {
-			setTemplateModal,
-			setSingleTemplateImport,
 			setImportModalStatus,
 			setThemeAction,
-		} = dispatch( 'neve-onboarding' );
+		} = dispatch( 'ti-onboarding' );
 
-		const runTemplateImport = () => {
-			setSingleTemplateImport( siteData.slug );
-			setTemplateModal( true );
-			setImportModalStatus( false );
-		};
 
 		return {
 			setModal: ( status ) => setImportModalStatus( status ),
 			setThemeAction: ( status ) => setThemeAction( status ),
-			runTemplateImport,
 		};
 	} )
 )( ImportModal );

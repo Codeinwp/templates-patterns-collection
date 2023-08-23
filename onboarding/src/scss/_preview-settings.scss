@@ -1,8 +1,9 @@
 .ob-preview-settings {
-  width: 275px;
+  position: relative;
+  width: 287px;
   transition: width 0.3s ease;
   z-index: 2;
-  overflow: scroll;
+  overflow: auto;
   padding: 45px 24px;
   &.retracted {
     width: 0;
@@ -14,5 +15,15 @@
     font-weight: 400;
     margin-bottom: 11px;
     padding: 0;
+  }
+
+  .ob-settings-wrap{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: calc( 100% - 50px );
+  }
+  .ob-settings-bottom{
+    padding-top: 62px;
   }
 }
