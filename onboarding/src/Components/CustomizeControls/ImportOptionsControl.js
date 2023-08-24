@@ -65,7 +65,7 @@ const ImportOptionsControl = ( { isCleanupAllowed, themeData } ) => {
 		},
 		performanceAddon: {
 			title: __(
-				'Enable performance features for my site',
+				'Performance features',
 				'templates-patterns-collection'
 			),
 			icon: 'dashboard',
@@ -149,8 +149,41 @@ const ImportOptionsControl = ( { isCleanupAllowed, themeData } ) => {
 							optionsOpened ? { height: divHeight + 'px' } : {}
 						}
 					>
-						Tesst
+						{ Object.keys( map ).map( ( id, index ) => {
+							const rowClass = classnames( 'ob-option-row', {
+								active: general[ id ],
+							} );
+							const { icon, title, tooltip } = map[ id ];
+
+							return (
+								<div className={ rowClass } key={ index }>
+									<div className="ob-option-name">
+										<Icon icon={ icon } />
+										<span>{ title }</span>
+										{ tooltip && (
+											<CustomTooltip>
+												{ tooltip }
+											</CustomTooltip>
+										) }
+									</div>
+									{ id !== 'theme_install' && (
+										<div className="ob-toggle-wrapper">
+											<ToggleControl
+												checked={ general[ id ] }
+												onChange={ () => {
+													setGeneral( {
+														...general,
+														[ id ]: ! general[ id ],
+													} );
+												} }
+											/>
+										</div>
+									) }
+								</div>
+							);
+						} ) }
 					</div>
+					<div className="ob-import-plugins"></div>
 				</div>
 			</div>
 		</>

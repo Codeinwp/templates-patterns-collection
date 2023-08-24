@@ -151,11 +151,36 @@
     justify-content: space-between;
     flex-direction: row-reverse;
   }
+}
 
-  .ob-import-options-wrap {
-    height: 0;
-    overflow: hidden;
-    transition: all 0.5s ease-in-out;
-    margin-top: 32px;
+.ob-import-options-wrap {
+  height: 0;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+  margin-top: 32px;
+}
+
+.ob-option-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid #E5E5E5;
+  align-items: center;
+  &:last-child {
+    border: none;
   }
+}
+
+.ob-option-name {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  font-size: 14px;
+  line-height: 28px;
+  align-items: center;
+  gap: 10px;
+}
+
+.ob-toggle-wrapper > div {
+  margin-bottom: 0;
 }

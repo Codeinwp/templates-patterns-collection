@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { Button, Dashicon, Popover } from '@wordpress/components';
