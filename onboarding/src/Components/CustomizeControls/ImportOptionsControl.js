@@ -9,9 +9,23 @@ import classnames from 'classnames';
 import CustomTooltip from '../CustomTooltip';
 import { Icon, Button, ToggleControl } from '@wordpress/components';
 
-const ImportOptionsControl = ( { isCleanupAllowed, themeData } ) => {
+const ImportOptionsControl = ( {
+	isCleanupAllowed,
+	themeData,
+	importData,
+} ) => {
 	const [ optionsOpened, setOptionsOpened ] = useState( false );
 	const [ divHeight, setDivHeight ] = useState( 0 );
+	const allPlugins = {
+		...( importData.recommended_plugins || {} ),
+		...( importData.mandatory_plugins || {} ),
+	};
+
+	const pluginsList = Object.keys( allPlugins )
+		.map( ( slug ) => {
+			return allPlugins[ slug ];
+		} )
+		.join( ', ' );
 
 	const updateDivHeight = () => {
 		const element = document.querySelector( '.ob-settings-wrap' );
@@ -182,8 +196,28 @@ const ImportOptionsControl = ( { isCleanupAllowed, themeData } ) => {
 								</div>
 							);
 						} ) }
+						{ allPlugins && (
+							<div className="ob-import-plugins">
+								<h2>
+									{ __(
+										'Plugins',
+										'templates-pattern-collection'
+									) }
+								</h2>
+								<p>
+									{ __(
+										'The following plugins are required for this Starter Site in order to work properly: ',
+										'templates-pattern-collection'
+									) }
+									<span
+										dangerouslySetInnerHTML={ {
+											__html: pluginsList,
+										} }
+									/>
+								</p>
+							</div>
+						) }
 					</div>
-					<div className="ob-import-plugins"></div>
 				</div>
 			</div>
 		</>

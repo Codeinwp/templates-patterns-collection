@@ -3,16 +3,90 @@ import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import PaletteControl from './CustomizeControls/PaletteControl';
 import TypographyControl from './CustomizeControls/TypographyControl';
 import SiteNameControl from './CustomizeControls/SiteNameControl';
 import LogoControl from './CustomizeControls/LogoControl';
 import ImportOptionsControl from './CustomizeControls/ImportOptionsControl';
+import { trailingSlashIt } from '../utils/common';
+import { get } from '../utils/rest';
 
-export const SiteSettings = ( { handlePrevStepClick, isProUser } ) => {
+export const SiteSettings = ( {
+	handlePrevStepClick,
+	isProUser,
+	siteData,
+} ) => {
 	const [ settingsPage, setSettingsPage ] = useState( 1 );
-	const { cleanupAllowed } = tiobDash;
+	const { license, cleanupAllowed } = tiobDash;
+	const [ error, setError ] = useState( null );
+	const [ fetching, setFetching ] = useState( true );
+	const [ importData, setImportData ] = useState( null );
+	const [ pluginOptions, setPluginOptions ] = useState( {} );
+
+	useEffect( () => {
+		// const fetchAddress = siteData.remote_url || siteData.url;
+		// Use the line below if testing in a staging env:
+		const fetchAddress = siteData.url || siteData.remote_url;
+		const url = new URL(
+			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
+		);
+		url.searchParams.append( 'license', license ? license.key : 'free' );
+		url.searchParams.append( 'ti_downloads', 'yes' );
+		get( url, true, false )
+			.then( ( response ) => {
+				if ( ! response.ok ) {
+					setError( {
+						message: __(
+							'Something went wrong while loading the site data. Please refresh the page and try again.',
+							'templates-patterns-collection'
+						),
+						code: 'ti__ob_failed_fetch_response',
+					} );
+					setFetching( false );
+				}
+				response.json().then( ( result ) => {
+					setImportData( { ...result, ...siteData } );
+					const mandatory = {
+						...( result.mandatory_plugins || {} ),
+					};
+					const optional = {
+						...( result.recommended_plugins || {} ),
+					};
+					const defaultOff =
+						result.default_off_recommended_plugins || [];
+
+					const tiDownloads = {
+						...( result.ti_downloads || {} ),
+					};
+
+					Object.keys( mandatory ).forEach( ( key ) => {
+						mandatory[ key ] = true;
+					} );
+					Object.keys( optional ).forEach( ( key ) => {
+						optional[ key ] = ! defaultOff.includes( key );
+					} );
+
+					setPluginOptions( {
+						...optional,
+						...mandatory,
+						...tiDownloads,
+					} );
+
+					setFetching( false );
+				} );
+			} )
+			.catch( () => {
+				setError( {
+					message: __(
+						'Something went wrong while loading the site data. Please refresh the page and try again.',
+						'templates-patterns-collection'
+					),
+					code: 'ti__ob_failed_fetch_catch',
+				} );
+				setFetching( false );
+			} );
+	}, [] );
 
 	return (
 		<div className="ob-site-settings">
@@ -81,7 +155,10 @@ export const SiteSettings = ( { handlePrevStepClick, isProUser } ) => {
 						</Button>
 					) }
 					{ settingsPage === 2 && (
-						<ImportOptionsControl isCleanupAllowed={ cleanupAllowed } />
+						<ImportOptionsControl
+							isCleanupAllowed={ cleanupAllowed }
+							importData={ importData }
+						/>
 					) }
 				</div>
 			</div>
@@ -91,9 +168,10 @@ export const SiteSettings = ( { handlePrevStepClick, isProUser } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getUserStatus } = select( 'ti-onboarding' );
+		const { getUserStatus, getCurrentSite } = select( 'ti-onboarding' );
 		return {
 			isProUser: getUserStatus(),
+			siteData: getCurrentSite(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
