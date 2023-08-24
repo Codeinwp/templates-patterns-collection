@@ -18,9 +18,15 @@ const SiteNameControl = ( { importSettings, handleSiteNameChange } ) => {
 	}, [ inputValue ] );
 
 	return (
-		<div className="ob-control type-text">
-			<h3>{ __( 'Bussiness Name', 'templates-patterns-collection' ) }</h3>
-			<TextControl value={ inputValue } onChange={ setInputValue } />
+		<div className="ob-ctrl">
+			<div className="ob-ctrl-head">
+				<h3>
+					{ __( 'Bussiness Name', 'templates-patterns-collection' ) }
+				</h3>
+			</div>
+			<div className="ob-ctrl-wrap input">
+				<TextControl className="ob-site-name" value={ inputValue } onChange={ setInputValue } />
+			</div>
 		</div>
 	);
 };

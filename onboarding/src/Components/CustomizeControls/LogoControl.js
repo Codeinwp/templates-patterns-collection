@@ -1,4 +1,3 @@
-import React from 'react';
 import { __ } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
 import { withSelect, withDispatch } from '@wordpress/data';
@@ -20,44 +19,46 @@ const LogoControl = ( { importSettings, handleLogoChange } ) => {
 	);
 
 	return (
-		<div className="ob-control">
-			<h3>{ __( 'Upload a logo', 'templates-patterns-collection' ) }</h3>
-			{ /*<MediaUploadCheck>*/ }
-			<MediaUpload
-				onSelect={ handleLogoChange }
-				allowedTypes={ [ 'image' ] }
-				value={ siteLogo.id }
-				render={ ( { open } ) => (
-					<>
-						<div className="ob-media-controls">
-							<input type="text" value={ siteLogo.url } />
-							<Button isLink onClick={ open }>
-								{ __(
-									'Browse',
-									'templates-patterns-collection'
-								) }
-							</Button>
-						</div>
-						<div
-							className={ classnames(
-								'ob-media-preview',
-								siteLogo.url ? 'active' : ''
-							) }
-						>
-							{ siteLogo.url && (
-								<img
-									src={ siteLogo.url }
-									alt={ __(
-										'Uploaded image',
+		<div className="ob-ctrl">
+			<div className="ob-ctrl-head">
+				<h3>{ __( 'Upload a logo', 'templates-patterns-collection' ) }</h3>
+			</div>
+			<div className="ob-ctrl-wrap media">
+				<MediaUpload
+					onSelect={ handleLogoChange }
+					allowedTypes={ [ 'image' ] }
+					value={ siteLogo.id }
+					render={ ( { open } ) => (
+						<>
+							<div className="ob-media-controls">
+								<input type="text" value={ siteLogo.url } />
+								<Button isLink onClick={ open }>
+									{ __(
+										'Browse',
 										'templates-patterns-collection'
 									) }
-								/>
-							) }
-						</div>
-					</>
-				) }
-			/>
-			{ /*</MediaUploadCheck>*/ }
+								</Button>
+							</div>
+							<div
+								className={ classnames(
+									'ob-media-preview',
+									siteLogo.url ? 'active' : ''
+								) }
+							>
+								{ siteLogo.url && (
+									<img
+										src={ siteLogo.url }
+										alt={ __(
+											'Uploaded image',
+											'templates-patterns-collection'
+										) }
+									/>
+								) }
+							</div>
+						</>
+					) }
+				/>
+			</div>
 		</div>
 	);
 };

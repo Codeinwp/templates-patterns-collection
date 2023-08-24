@@ -65,8 +65,8 @@ const PaletteControl = ( {
 
 	return (
 		palettes && (
-			<div className="ob-control">
-				<div className="header-wrap">
+			<div className="ob-ctrl">
+				<div className="ob-ctrl-head">
 					<h3>
 						{ __(
 							'Color Palette',
@@ -78,13 +78,13 @@ const PaletteControl = ( {
 						onClick={ () => handlePaletteChange( 'base' ) }
 					/>
 				</div>
-				<div className="container type-color">
+				<div className="ob-ctrl-wrap palette">
 					{ palettes &&
 						Object.keys( palettes ).map( ( paletteKey ) => (
 							<button
 								className={ classnames( [
-									'palette',
-									{ active: paletteKey === palette },
+									'ob-palette',
+									{ 'ob-active': paletteKey === palette },
 								] ) }
 								title={ palettes[ paletteKey ].name }
 								data-slug={ paletteKey }

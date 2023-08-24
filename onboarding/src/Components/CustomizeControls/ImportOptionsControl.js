@@ -1,17 +1,38 @@
 import { __, sprintf } from '@wordpress/i18n';
-import { createInterpolateElement, useState } from '@wordpress/element';
+import {
+	createInterpolateElement,
+	useState,
+	useEffect,
+} from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import classnames from 'classnames';
 import CustomTooltip from '../CustomTooltip';
-import {
-	Icon,
-	Button,
-	PanelRow,
-	ToggleControl,
-} from '@wordpress/components';
+import { Icon, Button, ToggleControl } from '@wordpress/components';
 
-const Options = ( { isCleanupAllowed, themeData } ) => {
+const ImportOptionsControl = ( { isCleanupAllowed, themeData } ) => {
 	const [ optionsOpened, setOptionsOpened ] = useState( false );
+	const [ divHeight, setDivHeight ] = useState( 0 );
+
+	const updateDivHeight = () => {
+		const element = document.querySelector( '.ob-settings-wrap' );
+		if ( element ) {
+			const height = element.offsetHeight - 82;
+			setDivHeight( height );
+		}
+	};
+
+	useEffect( () => {
+		updateDivHeight(); // Get initial height
+
+		// Attach event listener for window resize
+		window.addEventListener( 'resize', updateDivHeight );
+
+		// Clean up the event listener when the component unmounts
+		return () => {
+			window.removeEventListener( 'resize', updateDivHeight );
+		};
+	}, [] );
+
 	const [ general, setGeneral ] = useState( {
 		content: true,
 		customizer: true,
@@ -104,58 +125,35 @@ const Options = ( { isCleanupAllowed, themeData } ) => {
 	};
 
 	return (
-		<div className="ob-control type-options">
-			<div
-				className={ classnames(
-					'site-options-container',
-					optionsOpened ? 'is-opened' : ''
-				) }
-			>
-				<Button
-					onClick={ toggleOpen }
-					className="site-options-toggle"
-				>
-					{ __( 'Import settings', 'templates-patterns-collection' ) }
-				</Button>
-				{ Object.keys( map ).map( ( id, index ) => {
-					const rowClass = classnames( 'option-row', {
-						active: general[ id ],
-					} );
-					const { icon, title, tooltip } = map[ id ];
-
-					return (
-						<PanelRow className={ rowClass } key={ index }>
-							<Icon icon={ icon } />
-							<span>{ title }</span>
-							{ tooltip && (
-								<CustomTooltip
-									toLeft={
-										id === 'performanceAddon' ||
-										id === 'cleanup'
-									}
-									rightOffset={ id === 'cleanup' ? -90 : 0 }
-								>
-									{ tooltip }
-								</CustomTooltip>
-							) }
-							{ id !== 'theme_install' && (
-								<div className="toggle-wrapper">
-									<ToggleControl
-										checked={ general[ id ] }
-										onChange={ () => {
-											setGeneral( {
-												...general,
-												[ id ]: ! general[ id ],
-											} );
-										} }
-									/>
-								</div>
-							) }
-						</PanelRow>
-					);
-				} ) }
+		<>
+			<div className="ob-ctrl">
+				<div className="ob-ctrl-wrap import-options">
+					<Button
+						onClick={ toggleOpen }
+						icon={
+							optionsOpened ? 'arrow-up-alt2' : 'arrow-down-alt2'
+						}
+						className="toggle"
+					>
+						{ __(
+							'Advanced Settings',
+							'templates-patterns-collection'
+						) }
+					</Button>
+					<div
+						className={ classnames(
+							'ob-import-options-wrap',
+							optionsOpened ? 'is-opened' : ''
+						) }
+						style={
+							optionsOpened ? { height: divHeight + 'px' } : {}
+						}
+					>
+						Tesst
+					</div>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 
@@ -164,4 +162,4 @@ export default withSelect( ( select ) => {
 	return {
 		themeData: getThemeAction() || false,
 	};
-} )( Options );
+} )( ImportOptionsControl );

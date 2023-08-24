@@ -1,4 +1,4 @@
-import PreviewSettings from '../PreviewSettings';
+import PreviewSettings from '../SiteSettings';
 
 const CustomizeSite = () => {
 	return (

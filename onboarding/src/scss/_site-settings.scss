@@ -1,0 +1,29 @@
+.ob-site-settings {
+  position: relative;
+  width: 287px;
+  transition: width 0.3s ease;
+  z-index: 2;
+  overflow: auto;
+  padding: 45px 24px;
+}
+
+.ob-back {
+  color: $primary;
+  line-height: 23.8px;
+  font-weight: 400;
+  margin-bottom: 11px;
+  padding: 0;
+}
+
+.ob-settings-wrap{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc( 100% - 50px );
+}
+
+.ob-settings-bottom{
+  position: relative;
+  margin-top: 50px;
+  padding-bottom: 10px;
+}

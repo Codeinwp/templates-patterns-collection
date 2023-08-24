@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -7,24 +8,23 @@ import PaletteControl from './CustomizeControls/PaletteControl';
 import TypographyControl from './CustomizeControls/TypographyControl';
 import SiteNameControl from './CustomizeControls/SiteNameControl';
 import LogoControl from './CustomizeControls/LogoControl';
-import ImportModal from './ImportModal';
-import OptionsControl from './CustomizeControls/OptionsControl';
+import ImportOptionsControl from './CustomizeControls/ImportOptionsControl';
 
-export const PreviewSettings = ( { handlePrevStepClick, isProUser } ) => {
+export const SiteSettings = ( { handlePrevStepClick, isProUser } ) => {
 	const [ settingsPage, setSettingsPage ] = useState( 1 );
 	const { cleanupAllowed } = tiobDash;
 
 	return (
-		<div className="ob-preview-settings">
+		<div className="ob-site-settings">
 			<Button
-				className="back"
+				className="ob-back"
 				type="link"
 				onClick={ () => {
 					if ( settingsPage === 2 ) {
 						setSettingsPage( 1 );
-					} else {
-						handlePrevStepClick();
+						return;
 					}
+					handlePrevStepClick();
 				} }
 			>
 				{ __( 'Go back', 'templates-patterns-collection' ) }
@@ -71,14 +71,18 @@ export const PreviewSettings = ( { handlePrevStepClick, isProUser } ) => {
 					) }
 				</div>
 				<div className="ob-settings-bottom">
-					<OptionsControl isCleanupAllowed={ cleanupAllowed } />
-					<Button
-						isPrimary
-						className="ob-button full"
-						onClick={ () => setSettingsPage( 2 ) }
-					>
-						{ __( 'Continue', 'neve' ) }
-					</Button>
+					{ settingsPage === 1 && (
+						<Button
+							isPrimary
+							className="ob-button full"
+							onClick={ () => setSettingsPage( 2 ) }
+						>
+							{ __( 'Continue', 'neve' ) }
+						</Button>
+					) }
+					{ settingsPage === 2 && (
+						<ImportOptionsControl isCleanupAllowed={ cleanupAllowed } />
+					) }
 				</div>
 			</div>
 		</div>
@@ -100,4 +104,4 @@ export default compose(
 			},
 		};
 	} )
-)( PreviewSettings );
+)( SiteSettings );

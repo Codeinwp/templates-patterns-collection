@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -19,15 +20,15 @@ const TypographyControl = ( { importSettings, handleFontChange } ) => {
 	}
 
 	return (
-		<div className="ob-control">
-			<div className="header-wrap">
+		<div className="ob-ctrl">
+			<div className="ob-ctrl-head">
 				<h3>{ __( 'Typography', 'templates-patterns-collection' ) }</h3>
 				<Button
 					icon={ SVG.redo }
 					onClick={ () => handleFontChange( '' ) }
 				/>
 			</div>
-			<div className="container type-fonts">
+			<div className="ob-ctrl-wrap font">
 				{ Object.keys( tiobDash.fontParings ).map( ( slug ) => {
 					const { headingFont, bodyFont } = tiobDash.fontParings[
 						slug
@@ -35,16 +36,13 @@ const TypographyControl = ( { importSettings, handleFontChange } ) => {
 					const headingStyle = {
 						fontFamily: headingFont.font,
 					};
-					const bodyStyle = {
-						fontFamily: bodyFont.font,
-					};
 
 					return (
 						<Button
 							key={ slug }
 							data-slug={ slug }
 							className={ classnames( [
-								'font-pair',
+								'ob-font-pair',
 								{ active: slug === font },
 							] ) }
 							style={ headingStyle }
