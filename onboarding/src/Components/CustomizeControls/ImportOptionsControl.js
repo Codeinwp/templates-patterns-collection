@@ -4,15 +4,15 @@ import {
 	useState,
 	useEffect,
 } from '@wordpress/element';
-import { withSelect } from '@wordpress/data';
 import classnames from 'classnames';
 import CustomTooltip from '../CustomTooltip';
 import { Icon, Button, ToggleControl } from '@wordpress/components';
 
 const ImportOptionsControl = ( {
 	isCleanupAllowed,
-	themeData,
 	importData,
+	general,
+	setGeneral,
 } ) => {
 	const [ optionsOpened, setOptionsOpened ] = useState( false );
 	const [ divHeight, setDivHeight ] = useState( 0 );
@@ -46,15 +46,6 @@ const ImportOptionsControl = ( {
 			window.removeEventListener( 'resize', updateDivHeight );
 		};
 	}, [] );
-
-	const [ general, setGeneral ] = useState( {
-		content: true,
-		customizer: true,
-		widgets: true,
-		cleanup: false,
-		performanceAddon: true,
-		theme_install: themeData !== false,
-	} );
 
 	let map = {
 		content: {
@@ -224,9 +215,4 @@ const ImportOptionsControl = ( {
 	);
 };
 
-export default withSelect( ( select ) => {
-	const { getThemeAction } = select( 'ti-onboarding' );
-	return {
-		themeData: getThemeAction() || false,
-	};
-} )( ImportOptionsControl );
+export default ImportOptionsControl;

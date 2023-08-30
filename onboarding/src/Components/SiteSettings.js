@@ -14,14 +14,19 @@ import { get } from '../utils/rest';
 
 export const SiteSettings = ( {
 	handlePrevStepClick,
+	handleNextStepClick,
 	isProUser,
 	siteData,
+	general,
+	setGeneral,
+	setError,
 } ) => {
 	const [ settingsPage, setSettingsPage ] = useState( 1 );
 	const { license, cleanupAllowed } = tiobDash;
-	const [ error, setError ] = useState( null );
-	const [ fetching, setFetching ] = useState( true );
 	const [ importData, setImportData ] = useState( null );
+	const [ palettes, setPalettes ] = useState( null );
+	const [ fetching, setFetching ] = useState( true );
+
 	const [ pluginOptions, setPluginOptions ] = useState( {} );
 
 	useEffect( () => {
@@ -73,6 +78,11 @@ export const SiteSettings = ( {
 						...tiDownloads,
 					} );
 
+					const themeMods = result.theme_mods;
+					if ( themeMods && themeMods.neve_global_colors ) {
+						setPalettes( themeMods.neve_global_colors.palettes );
+					}
+
 					setFetching( false );
 				} );
 			} )
@@ -119,7 +129,7 @@ export const SiteSettings = ( {
 									'templates-patterns-collection'
 								) }
 							</p>
-							<PaletteControl />
+							<PaletteControl palettes={ palettes } />
 							<TypographyControl />
 						</>
 					) }
@@ -140,13 +150,13 @@ export const SiteSettings = ( {
 							</p>
 							<SiteNameControl />
 							<LogoControl />
-							{ /*<ImportModal />*/ }
 						</>
 					) }
 				</div>
 				<div className="ob-settings-bottom">
 					{ settingsPage === 1 && (
 						<Button
+							disabled={ fetching }
 							isPrimary
 							className="ob-button full"
 							onClick={ () => setSettingsPage( 2 ) }
@@ -155,10 +165,25 @@ export const SiteSettings = ( {
 						</Button>
 					) }
 					{ settingsPage === 2 && (
-						<ImportOptionsControl
-							isCleanupAllowed={ cleanupAllowed }
-							importData={ importData }
-						/>
+						<>
+							<ImportOptionsControl
+								general={ general }
+								setGeneral={ setGeneral }
+								isCleanupAllowed={ cleanupAllowed }
+								importData={ importData }
+							/>
+							<Button
+								disabled={ fetching }
+								className="ob-button full"
+								isPrimary
+								onClick={ handleNextStepClick }
+							>
+								{ __(
+									'Import Website',
+									'templates-patterns-collection'
+								) }
+							</Button>
+						</>
 					) }
 				</div>
 			</div>
@@ -179,6 +204,9 @@ export default compose(
 		return {
 			handlePrevStepClick: () => {
 				setOnboardingStep( 2 );
+			},
+			handleNextStepClick: () => {
+				setOnboardingStep( 4 );
 			},
 		};
 	} )

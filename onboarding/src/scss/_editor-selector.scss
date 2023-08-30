@@ -14,7 +14,7 @@
     margin: 0;
 
     li {
-      border-bottom: 1px solid $light-border;
+      border-bottom: 1px solid $border;
       margin: 0;
     }
 
@@ -24,7 +24,7 @@
       display: flex;
       align-items: center;
       font-weight: 600;
-      color: $dark-text;
+      color: $main-text;
       cursor: pointer;
       padding: 5px 10px;
       text-decoration: none;
@@ -40,7 +40,7 @@
 
       &:hover {
         background-color: $dark-bg;
-        color: $light-text;
+        color: $inverted-text;
       }
     }
   }

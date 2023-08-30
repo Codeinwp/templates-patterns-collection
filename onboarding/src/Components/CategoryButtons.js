@@ -9,7 +9,7 @@ const CategoryButtons = ( {
 	setCurrentCategory,
 } ) => {
 	return (
-		<div className="ob-tabs">
+		<div className="ob-cat-wrap">
 			{ Object.keys( categories ).map( ( key, index ) => {
 				const classes = classnames( {
 					cat: true,

@@ -46,7 +46,7 @@
   .color {
     width: 28px;
     height: 28px;
-    border: 1px solid $light-border;
+    border: 1px solid $border;
     border-radius: 50%;
   }
 }
@@ -56,7 +56,7 @@
  */
 .ob-font-pair {
   background-color: transparent;
-  border-radius: 4px;
+  border-radius: $button-radius;
   padding: 16px 15.5px;
   margin: 3px 0;
   font-size: 24px;
@@ -65,7 +65,7 @@
   letter-spacing: normal;
   font-weight: 700;
   box-shadow: 0 0 0 2px rgba(0,0,0,.1);
-  color: #272626;
+  color: $main-text;
   width: 80px;
   height: 60px;
   justify-content: center;
@@ -76,13 +76,13 @@
  */
 .ob-site-name {
   width: 100%;
-  input {
+  input[type="text"]{
     border-radius: 6px;
-    border: 1px solid $light-border;
+    border: 1px solid $border;
     font-weight: 400;
     font-size: 16px;
     line-height: 39px;
-    color: $light-text-1;
+    color: $secondary-text;
   }
 }
 
@@ -92,7 +92,7 @@
 .ob-media-controls{
   position: relative;
   margin-bottom: 12px;
-  input {
+  input[type="text"] {
     padding-right: 77px;
     width: 100%;
     line-height: 55px;
@@ -107,8 +107,8 @@
 }
 
 .ob-media-preview{
-  border: 1px dashed #8D8D8D;
-  border-radius: 8px;
+  border: 1px dashed $border;
+  border-radius: $card-radius;
   min-height: 56px;
   outline: none;
   &.active {
@@ -129,11 +129,7 @@
   width: calc( 100% + 2px );
   left: 0;
   border: none;
-  background: #fff;
-
-  h2:hover {
-    background: #fff;
-  }
+  background: $inverted-text;
 
   button:hover {
     color: $primary;
@@ -164,7 +160,7 @@
   display: flex;
   justify-content: space-between;
   padding: 20px 0;
-  border-bottom: 1px solid #E5E5E5;
+  border-bottom: 1px solid $border;
   align-items: center;
   &:last-child {
     border: none;

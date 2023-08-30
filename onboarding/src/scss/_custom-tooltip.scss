@@ -3,7 +3,7 @@
   align-items: center;
 
   > svg {
-    fill: $blue;
+    fill: $primary;
   }
 
   &:hover, &:focus {
@@ -24,7 +24,7 @@
   left: 1px;
   position: absolute;
   min-width: 264px;
-  background: #fff;
+  background: $inverted-text;
   box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
   padding: 10px;
   z-index: 1;

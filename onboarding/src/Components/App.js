@@ -1,4 +1,3 @@
-import { withSelect } from '@wordpress/data';
 import classnames from 'classnames';
 import Onboarding from './Onboarding';
 

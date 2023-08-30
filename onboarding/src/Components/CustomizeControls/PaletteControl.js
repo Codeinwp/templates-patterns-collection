@@ -1,39 +1,17 @@
 import { __ } from '@wordpress/i18n';
-import { useEffect, useState } from '@wordpress/element';
-import { trailingSlashIt, sendPostMessage } from '../../utils/common';
+import { sendPostMessage } from '../../utils/common';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
 import classnames from 'classnames';
-import { get } from '../../../../assets/src/utils/rest';
 import SVG from '../../utils/svg';
 
 const PaletteControl = ( {
-	siteData,
 	importSettings,
 	handlePaletteChange,
+	palettes,
 } ) => {
-	const [ palettes, setPalettes ] = useState( null );
 	const { palette } = importSettings;
-
-	useEffect( () => {
-		const fetchAddress = siteData.url || siteData.remote_url;
-		const url = new URL(
-			`${ trailingSlashIt( fetchAddress ) }wp-json/ti-demo-data/data`
-		);
-		get( url, true, false ).then( ( response ) => {
-			if ( ! response.ok ) {
-				return;
-			}
-
-			response.json().then( ( result ) => {
-				const themeMods = result.theme_mods;
-				if ( themeMods && themeMods.neve_global_colors ) {
-					setPalettes( themeMods.neve_global_colors.palettes );
-				}
-			} );
-		} );
-	}, [] );
 
 	const renderColorDivs = ( currentPalette ) => {
 		if ( ! currentPalette.colors ) {
