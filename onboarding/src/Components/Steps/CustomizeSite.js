@@ -1,6 +1,7 @@
 /* global tiobDash */
 import SiteSettings from '../SiteSettings';
-import { useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { useEffect, useState } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import { trailingSlashIt } from '../../utils/common';
 import { get } from '../../utils/rest';
@@ -10,12 +11,15 @@ const CustomizeSite = ( {
 	setError,
 	general,
 	setGeneral,
+	fetching,
 	setFetching,
+	importData,
 	setImportData,
 	setPluginOptions,
+	isCleanupAllowed,
 } ) => {
 	const { license } = tiobDash;
-
+	const [ palettes, setPalettes ] = useState( null );
 	useEffect( () => {
 		// const fetchAddress = siteData.remote_url || siteData.url;
 		// Use the line below if testing in a staging env:
@@ -66,6 +70,11 @@ const CustomizeSite = ( {
 						...tiDownloads,
 					} );
 
+					const themeMods = result.theme_mods;
+					if ( themeMods && themeMods.neve_global_colors ) {
+						setPalettes( themeMods.neve_global_colors.palettes );
+					}
+
 					setFetching( false );
 				} );
 			} )
@@ -83,7 +92,15 @@ const CustomizeSite = ( {
 
 	return (
 		<div className="ob-container row ovf-initial">
-			<SiteSettings general={ general } setGeneral={ setGeneral } />
+			<SiteSettings
+				setImportData={ setImportData }
+				general={ general }
+				setGeneral={ setGeneral }
+				isCleanupAllowed={ isCleanupAllowed }
+				fetching={ fetching }
+				importData={ importData }
+				palettes={ palettes }
+			/>
 			<div className="iframe-container">
 				<iframe
 					id="ti-ss-preview"

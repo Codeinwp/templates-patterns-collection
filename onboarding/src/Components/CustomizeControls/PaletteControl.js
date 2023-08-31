@@ -10,6 +10,7 @@ const PaletteControl = ( {
 	importSettings,
 	handlePaletteChange,
 	palettes,
+	setImportData,
 } ) => {
 	const { palette } = importSettings;
 
@@ -38,6 +39,16 @@ const PaletteControl = ( {
 
 	const handlePaletteClick = ( event ) => {
 		const paletteKey = event.currentTarget.getAttribute( 'data-slug' );
+		setImportData( ( prevData ) => ( {
+			...prevData,
+			theme_mods: {
+				...prevData.theme_mods,
+				neve_global_colors: {
+					...prevData.theme_mods.neve_global_colors,
+					activePalette: paletteKey,
+				},
+			},
+		} ) );
 		handlePaletteChange( paletteKey );
 	};
 

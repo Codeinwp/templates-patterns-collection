@@ -11,8 +11,7 @@ export const importMods = ( data ) => {
 };
 
 export const cleanupImport = ( data ) => {
-	return Promise.reject( new Error( 'Simulated error from cleanupImport' ) );
-	// return send( onboarding.root + '/cleanup', data );
+	return send( onboarding.root + '/cleanup', data );
 };
 
 export const installPlugins = ( pluginArray ) => {

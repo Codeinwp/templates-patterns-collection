@@ -1,0 +1,17 @@
+.ob-form-wrap{
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  margin-bottom: 19px;
+}
+
+.ob-done-actions{
+  .ob-button {
+    margin-bottom: 19px;
+  }
+  .close {
+    font-size: 16px;
+    text-decoration: none;
+    color: $secondary-text;
+  }
+}

@@ -1,14 +1,15 @@
+/* global tiobDash */
 import { Dashicon, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-const ImportModalError = ( { message, code } ) => {
+const ImportError = ( { message, code } ) => {
 	return (
-		<div className="well error">
+		<div className="ob-error-wrap">
 			{ message && (
-				<h3>
+				<h2>
 					<Dashicon icon="warning" />
 					<span>{ message }</span>
-				</h3>
+				</h2>
 			) }
 			<ul>
 				<li
@@ -29,14 +30,14 @@ const ImportModalError = ( { message, code } ) => {
 				) }
 				<li>
 					{ __( 'Error log', 'templates-patterns-collection' ) }:{ ' ' }
-					<Button isLink href={ tiobDash.onboarding.logUrl }>
+					<a href={ tiobDash.onboarding.logUrl }>
 						{ tiobDash.onboarding.logUrl }
 						<Dashicon icon="external" />
-					</Button>
+					</a>
 				</li>
 			</ul>
 		</div>
 	);
 };
 
-export default ImportModalError;
+export default ImportError;

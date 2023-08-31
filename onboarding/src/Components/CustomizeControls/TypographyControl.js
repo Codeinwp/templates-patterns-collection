@@ -7,11 +7,24 @@ import classnames from 'classnames';
 import SVG from '../../utils/svg';
 import { sendPostMessage } from '../../utils/common';
 
-const TypographyControl = ( { importSettings, handleFontChange } ) => {
+const TypographyControl = ( {
+	importSettings,
+	handleFontChange,
+	setImportData,
+} ) => {
 	const { font } = importSettings;
 
 	const handleFontClick = ( event ) => {
 		const fontKey = event.currentTarget.getAttribute( 'data-slug' );
+		const { bodyFont, headingFont } = tiobDash.fontParings[ fontKey ];
+		setImportData( ( prevData ) => ( {
+			...prevData,
+			theme_mods: {
+				...prevData.theme_mods,
+				neve_body_font_family: bodyFont.font,
+				neve_headings_font_family: headingFont.font,
+			},
+		} ) );
 		handleFontChange( fontKey );
 	};
 

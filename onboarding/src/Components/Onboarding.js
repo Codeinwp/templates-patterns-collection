@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { Fragment, useState } from '@wordpress/element';
 
 import Header from './Header';
@@ -9,6 +10,10 @@ import Import from './Steps/Import';
 import { withSelect } from '@wordpress/data';
 
 const Onboarding = ( { step, themeData } ) => {
+	const { cleanupAllowed } = tiobDash;
+	const [ isCleanupAllowed, setIsCleanupAllowed ] = useState(
+		cleanupAllowed
+	);
 	const [ general, setGeneral ] = useState( {
 		content: true,
 		customizer: true,
@@ -32,9 +37,12 @@ const Onboarding = ( { step, themeData } ) => {
 					general={ general }
 					setGeneral={ setGeneral }
 					setError={ setError }
+					fetching={ fetching }
 					setFetching={ setFetching }
+					importData={ importData }
 					setImportData={ setImportData }
 					setPluginOptions={ setPluginOptions }
+					isCleanupAllowed={ isCleanupAllowed }
 				/>
 			) }
 			{ step === 4 && (
@@ -44,6 +52,7 @@ const Onboarding = ( { step, themeData } ) => {
 					pluginOptions={ pluginOptions }
 					setError={ setError }
 					importData={ importData }
+					setIsCleanupAllowed={ setIsCleanupAllowed }
 				/>
 			) }
 		</Fragment>

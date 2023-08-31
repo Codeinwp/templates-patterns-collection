@@ -1,14 +1,16 @@
 import { __ } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
 import { withSelect, withDispatch } from '@wordpress/data';
-import { Button } from '@wordpress/components';
+import { Button, TextControl, Icon } from '@wordpress/components';
 import { sendPostMessage } from '../../utils/common';
 import { MediaUpload } from '@wordpress/media-utils';
 import { addFilter } from '@wordpress/hooks';
 import classnames from 'classnames';
+import {useState} from "@wordpress/element";
 
-const LogoControl = ( { importSettings, handleLogoChange } ) => {
+const LogoControl = ( { importSettings, handleLogoChange, setImportData } ) => {
 	const { siteLogo } = importSettings;
+	const [ logo, setLogo ] = useState( siteLogo.url );
 
 	const replaceMediaUpload = () => MediaUpload;
 
@@ -21,17 +23,32 @@ const LogoControl = ( { importSettings, handleLogoChange } ) => {
 	return (
 		<div className="ob-ctrl">
 			<div className="ob-ctrl-head">
-				<h3>{ __( 'Upload a logo', 'templates-patterns-collection' ) }</h3>
+				<h3>
+					{ __( 'Upload a logo', 'templates-patterns-collection' ) }
+				</h3>
 			</div>
 			<div className="ob-ctrl-wrap media">
 				<MediaUpload
-					onSelect={ handleLogoChange }
+					onSelect={ ( newLogo ) => {
+						handleLogoChange( newLogo );
+						setImportData( ( prevData ) => ( {
+							...prevData,
+							theme_mods: {
+								...prevData.theme_mods,
+								custom_logo: newLogo.id,
+							},
+						} ) );
+						setLogo( newLogo.url );
+					} }
 					allowedTypes={ [ 'image' ] }
 					value={ siteLogo.id }
 					render={ ( { open } ) => (
 						<>
 							<div className="ob-media-controls">
-								<input type="text" value={ siteLogo.url } />
+								<TextControl
+									value={ logo }
+									onChange={ () => {} }
+								/>
 								<Button isLink onClick={ open }>
 									{ __(
 										'Browse',
@@ -42,17 +59,34 @@ const LogoControl = ( { importSettings, handleLogoChange } ) => {
 							<div
 								className={ classnames(
 									'ob-media-preview',
-									siteLogo.url ? 'active' : ''
+									logo ? 'active' : ''
 								) }
 							>
-								{ siteLogo.url && (
-									<img
-										src={ siteLogo.url }
-										alt={ __(
-											'Uploaded image',
-											'templates-patterns-collection'
-										) }
-									/>
+								{ logo && (
+									<>
+										<img
+											src={ logo }
+											alt={ __(
+												'Uploaded image',
+												'templates-patterns-collection'
+											) }
+										/>
+										<div className="ob-preview-overlay">
+											<Button
+												isTertiary
+												onClick={ () => {
+													setLogo( '' );
+													handleLogoChange( {} );
+												} }
+											>
+												<Icon icon="no" />
+												{ __(
+													'Remove image',
+													'templates-patterns-collection'
+												) }
+											</Button>
+										</div>
+									</>
 								) }
 							</div>
 						</>
@@ -75,6 +109,7 @@ export default compose(
 
 		return {
 			handleLogoChange: ( newLogo ) => {
+				console.log( newLogo );
 				const updatedSettings = {
 					...importSettings,
 					siteLogo: newLogo,

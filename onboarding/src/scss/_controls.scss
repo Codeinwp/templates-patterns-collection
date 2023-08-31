@@ -77,11 +77,6 @@
 .ob-site-name {
   width: 100%;
   input[type="text"]{
-    border-radius: 6px;
-    border: 1px solid $border;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 39px;
     color: $secondary-text;
   }
 }
@@ -92,10 +87,14 @@
 .ob-media-controls{
   position: relative;
   margin-bottom: 12px;
-  input[type="text"] {
-    padding-right: 77px;
-    width: 100%;
-    line-height: 55px;
+  .components-base-control__field{
+    margin: 0;
+    input[type="text"] {
+      padding-right: 77px;
+      width: 100%;
+      line-height: 55px;
+      border-color: $border;
+    }
   }
   button {
     position: absolute;
@@ -111,12 +110,35 @@
   border-radius: $card-radius;
   min-height: 56px;
   outline: none;
+  position: relative;
+  line-height: 0;
   &.active {
     border: none;
     border-radius: 0;
   }
   img {
     width: 100%;
+  }
+  .ob-preview-overlay{
+    position: absolute;
+    background: rgba( 0, 0, 0, .7 );
+    opacity: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: opacity ease-in .1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      color: $error;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+  &:hover .ob-preview-overlay{
+    opacity: 1;
   }
 }
 

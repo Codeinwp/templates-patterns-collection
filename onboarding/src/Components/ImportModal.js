@@ -11,10 +11,7 @@ import {
 } from '../utils/site-import';
 import { get, ajaxAction } from '../utils/rest';
 import { trailingSlashIt } from '../utils/common';
-import ImportStepper from './ImportStepper';
-import ImportModalNote from './ImportModalNote';
 import classnames from 'classnames';
-import ImportModalError from './ImportModalError';
 import ImportModalMock from './ImportModalMock';
 import CustomTooltip from './CustomTooltip';
 
@@ -147,14 +144,6 @@ const ImportModal = ( {
 			} );
 	}, [] );
 
-	const Note = () => {
-		return (
-			<ImportModalNote
-				data={ importData }
-				externalInstalled={ externalPluginsInstalled }
-			/>
-		);
-	};
 
 	const Theme = () => {
 		const toggleOpen = () => {
@@ -831,7 +820,6 @@ const ImportModal = ( {
 					<div className="modal-body">
 						{ ! importing && 'done' !== currentStep && ! error ? (
 							<>
-								<Note />
 								<Panel className="modal-toggles">
 									{ themeData !== false && <Theme /> }
 									<Options />
@@ -840,30 +828,6 @@ const ImportModal = ( {
 							</>
 						) : (
 							<>
-								{ error && (
-									<>
-										<ImportModalError
-											message={ error.message || null }
-											code={ error.code || null }
-										/>
-										<hr />
-									</>
-								) }
-								{ null !== currentStep && (
-									<ImportStepper
-										progress={ {
-											theme_install: themeInstallProgress,
-											cleanup: cleanupProgress,
-											plugins: pluginsProgress,
-											content: contentProgress,
-											customizer: customizerProgress,
-											widgets: widgetsProgress,
-											performanceAddon: performanceAddonProgress,
-										} }
-										currentStep={ currentStep }
-										willDo={ general }
-									/>
-								) }
 								{ 'done' === currentStep && ! skipSubscribe && (
 									<>
 										<p className="tpc-subscribe-email-text">

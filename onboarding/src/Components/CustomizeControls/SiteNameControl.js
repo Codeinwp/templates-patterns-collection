@@ -5,13 +5,20 @@ import { TextControl } from '@wordpress/components';
 import { sendPostMessage } from '../../utils/common';
 import { useState, useEffect } from '@wordpress/element';
 
-const SiteNameControl = ( { importSettings, handleSiteNameChange } ) => {
+const SiteNameControl = ( { importSettings, handleSiteNameChange, setImportData } ) => {
 	const { siteName } = importSettings;
 	const [ inputValue, setInputValue ] = useState( siteName );
 
 	useEffect( () => {
 		const timer = setTimeout( () => {
 			handleSiteNameChange( inputValue );
+			setImportData( ( prevData ) => ( {
+				...prevData,
+				wp_options: {
+					...prevData.wp_options,
+					blogname: inputValue,
+				},
+			} ) );
 		}, 500 );
 
 		return () => clearTimeout( timer );
@@ -25,7 +32,11 @@ const SiteNameControl = ( { importSettings, handleSiteNameChange } ) => {
 				</h3>
 			</div>
 			<div className="ob-ctrl-wrap input">
-				<TextControl className="ob-site-name" value={ inputValue } onChange={ setInputValue } />
+				<TextControl
+					className="ob-site-name"
+					value={ inputValue }
+					onChange={ setInputValue }
+				/>
 			</div>
 		</div>
 	);

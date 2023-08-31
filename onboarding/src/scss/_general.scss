@@ -37,6 +37,34 @@ p {
   font-weight: 300;
 }
 
+input.components-text-control__input,
+input.components-text-control__input[type="text"],
+input.components-text-control__input[type="email"],
+.ob-select.ob-select.ob-select select {
+  border: 1px solid $border;
+  border-radius: $input-radius;
+  height: 53px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 0 21px;
+  &:focus {
+    outline: 2px solid $primary;
+  }
+}
+.ob-select.ob-select.ob-select {
+  .components-input-control__backdrop {
+    border: none;
+  }
+  .components-spacer{
+    padding-right: 21px;
+    svg{
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
 button.ob-button {
   display: flex;
   height: 48px;
@@ -70,11 +98,13 @@ button.ob-button {
     padding: 0 50px;
   }
   &.narrow {
+    transform: translateY(-61px);
     max-width: 559px;
     margin: 0 auto;
   }
   &.center {
     text-align: center;
+    align-items: center;
   }
   &.ovf-initial{
     overflow: initial;

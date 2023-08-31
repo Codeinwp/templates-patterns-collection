@@ -4,6 +4,9 @@
   padding: 12px 40px;
   border-bottom: 1px solid $border;
   align-items: center;
+  background: #fff;
+  position: relative;
+  z-index: 1;
   button, a {
     display: flex;
   }

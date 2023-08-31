@@ -1,8 +1,10 @@
 /* global tiobDash */
+/* eslint-disable no-console */
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
+import { Icon } from '@wordpress/components';
 
 import {
 	activateTheme,
@@ -14,8 +16,9 @@ import {
 	installTheme,
 } from '../../utils/site-import';
 
-import ImportProgress from "../ImportProgress";
-import ImportModalError from "../ImportModalError";
+import ImportProgress from '../ImportProgress';
+import ImportError from '../ImportError';
+import ImportForm from '../ImportForm';
 
 const Import = ( {
 	general,
@@ -26,24 +29,11 @@ const Import = ( {
 	importData,
 	editor,
 	setThemeAction,
+	setIsCleanupAllowed,
 } ) => {
-	const { cleanupAllowed } = tiobDash;
 	const [ currentStep, setCurrentStep ] = useState( null );
 	const [ actionsDone, setActionsDone ] = useState( 0 );
 	const [ importing, setImporting ] = useState( false );
-	const [ cleanupProgress, setCleanupProgress ] = useState( false );
-	const [ pluginsProgress, setPluginsProgress ] = useState( false );
-	const [ contentProgress, setContentProgress ] = useState( false );
-	const [ customizerProgress, setCustomizerProgress ] = useState( false );
-	const [ widgetsProgress, setWidgetsProgress ] = useState( false );
-	const [ performanceAddonProgress, setPerformanceAddonProgress ] = useState(
-		false
-	);
-	const [ frontPageID, setFrontPageID ] = useState( null );
-	const [ themeInstallProgress, setThemeInstallProgress ] = useState( false );
-	const [ isCleanupAllowed, setIsCleanupAllowed ] = useState(
-		cleanupAllowed
-	);
 
 	function runImportCleanup() {
 		console.clear();
@@ -62,7 +52,6 @@ const Import = ( {
 				}
 				console.log( '[D] Cleanup.' );
 				setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
-				setCleanupProgress( 'done' );
 				runImport();
 			} )
 			.catch( ( incomingError ) =>
@@ -113,7 +102,7 @@ const Import = ( {
 	function handleActivate() {
 		const callbackSuccess = () => {
 			console.log( '[D] Theme Activate.' );
-			setThemeInstallProgress( 'done' );
+			setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
 			setThemeAction( false );
 			runImportPlugins();
 		};
@@ -146,7 +135,6 @@ const Import = ( {
 					return false;
 				}
 				console.log( '[D] Plugins.' );
-				setPluginsProgress( 'done' );
 				setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
 				runImportContent();
 			} )
@@ -177,10 +165,6 @@ const Import = ( {
 					return false;
 				}
 				console.log( '[D] Content.' );
-				if ( response.frontpage_id ) {
-					setFrontPageID( response.frontpage_id );
-				}
-				setContentProgress( 'done' );
 				setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
 				runImportCustomizer();
 			} )
@@ -208,7 +192,6 @@ const Import = ( {
 					return false;
 				}
 				console.log( '[D] Customizer.' );
-				setCustomizerProgress( 'done' );
 				setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
 				runImportWidgets();
 			} )
@@ -232,7 +215,6 @@ const Import = ( {
 					return false;
 				}
 				console.log( '[D] Widgets.' );
-				setWidgetsProgress( 'done' );
 				setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
 				runPerformanceAddonInstall();
 			} )
@@ -257,7 +239,6 @@ const Import = ( {
 					return false;
 				}
 				console.log( '[D] Performance Addon.' );
-				setPerformanceAddonProgress( 'done' );
 				setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
 				setTimeout( importDone, 2000 );
 			} )
@@ -276,18 +257,6 @@ const Import = ( {
 	function handleError( incomingError, step ) {
 		setImporting( false );
 		setCurrentStep( null );
-		if ( 'cleanup' === step ) {
-			setPluginsProgress( 'skip' );
-		}
-		if ( 'plugins' === step ) {
-			setContentProgress( 'skip' );
-		}
-		if ( [ 'content', 'plugins' ].includes( step ) ) {
-			setCustomizerProgress( 'skip' );
-		}
-		if ( [ 'content', 'plugins', 'customizer' ].includes( step ) ) {
-			setWidgetsProgress( 'skip' );
-		}
 
 		const map = {
 			cleanup: __(
@@ -316,32 +285,9 @@ const Import = ( {
 			),
 		};
 
-		switch ( step ) {
-			case 'cleanup':
-				setCleanupProgress( 'error' );
-				break;
-			case 'plugins':
-				setPluginsProgress( 'error' );
-				break;
-			case 'content':
-				setContentProgress( 'error' );
-				break;
-			case 'customizer':
-				setCustomizerProgress( 'error' );
-				break;
-			case 'widgets':
-				setWidgetsProgress( 'error' );
-				break;
-			case 'performanceAddon':
-				setPerformanceAddonProgress( 'error' );
-				break;
-		}
 		setError(
 			incomingError.data
-				? {
-					message: map[ step ],
-					code: incomingError.data,
-				  }
+				? { message: map[ step ], code: incomingError.data }
 				: { message: map[ step ] }
 		);
 	}
@@ -382,12 +328,29 @@ const Import = ( {
 				<>
 					{ error && (
 						<>
-							<ImportModalError
+							<ImportError
 								message={ error.message || null }
 								code={ error.code || null }
 							/>
 							<hr />
 						</>
+					) }
+					{ 'done' === currentStep && ! importing && (
+						<div className="ob-import-done">
+							<Icon icon="yes-alt" />
+							<h1>
+								{ __(
+									'Import complete.',
+									'templates-patterns-collection'
+								) }
+								<br />
+								{ __(
+									'Enjoy your site!',
+									'templates-patterns-collection'
+								) }
+							</h1>
+							<ImportForm />
+						</div>
 					) }
 				</>
 			) }

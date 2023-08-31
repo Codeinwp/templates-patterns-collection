@@ -75,13 +75,13 @@ const ImportOptionsControl = ( {
 			),
 			icon: 'dashboard',
 			tooltip: createInterpolateElement(
-				__(
-					sprintf(
-						// translators: %s is Optimole plugin name.
+				sprintf(
+					// translators: %s is Optimole plugin name.
+					__(
 						'Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free.',
-						'Optimole'
+						'templates-patterns-collection'
 					),
-					'templates-patterns-collection'
+					'Optimole'
 				),
 				{
 					a: (
