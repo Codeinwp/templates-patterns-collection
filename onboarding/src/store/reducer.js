@@ -35,14 +35,11 @@ const initialState = {
 	license: initialLicense,
 	onboardingStep: 1,
 	importSettings: {
-		palette: 'base',
-		font: '',
 		siteName: '',
 		siteLogo: {
 			id: '',
 			thumbnail: '',
 			url: '',
-			width: 120,
 		},
 	},
 };

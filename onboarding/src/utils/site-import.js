@@ -1,6 +1,6 @@
 /* global tiobDash */
 const { onboarding } = tiobDash;
-import {get, send} from './rest';
+import { get, send } from './rest';
 
 export const importWidgets = ( data ) => {
 	return send( onboarding.root + '/import_widgets', data );

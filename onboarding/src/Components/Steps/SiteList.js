@@ -3,8 +3,13 @@ import Filters from '../Filters';
 import Sites from '../Sites';
 import EditorSelector from '../EditorSelector';
 import { EDITOR_MAP } from '../../utils/common';
+import { useEffect } from '@wordpress/element';
 
-const SiteList = () => {
+const SiteList = ( { setFetching } ) => {
+	useEffect( () => {
+		setFetching( true );
+	}, [] );
+
 	return (
 		<div className="ob-container wide">
 			<div className="ob-title-wrap">

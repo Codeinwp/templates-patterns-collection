@@ -19,7 +19,7 @@ const CustomizeSite = ( {
 	isCleanupAllowed,
 } ) => {
 	const { license } = tiobDash;
-	const [ palettes, setPalettes ] = useState( null );
+
 	useEffect( () => {
 		// const fetchAddress = siteData.remote_url || siteData.url;
 		// Use the line below if testing in a staging env:
@@ -70,11 +70,6 @@ const CustomizeSite = ( {
 						...tiDownloads,
 					} );
 
-					const themeMods = result.theme_mods;
-					if ( themeMods && themeMods.neve_global_colors ) {
-						setPalettes( themeMods.neve_global_colors.palettes );
-					}
-
 					setFetching( false );
 				} );
 			} )
@@ -99,7 +94,6 @@ const CustomizeSite = ( {
 				isCleanupAllowed={ isCleanupAllowed }
 				fetching={ fetching }
 				importData={ importData }
-				palettes={ palettes }
 			/>
 			<div className="iframe-container">
 				<iframe

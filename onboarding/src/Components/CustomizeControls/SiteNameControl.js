@@ -5,20 +5,17 @@ import { TextControl } from '@wordpress/components';
 import { sendPostMessage } from '../../utils/common';
 import { useState, useEffect } from '@wordpress/element';
 
-const SiteNameControl = ( { importSettings, handleSiteNameChange, setImportData } ) => {
+const SiteNameControl = ( {
+	importSettings,
+	handleSiteNameChange,
+	setImportData,
+} ) => {
 	const { siteName } = importSettings;
 	const [ inputValue, setInputValue ] = useState( siteName );
 
 	useEffect( () => {
 		const timer = setTimeout( () => {
 			handleSiteNameChange( inputValue );
-			setImportData( ( prevData ) => ( {
-				...prevData,
-				wp_options: {
-					...prevData.wp_options,
-					blogname: inputValue,
-				},
-			} ) );
 		}, 500 );
 
 		return () => clearTimeout( timer );
@@ -35,7 +32,16 @@ const SiteNameControl = ( { importSettings, handleSiteNameChange, setImportData 
 				<TextControl
 					className="ob-site-name"
 					value={ inputValue }
-					onChange={ setInputValue }
+					onChange={ ( newValue ) => {
+						setInputValue( newValue );
+						setImportData( ( prevData ) => ( {
+							...prevData,
+							wp_options: {
+								...prevData.wp_options,
+								blogname: newValue,
+							},
+						} ) );
+					} }
 				/>
 			</div>
 		</div>
@@ -62,7 +68,7 @@ export default compose(
 				setImportSettings( updatedSettings );
 				sendPostMessage( {
 					type: 'siteNameChange',
-					data: updatedSettings,
+					data: newSiteName,
 				} );
 			},
 		};

@@ -1,22 +1,25 @@
 /* global tiobDash */
 import { __ } from '@wordpress/i18n';
-import { withDispatch, withSelect } from '@wordpress/data';
-import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
 import classnames from 'classnames';
 import SVG from '../../utils/svg';
 import { sendPostMessage } from '../../utils/common';
 
 const TypographyControl = ( {
-	importSettings,
-	handleFontChange,
 	setImportData,
+	siteStyle,
+	setSiteStyle,
 } ) => {
-	const { font } = importSettings;
+	const { font } = siteStyle;
 
-	const handleFontClick = ( event ) => {
-		const fontKey = event.currentTarget.getAttribute( 'data-slug' );
+	const handleFontClick = ( fontKey ) => {
+		const newStyle = {
+			...siteStyle,
+			font: fontKey,
+		};
+		setSiteStyle( newStyle );
 		const { bodyFont, headingFont } = tiobDash.fontParings[ fontKey ];
+
 		setImportData( ( prevData ) => ( {
 			...prevData,
 			theme_mods: {
@@ -25,7 +28,11 @@ const TypographyControl = ( {
 				neve_headings_font_family: headingFont.font,
 			},
 		} ) );
-		handleFontChange( fontKey );
+
+		sendPostMessage( {
+			type: 'styleChange',
+			data: newStyle,
+		} );
 	};
 
 	if ( ! tiobDash || ! tiobDash.fontParings ) {
@@ -38,7 +45,7 @@ const TypographyControl = ( {
 				<h3>{ __( 'Typography', 'templates-patterns-collection' ) }</h3>
 				<Button
 					icon={ SVG.redo }
-					onClick={ () => handleFontChange( '' ) }
+					onClick={ () => handleFontClick( '' ) }
 				/>
 			</div>
 			<div className="ob-ctrl-wrap font">
@@ -53,14 +60,13 @@ const TypographyControl = ( {
 					return (
 						<Button
 							key={ slug }
-							data-slug={ slug }
 							className={ classnames( [
 								'ob-font-pair',
-								{ active: slug === font },
+								{ 'ob-active': slug === font },
 							] ) }
 							style={ headingStyle }
 							title={ `${ headingFont.font } / ${ bodyFont.font }` }
-							onClick={ handleFontClick }
+							onClick={ () => handleFontClick( slug ) }
 						>
 							Abc
 						</Button>
@@ -71,27 +77,4 @@ const TypographyControl = ( {
 	);
 };
 
-export default compose(
-	withSelect( ( select ) => {
-		const { getImportSettings } = select( 'ti-onboarding' );
-		return {
-			importSettings: getImportSettings(),
-		};
-	} ),
-	withDispatch( ( dispatch, { importSettings } ) => {
-		const { setImportSettings } = dispatch( 'ti-onboarding' );
-		return {
-			handleFontChange: ( newFont ) => {
-				const updatedSettings = {
-					...importSettings,
-					font: newFont,
-				};
-				setImportSettings( updatedSettings );
-				sendPostMessage( {
-					type: 'styleChange',
-					data: updatedSettings,
-				} );
-			},
-		};
-	} )
-)( TypographyControl );
+export default TypographyControl;

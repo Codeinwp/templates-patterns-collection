@@ -12,7 +12,7 @@ import {
 import { get, ajaxAction } from '../utils/rest';
 import { trailingSlashIt } from '../utils/common';
 import classnames from 'classnames';
-import ImportModalMock from './ImportModalMock';
+import ImportMock from './ImportMock';
 import CustomTooltip from './CustomTooltip';
 
 import {
@@ -814,7 +814,7 @@ const ImportModal = ( {
 			title={ modalTitle }
 		>
 			{ fetching ? (
-				<ImportModalMock />
+				<ImportMock />
 			) : (
 				<>
 					<div className="modal-body">

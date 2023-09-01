@@ -31,7 +31,7 @@ const Onboarding = ( { step, themeData } ) => {
 		<Fragment>
 			<Header />
 			{ step === 1 && <Welcome /> }
-			{ step === 2 && <SiteList /> }
+			{ step === 2 && <SiteList setFetching={ setFetching } /> }
 			{ step === 3 && (
 				<CustomizeSite
 					general={ general }

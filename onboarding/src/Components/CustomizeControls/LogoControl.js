@@ -6,7 +6,7 @@ import { sendPostMessage } from '../../utils/common';
 import { MediaUpload } from '@wordpress/media-utils';
 import { addFilter } from '@wordpress/hooks';
 import classnames from 'classnames';
-import {useState} from "@wordpress/element";
+import { useState } from '@wordpress/element';
 
 const LogoControl = ( { importSettings, handleLogoChange, setImportData } ) => {
 	const { siteLogo } = importSettings;
@@ -36,6 +36,11 @@ const LogoControl = ( { importSettings, handleLogoChange, setImportData } ) => {
 							theme_mods: {
 								...prevData.theme_mods,
 								custom_logo: newLogo.id,
+								logo_logo: JSON.stringify( {
+									dark: newLogo.id,
+									light: newLogo.id,
+									same: true,
+								} ),
 							},
 						} ) );
 						setLogo( newLogo.url );
@@ -109,7 +114,6 @@ export default compose(
 
 		return {
 			handleLogoChange: ( newLogo ) => {
-				console.log( newLogo );
 				const updatedSettings = {
 					...importSettings,
 					siteLogo: newLogo,
@@ -117,7 +121,7 @@ export default compose(
 				setImportSettings( updatedSettings );
 				sendPostMessage( {
 					type: 'logoChange',
-					data: newLogo,
+					data: newLogo.url,
 				} );
 			},
 		};

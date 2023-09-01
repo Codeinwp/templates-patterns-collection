@@ -1,22 +1,23 @@
 import { __ } from '@wordpress/i18n';
 import { sendPostMessage } from '../../utils/common';
-import { withDispatch, withSelect } from '@wordpress/data';
-import { compose } from '@wordpress/compose';
+import { withDispatch } from '@wordpress/data';
 import { Button } from '@wordpress/components';
 import classnames from 'classnames';
 import SVG from '../../utils/svg';
 
 const PaletteControl = ( {
-	importSettings,
-	handlePaletteChange,
-	palettes,
+	importData,
 	setImportData,
+	siteStyle,
+	setSiteStyle,
 } ) => {
-	const { palette } = importSettings;
+	const themeMods = importData?.theme_mods;
+	const allPalettes = themeMods?.neve_global_colors?.palettes;
+	const { palette } = siteStyle;
 
 	const renderColorDivs = ( currentPalette ) => {
 		if ( ! currentPalette.colors ) {
-			return null; // Skip palettes with null colors
+			return null;
 		}
 
 		const colorKeys = Object.keys( currentPalette.colors );
@@ -37,8 +38,14 @@ const PaletteControl = ( {
 		);
 	};
 
-	const handlePaletteClick = ( event ) => {
-		const paletteKey = event.currentTarget.getAttribute( 'data-slug' );
+	const handlePaletteClick = ( paletteKey ) => {
+		const newStyle = {
+			...siteStyle,
+			palette: paletteKey,
+		};
+
+		setSiteStyle( newStyle );
+
 		setImportData( ( prevData ) => ( {
 			...prevData,
 			theme_mods: {
@@ -49,11 +56,15 @@ const PaletteControl = ( {
 				},
 			},
 		} ) );
-		handlePaletteChange( paletteKey );
+
+		sendPostMessage( {
+			type: 'styleChange',
+			data: newStyle,
+		} );
 	};
 
 	return (
-		palettes && (
+		allPalettes && (
 			<div className="ob-ctrl">
 				<div className="ob-ctrl-head">
 					<h3>
@@ -64,23 +75,25 @@ const PaletteControl = ( {
 					</h3>
 					<Button
 						icon={ SVG.redo }
-						onClick={ () => handlePaletteChange( 'base' ) }
+						onClick={ () => handlePaletteClick( 'base' ) }
 					/>
 				</div>
 				<div className="ob-ctrl-wrap palette">
-					{ palettes &&
-						Object.keys( palettes ).map( ( paletteKey ) => (
+					{ allPalettes &&
+						Object.keys( allPalettes ).map( ( paletteKey ) => (
 							<button
 								className={ classnames( [
 									'ob-palette',
 									{ 'ob-active': paletteKey === palette },
 								] ) }
-								title={ palettes[ paletteKey ].name }
+								title={ allPalettes[ paletteKey ].name }
 								data-slug={ paletteKey }
 								key={ paletteKey }
-								onClick={ handlePaletteClick }
+								onClick={ () =>
+									handlePaletteClick( paletteKey )
+								}
 							>
-								{ renderColorDivs( palettes[ paletteKey ] ) }
+								{ renderColorDivs( allPalettes[ paletteKey ] ) }
 							</button>
 						) ) }
 				</div>
@@ -89,33 +102,11 @@ const PaletteControl = ( {
 	);
 };
 
-export default compose(
-	withSelect( ( select ) => {
-		const { getCurrentSite, getImportSettings } = select( 'ti-onboarding' );
-		return {
-			siteData: getCurrentSite(),
-			importSettings: getImportSettings(),
-		};
-	} ),
-	withDispatch( ( dispatch, { importSettings } ) => {
-		const { setOnboardingStep, setImportSettings } = dispatch(
-			'ti-onboarding'
-		);
-		return {
-			handlePrevStepClick: () => {
-				setOnboardingStep( 2 );
-			},
-			handlePaletteChange: ( newPalette ) => {
-				const updatedSettings = {
-					...importSettings,
-					palette: newPalette,
-				};
-				setImportSettings( updatedSettings );
-				sendPostMessage( {
-					type: 'styleChange',
-					data: updatedSettings,
-				} );
-			},
-		};
-	} )
-)( PaletteControl );
+export default withDispatch( ( dispatch ) => {
+	const { setOnboardingStep } = dispatch( 'ti-onboarding' );
+	return {
+		handlePrevStepClick: () => {
+			setOnboardingStep( 2 );
+		},
+	};
+} )( PaletteControl );
