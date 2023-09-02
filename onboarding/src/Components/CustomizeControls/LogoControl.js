@@ -8,8 +8,8 @@ import { addFilter } from '@wordpress/hooks';
 import classnames from 'classnames';
 import { useState } from '@wordpress/element';
 
-const LogoControl = ( { importSettings, handleLogoChange, setImportData } ) => {
-	const { siteLogo } = importSettings;
+const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
+	const { siteLogo } = userCustomSettings;
 	const [ logo, setLogo ] = useState( siteLogo.url );
 
 	const replaceMediaUpload = () => MediaUpload;
@@ -31,18 +31,6 @@ const LogoControl = ( { importSettings, handleLogoChange, setImportData } ) => {
 				<MediaUpload
 					onSelect={ ( newLogo ) => {
 						handleLogoChange( newLogo );
-						setImportData( ( prevData ) => ( {
-							...prevData,
-							theme_mods: {
-								...prevData.theme_mods,
-								custom_logo: newLogo.id,
-								logo_logo: JSON.stringify( {
-									dark: newLogo.id,
-									light: newLogo.id,
-									same: true,
-								} ),
-							},
-						} ) );
 						setLogo( newLogo.url );
 					} }
 					allowedTypes={ [ 'image' ] }
@@ -104,21 +92,39 @@ const LogoControl = ( { importSettings, handleLogoChange, setImportData } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getImportSettings } = select( 'ti-onboarding' );
+		const { getUserCustomSettings, getImportData } = select( 'ti-onboarding' );
 		return {
-			importSettings: getImportSettings(),
+			userCustomSettings: getUserCustomSettings(),
+			importData: getImportData(),
 		};
 	} ),
-	withDispatch( ( dispatch, { importSettings } ) => {
-		const { setImportSettings } = dispatch( 'ti-onboarding' );
+	withDispatch( ( dispatch, { importData, userCustomSettings } ) => {
+		const { setUserCustomSettings, setImportData } = dispatch(
+			'ti-onboarding'
+		);
 
 		return {
 			handleLogoChange: ( newLogo ) => {
 				const updatedSettings = {
-					...importSettings,
+					...userCustomSettings,
 					siteLogo: newLogo,
 				};
-				setImportSettings( updatedSettings );
+				setUserCustomSettings( updatedSettings );
+
+				const newImportData = {
+					...importData,
+					theme_mods: {
+						...importData.theme_mods,
+						custom_logo: newLogo.id,
+						logo_logo: JSON.stringify( {
+							dark: newLogo.id,
+							light: newLogo.id,
+							same: true,
+						} ),
+					},
+				};
+				setImportData( newImportData );
+
 				sendPostMessage( {
 					type: 'logoChange',
 					data: newLogo.url,

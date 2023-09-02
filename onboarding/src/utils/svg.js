@@ -41,10 +41,44 @@ const SVG = {
 		</svg>
 	),
 	redo: (
-		<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="18"
+			height="18"
+			fill="none"
+		>
 			<path
 				fill="#0366D5"
 				d="M16.645.672h-1.567a.396.396 0 00-.396.416l.132 2.734A8.177 8.177 0 008.571.936C4.054.936.37 4.622.375 9.138a8.196 8.196 0 0013.688 6.078.395.395 0 00.015-.576l-1.123-1.124a.396.396 0 00-.542-.018 5.816 5.816 0 11.986-7.611l-3.355-.161a.397.397 0 00-.416.397v1.566a.397.397 0 00.397.397h6.62a.397.397 0 00.397-.397V1.07a.396.396 0 00-.397-.397z"
+			></path>
+		</svg>
+	),
+	arrow: (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="17"
+			height="12"
+			fill="none"
+		>
+			<path
+				fill="#848484"
+				fillRule="evenodd"
+				d="M10.53 11.53l-1.06-1.06 3.72-3.72H0v-1.5h13.19L9.47 1.53 10.53.47 16.06 6l-5.53 5.53z"
+				clipRule="evenodd"
+			></path>
+		</svg>
+	),
+	delete: (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			fill="none"
+		>
+			<path
+				stroke="#848484"
+				strokeWidth="1.5"
+				d="M1.405 1L15 15M1 15L14.595 1"
 			></path>
 		</svg>
 	),

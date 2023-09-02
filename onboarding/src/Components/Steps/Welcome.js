@@ -1,10 +1,9 @@
 import { __ } from '@wordpress/i18n';
-import { withDispatch } from '@wordpress/data';
 import CategoryButtons from '../CategoryButtons';
 import Search from '../Search';
 import { ONBOARDING_CAT } from '../../utils/common';
 
-const Welcome = ( { handleNextStep } ) => {
+const Welcome = () => {
 	return (
 		<div className="ob-container narrow">
 			<h1>
@@ -19,11 +18,8 @@ const Welcome = ( { handleNextStep } ) => {
 					'templates-patterns-collection'
 				) }
 			</p>
-			<CategoryButtons
-				categories={ ONBOARDING_CAT }
-				onClick={ handleNextStep }
-			/>
-			<div className="search-container">
+			<CategoryButtons categories={ ONBOARDING_CAT } />
+			<div className="ob-search-container">
 				<p>
 					{ ' ' }
 					{ __(
@@ -31,17 +27,10 @@ const Welcome = ( { handleNextStep } ) => {
 						'templates-patterns-collection'
 					) }
 				</p>
-				<Search onSubmit={ handleNextStep } />
+				<Search />
 			</div>
 		</div>
 	);
 };
 
-export default withDispatch( ( dispatch ) => {
-	const { setOnboardingStep } = dispatch( 'ti-onboarding' );
-	return {
-		handleNextStep: () => {
-			setOnboardingStep( 2 );
-		},
-	};
-} )( Welcome );
+export default Welcome;

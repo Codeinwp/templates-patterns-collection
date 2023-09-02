@@ -1,5 +1,6 @@
 import { useState } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import StarterSiteCard from './StarterSiteCard';
 import VizSensor from 'react-visibility-sensor';
 import Fuse from 'fuse.js/dist/fuse.min';
@@ -58,28 +59,46 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 	const allData = getFilteredSites();
 
 	return (
-		<div className="ob-sites is-grid">
-			{ allData.slice( 0, maxShown ).map( ( site, index ) => {
-				return <StarterSiteCard key={ index } data={ site } />;
-			} ) }
+		<>
+			{ allData.length ? (
+				<div className="ob-sites is-grid">
+					{ allData.slice( 0, maxShown ).map( ( site, index ) => {
+						return <StarterSiteCard key={ index } data={ site } />;
+					} ) }
 
-			<VizSensor
-				onChange={ ( isVisible ) => {
-					if ( ! isVisible ) {
-						return false;
-					}
-					setMaxShown( maxShown + 9 );
-				} }
-			>
-				<span
-					style={ {
-						height: 10,
-						width: 10,
-						display: 'block',
-					} }
-				/>
-			</VizSensor>
-		</div>
+					<VizSensor
+						onChange={ ( isVisible ) => {
+							if ( ! isVisible ) {
+								return false;
+							}
+							setMaxShown( maxShown + 9 );
+						} }
+					>
+						<span
+							style={ {
+								height: 10,
+								width: 10,
+								display: 'block',
+							} }
+						/>
+					</VizSensor>
+				</div>
+			) : (
+				<div className="ob-no-results">
+					<p>
+						{ __(
+							'No results found.',
+							'templates-patterns-collection'
+						) }
+						&nbsp;
+						{ __(
+							'You can try a different search or use another category.',
+							'templates-patterns-collection'
+						) }
+					</p>
+				</div>
+			) }
+		</>
 	);
 };
 

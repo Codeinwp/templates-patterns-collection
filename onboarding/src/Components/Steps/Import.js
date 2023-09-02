@@ -22,14 +22,13 @@ import ImportForm from '../ImportForm';
 
 const Import = ( {
 	general,
-	themeData,
 	pluginOptions,
+	themeData,
 	error,
 	setError,
 	importData,
 	editor,
 	setThemeAction,
-	setIsCleanupAllowed,
 } ) => {
 	const [ currentStep, setCurrentStep ] = useState( null );
 	const [ actionsDone, setActionsDone ] = useState( 0 );
@@ -249,7 +248,6 @@ const Import = ( {
 
 	function importDone() {
 		setCurrentStep( 'done' );
-		setIsCleanupAllowed( 'yes' );
 		tiobDash.cleanupAllowed = 'yes';
 		setImporting( false );
 	}
@@ -360,23 +358,32 @@ const Import = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentEditor, getCurrentSite, getThemeAction } = select(
-			'ti-onboarding'
-		);
+		const {
+			getCurrentEditor,
+			getCurrentSite,
+			getThemeAction,
+			getError,
+			getPluginOptions,
+			getImportData,
+		} = select( 'ti-onboarding' );
 		return {
+			error: getError(),
 			editor: getCurrentEditor(),
 			siteData: getCurrentSite(),
 			themeData: getThemeAction() || false,
+			pluginOptions: getPluginOptions(),
+			importData: getImportData(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { setImportModalStatus, setThemeAction } = dispatch(
+		const { setImportModalStatus, setThemeAction, setError } = dispatch(
 			'ti-onboarding'
 		);
 
 		return {
 			setModal: ( status ) => setImportModalStatus( status ),
 			setThemeAction: ( status ) => setThemeAction( status ),
+			setError,
 		};
 	} )
 )( Import );

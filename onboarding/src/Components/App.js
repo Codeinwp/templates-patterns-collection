@@ -9,15 +9,9 @@ const App = () => {
 	] );
 
 	return (
-		<div className="tiob-wrap">
-			<div className={ wrapClasses }>
-				<div className="container content">
-					<div className="main">
-						<div className="tab-content columns starter-sites">
-							<Onboarding />
-						</div>
-					</div>
-				</div>
+		<div className={ wrapClasses }>
+			<div className="main">
+				<Onboarding />
 			</div>
 		</div>
 	);

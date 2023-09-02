@@ -17,10 +17,7 @@ export const SiteSettings = ( {
 	isProUser,
 	general,
 	setGeneral,
-	isCleanupAllowed,
 	fetching,
-	setImportData,
-	importData,
 } ) => {
 	const [ settingsPage, setSettingsPage ] = useState( 1 );
 	const [ siteStyle, setSiteStyle ] = useState( {
@@ -67,13 +64,10 @@ export const SiteSettings = ( {
 										) }
 									</p>
 									<PaletteControl
-										importData={ importData }
-										setImportData={ setImportData }
 										siteStyle={ siteStyle }
 										setSiteStyle={ setSiteStyle }
 									/>
 									<TypographyControl
-										setImportData={ setImportData }
 										siteStyle={ siteStyle }
 										setSiteStyle={ setSiteStyle }
 									/>
@@ -94,12 +88,8 @@ export const SiteSettings = ( {
 											'templates-patterns-collection'
 										) }
 									</p>
-									<SiteNameControl
-										setImportData={ setImportData }
-									/>
-									<LogoControl
-										setImportData={ setImportData }
-									/>
+									<SiteNameControl />
+									<LogoControl />
 								</>
 							) }
 						</div>
@@ -119,8 +109,6 @@ export const SiteSettings = ( {
 									<ImportOptionsControl
 										general={ general }
 										setGeneral={ setGeneral }
-										isCleanupAllowed={ isCleanupAllowed }
-										importData={ importData }
 									/>
 									<Button
 										disabled={ fetching }
@@ -147,20 +135,17 @@ export const SiteSettings = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getUserStatus } = select( 'ti-onboarding' );
+		const { getUserStatus, getFetching } = select( 'ti-onboarding' );
 		return {
 			isProUser: getUserStatus(),
+			fetching: getFetching(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
 		const { setOnboardingStep } = dispatch( 'ti-onboarding' );
 		return {
-			handlePrevStepClick: () => {
-				setOnboardingStep( 2 );
-			},
-			handleNextStepClick: () => {
-				setOnboardingStep( 4 );
-			},
+			handlePrevStepClick: () => setOnboardingStep( 2 ),
+			handleNextStepClick: () => setOnboardingStep( 4 ),
 		};
 	} )
 )( SiteSettings );

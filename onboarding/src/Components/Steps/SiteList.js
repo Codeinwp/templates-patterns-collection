@@ -4,6 +4,7 @@ import Sites from '../Sites';
 import EditorSelector from '../EditorSelector';
 import { EDITOR_MAP } from '../../utils/common';
 import { useEffect } from '@wordpress/element';
+import { withDispatch } from '@wordpress/data';
 
 const SiteList = ( { setFetching } ) => {
 	useEffect( () => {
@@ -24,4 +25,9 @@ const SiteList = ( { setFetching } ) => {
 	);
 };
 
-export default SiteList;
+export default withDispatch( ( dispatch ) => {
+	const { setFetching } = dispatch( 'ti-onboarding' );
+	return {
+		setFetching,
+	};
+} )( SiteList );

@@ -1,16 +1,12 @@
 import { __ } from '@wordpress/i18n';
 import { sendPostMessage } from '../../utils/common';
-import { withDispatch } from '@wordpress/data';
+import { compose } from '@wordpress/compose';
+import { withDispatch, withSelect } from '@wordpress/data';
 import { Button } from '@wordpress/components';
 import classnames from 'classnames';
 import SVG from '../../utils/svg';
 
-const PaletteControl = ( {
-	importData,
-	setImportData,
-	siteStyle,
-	setSiteStyle,
-} ) => {
+const PaletteControl = ( { importData, siteStyle, handlePaletteClick } ) => {
 	const themeMods = importData?.theme_mods;
 	const allPalettes = themeMods?.neve_global_colors?.palettes;
 	const { palette } = siteStyle;
@@ -36,31 +32,6 @@ const PaletteControl = ( {
 				) ) }
 			</>
 		);
-	};
-
-	const handlePaletteClick = ( paletteKey ) => {
-		const newStyle = {
-			...siteStyle,
-			palette: paletteKey,
-		};
-
-		setSiteStyle( newStyle );
-
-		setImportData( ( prevData ) => ( {
-			...prevData,
-			theme_mods: {
-				...prevData.theme_mods,
-				neve_global_colors: {
-					...prevData.theme_mods.neve_global_colors,
-					activePalette: paletteKey,
-				},
-			},
-		} ) );
-
-		sendPostMessage( {
-			type: 'styleChange',
-			data: newStyle,
-		} );
 	};
 
 	return (
@@ -102,11 +73,41 @@ const PaletteControl = ( {
 	);
 };
 
-export default withDispatch( ( dispatch ) => {
-	const { setOnboardingStep } = dispatch( 'ti-onboarding' );
-	return {
-		handlePrevStepClick: () => {
-			setOnboardingStep( 2 );
-		},
-	};
-} )( PaletteControl );
+export default compose(
+	withSelect( ( select ) => {
+		const { getImportData } = select( 'ti-onboarding' );
+		return {
+			importData: getImportData(),
+		};
+	} ),
+	withDispatch( ( dispatch, { importData, siteStyle, setSiteStyle } ) => {
+		const { setImportData } = dispatch( 'ti-onboarding' );
+
+		return {
+			handlePaletteClick: ( paletteKey ) => {
+				const newStyle = {
+					...siteStyle,
+					palette: paletteKey,
+				};
+				setSiteStyle( newStyle );
+
+				const newImportData = {
+					...importData,
+					theme_mods: {
+						...importData.theme_mods,
+						neve_global_colors: {
+							...importData.theme_mods.neve_global_colors,
+							activePalette: paletteKey,
+						},
+					},
+				};
+				setImportData( newImportData );
+
+				sendPostMessage( {
+					type: 'styleChange',
+					data: newStyle,
+				} );
+			},
+		};
+	} )
+)( PaletteControl );

@@ -112,12 +112,14 @@
   outline: none;
   position: relative;
   line-height: 0;
+  text-align: center;
   &.active {
     border: none;
     border-radius: 0;
   }
   img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 200px;
   }
   .ob-preview-overlay{
     position: absolute;

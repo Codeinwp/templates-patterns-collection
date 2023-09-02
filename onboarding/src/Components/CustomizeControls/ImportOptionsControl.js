@@ -7,13 +7,14 @@ import {
 import classnames from 'classnames';
 import CustomTooltip from '../CustomTooltip';
 import { Icon, Button, ToggleControl } from '@wordpress/components';
+import { withSelect } from '@wordpress/data';
 
 const ImportOptionsControl = ( {
-	isCleanupAllowed,
 	importData,
 	general,
 	setGeneral,
 } ) => {
+	const { cleanupAllowed } = tiobDash;
 	const [ optionsOpened, setOptionsOpened ] = useState( false );
 	const [ divHeight, setDivHeight ] = useState( 0 );
 	const allPlugins = {
@@ -108,7 +109,7 @@ const ImportOptionsControl = ( {
 		},
 	};
 
-	if ( isCleanupAllowed === 'yes' ) {
+	if ( cleanupAllowed === 'yes' ) {
 		map = {
 			cleanup: {
 				icon: 'trash',
@@ -215,4 +216,9 @@ const ImportOptionsControl = ( {
 	);
 };
 
-export default ImportOptionsControl;
+export default withSelect( ( select ) => {
+	const { getImportData } = select( 'ti-onboarding' );
+	return {
+		importData: getImportData(),
+	};
+} )( ImportOptionsControl );

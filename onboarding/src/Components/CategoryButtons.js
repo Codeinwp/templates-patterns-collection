@@ -1,13 +1,8 @@
-import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
+import { withSelect, withDispatch } from '@wordpress/data';
 import classnames from 'classnames';
 
-const CategoryButtons = ( {
-	categories,
-	onClick,
-	category,
-	setCurrentCategory,
-} ) => {
+const CategoryButtons = ( { category, categories, onClick } ) => {
 	return (
 		<div className="ob-cat-wrap">
 			{ Object.keys( categories ).map( ( key, index ) => {
@@ -21,12 +16,7 @@ const CategoryButtons = ( {
 					<button
 						className={ classes }
 						key={ index }
-						onClick={ () => {
-							setCurrentCategory( key );
-							if ( onClick ) {
-								onClick();
-							}
-						} }
+						onClick={ () => onClick( key ) }
 					>
 						{ categories[ key ] }
 					</button>
@@ -44,10 +34,11 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { setCurrentCategory } = dispatch( 'ti-onboarding' );
+		const { setOnboardingStep, setCategory } = dispatch( 'ti-onboarding' );
 		return {
-			setCurrentCategory: ( category ) => {
-				setCurrentCategory( category );
+			onClick: ( newCategory ) => {
+				setCategory( newCategory );
+				setOnboardingStep( 2 );
 			},
 		};
 	} )

@@ -1,101 +1,8 @@
 export default {
-	refreshSites( sites ) {
+	setCategory( category ) {
 		return {
-			type: 'REFRESH_SITES',
-			payload: { sites },
-		};
-	},
-	setCurrentEditor( editor ) {
-		return {
-			type: 'SET_CURRENT_EDITOR',
-			payload: { editor },
-		};
-	},
-	setCurrentCategory( category ) {
-		return {
-			type: 'SET_CURRENT_CATEGORY',
+			type: 'SET_CATEGORY',
 			payload: { category },
-		};
-	},
-	setCurrentSite( siteData ) {
-		return {
-			type: 'SET_FOCUSED_SITE',
-			payload: { siteData },
-		};
-	},
-	setPreviewStatus( previewStatus ) {
-		if ( previewStatus ) {
-			document.body.classList.add( 'ob-overflow-off' );
-		} else {
-			document.body.classList.remove( 'ob-overflow-off' );
-		}
-		return {
-			type: 'SET_PREVIEW_STATUS',
-			payload: { previewStatus },
-		};
-	},
-	setImportModalStatus( importModalStatus ) {
-		if ( importModalStatus ) {
-			document.body.classList.add( 'ob-overflow-off' );
-		} else {
-			document.body.classList.remove( 'ob-overflow-off' );
-		}
-		return {
-			type: 'SET_IMPORT_MODAL_STATUS',
-			payload: { importModalStatus },
-		};
-	},
-	setInstallModalStatus( installModalStatus ) {
-		if ( installModalStatus ) {
-			document.body.classList.add( 'ob-overflow-off' );
-		} else {
-			document.body.classList.remove( 'ob-overflow-off' );
-		}
-		return {
-			type: 'SET_INSTALL_MODAL_STATUS',
-			payload: { installModalStatus },
-		};
-	},
-	setThemeAction( themeActions ) {
-		return {
-			type: 'SET_THEME_ACTIONS',
-			payload: { themeActions },
-		};
-	},
-	setCurrentTab( currentTab ) {
-		return {
-			type: 'SET_CURRENT_TAB',
-			payload: { currentTab },
-		};
-	},
-	setFetching( fetching ) {
-		return {
-			type: 'SET_FETCHING',
-			payload: { fetching },
-		};
-	},
-	setSingleTemplateImport( slug ) {
-		return {
-			type: 'SET_SINGLE_TEMPLATE_IMPORT',
-			payload: { slug },
-		};
-	},
-	setTemplateModal( data ) {
-		return {
-			type: 'SET_TEMPLATE_MODAL',
-			payload: { data },
-		};
-	},
-	setSearchQuery( query ) {
-		return {
-			type: 'SET_SEARCH_QUERY',
-			payload: { query },
-		};
-	},
-	setLicense( license ) {
-		return {
-			type: 'SET_LICENSE',
-			payload: { license },
 		};
 	},
 	setOnboardingStep( step ) {
@@ -104,10 +11,46 @@ export default {
 			payload: { step },
 		};
 	},
-	setImportSettings( importSettings ) {
+	setSearchQuery( query ) {
 		return {
-			type: 'SET_IMPORT_SETTINGS',
-			payload: { importSettings },
+			type: 'SET_SEARCH_QUERY',
+			payload: { query },
+		};
+	},
+	setFetching( fetching ) {
+		return {
+			type: 'SET_FETCHING',
+			payload: { fetching },
+		};
+	},
+	setCurrentSite( siteData ) {
+		return {
+			type: 'SET_FOCUSED_SITE',
+			payload: { siteData },
+		};
+	},
+	setImportData( importData ) {
+		return {
+			type: 'SET_IMPORT_DATA',
+			payload: { importData },
+		};
+	},
+	setPluginOptions( pluginOptions ) {
+		return {
+			type: 'SET_PLUGIN_OPTIONS',
+			payload: { pluginOptions },
+		};
+	},
+	setError( error ) {
+		return {
+			type: 'SET_ERROR',
+			payload: { error },
+		};
+	},
+	setUserCustomSettings( userCustomSettings ) {
+		return {
+			type: 'SET_USER_CUSTOM_SETTINGS',
+			payload: { userCustomSettings },
 		};
 	},
 };

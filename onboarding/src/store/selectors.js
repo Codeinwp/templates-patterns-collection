@@ -1,18 +1,15 @@
 export default {
+	getThemeAction: ( state ) => state.themeAction,
+	getCurrentStep: ( state ) => state.onboardingStep,
 	getSites: ( state ) => state.sites,
-	getMigrationData: ( state ) => state.migrationData,
 	getCurrentEditor: ( state ) => state.editor,
 	getCurrentCategory: ( state ) => state.category,
-	getCurrentSite: ( state ) => state.currentSite,
-	getPreviewStatus: ( state ) => state.previewStatus,
-	getImportModalStatus: ( state ) => state.importModalStatus,
-	getThemeAction: ( state ) => state.themeAction,
-	getInstallModalStatus: ( state ) => state.installModalStatus,
-	getCurrentTab: ( state ) => state.currentTab,
 	getFetching: ( state ) => state.fetching,
-	getSingleImport: ( state ) => state.singleTemplateImport,
-	getTemplateModal: ( state ) => state.templateModal,
 	getSearchQuery: ( state ) => state.searchQuery,
+	getCurrentSite: ( state ) => state.currentSite,
+	getImportData: ( state ) => state.importData,
+	getError: ( state ) => state.error,
+	getPluginOptions: ( state ) => state.pluginOptions,
 	getUserStatus: ( state ) => {
 		const acceptedTiers = [
 			6,
@@ -38,9 +35,5 @@ export default {
 			acceptedTiers.includes( state.license.tier )
 		);
 	},
-	getLicense: ( state ) => {
-		return state.license;
-	},
-	getCurrentStep: ( state ) => state.onboardingStep,
-	getImportSettings: ( state ) => state.importSettings,
+	getUserCustomSettings: ( state ) => state.userCustomSettings,
 };

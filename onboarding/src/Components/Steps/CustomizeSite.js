@@ -1,22 +1,21 @@
 /* global tiobDash */
 import SiteSettings from '../SiteSettings';
 import { __ } from '@wordpress/i18n';
-import { useEffect, useState } from '@wordpress/element';
-import { withSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
+import { withDispatch, withSelect } from '@wordpress/data';
+import { compose } from '@wordpress/compose';
 import { trailingSlashIt } from '../../utils/common';
 import { get } from '../../utils/rest';
+import SitePreview from '../SitePreview';
 
 const CustomizeSite = ( {
 	siteData,
+	setFetching,
+	setImportData,
 	setError,
+	setPluginOptions,
 	general,
 	setGeneral,
-	fetching,
-	setFetching,
-	importData,
-	setImportData,
-	setPluginOptions,
-	isCleanupAllowed,
 } ) => {
 	const { license } = tiobDash;
 
@@ -87,34 +86,35 @@ const CustomizeSite = ( {
 
 	return (
 		<div className="ob-container row ovf-initial">
-			<SiteSettings
-				setImportData={ setImportData }
-				general={ general }
-				setGeneral={ setGeneral }
-				isCleanupAllowed={ isCleanupAllowed }
-				fetching={ fetching }
-				importData={ importData }
-			/>
-			<div className="iframe-container">
-				<iframe
-					id="ti-ss-preview"
-					className="iframe"
-					title="Your Iframe"
-					// src={ siteData.url }
-					src="https://neve.test"
-				></iframe>
-			</div>
+			<SiteSettings general={ general } setGeneral={ setGeneral } />
+			<SitePreview />
 		</div>
 	);
 };
 
-export default withSelect( ( select ) => {
-	const { getCurrentEditor, getCurrentSite, getThemeAction } = select(
-		'ti-onboarding'
-	);
-	return {
-		editor: getCurrentEditor(),
-		siteData: getCurrentSite(),
-		themeData: getThemeAction() || false,
-	};
-} )( CustomizeSite );
+export default compose(
+	withSelect( ( select ) => {
+		const { getCurrentEditor, getCurrentSite, getThemeAction } = select(
+			'ti-onboarding'
+		);
+		return {
+			editor: getCurrentEditor(),
+			siteData: getCurrentSite(),
+			themeData: getThemeAction() || false,
+		};
+	} ),
+	withDispatch( ( dispatch ) => {
+		const {
+			setFetching,
+			setImportData,
+			setPluginOptions,
+			setError,
+		} = dispatch( 'ti-onboarding' );
+		return {
+			setFetching,
+			setImportData,
+			setPluginOptions,
+			setError,
+		};
+	} )
+)( CustomizeSite );

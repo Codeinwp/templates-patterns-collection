@@ -5,12 +5,8 @@ import { TextControl } from '@wordpress/components';
 import { sendPostMessage } from '../../utils/common';
 import { useState, useEffect } from '@wordpress/element';
 
-const SiteNameControl = ( {
-	importSettings,
-	handleSiteNameChange,
-	setImportData,
-} ) => {
-	const { siteName } = importSettings;
+const SiteNameControl = ( { userCustomSettings, handleSiteNameChange } ) => {
+	const { siteName } = userCustomSettings;
 	const [ inputValue, setInputValue ] = useState( siteName );
 
 	useEffect( () => {
@@ -34,13 +30,6 @@ const SiteNameControl = ( {
 					value={ inputValue }
 					onChange={ ( newValue ) => {
 						setInputValue( newValue );
-						setImportData( ( prevData ) => ( {
-							...prevData,
-							wp_options: {
-								...prevData.wp_options,
-								blogname: newValue,
-							},
-						} ) );
 					} }
 				/>
 			</div>
@@ -50,22 +39,36 @@ const SiteNameControl = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentSite, getImportSettings } = select( 'ti-onboarding' );
+		const { getUserCustomSettings, getImportData } = select(
+			'ti-onboarding'
+		);
 		return {
-			siteData: getCurrentSite(),
-			importSettings: getImportSettings(),
+			userCustomSettings: getUserCustomSettings(),
+			importData: getImportData(),
 		};
 	} ),
-	withDispatch( ( dispatch, { importSettings } ) => {
-		const { setImportSettings } = dispatch( 'ti-onboarding' );
+	withDispatch( ( dispatch, { importData, userCustomSettings } ) => {
+		const { setUserCustomSettings, setImportData } = dispatch(
+			'ti-onboarding'
+		);
 
 		return {
 			handleSiteNameChange: ( newSiteName ) => {
 				const updatedSettings = {
-					...importSettings,
+					...userCustomSettings,
 					siteName: newSiteName,
 				};
-				setImportSettings( updatedSettings );
+				setUserCustomSettings( updatedSettings );
+
+				const newImportData = {
+					...importData,
+					wp_options: {
+						...importData.wp_options,
+						blogname: newSiteName,
+					},
+				};
+				setImportData( newImportData );
+
 				sendPostMessage( {
 					type: 'siteNameChange',
 					data: newSiteName,

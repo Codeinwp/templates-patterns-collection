@@ -1,18 +1,3 @@
-.ob-new {
-  color: $main-text;
-}
-
-.content-wrap.is-onboarding {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100000;
-  background: $inverted-text;
-  overflow: auto;
-}
-
 h1 {
   color: $main-text;
   font-size: 40px;
@@ -37,6 +22,74 @@ p {
   font-weight: 300;
 }
 
+.content-wrap.is-onboarding {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100000;
+  background: $inverted-text;
+  overflow: auto;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ob-container {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  &.narrow {
+    justify-content: center;
+    max-width: 559px;
+    margin: 0 auto;
+    overflow: initial;
+  }
+  &.wide {
+    padding: 0 50px;
+  }
+  &.row {
+    flex-direction: row;
+  }
+  &.center {
+    text-align: center;
+    align-items: center;
+  }
+}
+
+.ob-no-results{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.ob-sites {
+  margin-top: 30px;
+
+  &.is-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 22px;
+    grid-row-gap: 24px;
+  }
+}
+
+.ob-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/**
+ * Inputs.
+ */
 input.components-text-control__input,
 input.components-text-control__input[type="text"],
 input.components-text-control__input[type="email"],
@@ -52,6 +105,7 @@ input.components-text-control__input[type="email"],
     outline: 2px solid $primary;
   }
 }
+
 .ob-select.ob-select.ob-select {
   .components-input-control__backdrop {
     border: none;
@@ -85,59 +139,8 @@ button.ob-button {
   }
 }
 
-.ob-container {
-  justify-content: center;
-  flex-direction: column;
-  display: flex;
-  height: calc(100vh - 61px);
-  &.row {
-    flex-direction: row;
-  }
-  &.wide {
-    display: block;
-    padding: 0 50px;
-  }
-  &.narrow {
-    transform: translateY(-61px);
-    max-width: 559px;
-    margin: 0 auto;
-  }
-  &.center {
-    text-align: center;
-    align-items: center;
-  }
-  &.ovf-initial{
-    overflow: initial;
-  }
-}
-
-.ob-sites {
-  margin-top: 30px;
-
-  &.is-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-column-gap: 22px;
-    grid-row-gap: 24px;
-  }
-}
-
-.ob-title-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.iframe-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
 .iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+  flex: 1
 }
 
 @mixin ob-general--laptop() {
