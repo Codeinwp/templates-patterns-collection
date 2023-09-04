@@ -1,5 +1,5 @@
 /* global tiobDash */
-import { Dashicon, Button } from '@wordpress/components';
+import { Dashicon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 const ImportError = ( { message, code } ) => {

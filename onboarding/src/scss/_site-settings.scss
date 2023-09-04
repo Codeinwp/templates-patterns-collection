@@ -4,26 +4,46 @@
   transition: width 0.3s ease;
   z-index: 2;
   overflow: auto;
-  padding: 45px 24px;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
 }
 
-.ob-back {
-  color: $primary;
-  line-height: 23.8px;
-  font-weight: 400;
-  margin-bottom: 11px;
-  padding: 0;
+.ob-settings-description {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-bottom: 37px;
+  .ob-back {
+    color: $primary;
+    padding: 0;
+  }
+  h2 {
+    margin: 0;
+  }
+  p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 23.8px;
+    font-weight: 400;
+  }
 }
 
 .ob-settings-wrap{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: calc( 100% - 50px );
+  flex: 1;
 }
 
-.ob-settings-bottom{
+.ob-settings-top {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.ob-settings-bottom {
   position: relative;
-  margin-top: 80px;
+  margin-top: 56px;
   padding-bottom: 10px;
 }

@@ -1,15 +1,16 @@
 .ob-search-container {
-  margin-top: 80px;
+  margin-top: 61px;
 }
 
 .ob-search-form {
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
 }
 
 .ob-search-wrap {
   position: relative;
+  flex: 1;
   input.search-input {
     background-color: $light-bg;
     border: none;
@@ -18,6 +19,9 @@
     width: 100%;
     max-width: 275px;
     line-height: 26px;
+    &:focus{
+      outline: 2px solid $primary;
+    }
   }
   .search-icon{
     position: absolute;

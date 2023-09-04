@@ -3,7 +3,7 @@ import Search from './Search';
 import CategoryButtons from './CategoryButtons';
 import { ONBOARDING_CAT } from '../utils/common';
 
-const Filters = ( { category, setCategory } ) => {
+const Filters = () => {
 	const categories = {
 		all: __( 'All', 'templates-patterns-collection' ),
 		...ONBOARDING_CAT,

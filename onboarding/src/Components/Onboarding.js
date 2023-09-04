@@ -16,16 +16,23 @@ const Onboarding = ( { step, themeData } ) => {
 		performanceAddon: true,
 		theme_install: themeData !== false,
 	} );
+	const [ importing, setImporting ] = useState( false );
 
 	return (
 		<Fragment>
-			<Header />
+			<Header importing={ importing } />
 			{ step === 1 && <Welcome /> }
 			{ step === 2 && <SiteList /> }
 			{ step === 3 && (
 				<CustomizeSite general={ general } setGeneral={ setGeneral } />
 			) }
-			{ step === 4 && <Import general={ general } /> }
+			{ step === 4 && (
+				<Import
+					general={ general }
+					importing={ importing }
+					setImporting={ setImporting }
+				/>
+			) }
 		</Fragment>
 	);
 };

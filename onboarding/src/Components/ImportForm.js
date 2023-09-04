@@ -93,6 +93,8 @@ const ImportForm = () => {
 				slug: 'templates-patterns-collection',
 				site,
 				email,
+				userLevel,
+				buildingFor,
 			} ),
 		} )
 			.then( ( r ) => r.json() )

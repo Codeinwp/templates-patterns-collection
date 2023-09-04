@@ -2,9 +2,9 @@ import { compose } from '@wordpress/compose';
 import { withSelect, withDispatch } from '@wordpress/data';
 import classnames from 'classnames';
 
-const CategoryButtons = ( { category, categories, onClick } ) => {
+const CategoryButtons = ( { category, categories, onClick, style } ) => {
 	return (
-		<div className="ob-cat-wrap">
+		<div className="ob-cat-wrap" style={ style }>
 			{ Object.keys( categories ).map( ( key, index ) => {
 				const classes = classnames( {
 					cat: true,

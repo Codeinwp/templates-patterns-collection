@@ -4,12 +4,21 @@ import { withDispatch, withSelect } from '@wordpress/data';
 import classnames from 'classnames';
 import SVG from '../utils/svg';
 
-const Search = ( { onSearch, query, handleSubmit, step, deleteQuery } ) => {
+const Search = ( {
+	onSearch,
+	query,
+	handleSubmit,
+	step,
+	deleteQuery,
+	label,
+} ) => {
 	return (
 		<form onSubmit={ handleSubmit } className="ob-search-form">
+			{ label && <label htmlFor="ob-search-ss">{ label }</label> }
 			<div className="ob-search-wrap">
 				<Icon className="search-icon" icon={ SVG.search } />
 				<input
+					id="ob-search-ss"
 					type="text"
 					value={ query }
 					onChange={ ( e ) => {

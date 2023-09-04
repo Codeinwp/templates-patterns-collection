@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { __, sprintf } from '@wordpress/i18n';
 import {
 	createInterpolateElement,
@@ -9,11 +10,7 @@ import CustomTooltip from '../CustomTooltip';
 import { Icon, Button, ToggleControl } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 
-const ImportOptionsControl = ( {
-	importData,
-	general,
-	setGeneral,
-} ) => {
+const ImportOptionsControl = ( { importData, general, setGeneral } ) => {
 	const { cleanupAllowed } = tiobDash;
 	const [ optionsOpened, setOptionsOpened ] = useState( false );
 	const [ divHeight, setDivHeight ] = useState( 0 );
@@ -31,8 +28,7 @@ const ImportOptionsControl = ( {
 	const updateDivHeight = () => {
 		const element = document.querySelector( '.ob-settings-wrap' );
 		if ( element ) {
-			const height = element.offsetHeight - 82;
-			setDivHeight( height );
+			setDivHeight( element.offsetHeight + 56 );
 		}
 	};
 
@@ -155,39 +151,41 @@ const ImportOptionsControl = ( {
 							optionsOpened ? { height: divHeight + 'px' } : {}
 						}
 					>
-						{ Object.keys( map ).map( ( id, index ) => {
-							const rowClass = classnames( 'ob-option-row', {
-								active: general[ id ],
-							} );
-							const { icon, title, tooltip } = map[ id ];
+						<div className="ob-import-options-toggles">
+							{ Object.keys( map ).map( ( id, index ) => {
+								const rowClass = classnames( 'ob-option-row', {
+									active: general[ id ],
+								} );
+								const { icon, title, tooltip } = map[ id ];
 
-							return (
-								<div className={ rowClass } key={ index }>
-									<div className="ob-option-name">
-										<Icon icon={ icon } />
-										<span>{ title }</span>
-										{ tooltip && (
-											<CustomTooltip>
-												{ tooltip }
-											</CustomTooltip>
+								return (
+									<div className={ rowClass } key={ index }>
+										<div className="ob-option-name">
+											<Icon icon={ icon } />
+											<span>{ title }</span>
+											{ tooltip && (
+												<CustomTooltip>
+													{ tooltip }
+												</CustomTooltip>
+											) }
+										</div>
+										{ id !== 'theme_install' && (
+											<div className="ob-toggle-wrapper">
+												<ToggleControl
+													checked={ general[ id ] }
+													onChange={ () => {
+														setGeneral( {
+															...general,
+															[ id ]: ! general[ id ],
+														} );
+													} }
+												/>
+											</div>
 										) }
 									</div>
-									{ id !== 'theme_install' && (
-										<div className="ob-toggle-wrapper">
-											<ToggleControl
-												checked={ general[ id ] }
-												onChange={ () => {
-													setGeneral( {
-														...general,
-														[ id ]: ! general[ id ],
-													} );
-												} }
-											/>
-										</div>
-									) }
-								</div>
-							);
-						} ) }
+								);
+							} ) }
+						</div>
 						{ allPlugins && (
 							<div className="ob-import-plugins">
 								<h2>

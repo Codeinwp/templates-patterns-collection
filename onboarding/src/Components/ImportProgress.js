@@ -1,6 +1,5 @@
 import { __ } from '@wordpress/i18n';
 import ProgressBar from './ProgressBar';
-import { useState } from '@wordpress/element';
 
 const ImportProgress = ( { currentStep, actionsNb, actionsDone } ) => {
 	const stepsMap = {
@@ -30,12 +29,12 @@ const ImportProgress = ( { currentStep, actionsNb, actionsDone } ) => {
 		actionsNb === actionsDone ? 100 : increaseAmount * actionsDone;
 
 	return (
-		<>
+		<div className="ob-progress">
 			<ProgressBar completed={ completed } />
-			{ actionsNb !== actionsDone && (
+			{ actionsNb !== actionsDone && stepsMap[ currentStep ] && (
 				<p>{ stepsMap[ currentStep ] }...</p>
 			) }
-		</>
+		</div>
 	);
 };
 

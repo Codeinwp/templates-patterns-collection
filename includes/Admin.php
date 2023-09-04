@@ -446,7 +446,6 @@ class Admin {
 			wp_enqueue_media();
 
 			$onboarding_dependencies = ( include TIOB_PATH . 'onboarding/build/index.asset.php' );
-
 			wp_register_style( 'tiobObd', TIOB_URL . 'onboarding/build/style-index.css', array( 'wp-components' ), $onboarding_dependencies['version'] );
 			wp_style_add_data( 'tiobObd', 'rtl', 'replace' );
 			wp_enqueue_style( 'tiobObd' );
@@ -460,7 +459,7 @@ class Admin {
 				foreach ( $font_chunks as $index => $fonts_chunk ) {
 					wp_enqueue_style(
 						'tiob-google-fonts-' . $index,
-						'https://fonts.googleapis.com/css?family=' . join( '|', $fonts_chunk ) . '&display=swap"',
+						'https://fonts.googleapis.com/css?family=' . implode( '|', $fonts_chunk ) . '&display=swap"',
 						[],
 						$onboarding_dependencies['version']
 					);
@@ -636,14 +635,127 @@ class Admin {
 	 * Get font parings
 	 */
 	private function get_font_parings() {
-		if ( ! class_exists( '\Neve\Core\Settings\Mods', false ) ) {
-			return;
+		$font_pair_neve = [
+			[
+				'headingFont' => [
+					'font'        => 'Inter',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				],
+				'bodyFont'    => [
+					'font'       => 'Inter',
+					'fontSource' => 'Google',
+				],
+			],
+			[
+				'headingFont' => [
+					'font'        => 'Playfair Display',
+					'fontSource'  => 'Google',
+					'previewSize' => '27px',
+				],
+				'bodyFont'    => [
+					'font'        => 'Source Sans Pro',
+					'fontSource'  => 'Google',
+					'previewSize' => '18px',
+				],
+			],
+			[
+				'headingFont' => [
+					'font'       => 'Montserrat',
+					'fontSource' => 'Google',
+				],
+				'bodyFont'    => [
+					'font'       => 'Open Sans',
+					'fontSource' => 'Google',
+				],
+			],
+			[
+				'headingFont' => [
+					'font'       => 'Nunito',
+					'fontSource' => 'Google',
+				],
+				'bodyFont'    => [
+					'font'       => 'Lora',
+					'fontSource' => 'Google',
+				],
+			],
+			[
+				'headingFont' => [
+					'font'       => 'Lato',
+					'fontSource' => 'Google',
+				],
+				'bodyFont'    => [
+					'font'       => 'Karla',
+					'fontSource' => 'Google',
+				],
+			],
+			[
+				'headingFont' => [
+					'font'        => 'Outfit',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				],
+				'bodyFont'    => [
+					'font'       => 'Spline Sans',
+					'fontSource' => 'Google',
+				],
+			],
+			[
+				'headingFont' => [
+					'font'        => 'Lora',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				],
+				'bodyFont'    => [
+					'font'       => 'Ubuntu',
+					'fontSource' => 'Google',
+				],
+			],
+			[
+				'headingFont' => [
+					'font'        => 'Prata',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				],
+				'bodyFont'    => [
+					'font'        => 'Hanken Grotesk',
+					'fontSource'  => 'Google',
+					'previewSize' => '17px',
+				],
+			],
+			[
+				'headingFont' => [
+					'font'        => 'Albert Sans',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				],
+				'bodyFont'    => [
+					'font'        => 'Albert Sans',
+					'fontSource'  => 'Google',
+					'previewSize' => '17px',
+				],
+			],
+			[
+				'headingFont' => [
+					'font'        => 'Fraunces',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				],
+				'bodyFont'    => [
+					'font'        => 'Hanken Grotesk',
+					'fontSource'  => 'Google',
+					'previewSize' => '17px',
+				],
+			],
+		];
+
+		if ( class_exists( '\Neve\Core\Settings\Mods', false ) ) {
+			$font_pair_neve = apply_filters(
+				'neve_font_pairings',
+				\Neve\Core\Settings\Mods::get( \Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS, \Neve\Core\Settings\Config::$typography_default_pairs )
+			);
 		}
 
-		$font_pair_neve = apply_filters(
-			'neve_font_pairings',
-			\Neve\Core\Settings\Mods::get( \Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS, \Neve\Core\Settings\Config::$typography_default_pairs )
-		);
 		$index = 0;
 		foreach ( $font_pair_neve as $font_pair ) {
 			// limit the number of font pairs to first 5 and `Prata` and `Hanken Grotesk`.

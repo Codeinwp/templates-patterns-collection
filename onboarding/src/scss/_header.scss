@@ -7,7 +7,7 @@
   background: #fff;
   position: relative;
   z-index: 1;
-  button, a {
-    display: flex;
+  .components-button.is-link {
+    color: $main-text;
   }
 }

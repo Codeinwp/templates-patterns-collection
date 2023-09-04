@@ -1,3 +1,4 @@
+/* global tiobDash, FormData, fetch */
 export const send = ( route, data, simple = false ) => {
 	return requestData( route, simple, data );
 };
@@ -23,7 +24,10 @@ const requestData = async (
 
 	if ( tiobDash.params.site_url ) {
 		const url = new URL( route );
-		url.searchParams.append( 'site_url', encodeURIComponent( tiobDash.params.site_url ) );
+		url.searchParams.append(
+			'site_url',
+			encodeURIComponent( tiobDash.params.site_url )
+		);
 		route = url;
 	}
 
@@ -40,12 +44,17 @@ const requestData = async (
 	} );
 };
 
-export const ajaxAction = async (route, action = '', useNonce = '', data = {} ) => {
+export const ajaxAction = async (
+	route,
+	action = '',
+	useNonce = '',
+	data = {}
+) => {
 	const formData = new FormData();
-	formData.append('nonce', useNonce);
-	formData.append('action', action);
+	formData.append( 'nonce', useNonce );
+	formData.append( 'action', action );
 	if ( Object.keys( data ).length > 0 ) {
-		for ( const [key, value] of Object.entries( data ) ) {
+		for ( const [ key, value ] of Object.entries( data ) ) {
 			formData.append( key, value );
 		}
 	}
@@ -57,7 +66,7 @@ export const ajaxAction = async (route, action = '', useNonce = '', data = {} ) 
 		body: formData,
 	};
 
-	return await fetch(route, options).then(() => {
+	return await fetch( route, options ).then( () => {
 		return true;
-	});
+	} );
 };

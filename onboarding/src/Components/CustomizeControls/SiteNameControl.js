@@ -19,7 +19,7 @@ const SiteNameControl = ( { userCustomSettings, handleSiteNameChange } ) => {
 
 	return (
 		<div className="ob-ctrl">
-			<div className="ob-ctrl-head">
+			<div className="ob-ctrl-head small-gap">
 				<h3>
 					{ __( 'Bussiness Name', 'templates-patterns-collection' ) }
 				</h3>
@@ -57,6 +57,7 @@ export default compose(
 				const updatedSettings = {
 					...userCustomSettings,
 					siteName: newSiteName,
+					updated: true,
 				};
 				setUserCustomSettings( updatedSettings );
 
@@ -70,8 +71,8 @@ export default compose(
 				setImportData( newImportData );
 
 				sendPostMessage( {
-					type: 'siteNameChange',
-					data: newSiteName,
+					type: 'updateSiteInfo',
+					data: userCustomSettings,
 				} );
 			},
 		};

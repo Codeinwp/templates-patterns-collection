@@ -2,17 +2,26 @@ h1 {
   color: $main-text;
   font-size: 40px;
   line-height: 54px;
+  margin: 0;
 }
 
 h2 {
   font-size: 24px;
   line-height: 36px;
-  margin: 10px 0;
+  margin: 0 0 11px 0;
+  font-weight: 700;
 }
 
 h3 {
   font-size: 20px;
   line-height: 30px;
+  font-weight: 700;
+}
+
+h4 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
 }
 
 p {
@@ -20,9 +29,21 @@ p {
   line-height: 30.6px;
   color: $secondary-text;
   font-weight: 300;
+  margin: 21px 0;
 }
 
-.content-wrap.is-onboarding {
+label {
+  color: $secondary-text;
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: 300;
+}
+
+iframe {
+  flex: 1
+}
+
+.ob {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -33,7 +54,7 @@ p {
   overflow: auto;
 }
 
-.main {
+.ob-main {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -51,7 +72,7 @@ p {
     overflow: initial;
   }
   &.wide {
-    padding: 0 50px;
+    padding: 43px;
   }
   &.row {
     flex-direction: row;
@@ -69,16 +90,11 @@ p {
   justify-content: center;
 }
 
-
-.ob-sites {
-  margin-top: 30px;
-
-  &.is-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-column-gap: 22px;
-    grid-row-gap: 24px;
-  }
+.ob-sites.is-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 23px;
+  grid-row-gap: 24px;
 }
 
 .ob-title-wrap {
@@ -119,7 +135,7 @@ input.components-text-control__input[type="email"],
   }
 }
 
-button.ob-button {
+.ob-button {
   display: flex;
   height: 48px;
   padding: 16px 32px;
@@ -130,7 +146,7 @@ button.ob-button {
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
-  line-height: 150%;
+  line-height: 30px;
   &.is-primary{
     background: $primary;
   }
@@ -139,8 +155,18 @@ button.ob-button {
   }
 }
 
-.iframe {
-  flex: 1
+.ob-pro-info {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  h4, p {
+    margin: 0;
+  }
+  p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 23.8px;
+  }
 }
 
 @mixin ob-general--laptop() {

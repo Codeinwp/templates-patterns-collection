@@ -32,6 +32,7 @@ const initialState = {
 			thumbnail: '',
 			url: '',
 		},
+		updated: false,
 	},
 	importData: null,
 	pluginOptions: {},

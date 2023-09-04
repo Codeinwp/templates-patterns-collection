@@ -18,16 +18,17 @@ const Welcome = () => {
 					'templates-patterns-collection'
 				) }
 			</p>
-			<CategoryButtons categories={ ONBOARDING_CAT } />
+			<CategoryButtons
+				categories={ ONBOARDING_CAT }
+				style={ { margin: '26px 0' } }
+			/>
 			<div className="ob-search-container">
-				<p>
-					{ ' ' }
-					{ __(
+				<Search
+					label={ __(
 						'Or search for a site',
 						'templates-patterns-collection'
 					) }
-				</p>
-				<Search />
+				/>
 			</div>
 		</div>
 	);

@@ -29,10 +29,11 @@ const Import = ( {
 	importData,
 	editor,
 	setThemeAction,
+	importing,
+	setImporting,
 } ) => {
 	const [ currentStep, setCurrentStep ] = useState( null );
 	const [ actionsDone, setActionsDone ] = useState( 0 );
-	const [ importing, setImporting ] = useState( false );
 
 	function runImportCleanup() {
 		console.clear();
@@ -291,40 +292,41 @@ const Import = ( {
 	}
 
 	useEffect( () => {
+		setImporting( true );
 		runImportCleanup();
 	}, [] );
 
 	return (
 		<div className="ob-container narrow center">
-			{ 'done' !== currentStep && ! error && ! importing ? (
+			{ 'done' !== currentStep && ! error && importing ? (
 				<>
-					<h1>
-						{ __(
-							'We are importing your new site!',
-							'templates-patterns-collection'
-						) }
-					</h1>
-					<p>
-						{ __(
-							'Sit tight as we import a website based on your references.',
-							'templates-patterns-collection'
-						) }
-					</p>
-					{ null !== currentStep && (
-						<ImportProgress
-							actionsDone={ actionsDone }
-							currentStep={ currentStep }
-							actionsNb={
-								Object.values( general ).filter(
-									( value ) => value === true
-								).length
-							}
-						/>
-					) }
+					<div className="ob-importing-header-wrap">
+						<h1>
+							{ __(
+								'We are importing your new site!',
+								'templates-patterns-collection'
+							) }
+						</h1>
+						<p>
+							{ __(
+								'Sit tight as we import a website based on your references.',
+								'templates-patterns-collection'
+							) }
+						</p>
+					</div>
+					<ImportProgress
+						actionsDone={ actionsDone }
+						currentStep={ currentStep }
+						actionsNb={
+							Object.values( general ).filter(
+								( value ) => value === true
+							).length
+						}
+					/>
 				</>
 			) : (
 				<>
-					{ error && (
+					{ error && ! importing && (
 						<>
 							<ImportError
 								message={ error.message || null }

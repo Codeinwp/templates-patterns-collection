@@ -1,9 +1,11 @@
-
 .ob-ctrl-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 40px 0 20px 0;
+  margin: 0 0 24px 0;
+  &.small-gap {
+    margin: 0 0 9px 0;
+  }
   h3 {
     margin: 0;
   }
@@ -20,7 +22,7 @@
   &.font {
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 70px;
   }
 }
@@ -69,6 +71,13 @@
   width: 80px;
   height: 60px;
   justify-content: center;
+}
+
+.ob-font-default {
+  width: 100%;
+  .separator{
+    margin: 0 10px;
+  }
 }
 
 /**
@@ -123,7 +132,7 @@
   }
   .ob-preview-overlay{
     position: absolute;
-    background: rgba( 0, 0, 0, .7 );
+    background: rgba( 0, 0, 0, .5 );
     opacity: 0;
     top: 0;
     left: 0;
@@ -136,7 +145,6 @@
     button {
       color: $error;
       font-size: 16px;
-      font-weight: bold;
     }
   }
   &:hover .ob-preview-overlay{
@@ -170,6 +178,10 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row-reverse;
+    padding: 16px 8px;
+    height: auto;
+    width: calc( 100% - 6px );
+    margin-left: 2px;
   }
 }
 
@@ -177,7 +189,9 @@
   height: 0;
   overflow: hidden;
   transition: all 0.5s ease-in-out;
-  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .ob-option-row {
@@ -203,4 +217,19 @@
 
 .ob-toggle-wrapper > div {
   margin-bottom: 0;
+}
+
+.ob-import-plugins {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  h2, p {
+    margin: 0;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 23.8px;
+    font-weight: 400;
+  }
 }

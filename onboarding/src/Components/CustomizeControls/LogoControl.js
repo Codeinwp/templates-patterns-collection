@@ -22,7 +22,7 @@ const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 
 	return (
 		<div className="ob-ctrl">
-			<div className="ob-ctrl-head">
+			<div className="ob-ctrl-head small-gap">
 				<h3>
 					{ __( 'Upload a logo', 'templates-patterns-collection' ) }
 				</h3>
@@ -108,6 +108,7 @@ export default compose(
 				const updatedSettings = {
 					...userCustomSettings,
 					siteLogo: newLogo,
+					updated: true,
 				};
 				setUserCustomSettings( updatedSettings );
 
@@ -126,8 +127,8 @@ export default compose(
 				setImportData( newImportData );
 
 				sendPostMessage( {
-					type: 'logoChange',
-					data: newLogo.url,
+					type: 'updateSiteInfo',
+					data: userCustomSettings,
 				} );
 			},
 		};
