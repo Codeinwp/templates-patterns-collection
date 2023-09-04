@@ -58,8 +58,7 @@ const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
 			id="ti-ss-preview"
 			className="iframe"
 			title="Your Iframe"
-			// src={ siteData.url }
-			src="https://neve.test"
+			src={ siteData.url }
 			onLoad={ handleIframeLoading }
 		></iframe>
 	);
