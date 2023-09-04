@@ -57,7 +57,6 @@ export default compose(
 				const updatedSettings = {
 					...userCustomSettings,
 					siteName: newSiteName,
-					updated: true,
 				};
 				setUserCustomSettings( updatedSettings );
 
@@ -70,9 +69,13 @@ export default compose(
 				};
 				setImportData( newImportData );
 
+				const logoDisplay = newImportData?.theme_mods?.logo_display;
 				sendPostMessage( {
 					type: 'updateSiteInfo',
-					data: userCustomSettings,
+					data: {
+						...updatedSettings,
+						logoDisplay,
+					},
 				} );
 			},
 		};

@@ -26,13 +26,8 @@ const initialState = {
 	license: initialLicense,
 	onboardingStep: 1,
 	userCustomSettings: {
-		siteName: '',
-		siteLogo: {
-			id: '',
-			thumbnail: '',
-			url: '',
-		},
-		updated: false,
+		siteName: null,
+		siteLogo: null,
 	},
 	importData: null,
 	pluginOptions: {},

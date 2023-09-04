@@ -2,7 +2,7 @@ import { useEffect, useState } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import { sendPostMessage } from '../utils/common';
 
-const SitePreview = ( { userCustomSettings, siteData } ) => {
+const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
 	const [ loading, setLoading ] = useState( true );
 
 	const loadDefaultFonts = ( message ) => {
@@ -31,9 +31,14 @@ const SitePreview = ( { userCustomSettings, siteData } ) => {
 	useEffect( () => {
 		window.addEventListener( 'message', loadDefaultFonts );
 
+		const logoDisplay = importData?.theme_mods?.logo_display;
+
 		sendPostMessage( {
-			type: 'updateAll',
-			data: userCustomSettings,
+			type: 'updateSiteInfo',
+			data: {
+				...userCustomSettings,
+				logoDisplay,
+			},
 		} );
 
 		if ( loading !== false ) {
@@ -61,9 +66,12 @@ const SitePreview = ( { userCustomSettings, siteData } ) => {
 };
 
 export default withSelect( ( select ) => {
-	const { getUserCustomSettings, getCurrentSite } = select( 'ti-onboarding' );
+	const { getUserCustomSettings, getCurrentSite, getImportData } = select(
+		'ti-onboarding'
+	);
 	return {
 		userCustomSettings: getUserCustomSettings(),
 		siteData: getCurrentSite(),
+		importData: getImportData(),
 	};
 } )( SitePreview );

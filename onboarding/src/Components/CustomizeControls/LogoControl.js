@@ -10,7 +10,7 @@ import { useState } from '@wordpress/element';
 
 const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 	const { siteLogo } = userCustomSettings;
-	const [ logo, setLogo ] = useState( siteLogo.url );
+	const [ logo, setLogo ] = useState( siteLogo?.url || '' );
 
 	const replaceMediaUpload = () => MediaUpload;
 
@@ -34,7 +34,7 @@ const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 						setLogo( newLogo.url );
 					} }
 					allowedTypes={ [ 'image' ] }
-					value={ siteLogo.id }
+					value={ siteLogo?.id || '' }
 					render={ ( { open } ) => (
 						<>
 							<div className="ob-media-controls">
@@ -108,7 +108,6 @@ export default compose(
 				const updatedSettings = {
 					...userCustomSettings,
 					siteLogo: newLogo,
-					updated: true,
 				};
 				setUserCustomSettings( updatedSettings );
 
@@ -126,9 +125,14 @@ export default compose(
 				};
 				setImportData( newImportData );
 
+				const logoDisplay = newImportData?.theme_mods?.logo_display;
+
 				sendPostMessage( {
 					type: 'updateSiteInfo',
-					data: userCustomSettings,
+					data: {
+						...updatedSettings,
+						logoDisplay,
+					},
 				} );
 			},
 		};
