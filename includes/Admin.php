@@ -468,7 +468,7 @@ class Admin {
 			return;
 		}
 
-		if ( $this->neve_new_user === 'yes' && strpos( $screen->id, '_page_neve-onboarding' ) ) {
+		if ( $this->neve_new_user === 'yes' && current_user_can( 'install_plugins') && strpos( $screen->id, '_page_neve-onboarding' ) ) {
 
 			wp_enqueue_media();
 
