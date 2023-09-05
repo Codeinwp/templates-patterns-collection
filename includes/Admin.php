@@ -75,7 +75,6 @@ class Admin {
 		add_action( 'admin_menu', array( $this, 'register' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
-		//      add_action( 'activated_plugin', array( $this, 'set_activation_redirect' ) );
 		add_action( 'admin_footer_text', array( $this, 'activation_redirect' ) );
 
 		$this->setup_white_label();
@@ -290,12 +289,15 @@ class Admin {
 	 *
 	 * @return void
 	 */
-	public function activation_redirect( $plugin ) {
+	public function activation_redirect() {
 		$just_activated = get_option( 'tpc_activated', false );
 		if ( ! $just_activated ) {
 			return;
 		}
 		if ( $this->neve_new_user !== 'yes' ) {
+			return;
+		}
+		if ( ! current_user_can( 'install_plugins' ) ) {
 			return;
 		}
 		delete_option( 'tpc_activated' );
