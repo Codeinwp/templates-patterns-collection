@@ -11,6 +11,7 @@
 .ob-search-wrap {
   position: relative;
   flex: 1;
+  max-width: 275px;
   input.search-input {
     background-color: $light-bg;
     border: none;

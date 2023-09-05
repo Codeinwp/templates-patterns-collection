@@ -53,4 +53,10 @@ export default {
 			payload: { userCustomSettings },
 		};
 	},
+	setCurrentEditor( editor ) {
+		return {
+			type: 'SET_CURRENT_EDITOR',
+			payload: { editor },
+		};
+	},
 };

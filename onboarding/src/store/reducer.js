@@ -89,6 +89,13 @@ export default ( state = initialState, action ) => {
 				...state,
 				userCustomSettings,
 			};
+		case 'SET_CURRENT_EDITOR':
+			const { editor } = action.payload;
+			localStorage.setItem( 'neve-onboarding-editor', editor );
+			return {
+				...state,
+				editor,
+			};
 	}
 	return state;
 };
