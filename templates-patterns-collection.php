@@ -77,3 +77,8 @@ function ti_tpc_run() {
 
 	\TIOB\Main::instance();
 }
+
+function ti_tpc_activation_redirect() {
+	add_option( 'tpc_activated', true );
+}
+add_action( 'activated_plugin', 'ti_tpc_activation_redirect' );

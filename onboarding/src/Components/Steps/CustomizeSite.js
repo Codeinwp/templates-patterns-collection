@@ -20,6 +20,7 @@ const CustomizeSite = ( {
 	const { license } = tiobDash;
 
 	useEffect( () => {
+		// TODO: Uncomment the following line
 		// const fetchAddress = siteData.remote_url || siteData.url;
 		// Use the line below if testing in a staging env:
 		const fetchAddress = siteData.url || siteData.remote_url;

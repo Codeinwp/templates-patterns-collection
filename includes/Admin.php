@@ -52,6 +52,12 @@ class Admin {
 	 */
 	private $google_fonts = [];
 
+	/**
+	 * Is new Neve user
+	 * @var string
+	 */
+	private $neve_new_user;
+
 	public static function get_templates_cloud_endpoint() {
 		return 'https://' . self::API . '/templates-cloud/';
 	}
@@ -60,6 +66,8 @@ class Admin {
 	 * Initialize the Admin.
 	 */
 	public function init() {
+		$this->neve_new_user = get_option( 'neve_new_user', 'no' );
+
 		License::get_instance();
 		add_filter( 'query_vars', array( $this, 'add_onboarding_query_var' ) );
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
@@ -67,6 +75,8 @@ class Admin {
 		add_action( 'admin_menu', array( $this, 'register' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
+//		add_action( 'activated_plugin', array( $this, 'set_activation_redirect' ) );
+		add_action( 'admin_footer_text', array( $this, 'activation_redirect' ) );
 
 		$this->setup_white_label();
 
@@ -274,6 +284,25 @@ class Admin {
 		return $data;
 	}
 
+
+	/**
+	 * Redirect to onboarding if user is new.
+	 *
+	 * @return void
+	 */
+	public function activation_redirect( $plugin ) {
+		$just_activated = get_option( 'tpc_activated', false );
+		if ( ! $just_activated ) {
+			return;
+		}
+		if ( $this->neve_new_user !== 'yes' ){
+			return;
+		}
+		delete_option( 'tpc_activated' );
+		wp_safe_redirect( admin_url( 'admin.php?page=neve-onboarding' ) );
+		exit();
+	}
+
 	/**
 	 * Use the Neve builtin compatibility to check for specific support.
 	 *
@@ -375,18 +404,17 @@ class Admin {
 		}
 		$this->add_theme_page_for_tiob( $starter_site_data );
 
-		$onboarding_data = array(
-			'page_title' => __( 'Onboarding', 'templates-patterns-collection' ),
-			'menu_title' => $prefix . __( 'Onboarding', 'templates-patterns-collection' ),
-			'capability' => 'activate_plugins',
-			'menu_slug'  => 'neve-onboarding',
-			'callback'   => array(
-				$this,
-				'render_onboarding',
-			),
-		);
-		$is_new_user = true; // TODO: Actually check for new user
-		if ( $is_new_user ) {
+		if ( $this->neve_new_user === 'yes' ) {
+			$onboarding_data = array(
+				'page_title' => __( 'Onboarding', 'templates-patterns-collection' ),
+				'menu_title' => $prefix . __( 'Onboarding', 'templates-patterns-collection' ),
+				'capability' => 'activate_plugins',
+				'menu_slug'  => 'neve-onboarding',
+				'callback'   => array(
+					$this,
+					'render_onboarding',
+				),
+			);
 			$this->add_theme_page_for_tiob( $onboarding_data );
 		}
 
@@ -440,8 +468,8 @@ class Admin {
 			return;
 		}
 
-		// TODO: Check if new user.
-		if ( strpos( $screen->id, '_page_neve-onboarding' ) ) {
+
+		if ( $this->neve_new_user === 'yes' && strpos( $screen->id, '_page_neve-onboarding' ) ) {
 
 			wp_enqueue_media();
 

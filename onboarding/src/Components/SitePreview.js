@@ -6,10 +6,13 @@ const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
 	const [ loading, setLoading ] = useState( true );
 
 	const loadDefaultFonts = ( message ) => {
-		// TODO: change to demosites.io
+		// TODO: uncomment the following lines when demosites changes are merged on production
 		// if ( message.origin !== siteData.url ) {
 		// 	return;
 		// }
+		if ( message.origin !== 'https://staging.demosites.io' ) {
+			return;
+		}
 
 		const { data } = message;
 		const { call, value } = data;
@@ -53,13 +56,16 @@ const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
 		setLoading( false );
 	};
 
+	const siteUrl =
+		siteData.url.replace( 'https://', 'https://staging.' ) +
+		'?onboarding=true';
+
 	return (
 		<iframe
 			id="ti-ss-preview"
 			className="iframe"
 			title="Your Iframe"
-			// src={ siteData.url }
-			src="https://neve.test"
+			src={ siteUrl }
 			onLoad={ handleIframeLoading }
 		></iframe>
 	);
