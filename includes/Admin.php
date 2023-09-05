@@ -43,14 +43,14 @@ class Admin {
 	 *
 	 * @var array
 	 */
-	private $font_pairs_neve = [];
+	private $font_pairs_neve = array();
 
 	/**
 	 * Google fonts
 	 *
 	 * @var array
 	 */
-	private $google_fonts = [];
+	private $google_fonts = array();
 
 	/**
 	 * Is new Neve user
@@ -75,7 +75,7 @@ class Admin {
 		add_action( 'admin_menu', array( $this, 'register' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
-//		add_action( 'activated_plugin', array( $this, 'set_activation_redirect' ) );
+		//      add_action( 'activated_plugin', array( $this, 'set_activation_redirect' ) );
 		add_action( 'admin_footer_text', array( $this, 'activation_redirect' ) );
 
 		$this->setup_white_label();
@@ -295,7 +295,7 @@ class Admin {
 		if ( ! $just_activated ) {
 			return;
 		}
-		if ( $this->neve_new_user !== 'yes' ){
+		if ( $this->neve_new_user !== 'yes' ) {
 			return;
 		}
 		delete_option( 'tpc_activated' );
@@ -468,7 +468,6 @@ class Admin {
 			return;
 		}
 
-
 		if ( $this->neve_new_user === 'yes' && strpos( $screen->id, '_page_neve-onboarding' ) ) {
 
 			wp_enqueue_media();
@@ -488,12 +487,11 @@ class Admin {
 					wp_enqueue_style(
 						'tiob-google-fonts-' . $index,
 						'https://fonts.googleapis.com/css?family=' . implode( '|', $fonts_chunk ) . '&display=swap"',
-						[],
+						array(),
 						$onboarding_dependencies['version']
 					);
 				}
 			}
-
 		}
 
 		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false ) {
@@ -642,10 +640,7 @@ class Admin {
 	 * @return bool
 	 */
 	private function is_font_prata_and_hanke( $font_pair ) {
-		return $this->font_array_key_is_defined( $font_pair, 'bodyFont' ) &&
-		       $this->font_array_key_is_defined( $font_pair, 'headingFont' ) &&
-		       'Prata' === $font_pair['headingFont']['font'] &&
-		       'Hanken Grotesk' === $font_pair['bodyFont']['font'];
+		return $this->font_array_key_is_defined( $font_pair, 'bodyFont' ) && $this->font_array_key_is_defined( $font_pair, 'headingFont' ) && 'Prata' === $font_pair['headingFont']['font'] && 'Hanken Grotesk' === $font_pair['bodyFont']['font'];
 	}
 
 	/**
@@ -663,119 +658,119 @@ class Admin {
 	 * Get font parings
 	 */
 	private function get_font_parings() {
-		$font_pair_neve = [
-			[
-				'headingFont' => [
+		$font_pair_neve = array(
+			array(
+				'headingFont' => array(
 					'font'        => 'Inter',
 					'fontSource'  => 'Google',
 					'previewSize' => '25px',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'       => 'Inter',
 					'fontSource' => 'Google',
-				],
-			],
-			[
-				'headingFont' => [
+				),
+			),
+			array(
+				'headingFont' => array(
 					'font'        => 'Playfair Display',
 					'fontSource'  => 'Google',
 					'previewSize' => '27px',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'        => 'Source Sans Pro',
 					'fontSource'  => 'Google',
 					'previewSize' => '18px',
-				],
-			],
-			[
-				'headingFont' => [
+				),
+			),
+			array(
+				'headingFont' => array(
 					'font'       => 'Montserrat',
 					'fontSource' => 'Google',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'       => 'Open Sans',
 					'fontSource' => 'Google',
-				],
-			],
-			[
-				'headingFont' => [
+				),
+			),
+			array(
+				'headingFont' => array(
 					'font'       => 'Nunito',
 					'fontSource' => 'Google',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'       => 'Lora',
 					'fontSource' => 'Google',
-				],
-			],
-			[
-				'headingFont' => [
+				),
+			),
+			array(
+				'headingFont' => array(
 					'font'       => 'Lato',
 					'fontSource' => 'Google',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'       => 'Karla',
 					'fontSource' => 'Google',
-				],
-			],
-			[
-				'headingFont' => [
+				),
+			),
+			array(
+				'headingFont' => array(
 					'font'        => 'Outfit',
 					'fontSource'  => 'Google',
 					'previewSize' => '25px',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'       => 'Spline Sans',
 					'fontSource' => 'Google',
-				],
-			],
-			[
-				'headingFont' => [
+				),
+			),
+			array(
+				'headingFont' => array(
 					'font'        => 'Lora',
 					'fontSource'  => 'Google',
 					'previewSize' => '25px',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'       => 'Ubuntu',
 					'fontSource' => 'Google',
-				],
-			],
-			[
-				'headingFont' => [
+				),
+			),
+			array(
+				'headingFont' => array(
 					'font'        => 'Prata',
 					'fontSource'  => 'Google',
 					'previewSize' => '25px',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'        => 'Hanken Grotesk',
 					'fontSource'  => 'Google',
 					'previewSize' => '17px',
-				],
-			],
-			[
-				'headingFont' => [
+				),
+			),
+			array(
+				'headingFont' => array(
 					'font'        => 'Albert Sans',
 					'fontSource'  => 'Google',
 					'previewSize' => '25px',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'        => 'Albert Sans',
 					'fontSource'  => 'Google',
 					'previewSize' => '17px',
-				],
-			],
-			[
-				'headingFont' => [
+				),
+			),
+			array(
+				'headingFont' => array(
 					'font'        => 'Fraunces',
 					'fontSource'  => 'Google',
 					'previewSize' => '25px',
-				],
-				'bodyFont'    => [
+				),
+				'bodyFont'    => array(
 					'font'        => 'Hanken Grotesk',
 					'fontSource'  => 'Google',
 					'previewSize' => '17px',
-				],
-			],
-		];
+				),
+			),
+		);
 
 		if ( class_exists( '\Neve\Core\Settings\Mods', false ) ) {
 			$font_pair_neve = apply_filters(
@@ -790,20 +785,14 @@ class Admin {
 			if ( $index > 4 && ! $this->is_font_prata_and_hanke( $font_pair ) ) {
 				continue;
 			}
-			$slug = $this->get_slug_from_font_pair( $font_pair ) . '-' . $index;
+			$slug                           = $this->get_slug_from_font_pair( $font_pair ) . '-' . $index;
 			$this->font_pairs_neve[ $slug ] = $font_pair;
 
-			if ( $this->font_array_key_is_defined( $font_pair, 'bodyFont' ) &&
-			     'Google' === $font_pair['bodyFont']['fontSource'] &&
-			     ! in_array( $font_pair['bodyFont']['font'], $this->google_fonts, true )
-			) {
+			if ( $this->font_array_key_is_defined( $font_pair, 'bodyFont' ) && 'Google' === $font_pair['bodyFont']['fontSource'] && ! in_array( $font_pair['bodyFont']['font'], $this->google_fonts, true ) ) {
 				$this->google_fonts[] = $font_pair['bodyFont']['font'];
 			}
 
-			if ( $this->font_array_key_is_defined( $font_pair, 'headingFont' ) &&
-			     'Google' === $font_pair['headingFont']['fontSource'] &&
-			     ! in_array( $font_pair['headingFont']['font'], $this->google_fonts, true )
-			) {
+			if ( $this->font_array_key_is_defined( $font_pair, 'headingFont' ) && 'Google' === $font_pair['headingFont']['fontSource'] && ! in_array( $font_pair['headingFont']['font'], $this->google_fonts, true ) ) {
 				$this->google_fonts[] = $font_pair['headingFont']['font'];
 			}
 
