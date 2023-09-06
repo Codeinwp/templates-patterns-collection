@@ -1,4 +1,4 @@
-/* global tiobDash */
+/* global tiobDash, fetch */
 /* eslint-disable no-console */
 import { __ } from '@wordpress/i18n';
 import { TextControl, Button, SelectControl } from '@wordpress/components';
@@ -79,7 +79,7 @@ const ImportForm = () => {
 
 		setProcessingSub( true );
 
-		if ( '' === email.trim() ) {
+		if ( '' === email.trim() && '' === userLevel && '' === buildingFor ) {
 			markSubscribeSkip( site, { isTempSkip: true } );
 			return;
 		}

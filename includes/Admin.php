@@ -290,8 +290,12 @@ class Admin {
 	 * @return void
 	 */
 	public function activation_redirect() {
-		$just_activated = get_option( 'tpc_activated', false );
-		if ( ! $just_activated ) {
+		$activated_plugin = get_option( 'tpc_activated_plugin', false );
+		if ( ! $activated_plugin ) {
+			return;
+		}
+		if ( $activated_plugin !== TIOB_BASENAME ) {
+			delete_option( 'tpc_activated_plugin' );
 			return;
 		}
 		if ( $this->neve_new_user !== 'yes' ) {
@@ -300,7 +304,7 @@ class Admin {
 		if ( ! current_user_can( 'install_plugins' ) ) {
 			return;
 		}
-		delete_option( 'tpc_activated' );
+		delete_option( 'tpc_activated_plugin' );
 		wp_safe_redirect( admin_url( 'admin.php?page=neve-onboarding' ) );
 		exit();
 	}
