@@ -75,17 +75,18 @@ const SitePreview = ( {
 			id="ti-ss-preview"
 			className="iframe"
 			title="Your Iframe"
-			// src={ siteUrl }
-			src="https://neve.test"
+			src={ siteUrl }
 			onLoad={ handleIframeLoading }
 		></iframe>
 	);
 };
 
 export default withSelect( ( select ) => {
-	const { getUserCustomSettings, getCurrentSite, getImportData } = select(
-		'ti-onboarding'
-	);
+	const {
+		getUserCustomSettings,
+		getCurrentSite,
+		getImportData,
+	} = select( 'ti-onboarding' );
 	return {
 		userCustomSettings: getUserCustomSettings(),
 		siteData: getCurrentSite(),
