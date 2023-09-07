@@ -75,7 +75,7 @@ class Admin {
 		add_action( 'admin_menu', array( $this, 'register' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
-		add_action( 'admin_footer_text', array( $this, 'activation_redirect' ) );
+		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
 
 		$this->setup_white_label();
 

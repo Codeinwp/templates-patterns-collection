@@ -47,37 +47,41 @@ export default compose(
 			importData: getImportData(),
 		};
 	} ),
-	withDispatch( ( dispatch, { importData, userCustomSettings } ) => {
-		const { setUserCustomSettings, setImportData } = dispatch(
-			'ti-onboarding'
-		);
+	withDispatch(
+		( dispatch, { importData, userCustomSettings, importDataDefault } ) => {
+			const { setUserCustomSettings, setImportData } = dispatch(
+				'ti-onboarding'
+			);
 
-		return {
-			handleSiteNameChange: ( newSiteName ) => {
-				const updatedSettings = {
-					...userCustomSettings,
-					siteName: newSiteName,
-				};
-				setUserCustomSettings( updatedSettings );
+			return {
+				handleSiteNameChange: ( newSiteName ) => {
+					const updatedSettings = {
+						...userCustomSettings,
+						siteName: newSiteName,
+					};
+					setUserCustomSettings( updatedSettings );
 
-				const newImportData = {
-					...importData,
-					wp_options: {
-						...importData.wp_options,
-						blogname: newSiteName,
-					},
-				};
-				setImportData( newImportData );
+					const newImportData = {
+						...importData,
+						wp_options: {
+							...importData.wp_options,
+							blogname:
+								newSiteName ||
+								importDataDefault.wp_options.blogname,
+						},
+					};
+					setImportData( newImportData );
 
-				const logoDisplay = newImportData?.theme_mods?.logo_display;
-				sendPostMessage( {
-					type: 'updateSiteInfo',
-					data: {
-						...updatedSettings,
-						logoDisplay,
-					},
-				} );
-			},
-		};
-	} )
+					const logoDisplay = newImportData?.theme_mods?.logo_display;
+					sendPostMessage( {
+						type: 'updateSiteInfo',
+						data: {
+							...updatedSettings,
+							logoDisplay,
+						},
+					} );
+				},
+			};
+		}
+	)
 )( SiteNameControl );

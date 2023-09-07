@@ -1,4 +1,4 @@
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
@@ -18,12 +18,11 @@ export const SiteSettings = ( {
 	setGeneral,
 	fetching,
 	siteData,
+	siteStyle,
+	setSiteStyle,
+	importDataDefault,
 } ) => {
 	const [ settingsPage, setSettingsPage ] = useState( 1 );
-	const [ siteStyle, setSiteStyle ] = useState( {
-		palette: 'base',
-		font: 'default',
-	} );
 	const canImport = ! siteData.upsell;
 
 	let heading =
@@ -120,8 +119,16 @@ export const SiteSettings = ( {
 							{ settingsPage === 2 &&
 								( canImport ? (
 									<>
-										<SiteNameControl />
-										<LogoControl />
+										<SiteNameControl
+											importDataDefault={
+												importDataDefault
+											}
+										/>
+										<LogoControl
+											importDataDefault={
+												importDataDefault
+											}
+										/>
 									</>
 								) : (
 									<Button

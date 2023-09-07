@@ -2,7 +2,12 @@ import { useEffect, useState } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import { sendPostMessage } from '../utils/common';
 
-const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
+const SitePreview = ( {
+	userCustomSettings,
+	siteData,
+	importData,
+	siteStyle,
+} ) => {
 	const [ loading, setLoading ] = useState( true );
 
 	const loadDefaultFonts = ( message ) => {
@@ -20,6 +25,21 @@ const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
 			return;
 		}
 
+		const logoDisplay = importData?.theme_mods?.logo_display;
+
+		sendPostMessage( {
+			type: 'updateSiteInfo',
+			data: {
+				...userCustomSettings,
+				logoDisplay,
+			},
+		} );
+
+		sendPostMessage( {
+			type: 'styleChange',
+			data: siteStyle,
+		} );
+
 		const scriptsToLoad = JSON.parse( value );
 		scriptsToLoad.forEach( ( element ) => {
 			const { id, href } = element;
@@ -33,16 +53,6 @@ const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
 
 	useEffect( () => {
 		window.addEventListener( 'message', loadDefaultFonts );
-
-		const logoDisplay = importData?.theme_mods?.logo_display;
-
-		sendPostMessage( {
-			type: 'updateSiteInfo',
-			data: {
-				...userCustomSettings,
-				logoDisplay,
-			},
-		} );
 
 		if ( loading !== false ) {
 			return;
@@ -65,7 +75,8 @@ const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
 			id="ti-ss-preview"
 			className="iframe"
 			title="Your Iframe"
-			src={ siteUrl }
+			// src={ siteUrl }
+			src="https://neve.test"
 			onLoad={ handleIframeLoading }
 		></iframe>
 	);

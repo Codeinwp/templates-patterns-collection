@@ -1,7 +1,7 @@
 /* global tiobDash */
 import SiteSettings from '../SiteSettings';
 import { __ } from '@wordpress/i18n';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { trailingSlashIt } from '../../utils/common';
@@ -17,6 +17,12 @@ const CustomizeSite = ( {
 	general,
 	setGeneral,
 } ) => {
+	const [ siteStyle, setSiteStyle ] = useState( {
+		palette: 'base',
+		font: 'default',
+	} );
+	const [ importDataDefault, setImportDataDefault ] = useState( null );
+
 	const { license } = tiobDash;
 
 	useEffect( () => {
@@ -44,6 +50,7 @@ const CustomizeSite = ( {
 				}
 				response.json().then( ( result ) => {
 					setImportData( { ...result, ...siteData } );
+					setImportDataDefault( { ...result, ...siteData } );
 					const mandatory = {
 						...( result.mandatory_plugins || {} ),
 					};
@@ -87,8 +94,14 @@ const CustomizeSite = ( {
 
 	return (
 		<div className="ob-container row ovf-initial">
-			<SiteSettings general={ general } setGeneral={ setGeneral } />
-			<SitePreview />
+			<SiteSettings
+				importDataDefault={ importDataDefault }
+				siteStyle={ siteStyle }
+				setSiteStyle={ setSiteStyle }
+				general={ general }
+				setGeneral={ setGeneral }
+			/>
+			<SitePreview siteStyle={ siteStyle } />
 		</div>
 	);
 };

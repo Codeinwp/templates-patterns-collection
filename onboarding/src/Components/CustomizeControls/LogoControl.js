@@ -69,7 +69,7 @@ const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 												isTertiary
 												onClick={ () => {
 													setLogo( '' );
-													handleLogoChange( {} );
+													handleLogoChange( null );
 												} }
 											>
 												<Icon icon="no" />
@@ -92,49 +92,60 @@ const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getUserCustomSettings, getImportData } = select( 'ti-onboarding' );
+		const { getUserCustomSettings, getImportData } = select(
+			'ti-onboarding'
+		);
 		return {
 			userCustomSettings: getUserCustomSettings(),
 			importData: getImportData(),
 		};
 	} ),
-	withDispatch( ( dispatch, { importData, userCustomSettings } ) => {
-		const { setUserCustomSettings, setImportData } = dispatch(
-			'ti-onboarding'
-		);
+	withDispatch(
+		( dispatch, { importData, userCustomSettings, importDataDefault } ) => {
+			const { setUserCustomSettings, setImportData } = dispatch(
+				'ti-onboarding'
+			);
 
-		return {
-			handleLogoChange: ( newLogo ) => {
-				const updatedSettings = {
-					...userCustomSettings,
-					siteLogo: newLogo,
-				};
-				setUserCustomSettings( updatedSettings );
+			return {
+				handleLogoChange: ( newLogo ) => {
+					const updatedSettings = {
+						...userCustomSettings,
+						siteLogo: newLogo,
+					};
+					setUserCustomSettings( updatedSettings );
 
-				const newImportData = {
-					...importData,
-					theme_mods: {
-						...importData.theme_mods,
-						custom_logo: newLogo.id,
-						logo_logo: JSON.stringify( {
-							dark: newLogo.id,
-							light: newLogo.id,
-							same: true,
-						} ),
-					},
-				};
-				setImportData( newImportData );
+					const newImportData = {
+						...importData,
+						theme_mods: {
+							...importData.theme_mods,
+							custom_logo: newLogo
+								? newLogo.id
+								: importDataDefault.theme_mods.custom_logo,
+							logo_logo: newLogo
+								? JSON.stringify( {
+										dark: newLogo.id,
+										light: newLogo.id,
+										same: true,
+								  } )
+								: JSON.stringify( {
+										...importDataDefault.theme_mods
+											.logo_logo,
+								  } ),
+						},
+					};
+					setImportData( newImportData );
 
-				const logoDisplay = newImportData?.theme_mods?.logo_display;
+					const logoDisplay = newImportData?.theme_mods?.logo_display;
 
-				sendPostMessage( {
-					type: 'updateSiteInfo',
-					data: {
-						...updatedSettings,
-						logoDisplay,
-					},
-				} );
-			},
-		};
-	} )
+					sendPostMessage( {
+						type: 'updateSiteInfo',
+						data: {
+							...updatedSettings,
+							logoDisplay,
+						},
+					} );
+				},
+			};
+		}
+	)
 )( LogoControl );
