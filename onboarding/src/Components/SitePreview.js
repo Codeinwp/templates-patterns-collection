@@ -74,7 +74,7 @@ const SitePreview = ( {
 		<iframe
 			id="ti-ss-preview"
 			className="iframe"
-			title="Your Iframe"
+			title="Website Preview"
 			src={ siteUrl }
 			onLoad={ handleIframeLoading }
 		></iframe>
