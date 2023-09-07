@@ -25,7 +25,7 @@
     "build:elementor": "wp-scripts build elementor/src/index.js --output-path=elementor/build",
     "build:beaver": "wp-scripts build beaver/src/index.js --output-path=beaver/build",
     "rtlcss:app": "rtlcss assets/build/style-app.css assets/build/style-app-rtl.css",
-    "rtlcss:onboarding": "rtlcss onboarding/build/style-app.css onboarding/build/style-app-rtl.css",
+    "rtlcss:onboarding": "rtlcss onboarding/build/style-index.css onboarding/build/style-index-rtl.css",
     "rtlcss:editor": "rtlcss editor/build/index.css editor/build/index-rtl.css",
     "rtlcss:elementor": "rtlcss elementor/build/index.css elementor/build/index-rtl.css",
     "rtlcss:beaver": "rtlcss beaver/build/index.css beaver/build/index-rtl.css",
