@@ -21,9 +21,11 @@ export const SiteSettings = ( {
 	siteStyle,
 	setSiteStyle,
 	importDataDefault,
+	currentCustomizations,
 } ) => {
 	const [ settingsPage, setSettingsPage ] = useState( 1 );
 	const canImport = ! siteData.upsell;
+	const { siteName, siteLogo } = currentCustomizations;
 
 	let heading =
 		settingsPage === 1
@@ -41,29 +43,43 @@ export const SiteSettings = ( {
 				'templates-patterns-collection'
 			  );
 	if ( ! canImport ) {
-		heading = __( 'This is a Premium Starter Site!', 'neve' );
+		heading = __(
+			'This is a Premium Starter Site!',
+			'templates-patterns-collection'
+		);
 		description = __(
 			'Upgrade to Neve Pro to enjoy unlimited access to all templates in the library.',
-			'neve'
+			'templates-patterns-collection'
 		);
 	}
 
-	const secondUpsell = createInterpolateElement(
+	const firstUpsell = createInterpolateElement(
 		__(
-			'You can download this from your <link1></link1>. If you have any questions, feel free to <link2></link2>.',
+			'If you are an existing Neve Pro customer, please install the premium version of the plugin from your Themeisle <a></a>.',
 			'templates-patterns-collection'
 		),
 		{
-			link1: (
+			a: (
 				<a
 					href="https://store.themeisle.com/"
 					target="_blank"
 					rel="external noreferrer noopener"
 				>
-					{ __( 'dashboard', 'templates-patterns-collection' ) }
+					{ __(
+						'account dashboard',
+						'templates-patterns-collection'
+					) }
 				</a>
 			),
-			link2: (
+		}
+	);
+	const secondUpsell = createInterpolateElement(
+		__(
+			'If you have any questions, feel free to <a></a>.',
+			'templates-patterns-collection'
+		),
+		{
+			a: (
 				<a
 					href="https://themeisle.com/contact/"
 					target="_blank"
@@ -153,7 +169,7 @@ export const SiteSettings = ( {
 									className="ob-button full"
 									onClick={ () => setSettingsPage( 2 ) }
 								>
-									{ __( 'Continue', 'neve' ) }
+									{ __( 'Continue', 'templates-patterns-collection' ) }
 								</Button>
 							) }
 							{ settingsPage === 2 &&
@@ -164,13 +180,27 @@ export const SiteSettings = ( {
 											setGeneral={ setGeneral }
 										/>
 										<Button
-											disabled={ fetching }
-											className="ob-button full"
 											isPrimary
+											className="ob-button full"
 											onClick={ handleNextStepClick }
+											disabled={
+												fetching ||
+												( ! siteName && ! siteLogo )
+											}
 										>
 											{ __(
 												'Import Website',
+												'templates-patterns-collection'
+											) }
+										</Button>
+										<Button
+											isLink
+											className="ob-link"
+											onClick={ handleNextStepClick }
+											disabled={ fetching }
+										>
+											{ __(
+												'Skip and import website',
 												'templates-patterns-collection'
 											) }
 										</Button>
@@ -183,12 +213,7 @@ export const SiteSettings = ( {
 												'templates-patterns-collection'
 											) }
 										</h4>
-										<p>
-											{ __(
-												'If you are an existing Neve Pro customer, please install the premium version of the plugin.',
-												'templates-patterns-collection'
-											) }
-										</p>
+										<p>{ firstUpsell }</p>
 										<p>{ secondUpsell }</p>
 									</div>
 								) ) }
@@ -204,10 +229,11 @@ export const SiteSettings = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getFetching, getCurrentSite } = select( 'ti-onboarding' );
+		const { getFetching, getCurrentSite, getUserCustomSettings } = select( 'ti-onboarding' );
 		return {
 			fetching: getFetching(),
 			siteData: getCurrentSite(),
+			currentCustomizations: getUserCustomSettings(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {

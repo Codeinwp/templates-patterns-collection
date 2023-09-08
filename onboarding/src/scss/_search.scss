@@ -11,14 +11,12 @@
 .ob-search-wrap {
   position: relative;
   flex: 1;
-  max-width: 275px;
   input.search-input {
     background-color: $light-bg;
     border: none;
     border-radius: 999px;
     padding: 10px 16px 10px 46px;
-    width: 100%;
-    max-width: 275px;
+    width: 275px;
     line-height: 26px;
     &:focus{
       outline: 2px solid $primary;

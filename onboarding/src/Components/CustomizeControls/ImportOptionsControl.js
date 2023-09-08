@@ -28,7 +28,7 @@ const ImportOptionsControl = ( { importData, general, setGeneral } ) => {
 	const updateDivHeight = () => {
 		const element = document.querySelector( '.ob-settings-wrap' );
 		if ( element ) {
-			setDivHeight( element.offsetHeight + 56 );
+			setDivHeight( element.offsetHeight + 30 );
 		}
 	};
 
@@ -176,7 +176,9 @@ const ImportOptionsControl = ( { importData, general, setGeneral } ) => {
 													onChange={ () => {
 														setGeneral( {
 															...general,
-															[ id ]: ! general[ id ],
+															[ id ]: ! general[
+																id
+															],
 														} );
 													} }
 												/>

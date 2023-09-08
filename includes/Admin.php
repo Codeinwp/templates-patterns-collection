@@ -52,12 +52,6 @@ class Admin {
 	 */
 	private $google_fonts = array();
 
-	/**
-	 * Is new Neve user
-	 * @var string
-	 */
-	private $neve_new_user;
-
 	public static function get_templates_cloud_endpoint() {
 		return 'https://' . self::API . '/templates-cloud/';
 	}
@@ -66,8 +60,6 @@ class Admin {
 	 * Initialize the Admin.
 	 */
 	public function init() {
-		$this->neve_new_user = get_option( 'neve_new_user', 'no' );
-
 		License::get_instance();
 		add_filter( 'query_vars', array( $this, 'add_onboarding_query_var' ) );
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
@@ -298,12 +290,10 @@ class Admin {
 			delete_option( 'tpc_activated_plugin' );
 			return;
 		}
-		if ( $this->neve_new_user !== 'yes' ) {
+		if ( ! $this->should_load_onboarding() ) {
 			return;
 		}
-		if ( ! current_user_can( 'install_plugins' ) ) {
-			return;
-		}
+
 		delete_option( 'tpc_activated_plugin' );
 		wp_safe_redirect( admin_url( 'admin.php?page=neve-onboarding' ) );
 		exit();
@@ -410,7 +400,7 @@ class Admin {
 		}
 		$this->add_theme_page_for_tiob( $starter_site_data );
 
-		if ( $this->neve_new_user === 'yes' ) {
+		if ( $this->should_load_onboarding() ) {
 			$onboarding_data = array(
 				'page_title' => __( 'Onboarding', 'templates-patterns-collection' ),
 				'menu_title' => $prefix . __( 'Onboarding', 'templates-patterns-collection' ),
@@ -465,16 +455,44 @@ class Admin {
 	 * Render method for the onboarding page.
 	 */
 	public function render_onboarding() {
-		echo '<div id="ti-app"/>';
+		echo '<div id="ob-app"/>';
 	}
 
+	/**
+	 * Decide if the new onboarding should load
+	 *
+	 * @return bool
+	 */
+	private function should_load_onboarding() {
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return false;
+		}
+
+		$current_theme = wp_get_theme();
+		$template      = $current_theme->template === 'neve' ? $current_theme->template : $current_theme->parent();
+		if ( $template !== 'neve' ) {
+			return false;
+		}
+
+		if ( get_option( 'neve_new_user', 'no' ) !== 'yes' ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Enqueue scripts and styles
+	 *
+	 * @return void
+	 */
 	public function enqueue() {
 		$screen = get_current_screen();
 		if ( ! isset( $screen->id ) ) {
 			return;
 		}
 
-		if ( $this->neve_new_user === 'yes' && current_user_can( 'install_plugins' ) && strpos( $screen->id, '_page_neve-onboarding' ) ) {
+		if ( $this->should_load_onboarding() && strpos( $screen->id, '_page_neve-onboarding' ) ) {
 
 			wp_enqueue_media();
 

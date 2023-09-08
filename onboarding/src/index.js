@@ -12,4 +12,4 @@ registerStore( 'ti-onboarding', {
 	selectors,
 } );
 
-render( <App />, document.getElementById( 'ti-app' ) );
+render( <App />, document.getElementById( 'ob-app' ) );

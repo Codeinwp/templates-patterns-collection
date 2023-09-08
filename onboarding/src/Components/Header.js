@@ -1,10 +1,12 @@
+/* global tiobDash */
 import { withDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { Tooltip, Button } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 
 import SVG from '../utils/svg';
 
 const Header = ( { handleLogoClick, importing } ) => {
+	const { brandedTheme } = tiobDash;
 	return (
 		<div className="ob-header">
 			<Button
@@ -12,10 +14,22 @@ const Header = ( { handleLogoClick, importing } ) => {
 				disabled={ importing }
 				style={ { opacity: 1 } }
 			>
-				{ SVG.logo }
+				{ ! brandedTheme ? (
+					SVG.logo
+				) : (
+					<h2 style={ { margin: 0 } }>
+						{ __(
+							'Import Templates',
+							'templates-patterns-collection'
+						) }
+					</h2>
+				) }
 			</Button>
 			<Button
-				label={ __( 'Exit to dashboard', 'neve' ) }
+				label={ __(
+					'Exit to dashboard',
+					'templates-patterns-collection'
+				) }
 				href="/wp-admin"
 				isLink
 				disabled={ importing }

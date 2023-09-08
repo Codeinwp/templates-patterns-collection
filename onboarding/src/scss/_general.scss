@@ -1,3 +1,7 @@
+#ob-app {
+  font-family: Arial, sans-serif;
+}
+
 h1 {
   color: $main-text;
   font-size: 40px;
@@ -152,6 +156,20 @@ input.components-text-control__input[type="email"],
   }
   &.full {
     width: 100%;
+  }
+}
+
+.components-button.is-link.ob-link {
+  font-size: 16px;
+  line-height: 24px;
+  color: $secondary-text;
+  text-align: center;
+  margin-top: 17px;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+  &:focus {
+    box-shadow: none;
   }
 }
 

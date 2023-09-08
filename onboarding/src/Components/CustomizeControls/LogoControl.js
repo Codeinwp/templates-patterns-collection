@@ -16,7 +16,7 @@ const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 
 	addFilter(
 		'editor.MediaUpload',
-		'core/edit-post/components/media-upload/replace-media-upload',
+		'tpc/onboarding/replace-media-upload',
 		replaceMediaUpload()
 	);
 
