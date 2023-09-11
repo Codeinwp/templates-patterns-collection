@@ -1,4 +1,4 @@
-.tiob-tooltip-toggle {
+.ob-tooltip-toggle {
   display: flex;
   align-items: center;
 
@@ -10,7 +10,7 @@
     outline: none;
     box-shadow: none;
 
-    .tiob-tooltip-content {
+    .ob-tooltip-content {
       opacity: 1;
       pointer-events: all;
       z-index: 11;
@@ -18,7 +18,7 @@
   }
 }
 
-.tiob-tooltip-content {
+.ob-tooltip-content {
   font-size: 13px;
   top: 100%;
   left: 1px;
@@ -30,4 +30,5 @@
   z-index: 1;
   pointer-events: none;
   opacity: 0;
+  line-height: 1.75;
 }

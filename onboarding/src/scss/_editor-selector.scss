@@ -2,10 +2,10 @@
   overflow: visible;
   display: inline-block;
   position: relative;
+  height: 54px;
 
   img {
     border-radius: 100%;
-    margin-right: 5px;
     max-width: 38px;
     max-height: 38px;
   }
@@ -14,34 +14,40 @@
     margin: 0;
 
     li {
-      border-bottom: 1px solid $border;
       margin: 0;
     }
 
     a {
-      height: 35px;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      font-weight: 600;
-      color: $main-text;
-      cursor: pointer;
-      padding: 5px 10px;
-      text-decoration: none;
-      white-space: nowrap;
+      display: block;
+      padding: 8px;
+      text-align: left;
+    }
+  }
 
-      > span:not(.count) {
-        margin-right: 20px;
-      }
+  .ob-current-editor{
+    display: flex;
+    align-items: center;
+    > img, span {
+      padding: 8px;
+    }
+  }
 
-      .count {
-        margin-left: auto;
-      }
+  .components-button {
+    height: auto;
+    padding: 0;
+  }
 
-      &:hover {
-        background-color: $dark-bg;
-        color: $inverted-text;
-      }
+  .ob-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 5px;
+    &.active {
+      background: $inverted-text;
+      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.10);
+    }
+    > span {
+      width: 100%;
     }
   }
 }
