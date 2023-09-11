@@ -144,7 +144,10 @@ const ImportForm = () => {
 				<Button
 					isPrimary
 					className="ob-button full"
-					disabled={ processingSub }
+					disabled={
+						processingSub ||
+						( ! email && ! userLevel && ! buildingFor )
+					}
 					onClick={ viewWebsiteAndSubscribe }
 				>
 					{ __(
