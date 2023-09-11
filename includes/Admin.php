@@ -1057,22 +1057,22 @@ class Admin {
 			'rest_not_working'            => sprintf(
 			/* translators: 1 - 'here'. */
 				__( 'It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ) )
+				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api" target="_blank" rel="external noreferrer noopener">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ) )
 			),
 			'error_report'                => sprintf(
 			/* translators: 1 - 'get in touch'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
+				sprintf( '<a href="https://themeisle.com/contact" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
 			'troubleshooting'             => sprintf(
 			/* translators: 1 - 'troubleshooting guide'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ) )
+				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ) )
 			),
 			'support'                     => sprintf(
 			/* translators: 1 - 'get in touch'. */
 				__( 'If none of the solutions in the guide work, please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
+				sprintf( '<a href="https://themeisle.com/contact" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
 			'fsDown'                      => sprintf(
 			/* translators: %s - 'WP_Filesystem'. */
