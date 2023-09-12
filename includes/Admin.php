@@ -264,6 +264,9 @@ class Admin {
 		$this->ensure_ajax_response( $response );
 	}
 
+	/**
+	 * Handles the `mark_onboarding_done` ajax action.
+	 */
 	public function mark_onboarding_done() {
 		$response = array(
 			'success' => false,
