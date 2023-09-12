@@ -283,19 +283,15 @@ class Admin {
 	 * @return void
 	 */
 	public function activation_redirect() {
-		$activated_plugin = get_option( 'tpc_activated_plugin', false );
-		if ( ! $activated_plugin ) {
-			return;
-		}
-		if ( $activated_plugin !== TIOB_BASENAME ) {
-			delete_option( 'tpc_activated_plugin' );
+		$should_run_obd = get_option( 'tpc_maybe_run_onboarding', false );
+		if ( ! $should_run_obd ) {
 			return;
 		}
 		if ( ! $this->should_load_onboarding() ) {
 			return;
 		}
 
-		delete_option( 'tpc_activated_plugin' );
+		delete_option( 'tpc_maybe_run_onboarding' );
 		wp_safe_redirect( admin_url( 'admin.php?page=neve-onboarding' ) );
 		exit();
 	}
