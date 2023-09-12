@@ -3,6 +3,7 @@
 import { __ } from '@wordpress/i18n';
 import { TextControl, Button, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { ajaxAction } from '../utils/rest';
 
 const ImportForm = () => {
 	const [ email, setEmail ] = useState( tiobDash.emailSubscribe.email || '' );
@@ -57,6 +58,12 @@ const ImportForm = () => {
 	const viewWebsiteAndSubscribe = () => {
 		setProcessingSub( true );
 
+		ajaxAction(
+			tiobDash.onboardingDone.ajaxURL,
+			'mark_onboarding_done',
+			tiobDash.onboardingDone.nonce
+		);
+
 		fetch( 'https://api.themeisle.com/tracking/subscribe', {
 			method: 'POST',
 			headers: {
@@ -71,15 +78,29 @@ const ImportForm = () => {
 			} ),
 		} )
 			.then( ( r ) => r.json() )
-			.then( ( response ) => {
-				if ( 'success' === response.code ) {
-					window.location.href = site;
-				}
-			} )
-			?.catch( ( error ) => {
+			.catch( ( error ) => {
 				console.error( error );
-				window.location.href = site;
+			} )
+			.finally( () => {
+				ajaxAction(
+					tiobDash.onboardingDone.ajaxURL,
+					'mark_onboarding_done',
+					tiobDash.onboardingDone.nonce
+				).then( () => {
+					window.location.href = site;
+				} );
 			} );
+	};
+
+	const handleSkip = () => {
+		setProcessingSub( true );
+		ajaxAction(
+			tiobDash.onboardingDone.ajaxURL,
+			'mark_onboarding_done',
+			tiobDash.onboardingDone.nonce
+		).then( () => {
+			window.location.href = site;
+		} );
 	};
 
 	return (
@@ -135,8 +156,8 @@ const ImportForm = () => {
 					<Button
 						isLink
 						className="close is-grayed"
-						href="/"
 						disabled={ processingSub }
+						onClick={ handleSkip }
 					>
 						{ __(
 							'Skip and view site',

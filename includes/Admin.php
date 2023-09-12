@@ -75,6 +75,9 @@ class Admin {
 		add_action( 'wp_ajax_skip_subscribe', array( $this, 'skip_subscribe' ) );
 		add_action( 'wp_ajax_nopriv_skip_subscribe', array( $this, 'skip_subscribe' ) );
 
+		add_action( 'wp_ajax_mark_onboarding_done', array( $this, 'mark_onboarding_done' ) );
+		add_action( 'wp_ajax_nopriv_mark_onboarding_done', array( $this, 'mark_onboarding_done' ) );
+
 		$this->register_feedback_settings();
 
 		$this->register_prevent_clone_hooks();
@@ -258,6 +261,29 @@ class Admin {
 		}
 
 		update_option( $this->skip_email_subscribe_namespace, 'yes' );
+		$this->ensure_ajax_response( $response );
+	}
+
+	public function mark_onboarding_done() {
+		$response = array(
+			'success' => false,
+			'code'    => 'ti__ob_not_allowed',
+			'message' => 'Not allowed!',
+		);
+		if ( ! isset( $_REQUEST['nonce'] ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'onboarding_done_nonce' ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		unset( $response['code'] );
+		unset( $response['message'] );
+
+		update_option( 'tpc_onboarding_done', 'yes' );
 		$this->ensure_ajax_response( $response );
 	}
 
@@ -519,6 +545,11 @@ class Admin {
 			return false;
 		}
 
+		$onboarding_done = get_option( 'tpc_onboarding_done', 'no' );
+		if ( $onboarding_done === 'yes' ) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -633,6 +664,10 @@ class Admin {
 				'nonce'      => wp_create_nonce( 'skip_subscribe_nonce' ),
 				'skipStatus' => $this->get_skip_subscribe_status() ? 'yes' : 'no',
 				'email'      => ( ! empty( $user ) ) ? $user->user_email : '',
+			),
+			'onboardingDone'      => array(
+				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'nonce'   => wp_create_nonce( 'onboarding_done_nonce' ),
 			),
 			'feedback'            => array(
 				'count'     => get_option( self::IMPORTED_TEMPLATES_COUNT_OPT, 0 ),
