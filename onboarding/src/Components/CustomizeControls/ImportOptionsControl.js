@@ -19,11 +19,12 @@ const ImportOptionsControl = ( { importData, general, setGeneral } ) => {
 		...( importData.mandatory_plugins || {} ),
 	};
 
-	const pluginsList = Object.keys( allPlugins )
-		.map( ( slug ) => {
-			return allPlugins[ slug ];
-		} )
-		.join( ', ' );
+	const pluginsList = Object.entries( allPlugins )
+		.map(
+			( [ slug, pluginName ] ) =>
+				`<li key="${ slug }">${ pluginName }</li>`
+		)
+		.join( '' );
 
 	const updateDivHeight = () => {
 		const element = document.querySelector( '.ob-settings-wrap' );
@@ -201,12 +202,12 @@ const ImportOptionsControl = ( { importData, general, setGeneral } ) => {
 										'The following plugins are required for this Starter Site in order to work properly: ',
 										'templates-pattern-collection'
 									) }
-									<span
-										dangerouslySetInnerHTML={ {
-											__html: pluginsList,
-										} }
-									/>
 								</p>
+								<ul
+									dangerouslySetInnerHTML={ {
+										__html: pluginsList,
+									} }
+								/>
 							</div>
 						) }
 					</div>

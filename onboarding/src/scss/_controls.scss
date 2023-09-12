@@ -75,9 +75,6 @@
 
 .ob-font-default {
   width: 100%;
-  .separator{
-    margin: 0 10px;
-  }
 }
 
 /**
@@ -227,9 +224,17 @@
     margin: 0;
   }
 
-  p {
+  p, ul {
     font-size: 14px;
     line-height: 23.8px;
     font-weight: 400;
+  }
+
+  ul {
+    color: $secondary-text;
+    padding: 0 18px;
+    li {
+      list-style-type: disclosure-closed;
+    }
   }
 }

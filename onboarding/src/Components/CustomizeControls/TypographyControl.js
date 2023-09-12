@@ -43,11 +43,7 @@ const TypographyControl = ( { siteStyle, handleFontClick, importData } ) => {
 					title={ `${ defaultHeadingsFont } / ${ defaultBodyFont }` }
 					onClick={ () => handleFontClick( 'default' ) }
 				>
-					<span style={ { fontFamily: defaultHeadingsFont } }>
-						Jost
-					</span>
-					<span className="separator">/</span>
-					<span style={ { fontFamily: defaultBodyFont } }>Jost</span>
+					{ __( 'Default', 'templates-patterns-collection' ) }
 				</Button>
 
 				{ Object.keys( tiobDash.fontParings ).map( ( slug ) => {

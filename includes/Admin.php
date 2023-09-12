@@ -65,6 +65,7 @@ class Admin {
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
 		add_action( 'admin_menu', array( $this, 'register' ) );
+		add_filter( 'submenu_file', array( $this, 'hide_onboarding' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
 		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
@@ -404,7 +405,7 @@ class Admin {
 			$onboarding_data = array(
 				'page_title' => __( 'Onboarding', 'templates-patterns-collection' ),
 				'menu_title' => $prefix . __( 'Onboarding', 'templates-patterns-collection' ),
-				'capability' => 'activate_plugins',
+				'capability' => 'install_plugins',
 				'menu_slug'  => 'neve-onboarding',
 				'callback'   => array(
 					$this,
@@ -418,6 +419,18 @@ class Admin {
 			return false;
 		}
 		$this->add_theme_page_for_tiob( $library_data );
+	}
+
+	/**
+	 * Hide the onboarding item from Neve menu.
+	 *
+	 * @param $submenu_file string The submenu file.
+	 *
+	 * @return string
+	 */
+	public function hide_onboarding( $submenu_file ) {
+		remove_submenu_page( 'neve-welcome', 'neve-onboarding' );
+		return $submenu_file;
 	}
 
 	/**
@@ -458,6 +471,38 @@ class Admin {
 		echo '<div id="ob-app"/>';
 	}
 
+
+	/**
+	 * Determine if the current user is a new one.
+	 *
+	 * @return bool
+	 */
+	private function is_neve_new_user() {
+		$is_old_user = get_option( 'neve_is_old_user', false );
+
+		if ( $is_old_user ) {
+			return false;
+		}
+
+		$install_time = get_option( 'neve_install' );
+
+		if ( empty( $install_time ) ) {
+			update_option( 'neve_is_old_user', true );
+			return false;
+		}
+
+		$now         = time();
+		$one_day_ago = $now - 86400; // 86400 seconds in a day (24 hours)
+
+		$is_new_user = ( $install_time >= $one_day_ago );
+
+		if ( ! $is_new_user ) {
+			update_option( 'neve_is_old_user', true );
+		}
+
+		return $is_new_user;
+	}
+
 	/**
 	 * Decide if the new onboarding should load
 	 *
@@ -474,7 +519,7 @@ class Admin {
 			return false;
 		}
 
-		if ( get_option( 'neve_new_user', 'no' ) !== 'yes' ) {
+		if ( ! $this->is_neve_new_user() ) {
 			return false;
 		}
 
