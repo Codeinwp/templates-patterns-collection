@@ -32,6 +32,7 @@ const initialState = {
 	importData: null,
 	pluginOptions: {},
 	error: null,
+	trackingId: '',
 };
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
@@ -95,6 +96,13 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				editor,
+			};
+		case 'SET_TRACKING_ID':
+			const { trackingId } = action.payload;
+			localStorage.setItem( 'neve-onboarding-editor', trackingId );
+			return {
+				...state,
+				trackingId,
 			};
 	}
 	return state;

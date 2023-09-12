@@ -36,4 +36,5 @@ export default {
 		);
 	},
 	getUserCustomSettings: ( state ) => state.userCustomSettings,
+	getTrackingId: ( state ) => state.trackingId,
 };

@@ -59,4 +59,10 @@ export default {
 			payload: { editor },
 		};
 	},
+	setTrackingId( trackingId ) {
+		return {
+			type: 'SET_TRACKING_ID',
+			payload: { trackingId },
+		};
+	},
 };

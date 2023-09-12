@@ -1,3 +1,4 @@
+/* global fetch */
 import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -22,6 +23,8 @@ export const SiteSettings = ( {
 	setSiteStyle,
 	importDataDefault,
 	currentCustomizations,
+	trackingId,
+	editor,
 } ) => {
 	const [ settingsPage, setSettingsPage ] = useState( 1 );
 	const canImport = ! siteData.upsell;
@@ -90,6 +93,53 @@ export const SiteSettings = ( {
 			),
 		}
 	);
+
+	const designChocicesSubmit = () => {
+		setSettingsPage( 2 );
+		if ( ! trackingId ) {
+			return;
+		}
+		fetch( 'https://api.themeisle.com/tracking/onboarding', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify( {
+				_id: trackingId,
+				data: {
+					designChoices: {
+						palette: siteStyle.palette,
+						typography: siteStyle.font,
+					},
+					selectedTemplate: siteData.title,
+					type: editor,
+				},
+			} ),
+		} ).catch( ( error ) => {
+			// eslint-disable-next-line no-console
+			console.error( error );
+		} );
+	};
+
+	const identityChoicesSubmit = () => {
+		handleNextStepClick();
+		fetch( 'https://api.themeisle.com/tracking/onboarding', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify( {
+				_id: trackingId,
+				data: {
+					siteIdentityFilled: siteName || siteLogo,
+					importedItems: general,
+				},
+			} ),
+		} ).catch( ( error ) => {
+			// eslint-disable-next-line no-console
+			console.error( error );
+		} );
+	};
 
 	return (
 		<div
@@ -167,9 +217,12 @@ export const SiteSettings = ( {
 									disabled={ fetching }
 									isPrimary
 									className="ob-button full"
-									onClick={ () => setSettingsPage( 2 ) }
+									onClick={ designChocicesSubmit }
 								>
-									{ __( 'Continue', 'templates-patterns-collection' ) }
+									{ __(
+										'Continue',
+										'templates-patterns-collection'
+									) }
 								</Button>
 							) }
 							{ settingsPage === 2 &&
@@ -182,7 +235,7 @@ export const SiteSettings = ( {
 										<Button
 											isPrimary
 											className="ob-button full"
-											onClick={ handleNextStepClick }
+											onClick={ identityChoicesSubmit }
 											disabled={
 												fetching ||
 												( ! siteName && ! siteLogo )
@@ -196,7 +249,7 @@ export const SiteSettings = ( {
 										<Button
 											isLink
 											className="ob-link"
-											onClick={ handleNextStepClick }
+											onClick={ identityChoicesSubmit }
 											disabled={ fetching }
 										>
 											{ __(
@@ -229,11 +282,19 @@ export const SiteSettings = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getFetching, getCurrentSite, getUserCustomSettings } = select( 'ti-onboarding' );
+		const {
+			getFetching,
+			getCurrentSite,
+			getUserCustomSettings,
+			getTrackingId,
+			getCurrentEditor,
+		} = select( 'ti-onboarding' );
 		return {
 			fetching: getFetching(),
 			siteData: getCurrentSite(),
 			currentCustomizations: getUserCustomSettings(),
+			trackingId: getTrackingId(),
+			editor: getCurrentEditor(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {

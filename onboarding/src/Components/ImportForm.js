@@ -4,8 +4,9 @@ import { __ } from '@wordpress/i18n';
 import { TextControl, Button, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { ajaxAction } from '../utils/rest';
+import { withSelect } from '@wordpress/data';
 
-const ImportForm = () => {
+const ImportForm = ( { trackingId } ) => {
 	const [ email, setEmail ] = useState( tiobDash.emailSubscribe.email || '' );
 	const [ userLevel, setUserLevel ] = useState( '' );
 	const [ buildingFor, setBuildingFor ] = useState( '' );
@@ -55,33 +56,56 @@ const ImportForm = () => {
 
 	const site = tiobDash.onboarding.homeUrl || '';
 
-	const viewWebsiteAndSubscribe = () => {
+	const viewWebsiteAndSubscribe = ( skipSubscribe = false ) => {
 		setProcessingSub( true );
 
-		ajaxAction(
-			tiobDash.onboardingDone.ajaxURL,
-			'mark_onboarding_done',
-			tiobDash.onboardingDone.nonce
-		);
+		const trackingPromise = fetch(
+			'https://api.themeisle.com/tracking/onboarding',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify( {
+					_id: trackingId,
+					userMeta: {
+						email,
+						i_am: userLevel,
+						making_website_for: buildingFor,
+					},
+				} ),
+			}
+		).catch( ( error ) => {
+			console.error( error );
+		} );
 
-		fetch( 'https://api.themeisle.com/tracking/subscribe', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify( {
-				slug: 'templates-patterns-collection',
-				site,
-				email,
-				userLevel,
-				buildingFor,
-			} ),
-		} )
-			.then( ( r ) => r.json() )
-			.catch( ( error ) => {
-				console.error( error );
-			} )
-			.finally( () => {
+		let subscribePromise;
+
+		if ( ! skipSubscribe ) {
+			subscribePromise = fetch(
+				'https://api.themeisle.com/tracking/subscribe',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify( {
+						slug: 'templates-patterns-collection',
+						site,
+						email,
+						userLevel,
+						buildingFor,
+					} ),
+				}
+			)
+				.then( ( r ) => r.json() )
+				.catch( ( error ) => {
+					console.error( error );
+				} );
+		}
+
+		Promise.all( [ trackingPromise, subscribePromise ] )
+			.then( () => {
 				ajaxAction(
 					tiobDash.onboardingDone.ajaxURL,
 					'mark_onboarding_done',
@@ -89,18 +113,10 @@ const ImportForm = () => {
 				).then( () => {
 					window.location.href = site;
 				} );
+			} )
+			.catch( ( error ) => {
+				console.error( error );
 			} );
-	};
-
-	const handleSkip = () => {
-		setProcessingSub( true );
-		ajaxAction(
-			tiobDash.onboardingDone.ajaxURL,
-			'mark_onboarding_done',
-			tiobDash.onboardingDone.nonce
-		).then( () => {
-			window.location.href = site;
-		} );
 	};
 
 	return (
@@ -157,7 +173,7 @@ const ImportForm = () => {
 						isLink
 						className="close is-grayed"
 						disabled={ processingSub }
-						onClick={ handleSkip }
+						onClick={ () => viewWebsiteAndSubscribe( true ) }
 					>
 						{ __(
 							'Skip and view site',
@@ -170,4 +186,9 @@ const ImportForm = () => {
 	);
 };
 
-export default ImportForm;
+export default withSelect( ( select ) => {
+	const { getTrackingId } = select( 'ti-onboarding' );
+	return {
+		trackingId: getTrackingId(),
+	};
+} )( ImportForm );
