@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
-import { createInterpolateElement } from '@wordpress/element';
+import { createInterpolateElement, useState } from '@wordpress/element';
 import PaletteControl from './CustomizeControls/PaletteControl';
 import TypographyControl from './CustomizeControls/TypographyControl';
 import SiteNameControl from './CustomizeControls/SiteNameControl';
@@ -27,6 +27,7 @@ export const SiteSettings = ( {
 } ) => {
 	const canImport = ! siteData.upsell;
 	const { siteName, siteLogo } = currentCustomizations;
+	const [ settingsChanged, setSettingsChanged ] = useState( false );
 
 	let heading =
 		step === 3
@@ -219,6 +220,9 @@ export const SiteSettings = ( {
 										<ImportOptionsControl
 											general={ general }
 											setGeneral={ setGeneral }
+											setSettingsChanged={
+												setSettingsChanged
+											}
 										/>
 										<Button
 											isPrimary
@@ -226,7 +230,9 @@ export const SiteSettings = ( {
 											onClick={ identityChoicesSubmit }
 											disabled={
 												fetching ||
-												( ! siteName && ! siteLogo )
+												( ! siteName &&
+													! siteLogo &&
+													! settingsChanged )
 											}
 										>
 											{ __(

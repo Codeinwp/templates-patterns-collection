@@ -10,7 +10,12 @@ import CustomTooltip from '../CustomTooltip';
 import { Icon, Button, ToggleControl } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 
-const ImportOptionsControl = ( { importData, general, setGeneral } ) => {
+const ImportOptionsControl = ( {
+	importData,
+	general,
+	setGeneral,
+	setSettingsChanged,
+} ) => {
 	const { cleanupAllowed } = tiobDash;
 	const [ optionsOpened, setOptionsOpened ] = useState( false );
 	const [ divHeight, setDivHeight ] = useState( 0 );
@@ -175,6 +180,9 @@ const ImportOptionsControl = ( { importData, general, setGeneral } ) => {
 												<ToggleControl
 													checked={ general[ id ] }
 													onChange={ () => {
+														setSettingsChanged(
+															true
+														);
 														setGeneral( {
 															...general,
 															[ id ]: ! general[
