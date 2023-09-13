@@ -2,7 +2,6 @@ import { __ } from '@wordpress/i18n';
 import Filters from '../Filters';
 import Sites from '../Sites';
 import EditorSelector from '../EditorSelector';
-import { EDITOR_MAP } from '../../utils/common';
 import { useEffect } from '@wordpress/element';
 import { withDispatch } from '@wordpress/data';
 
@@ -17,7 +16,7 @@ const SiteList = ( { setFetching } ) => {
 				<h1>
 					{ __( 'Choose a design', 'templates-patterns-collection' ) }
 				</h1>
-				<EditorSelector EDITOR_MAP={ EDITOR_MAP } />
+				<EditorSelector />
 			</div>
 			<Filters />
 			<Sites />

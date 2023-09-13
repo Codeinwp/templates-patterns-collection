@@ -1,4 +1,6 @@
 /* global tiobDash, FormData, fetch */
+/* eslint-disable no-console */
+
 export const send = ( route, data, simple = false ) => {
 	return requestData( route, simple, data );
 };
@@ -69,4 +71,38 @@ export const ajaxAction = async (
 	return await fetch( route, options ).then( () => {
 		return true;
 	} );
+};
+
+export const track = async ( trackingId = '', data ) => {
+	try {
+		const response = await fetch(
+			'https://api.themeisle.com/tracking/onboarding',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify( {
+					_id: trackingId,
+					data,
+				} ),
+			}
+		);
+
+		if ( ! response.ok ) {
+			console.error( `HTTP error! Status: ${ response.status }` );
+			return false;
+		}
+
+		const jsonResponse = await response.json();
+
+		if ( jsonResponse.code !== 'success' ) {
+			return false;
+		}
+
+		return jsonResponse.id || false;
+	} catch ( error ) {
+		console.error( error );
+		return false;
+	}
 };

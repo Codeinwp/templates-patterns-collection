@@ -1,12 +1,30 @@
 /* global tiobDash */
-import { withDispatch } from '@wordpress/data';
+import { compose } from '@wordpress/compose';
+import { withSelect, withDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
-
 import SVG from '../utils/svg';
+import { track } from '../utils/rest';
 
-const Header = ( { handleLogoClick, importing } ) => {
+const Header = ( { handleLogoClick, importing, step, trackingId } ) => {
 	const { brandedTheme } = tiobDash;
+
+	const handleExit = () => {
+		const data = {
+			step_id: step,
+			step_status: 'exit',
+		};
+		const site = tiobDash.onboarding.homeUrl || '';
+		track( trackingId, data )
+			.catch( ( error ) => {
+				// eslint-disable-next-line no-console
+				console.error( error );
+			} )
+			.finally( () => {
+				window.location.href = site + '/wp-admin';
+			} );
+	};
+
 	return (
 		<div className="ob-header">
 			<Button
@@ -30,9 +48,9 @@ const Header = ( { handleLogoClick, importing } ) => {
 					'Exit to dashboard',
 					'templates-patterns-collection'
 				) }
-				href="/wp-admin"
 				isLink
 				disabled={ importing }
+				onClick={ handleExit }
 			>
 				{ SVG.close }
 			</Button>
@@ -40,11 +58,20 @@ const Header = ( { handleLogoClick, importing } ) => {
 	);
 };
 
-export default withDispatch( ( dispatch ) => {
-	const { setOnboardingStep } = dispatch( 'ti-onboarding' );
-	return {
-		handleLogoClick: () => {
-			setOnboardingStep( 1 );
-		},
-	};
-} )( Header );
+export default compose(
+	withSelect( ( select ) => {
+		const { getCurrentStep, getTrackingId } = select( 'ti-onboarding' );
+		return {
+			step: getCurrentStep(),
+			trackingId: getTrackingId(),
+		};
+	} ),
+	withDispatch( ( dispatch ) => {
+		const { setOnboardingStep } = dispatch( 'ti-onboarding' );
+		return {
+			handleLogoClick: () => {
+				setOnboardingStep( 1 );
+			},
+		};
+	} )
+)( Header );

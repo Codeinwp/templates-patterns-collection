@@ -21,7 +21,7 @@ const initialState = {
 	editor: selectedEditor,
 	category: 'all',
 	currentSite: null,
-	fetching: true,
+	fetching: false,
 	searchQuery: '',
 	license: initialLicense,
 	onboardingStep: 1,
@@ -99,7 +99,6 @@ export default ( state = initialState, action ) => {
 			};
 		case 'SET_TRACKING_ID':
 			const { trackingId } = action.payload;
-			localStorage.setItem( 'neve-onboarding-editor', trackingId );
 			return {
 				...state,
 				trackingId,

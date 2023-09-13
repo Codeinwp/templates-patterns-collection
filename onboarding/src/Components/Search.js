@@ -1,9 +1,9 @@
-/* global tiobDash, fetch */
 import { Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
 import classnames from 'classnames';
 import SVG from '../utils/svg';
+import { track } from '../utils/rest';
 
 const Search = ( {
 	onSearch,
@@ -70,12 +70,9 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch, { step, query, trackingId, category } ) => {
-		const {
-			setSearchQuery,
-			setCategory,
-			setOnboardingStep,
-			setTrackingId,
-		} = dispatch( 'ti-onboarding' );
+		const { setSearchQuery, setCategory, setOnboardingStep } = dispatch(
+			'ti-onboarding'
+		);
 		return {
 			onSearch: ( searchQuery ) => setSearchQuery( searchQuery ),
 			deleteQuery: () => setSearchQuery( '' ),
@@ -84,34 +81,16 @@ export default compose(
 				setCategory( 'all' );
 				if ( step === 1 ) {
 					setOnboardingStep( 2 );
-					fetch( 'https://api.themeisle.com/tracking/onboarding', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify( {
-							_id: trackingId,
-							data: {
-								slug: 'templates-patterns-collection',
-								license_id: tiobDash.license,
-								site: tiobDash.onboarding.homeUrl || '',
-								search: query,
-								cat: category,
-							},
-						} ),
-					} )
-						.then( ( r ) => r.json() )
-						.then( ( response ) => {
-							if ( 'success' === response.code ) {
-								const id = response.id;
-								if ( id ) {
-									setTrackingId( id );
-								}
-							}
-						} )
-						.catch( ( error ) => {
-							console.error( error );
-						} );
+					const data = {
+						search: query,
+						cat: category,
+						step_id: 1,
+						step_status: 'completed',
+					};
+					track( trackingId, data ).catch( ( error ) => {
+						// eslint-disable-next-line no-console
+						console.error( error );
+					} );
 				}
 			},
 		};

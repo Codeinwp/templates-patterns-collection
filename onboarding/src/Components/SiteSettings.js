@@ -1,9 +1,8 @@
-/* global fetch */
 import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Button } from '@wordpress/components';
-import { useState, createInterpolateElement } from '@wordpress/element';
+import { createInterpolateElement } from '@wordpress/element';
 import PaletteControl from './CustomizeControls/PaletteControl';
 import TypographyControl from './CustomizeControls/TypographyControl';
 import SiteNameControl from './CustomizeControls/SiteNameControl';
@@ -11,10 +10,9 @@ import LogoControl from './CustomizeControls/LogoControl';
 import ImportOptionsControl from './CustomizeControls/ImportOptionsControl';
 import ImportMock from './ImportMock';
 import classnames from 'classnames';
+import { track } from '../utils/rest';
 
 export const SiteSettings = ( {
-	handlePrevStepClick,
-	handleNextStepClick,
 	general,
 	setGeneral,
 	fetching,
@@ -24,22 +22,22 @@ export const SiteSettings = ( {
 	importDataDefault,
 	currentCustomizations,
 	trackingId,
-	editor,
+	setOnboardingStep,
+	step,
 } ) => {
-	const [ settingsPage, setSettingsPage ] = useState( 1 );
 	const canImport = ! siteData.upsell;
 	const { siteName, siteLogo } = currentCustomizations;
 
 	let heading =
-		settingsPage === 1
+		step === 3
 			? __( 'Customise design', 'templates-patterns-collection' )
 			: __( 'Site details', 'templates-patterns-collection' );
 
 	let description =
-		settingsPage === 1
+		step === 3
 			? __(
-				'Customise the design of your site, such as color and typography.',
-				'templates-patterns-collection'
+					'Customise the design of your site, such as color and typography.',
+					'templates-patterns-collection'
 			  )
 			: __(
 				'Optionally add your business name and logo. You can change these later.',
@@ -94,48 +92,38 @@ export const SiteSettings = ( {
 		}
 	);
 
-	const designChocicesSubmit = () => {
-		setSettingsPage( 2 );
-		if ( ! trackingId ) {
-			return;
-		}
-		fetch( 'https://api.themeisle.com/tracking/onboarding', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
+	const designChoicesSubmit = () => {
+		setOnboardingStep( 4 );
+		const trackData = {
+			design_choices: {
+				palette: siteStyle.palette,
+				typography: siteStyle.font,
 			},
-			body: JSON.stringify( {
-				_id: trackingId,
-				data: {
-					designChoices: {
-						palette: siteStyle.palette,
-						typography: siteStyle.font,
-					},
-					selectedTemplate: siteData.title,
-					type: editor,
-				},
-			} ),
-		} ).catch( ( error ) => {
+			step_id: 3,
+			step_status: 'completed',
+		};
+		track( trackingId, trackData ).catch( ( error ) => {
 			// eslint-disable-next-line no-console
 			console.error( error );
 		} );
 	};
 
-	const identityChoicesSubmit = () => {
-		handleNextStepClick();
-		fetch( 'https://api.themeisle.com/tracking/onboarding', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify( {
-				_id: trackingId,
-				data: {
-					siteIdentityFilled: siteName || siteLogo,
-					importedItems: general,
-				},
-			} ),
-		} ).catch( ( error ) => {
+	const identityChoicesSubmit = ( skip = false ) => {
+		const fieldsFilled = [];
+		if ( siteName ) {
+			fieldsFilled.push( 'siteName' );
+		}
+		if ( siteLogo ) {
+			fieldsFilled.push( 'siteLogo' );
+		}
+		setOnboardingStep( 5 );
+		const trackData = {
+			imported_items: general,
+			fields_filled: fieldsFilled,
+			step_id: 4,
+			step_status: skip ? 'skip' : 'completed',
+		};
+		track( trackingId, trackData ).catch( ( error ) => {
 			// eslint-disable-next-line no-console
 			console.error( error );
 		} );
@@ -155,11 +143,11 @@ export const SiteSettings = ( {
 							className="ob-back"
 							type="link"
 							onClick={ () => {
-								if ( settingsPage === 2 ) {
-									setSettingsPage( 1 );
+								if ( step === 4 ) {
+									setOnboardingStep( 3 );
 									return;
 								}
-								handlePrevStepClick();
+								setOnboardingStep( 2 );
 							} }
 						>
 							{ __( 'Go back', 'templates-patterns-collection' ) }
@@ -169,7 +157,7 @@ export const SiteSettings = ( {
 					</div>
 					<div className="ob-settings-wrap">
 						<div className="ob-settings-top">
-							{ settingsPage === 1 && (
+							{ step === 3 && (
 								<>
 									<PaletteControl
 										siteStyle={ siteStyle }
@@ -182,7 +170,7 @@ export const SiteSettings = ( {
 								</>
 							) }
 
-							{ settingsPage === 2 &&
+							{ step === 4 &&
 								( canImport ? (
 									<>
 										<SiteNameControl
@@ -212,12 +200,12 @@ export const SiteSettings = ( {
 								) ) }
 						</div>
 						<div className="ob-settings-bottom">
-							{ settingsPage === 1 && (
+							{ step === 3 && (
 								<Button
 									disabled={ fetching }
 									isPrimary
 									className="ob-button full"
-									onClick={ designChocicesSubmit }
+									onClick={ designChoicesSubmit }
 								>
 									{ __(
 										'Continue',
@@ -225,7 +213,7 @@ export const SiteSettings = ( {
 									) }
 								</Button>
 							) }
-							{ settingsPage === 2 &&
+							{ step === 4 &&
 								( canImport ? (
 									<>
 										<ImportOptionsControl
@@ -249,7 +237,9 @@ export const SiteSettings = ( {
 										<Button
 											isLink
 											className="ob-link"
-											onClick={ identityChoicesSubmit }
+											onClick={ () =>
+												identityChoicesSubmit( true )
+											}
 											disabled={ fetching }
 										>
 											{ __(
@@ -287,21 +277,20 @@ export default compose(
 			getCurrentSite,
 			getUserCustomSettings,
 			getTrackingId,
-			getCurrentEditor,
+			getCurrentStep,
 		} = select( 'ti-onboarding' );
 		return {
 			fetching: getFetching(),
 			siteData: getCurrentSite(),
 			currentCustomizations: getUserCustomSettings(),
 			trackingId: getTrackingId(),
-			editor: getCurrentEditor(),
+			step: getCurrentStep(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
 		const { setOnboardingStep } = dispatch( 'ti-onboarding' );
 		return {
-			handlePrevStepClick: () => setOnboardingStep( 2 ),
-			handleNextStepClick: () => setOnboardingStep( 4 ),
+			setOnboardingStep,
 		};
 	} )
 )( SiteSettings );

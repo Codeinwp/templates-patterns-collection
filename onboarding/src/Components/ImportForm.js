@@ -3,7 +3,7 @@
 import { __ } from '@wordpress/i18n';
 import { TextControl, Button, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { ajaxAction } from '../utils/rest';
+import { ajaxAction, track } from '../utils/rest';
 import { withSelect } from '@wordpress/data';
 
 const ImportForm = ( { trackingId } ) => {
@@ -59,25 +59,21 @@ const ImportForm = ( { trackingId } ) => {
 	const viewWebsiteAndSubscribe = ( skipSubscribe = false ) => {
 		setProcessingSub( true );
 
-		const trackingPromise = fetch(
-			'https://api.themeisle.com/tracking/onboarding',
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify( {
-					_id: trackingId,
-					userMeta: {
-						email,
-						i_am: userLevel,
-						making_website_for: buildingFor,
-					},
-				} ),
+		const trackData = {
+			user_meta: {
+				email,
+				i_am: userLevel,
+				making_website_for: buildingFor,
+			},
+			step_id: 5,
+			step_status: skipSubscribe ? 'skip' : 'completed',
+		};
+		const trackingPromise = track( trackingId, trackData ).catch(
+			( error ) => {
+				// eslint-disable-next-line no-console
+				console.error( error );
 			}
-		).catch( ( error ) => {
-			console.error( error );
-		} );
+		);
 
 		let subscribePromise;
 
