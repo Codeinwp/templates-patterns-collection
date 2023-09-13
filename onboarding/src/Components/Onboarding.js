@@ -17,12 +17,18 @@ const Onboarding = ( { step, themeData } ) => {
 		theme_install: themeData !== false,
 	} );
 	const [ importing, setImporting ] = useState( false );
+	const [ showToast, setShowToast ] = useState( false );
 
 	return (
 		<Fragment>
 			<Header importing={ importing } />
 			{ step === 1 && <Welcome /> }
-			{ step === 2 && <SiteList /> }
+			{ step === 2 && (
+				<SiteList
+					showToast={ showToast }
+					setShowToast={ setShowToast }
+				/>
+			) }
 			{ ( step === 3 || step === 4 ) && (
 				<CustomizeSite general={ general } setGeneral={ setGeneral } />
 			) }
