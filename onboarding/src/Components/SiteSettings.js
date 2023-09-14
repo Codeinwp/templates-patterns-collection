@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -28,6 +29,8 @@ export const SiteSettings = ( {
 	const canImport = ! siteData.upsell;
 	const { siteName, siteLogo } = currentCustomizations;
 	const [ settingsChanged, setSettingsChanged ] = useState( false );
+	const dashboardLink = tiobDash.onboardingUpsell?.dashboard;
+	const contactLink = tiobDash.onboardingUpsell?.contact;
 
 	let heading =
 		step === 3
@@ -63,7 +66,7 @@ export const SiteSettings = ( {
 		{
 			a: (
 				<a
-					href="https://store.themeisle.com/"
+					href={ dashboardLink }
 					target="_blank"
 					rel="external noreferrer noopener"
 				>
@@ -83,7 +86,7 @@ export const SiteSettings = ( {
 		{
 			a: (
 				<a
-					href="https://themeisle.com/contact/"
+					href={ contactLink }
 					target="_blank"
 					rel="external noreferrer noopener"
 				>
