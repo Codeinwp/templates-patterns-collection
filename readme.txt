@@ -15,8 +15,8 @@ A cloud based service with 100+ templates and starter sites for Neve theme.
 = A cloud based templates library which enables you to create or use existing ready-made website with 1-click. =
 
 ### More than 100 Starter Sites and Templates available for the most popular page builders ###
-Free and premium templates and starter sites available for top 5 page builders: Elementor, Beaver Builder, Brizy, Gutenberg, Divi and Thrive.
-All templates can be previewed on [demosites.io](https://demosites.io/) and you can seamlessly import to any of your site.
+Browse a wide selection of templates and starter sites that are designed to help you build beautiful websites with Elementor and Gutenberg. All templates can be previewed on [demosites.io](https://demosites.io/) and you can seamlessly import them to any of your sites. Whether you're a beginner or a seasoned pro, our templates can help you save time and create stunning websites without any coding knowledge.
+In addition to our Elementor and Gutenberg templates, we also offer a handful of page templates for Beaver Builder. These templates are perfect for creating basic pages such as contact pages, about pages, and blog pages. If you're a Beaver Builder user, be sure to check out our selection of page templates.
 
 ### Your own private Templates Cloud [PRO] ###
 Boost productivity and speed up your workflow by saving all your designs and share them automatically to all your sites in 1-click.
