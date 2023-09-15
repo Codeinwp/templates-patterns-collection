@@ -1,7 +1,7 @@
 === Cloud Templates & Patterns collection ===
 Contributors: themeisle
 Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
-Requires at least: 4.7
+Requires at least: 5.4
 Tested up to: 6.3
 Requires PHP: 5.6
 Stable tag: trunk
@@ -42,7 +42,7 @@ Yes, you can. You can either chose to import one template or the entire starter 
 ##### [Version 1.1.39](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.38...v1.1.39) (2023-06-19)
 
 - Feat: Allow post types from Pods plugin to be imported
-- Feat: Add support for Neve setting page 
+- Feat: Add support for Neve setting page
 - Fix: Import preview Elementor.
 - Fix: Improved Elementor styles for light and dark skin.
 - Fix: Error from TPC inside FSE editor.
@@ -272,7 +272,7 @@ Enhance compatibility with Mega menus import
 
 ##### [Version 1.1.11](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.10...v1.1.11) (2021-05-13)
 
-* Improve translations 
+* Improve translations
 * Improve texts and descriptions
 
 
@@ -297,7 +297,7 @@ Enhance compatibility with Mega menus import
 
 ##### [Version 1.1.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.7...v1.1.8) (2021-04-29)
 
-- Decode HTML entities in title 
+- Decode HTML entities in title
 - Improve Templates Cloud visibility
 - Fix meta not saving properly
 

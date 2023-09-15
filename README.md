@@ -1,7 +1,7 @@
 # Cloud Templates & Patterns collection #
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** neve, templates, patterns, blocks, starter, sites, demo, content, import  
-**Requires at least:** 4.7  
+**Requires at least:** 5.4  
 **Tested up to:** 6.2  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
