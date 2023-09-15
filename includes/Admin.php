@@ -676,10 +676,10 @@ class Admin {
 				'count'     => get_option( self::IMPORTED_TEMPLATES_COUNT_OPT, 0 ),
 				'dismissed' => get_option( self::FEEDBACK_DISMISSED_OPT, false ),
 			),
-			'onboardingUpsell' => array(
+			'onboardingUpsell'    => array(
 				'dashboard' => tsdk_utmify( 'https://store.themeisle.com/', 'onboarding_upsell' ),
-				'contact'   => tsdk_utmify( 'https://themeisle.com/contact/', 'onboarding_upsell'),
-			)
+				'contact'   => tsdk_utmify( 'https://themeisle.com/contact/', 'onboarding_upsell' ),
+			),
 		);
 	}
 
