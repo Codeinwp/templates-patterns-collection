@@ -47,7 +47,7 @@ export const SiteSettings = ( {
 				'Optionally add your business name and logo. You can change these later.',
 				'templates-patterns-collection'
 			  );
-	if ( ! canImport ) {
+	if ( ! canImport && step === 4 ) {
 		heading = __(
 			'This is a Premium Starter Site!',
 			'templates-patterns-collection'
@@ -141,7 +141,7 @@ export const SiteSettings = ( {
 			) }
 		>
 			{ ! fetching ? (
-				<>
+				<div className="ob-site-settings-container">
 					<div className="ob-settings-description">
 						<Button
 							className="ob-back"
@@ -271,7 +271,7 @@ export const SiteSettings = ( {
 								) ) }
 						</div>
 					</div>
-				</>
+				</div>
 			) : (
 				<ImportMock />
 			) }

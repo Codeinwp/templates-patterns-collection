@@ -68,15 +68,9 @@ const ImportForm = ( { trackingId } ) => {
 			step_id: 5,
 			step_status: skipSubscribe ? 'skip' : 'completed',
 		};
-		const trackingPromise = track( trackingId, trackData ).catch(
-			( error ) => {
-				// eslint-disable-next-line no-console
-				console.error( error );
-			}
-		);
+		const trackingPromise = track( trackingId, trackData );
 
 		let subscribePromise;
-
 		if ( ! skipSubscribe ) {
 			subscribePromise = fetch(
 				'https://api.themeisle.com/tracking/subscribe',
@@ -93,25 +87,25 @@ const ImportForm = ( { trackingId } ) => {
 						buildingFor,
 					} ),
 				}
-			)
-				.then( ( r ) => r.json() )
-				.catch( ( error ) => {
-					console.error( error );
-				} );
+			);
 		}
 
-		Promise.all( [ trackingPromise, subscribePromise ] )
-			.then( () => {
-				ajaxAction(
-					tiobDash.onboardingDone.ajaxURL,
-					'mark_onboarding_done',
-					tiobDash.onboardingDone.nonce
-				).then( () => {
-					window.location.href = site;
-				} );
-			} )
+		const finishImportPromise = ajaxAction(
+			tiobDash.onboardingDone.ajaxURL,
+			'mark_onboarding_done',
+			tiobDash.onboardingDone.nonce
+		);
+
+		Promise.all( [
+			trackingPromise,
+			subscribePromise,
+			finishImportPromise,
+		] )
 			.catch( ( error ) => {
 				console.error( error );
+			} )
+			.finally( () => {
+				window.location.href = site;
 			} );
 	};
 

@@ -130,6 +130,26 @@ const ImportOptionsControl = ( {
 
 	const toggleOpen = () => {
 		setOptionsOpened( ! optionsOpened );
+
+		const optionsContainer = document.querySelector(
+			'.ob-import-options-toggles'
+		);
+		const pluginsContainer = document.querySelector( '.ob-import-plugins' );
+
+		const container = document.querySelector(
+			'.ob-site-settings-container'
+		);
+		if ( ! optionsOpened ) {
+			const newHeight =
+				optionsContainer.offsetHeight +
+				pluginsContainer.offsetHeight +
+				200;
+			container.style.minHeight = newHeight + 'px';
+		} else {
+			container.style.minHeight = 'auto';
+		}
+
+		updateDivHeight();
 	};
 
 	return (

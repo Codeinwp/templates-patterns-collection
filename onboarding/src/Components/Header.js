@@ -4,7 +4,7 @@ import { withSelect, withDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
 import SVG from '../utils/svg';
-import { track } from '../utils/rest';
+import { ajaxAction, track } from '../utils/rest';
 
 const Header = ( { handleLogoClick, importing, step, trackingId } ) => {
 	const { brandedTheme } = tiobDash;
@@ -15,7 +15,19 @@ const Header = ( { handleLogoClick, importing, step, trackingId } ) => {
 			step_status: 'exit',
 		};
 		const site = tiobDash.onboarding.homeUrl || '';
-		track( trackingId, data )
+
+		const trackingPromise = track( trackingId, data );
+
+		let finishImportPromise;
+		if ( step === 5 ) {
+			finishImportPromise = ajaxAction(
+				tiobDash.onboardingDone.ajaxURL,
+				'mark_onboarding_done',
+				tiobDash.onboardingDone.nonce
+			);
+		}
+
+		Promise.all( [ trackingPromise, finishImportPromise ] )
 			.catch( ( error ) => {
 				// eslint-disable-next-line no-console
 				console.error( error );

@@ -9,6 +9,12 @@
   flex-direction: column;
 }
 
+.ob-site-settings-container{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .ob-settings-description {
   display: flex;
   flex-direction: column;

@@ -1,6 +1,6 @@
 /* global tiobDash */
 import { __ } from '@wordpress/i18n';
-import { useEffect, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { Button, Dashicon } from '@wordpress/components';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -8,9 +8,6 @@ import classnames from 'classnames';
 import { EDITOR_MAP } from '../utils/common';
 
 const EditorSelector = ( { editor, setCurrentEditor, sites } ) => {
-	useEffect( () => {
-		setCurrentEditor( 'gutenberg' );
-	}, [] );
 	const [ open, setOpen ] = useState( false );
 	const editorsOrderedFromAPI = Object.keys( sites );
 	const toggleDropdown = () => setOpen( ! open );
