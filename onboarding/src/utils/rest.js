@@ -96,7 +96,13 @@ export const track = async ( trackingId = '', data ) => {
 
 		const jsonResponse = await response.json();
 
-		if ( jsonResponse.code !== 'success' ) {
+		const validCodes = [ 'success', 'invalid' ]; // Add valid codes to this array
+		if ( ! validCodes.includes( jsonResponse.code ) ) {
+			return false;
+		}
+
+		if ( jsonResponse.code === 'invalid' ) {
+			console.error( jsonResponse.message );
 			return false;
 		}
 
