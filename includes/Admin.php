@@ -319,6 +319,9 @@ class Admin {
 		if ( ! $this->should_load_onboarding() ) {
 			return;
 		}
+		if ( $this->is_starter_sites_disabled() ) {
+			return;
+		}
 
 		delete_option( 'tpc_maybe_run_onboarding' );
 		wp_safe_redirect( admin_url( 'admin.php?page=neve-onboarding' ) );
