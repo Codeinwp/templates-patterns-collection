@@ -11,6 +11,9 @@ const Header = ( { handleLogoClick, importing, step, trackingId } ) => {
 
 	const handleExit = () => {
 		const data = {
+			slug: 'neve',
+			license_id: tiobDash.license,
+			site: tiobDash.onboarding.homeUrl || '',
 			step_id: step,
 			step_status: 'exit',
 		};

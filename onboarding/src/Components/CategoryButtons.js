@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { compose } from '@wordpress/compose';
 import { withSelect, withDispatch } from '@wordpress/data';
 import classnames from 'classnames';
@@ -50,6 +51,9 @@ export default compose(
 				if ( step === 1 ) {
 					setOnboardingStep( 2 );
 					const data = {
+						slug: 'neve',
+						license_id: tiobDash.license,
+						site: tiobDash.onboarding.homeUrl || '',
 						search: query,
 						cat: category,
 						step_id: 1,

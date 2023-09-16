@@ -17,7 +17,7 @@ const Welcome = ( { trackingId, setTrackingId, fetching, setFetching } ) => {
 
 		setFetching( true );
 		const data = {
-			slug: 'templates-patterns-collection',
+			slug: 'neve',
 			license_id: tiobDash.license,
 			site: tiobDash.onboarding.homeUrl || '',
 		};

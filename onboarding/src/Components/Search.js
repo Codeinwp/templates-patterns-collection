@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
@@ -82,6 +83,9 @@ export default compose(
 				if ( step === 1 ) {
 					setOnboardingStep( 2 );
 					const data = {
+						slug: 'neve',
+						license_id: tiobDash.license,
+						site: tiobDash.onboarding.homeUrl || '',
 						search: query,
 						cat: category,
 						step_id: 1,

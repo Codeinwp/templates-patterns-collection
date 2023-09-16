@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Button } from '@wordpress/components';
@@ -17,6 +18,9 @@ const StarterSiteCard = ( {
 		setSite();
 		handleNextStep();
 		const trackData = {
+			slug: 'neve',
+			license_id: tiobDash.license,
+			site: tiobDash.onboarding.homeUrl || '',
 			step_id: 2,
 			step_status: 'completed',
 			selected_template: title,

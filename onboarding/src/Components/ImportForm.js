@@ -60,6 +60,9 @@ const ImportForm = ( { trackingId } ) => {
 		setProcessingSub( true );
 
 		const trackData = {
+			slug: 'neve',
+			license_id: tiobDash.license,
+			site: tiobDash.onboarding.homeUrl || '',
 			user_meta: {
 				email,
 				i_am: userLevel,

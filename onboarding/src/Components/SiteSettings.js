@@ -99,6 +99,9 @@ export const SiteSettings = ( {
 	const designChoicesSubmit = () => {
 		setOnboardingStep( 4 );
 		const trackData = {
+			slug: 'neve',
+			license_id: tiobDash.license,
+			site: tiobDash.onboarding.homeUrl || '',
 			design_choices: {
 				palette: siteStyle.palette,
 				typography: siteStyle.font,
@@ -122,6 +125,9 @@ export const SiteSettings = ( {
 		}
 		setOnboardingStep( 5 );
 		const trackData = {
+			slug: 'neve',
+			license_id: tiobDash.license,
+			site: tiobDash.onboarding.homeUrl || '',
 			imported_items: general,
 			fields_filled: fieldsFilled,
 			step_id: 4,
