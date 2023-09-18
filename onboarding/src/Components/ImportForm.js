@@ -56,7 +56,9 @@ const ImportForm = ( { trackingId } ) => {
 
 	const site = tiobDash.onboarding.homeUrl || '';
 
-	const viewWebsiteAndSubscribe = ( skipSubscribe = false ) => {
+	const viewWebsiteAndSubscribe = ( event, skipSubscribe = false ) => {
+		event.preventDefault();
+
 		setProcessingSub( true );
 
 		const trackData = {
@@ -120,7 +122,9 @@ const ImportForm = ( { trackingId } ) => {
 			</p>
 			<form
 				className="ob-subscribe-form"
-				onSubmit={ viewWebsiteAndSubscribe }
+				onSubmit={ ( event ) => {
+					viewWebsiteAndSubscribe( event );
+				} }
 			>
 				<div className="ob-form-wrap">
 					<TextControl
@@ -164,7 +168,9 @@ const ImportForm = ( { trackingId } ) => {
 						isLink
 						className="close is-grayed"
 						disabled={ processingSub }
-						onClick={ () => viewWebsiteAndSubscribe( true ) }
+						onClick={ ( event ) =>
+							viewWebsiteAndSubscribe( event, true )
+						}
 					>
 						{ __(
 							'Skip and view site',
