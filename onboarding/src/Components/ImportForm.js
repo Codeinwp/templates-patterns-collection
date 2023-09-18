@@ -86,8 +86,6 @@ const ImportForm = ( { trackingId } ) => {
 						slug: 'templates-patterns-collection',
 						site,
 						email,
-						userLevel,
-						buildingFor,
 					} ),
 				}
 			);
