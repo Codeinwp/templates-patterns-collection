@@ -101,7 +101,7 @@ const CustomizeSite = ( {
 				general={ general }
 				setGeneral={ setGeneral }
 			/>
-			<SitePreview siteStyle={ siteStyle } />
+			<SitePreview />
 		</div>
 	);
 };

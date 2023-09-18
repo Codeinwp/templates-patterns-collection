@@ -2,65 +2,21 @@ import { useEffect, useState } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import { sendPostMessage } from '../utils/common';
 
-const SitePreview = ( {
-	userCustomSettings,
-	siteData,
-	importData,
-	siteStyle,
-} ) => {
+const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
 	const [ loading, setLoading ] = useState( true );
 
-	const loadDefaultFonts = ( message ) => {
-		// TODO: uncomment the following lines when demosites changes are merged on production
-		// if ( message.origin !== siteData.url ) {
-		// 	return;
-		// }
-		if ( message.origin !== 'https://staging.demosites.io' ) {
-			return;
-		}
-
-		const { data } = message;
-		const { call, value } = data;
-		if ( call !== 'demoDefaultFonts' ) {
-			return;
-		}
-
-		const logoDisplay = importData?.theme_mods?.logo_display;
-
-		sendPostMessage( {
-			type: 'updateSiteInfo',
-			data: {
-				...userCustomSettings,
-				logoDisplay,
-			},
-		} );
-
-		sendPostMessage( {
-			type: 'styleChange',
-			data: siteStyle,
-		} );
-
-		const scriptsToLoad = JSON.parse( value );
-		scriptsToLoad.forEach( ( element ) => {
-			const { id, href } = element;
-			const node = document.createElement( 'link' );
-			node.id = id;
-			node.setAttribute( 'rel', 'stylesheet' );
-			node.setAttribute( 'href', href );
-			document.head.appendChild( node );
-		} );
-	};
-
 	useEffect( () => {
-		window.addEventListener( 'message', loadDefaultFonts );
-
-		if ( loading !== false ) {
-			return;
+		if ( ! loading ) {
+			const logoDisplay = importData?.theme_mods?.logo_display;
+			sendPostMessage( {
+				type: 'updateSiteInfo',
+				data: {
+					...userCustomSettings,
+					logoDisplay,
+				},
+			} );
 		}
-		return () => {
-			window.removeEventListener( 'message', loadDefaultFonts );
-		};
-	}, [ loading, loadDefaultFonts ] );
+	}, [ loading ] );
 
 	const handleIframeLoading = () => {
 		setLoading( false );
@@ -82,11 +38,9 @@ const SitePreview = ( {
 };
 
 export default withSelect( ( select ) => {
-	const {
-		getUserCustomSettings,
-		getCurrentSite,
-		getImportData,
-	} = select( 'ti-onboarding' );
+	const { getUserCustomSettings, getCurrentSite, getImportData } = select(
+		'ti-onboarding'
+	);
 	return {
 		userCustomSettings: getUserCustomSettings(),
 		siteData: getCurrentSite(),
