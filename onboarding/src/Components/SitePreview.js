@@ -22,9 +22,7 @@ const SitePreview = ( { userCustomSettings, siteData, importData } ) => {
 		setLoading( false );
 	};
 
-	const siteUrl =
-		siteData.url.replace( 'https://', 'https://staging.' ) +
-		'?onboarding=true';
+	const siteUrl = siteData.url + '?onboarding=true';
 
 	return (
 		<iframe
