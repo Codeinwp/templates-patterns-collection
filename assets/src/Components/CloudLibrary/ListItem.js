@@ -208,7 +208,9 @@ const ListItem = ( {
 			{ userTemplate && (
 				<div className="controls">
 					{ item.link ? (
-						<Tooltip text={ __( 'This template is synced to a page.' ) }>
+						<Tooltip
+							text={ __( 'This template is synced to a page.' ) }
+						>
 							<Button
 								label={ __( 'Edit' ) }
 								icon={ edit }
@@ -231,7 +233,15 @@ const ListItem = ( {
 							className={ classnames( {
 								'is-loading': 'updating' === isLoading,
 							} ) }
-							onClick={ () => isEditing ? updateItem : setEditing( ! isEditing ) }
+							onClick={ ( e ) => {
+								if ( isEditing ) {
+									updateItem( e ).then( () =>
+										setEditing( ! isEditing )
+									);
+									return;
+								}
+								setEditing( ! isEditing );
+							} }
 						>
 							{ isEditing ? __( 'Update' ) : __( 'Edit' ) }
 						</Button>

@@ -17,6 +17,7 @@ import classnames from 'classnames';
 import ImportModalError from './ImportModalError';
 import ImportModalMock from './ImportModalMock';
 import CustomTooltip from './CustomTooltip';
+import DocNotice from './DocNotice';
 
 import {
 	createInterpolateElement,
@@ -826,6 +827,17 @@ const ImportModal = ( {
 			) : (
 				<>
 					<div className="modal-body">
+						{ 'done' === currentStep &&
+							! error &&
+							siteData.doc_url && (
+								<DocNotice
+									data={ {
+										text: __( 'Learn more about this starter site', 'templates-patterns-collection' ),
+										url: siteData.doc_url,
+									} }
+								/>
+							)
+						}
 						{ ! importing && 'done' !== currentStep && ! error ? (
 							<>
 								<ModalHead />
