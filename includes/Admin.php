@@ -579,7 +579,7 @@ class Admin {
 		}
 
 		// Previously the library was visited check was stored in a transient. To ensure the notification is not displayed anymore once the user has visited the library
-		// the transient was moved to an option and here we check that if the transient is set we also update the option.
+		// the transient was moved to an option and here we check that if the transient is set and we also update the option.
 		$visited_transient = (bool) get_transient( self::VISITED_LIBRARY_OPT );
 		$page_was_visited  = get_option( self::VISITED_LIBRARY_OPT, false );
 		if ( $visited_transient && $page_was_visited === false ) {
