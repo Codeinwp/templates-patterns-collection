@@ -23,7 +23,7 @@ const Welcome = ( { trackingId, setTrackingId, fetching, setFetching } ) => {
 		};
 		track( trackingId, data )
 			.then( ( id ) => {
-				if ( id && trackingId ) {
+				if ( id ) {
 					setTrackingId( id );
 				}
 			} )
