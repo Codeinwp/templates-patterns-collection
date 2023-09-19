@@ -201,7 +201,7 @@ final class License {
 
 			if ( $license->tier !== 3 ) {
 				$category_mapping = self::NEVE_CATEGORY_MAPPING;
-				$tier = isset( $category_mapping[ $license->tier ] ) ? $category_mapping[ $license->tier ] : $license->tier;
+				$tier             = isset( $category_mapping[ $license->tier ] ) ? $category_mapping[ $license->tier ] : $license->tier;
 			}
 
 			return (int) $tier;

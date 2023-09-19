@@ -331,9 +331,9 @@ class Admin {
 	 * @return bool
 	 */
 	private function neve_theme_has_support( $feature ) {
-		if (defined('NEVE_COMPATIBILITY_FEATURES')) {
+		if ( defined( 'NEVE_COMPATIBILITY_FEATURES' ) ) {
 			$features = NEVE_COMPATIBILITY_FEATURES;
-			return isset($features[$feature]);
+			return isset( $features[ $feature ] );
 		}
 		return false;
 	}
@@ -468,11 +468,11 @@ class Admin {
 	 * @return int
 	 */
 	private function neve_license_plan() {
-		$category = apply_filters('product_neve_license_plan', -1);
+		$category = apply_filters( 'product_neve_license_plan', -1 );
 
 		$category_mapping = License::NEVE_CATEGORY_MAPPING;
 
-		return $category > -1 && isset($category_mapping[$category]) ? $category_mapping[$category] : -1;
+		return $category > -1 && isset( $category_mapping[ $category ] ) ? $category_mapping[ $category ] : -1;
 	}
 
 	/**
