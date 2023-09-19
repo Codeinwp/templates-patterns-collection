@@ -1,0 +1,53 @@
+.ob-editor-selector {
+  overflow: visible;
+  display: inline-block;
+  position: relative;
+  height: 54px;
+
+  img {
+    border-radius: 100%;
+    max-width: 38px;
+    max-height: 38px;
+  }
+
+  .options {
+    margin: 0;
+
+    li {
+      margin: 0;
+    }
+
+    a {
+      display: block;
+      padding: 8px;
+      text-align: left;
+    }
+  }
+
+  .ob-current-editor{
+    display: flex;
+    align-items: center;
+    > img, span {
+      padding: 8px;
+    }
+  }
+
+  .components-button {
+    height: auto;
+    padding: 0;
+  }
+
+  .ob-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 5px;
+    &.active {
+      background: $inverted-text;
+      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.10);
+    }
+    > span {
+      width: 100%;
+    }
+  }
+}

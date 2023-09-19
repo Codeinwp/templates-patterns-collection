@@ -1,0 +1,13 @@
+@media (min-width: #{$tablet}) {
+	@include ob-general--tablet();
+}
+
+@media (min-width: #{$laptop}) {
+	@include ob-general--laptop();
+}
+
+@media (min-width: #{$desktop}) {
+}
+
+@media (min-width: #{$desktop-large}) {
+}

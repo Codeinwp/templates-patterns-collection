@@ -2,8 +2,8 @@ import { withSelect } from '@wordpress/data';
 import classnames from 'classnames';
 
 import Onboarding from './Main';
-import {useState} from "@wordpress/element";
-import {LicensePanelContext} from "./LicensePanelContext";
+import { useState } from '@wordpress/element';
+import { LicensePanelContext } from './LicensePanelContext';
 
 const App = ( { onboarding, userStatus } ) => {
 	const wrapClasses = classnames( [

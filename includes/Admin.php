@@ -38,6 +38,20 @@ class Admin {
 	 */
 	private $skip_email_subscribe_namespace = 'tpc_skip_email_subscribe';
 
+	/**
+	 * Neve font pairs
+	 *
+	 * @var array
+	 */
+	private $font_pairs_neve = array();
+
+	/**
+	 * Google fonts
+	 *
+	 * @var array
+	 */
+	private $google_fonts = array();
+
 	public static function get_templates_cloud_endpoint() {
 		return 'https://' . self::API . '/templates-cloud/';
 	}
@@ -51,17 +65,24 @@ class Admin {
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
 		add_action( 'admin_menu', array( $this, 'register' ) );
+		add_filter( 'submenu_file', array( $this, 'hide_onboarding' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
+		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
 
 		$this->setup_white_label();
 
 		add_action( 'wp_ajax_skip_subscribe', array( $this, 'skip_subscribe' ) );
 		add_action( 'wp_ajax_nopriv_skip_subscribe', array( $this, 'skip_subscribe' ) );
 
+		add_action( 'wp_ajax_mark_onboarding_done', array( $this, 'mark_onboarding_done' ) );
+		add_action( 'wp_ajax_nopriv_mark_onboarding_done', array( $this, 'mark_onboarding_done' ) );
+
 		$this->register_feedback_settings();
 
 		$this->register_prevent_clone_hooks();
+
+		$this->get_font_parings();
 	}
 
 	/**
@@ -244,6 +265,32 @@ class Admin {
 	}
 
 	/**
+	 * Handles the `mark_onboarding_done` ajax action.
+	 */
+	public function mark_onboarding_done() {
+		$response = array(
+			'success' => false,
+			'code'    => 'ti__ob_not_allowed',
+			'message' => 'Not allowed!',
+		);
+		if ( ! isset( $_REQUEST['nonce'] ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'onboarding_done_nonce' ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		unset( $response['code'] );
+		unset( $response['message'] );
+
+		update_option( 'tpc_onboarding_done', 'yes' );
+		$this->ensure_ajax_response( $response );
+	}
+
+	/**
 	 * Hook into editor data to add Neve plan if available
 	 * or return the proper tier if stand-alone license is valid.
 	 *
@@ -256,6 +303,26 @@ class Admin {
 		$data['tier'] = License::get_license_tier( $plan );
 
 		return $data;
+	}
+
+
+	/**
+	 * Redirect to onboarding if user is new.
+	 *
+	 * @return void
+	 */
+	public function activation_redirect() {
+		$should_run_obd = get_option( 'tpc_maybe_run_onboarding', false );
+		if ( ! $should_run_obd ) {
+			return;
+		}
+		if ( ! $this->should_load_onboarding() ) {
+			return;
+		}
+
+		delete_option( 'tpc_maybe_run_onboarding' );
+		wp_safe_redirect( admin_url( 'admin.php?page=neve-onboarding' ) );
+		exit();
 	}
 
 	/**
@@ -359,10 +426,36 @@ class Admin {
 		}
 		$this->add_theme_page_for_tiob( $starter_site_data );
 
+		if ( $this->should_load_onboarding() ) {
+			$onboarding_data = array(
+				'page_title' => __( 'Onboarding', 'templates-patterns-collection' ),
+				'menu_title' => $prefix . __( 'Onboarding', 'templates-patterns-collection' ),
+				'capability' => 'install_plugins',
+				'menu_slug'  => 'neve-onboarding',
+				'callback'   => array(
+					$this,
+					'render_onboarding',
+				),
+			);
+			$this->add_theme_page_for_tiob( $onboarding_data );
+		}
+
 		if ( $this->is_library_disabled() ) {
 			return false;
 		}
 		$this->add_theme_page_for_tiob( $library_data );
+	}
+
+	/**
+	 * Hide the onboarding item from Neve menu.
+	 *
+	 * @param $submenu_file string The submenu file.
+	 *
+	 * @return string
+	 */
+	public function hide_onboarding( $submenu_file ) {
+		remove_submenu_page( 'neve-welcome', 'neve-onboarding' );
+		return $submenu_file;
 	}
 
 	/**
@@ -396,10 +489,112 @@ class Admin {
 		echo '<div id="tpc-app"/>';
 	}
 
+	/**
+	 * Render method for the onboarding page.
+	 */
+	public function render_onboarding() {
+		echo '<div id="ob-app"/>';
+	}
+
+
+	/**
+	 * Determine if the current user is a new one.
+	 *
+	 * @return bool
+	 */
+	private function is_neve_new_user() {
+		$is_old_user = get_option( 'neve_is_old_user', false );
+
+		if ( $is_old_user ) {
+			return false;
+		}
+
+		$install_time = get_option( 'neve_install' );
+
+		if ( empty( $install_time ) ) {
+			update_option( 'neve_is_old_user', true );
+			return false;
+		}
+
+		$now         = time();
+		$one_day_ago = $now - 86400; // 86400 seconds in a day (24 hours)
+
+		$is_new_user = ( $install_time >= $one_day_ago );
+
+		if ( ! $is_new_user ) {
+			update_option( 'neve_is_old_user', true );
+		}
+
+		return $is_new_user;
+	}
+
+	/**
+	 * Decide if the new onboarding should load
+	 *
+	 * @return bool
+	 */
+	private function should_load_onboarding() {
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return false;
+		}
+
+		if ( $this->is_starter_sites_disabled() ) {
+			return false;
+		}
+
+		$current_theme = wp_get_theme();
+		$template      = $current_theme->template === 'neve' ? $current_theme->template : $current_theme->parent();
+		if ( $template !== 'neve' ) {
+			return false;
+		}
+
+		if ( ! $this->is_neve_new_user() ) {
+			return false;
+		}
+
+		$onboarding_done = get_option( 'tpc_onboarding_done', 'no' );
+		if ( $onboarding_done === 'yes' ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Enqueue scripts and styles
+	 *
+	 * @return void
+	 */
 	public function enqueue() {
 		$screen = get_current_screen();
 		if ( ! isset( $screen->id ) ) {
 			return;
+		}
+
+		if ( $this->should_load_onboarding() && strpos( $screen->id, '_page_neve-onboarding' ) ) {
+
+			wp_enqueue_media();
+
+			$onboarding_dependencies = ( include TIOB_PATH . 'onboarding/build/index.asset.php' );
+			wp_register_style( 'tiobObd', TIOB_URL . 'onboarding/build/style-index.css', array( 'wp-components' ), $onboarding_dependencies['version'] );
+			wp_style_add_data( 'tiobObd', 'rtl', 'replace' );
+			wp_enqueue_style( 'tiobObd' );
+
+			wp_register_script( 'tiobObd', TIOB_URL . 'onboarding/build/index.js', array_merge( $onboarding_dependencies['dependencies'], array( 'updates' ) ), $onboarding_dependencies['version'], true );
+			wp_localize_script( 'tiobObd', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
+			wp_enqueue_script( 'tiobObd' );
+
+			if ( ! empty( $this->google_fonts ) ) {
+				$font_chunks = array_chunk( $this->google_fonts, absint( count( $this->google_fonts ) / 5 ) );
+				foreach ( $font_chunks as $index => $fonts_chunk ) {
+					wp_enqueue_style(
+						'tiob-google-fonts-' . $index,
+						'https://fonts.googleapis.com/css?family=' . implode( '|', $fonts_chunk ) . '&display=swap"',
+						array(),
+						$onboarding_dependencies['version']
+					);
+				}
+			}
 		}
 
 		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false ) {
@@ -462,6 +657,7 @@ class Admin {
 			'brandedTheme'        => $this->get_whitelabel_name(),
 			'hideStarterSites'    => $this->is_starter_sites_disabled(),
 			'hideMyLibrary'       => $this->is_library_disabled(),
+			'fontParings'         => $this->font_pairs_neve,
 			'endpoint'            => ( defined( 'TPC_TEMPLATES_CLOUD_ENDPOINT' ) ) ? TPC_TEMPLATES_CLOUD_ENDPOINT : self::get_templates_cloud_endpoint(),
 			'params'              => array(
 				'site_url'   => get_site_url(),
@@ -476,9 +672,17 @@ class Admin {
 				'skipStatus' => $this->get_skip_subscribe_status() ? 'yes' : 'no',
 				'email'      => ( ! empty( $user ) ) ? $user->user_email : '',
 			),
+			'onboardingDone'      => array(
+				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'nonce'   => wp_create_nonce( 'onboarding_done_nonce' ),
+			),
 			'feedback'            => array(
 				'count'     => get_option( self::IMPORTED_TEMPLATES_COUNT_OPT, 0 ),
 				'dismissed' => get_option( self::FEEDBACK_DISMISSED_OPT, false ),
+			),
+			'onboardingUpsell'    => array(
+				'dashboard' => tsdk_utmify( 'https://store.themeisle.com/', 'onboarding_upsell' ),
+				'contact'   => tsdk_utmify( 'https://themeisle.com/contact/', 'onboarding_upsell' ),
 			),
 		);
 	}
@@ -525,6 +729,186 @@ class Admin {
 			'slug'   => 'neve',
 			'nonce'  => wp_create_nonce( 'switch-theme_neve' ),
 		);
+	}
+
+	/**
+	 * Check if we can use the font pair to check for Google fonts.
+	 *
+	 * @param array $font_pair The font pair.
+	 * @param string $key The key to check.
+	 *
+	 * @return bool
+	 */
+	private function font_array_key_is_defined( $font_pair, $key = 'bodyFont' ) {
+		return isset( $font_pair[ $key ] ) && isset( $font_pair[ $key ]['fontSource'] ) && isset( $font_pair[ $key ]['font'] );
+	}
+
+	/**
+	 * Check if the font pair is `Prata` and `Hanken Grotesk`.
+	 *
+	 * @param $font_pair
+	 *
+	 * @return bool
+	 */
+	private function is_font_prata_and_hanke( $font_pair ) {
+		return $this->font_array_key_is_defined( $font_pair, 'bodyFont' ) && $this->font_array_key_is_defined( $font_pair, 'headingFont' ) && 'Prata' === $font_pair['headingFont']['font'] && 'Hanken Grotesk' === $font_pair['bodyFont']['font'];
+	}
+
+	/**
+	 * Get the slug from the font pair.
+	 *
+	 * @param array $font_pair The font pair.
+	 *
+	 * @return string
+	 */
+	private function get_slug_from_font_pair( $font_pair ) {
+		return strtolower( str_replace( ' ', '', $font_pair['headingFont']['font'] ) ) . '-' . strtolower( str_replace( ' ', '', $font_pair['bodyFont']['font'] ) );
+	}
+
+	/**
+	 * Get font parings
+	 */
+	private function get_font_parings() {
+		$font_pair_neve = array(
+			array(
+				'headingFont' => array(
+					'font'        => 'Inter',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				),
+				'bodyFont'    => array(
+					'font'       => 'Inter',
+					'fontSource' => 'Google',
+				),
+			),
+			array(
+				'headingFont' => array(
+					'font'        => 'Playfair Display',
+					'fontSource'  => 'Google',
+					'previewSize' => '27px',
+				),
+				'bodyFont'    => array(
+					'font'        => 'Source Sans Pro',
+					'fontSource'  => 'Google',
+					'previewSize' => '18px',
+				),
+			),
+			array(
+				'headingFont' => array(
+					'font'       => 'Montserrat',
+					'fontSource' => 'Google',
+				),
+				'bodyFont'    => array(
+					'font'       => 'Open Sans',
+					'fontSource' => 'Google',
+				),
+			),
+			array(
+				'headingFont' => array(
+					'font'       => 'Nunito',
+					'fontSource' => 'Google',
+				),
+				'bodyFont'    => array(
+					'font'       => 'Lora',
+					'fontSource' => 'Google',
+				),
+			),
+			array(
+				'headingFont' => array(
+					'font'       => 'Lato',
+					'fontSource' => 'Google',
+				),
+				'bodyFont'    => array(
+					'font'       => 'Karla',
+					'fontSource' => 'Google',
+				),
+			),
+			array(
+				'headingFont' => array(
+					'font'        => 'Outfit',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				),
+				'bodyFont'    => array(
+					'font'       => 'Spline Sans',
+					'fontSource' => 'Google',
+				),
+			),
+			array(
+				'headingFont' => array(
+					'font'        => 'Lora',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				),
+				'bodyFont'    => array(
+					'font'       => 'Ubuntu',
+					'fontSource' => 'Google',
+				),
+			),
+			array(
+				'headingFont' => array(
+					'font'        => 'Prata',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				),
+				'bodyFont'    => array(
+					'font'        => 'Hanken Grotesk',
+					'fontSource'  => 'Google',
+					'previewSize' => '17px',
+				),
+			),
+			array(
+				'headingFont' => array(
+					'font'        => 'Albert Sans',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				),
+				'bodyFont'    => array(
+					'font'        => 'Albert Sans',
+					'fontSource'  => 'Google',
+					'previewSize' => '17px',
+				),
+			),
+			array(
+				'headingFont' => array(
+					'font'        => 'Fraunces',
+					'fontSource'  => 'Google',
+					'previewSize' => '25px',
+				),
+				'bodyFont'    => array(
+					'font'        => 'Hanken Grotesk',
+					'fontSource'  => 'Google',
+					'previewSize' => '17px',
+				),
+			),
+		);
+
+		if ( class_exists( '\Neve\Core\Settings\Mods', false ) ) {
+			$font_pair_neve = apply_filters(
+				'neve_font_pairings',
+				\Neve\Core\Settings\Mods::get( \Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS, \Neve\Core\Settings\Config::$typography_default_pairs )
+			);
+		}
+
+		$index = 0;
+		foreach ( $font_pair_neve as $font_pair ) {
+			// limit the number of font pairs to first 5 and `Prata` and `Hanken Grotesk`.
+			if ( $index > 4 && ! $this->is_font_prata_and_hanke( $font_pair ) ) {
+				continue;
+			}
+			$slug                           = $this->get_slug_from_font_pair( $font_pair ) . '-' . $index;
+			$this->font_pairs_neve[ $slug ] = $font_pair;
+
+			if ( $this->font_array_key_is_defined( $font_pair, 'bodyFont' ) && 'Google' === $font_pair['bodyFont']['fontSource'] && ! in_array( $font_pair['bodyFont']['font'], $this->google_fonts, true ) ) {
+				$this->google_fonts[] = $font_pair['bodyFont']['font'];
+			}
+
+			if ( $this->font_array_key_is_defined( $font_pair, 'headingFont' ) && 'Google' === $font_pair['headingFont']['fontSource'] && ! in_array( $font_pair['headingFont']['font'], $this->google_fonts, true ) ) {
+				$this->google_fonts[] = $font_pair['headingFont']['font'];
+			}
+
+			$index++;
+		}
 	}
 
 	/**
@@ -760,22 +1144,22 @@ class Admin {
 			'rest_not_working'            => sprintf(
 			/* translators: 1 - 'here'. */
 				__( 'It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ) )
+				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api" target="_blank" rel="external noreferrer noopener">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ) )
 			),
 			'error_report'                => sprintf(
 			/* translators: 1 - 'get in touch'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
+				sprintf( '<a href="https://themeisle.com/contact" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
 			'troubleshooting'             => sprintf(
 			/* translators: 1 - 'troubleshooting guide'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ) )
+				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ) )
 			),
 			'support'                     => sprintf(
 			/* translators: 1 - 'get in touch'. */
 				__( 'If none of the solutions in the guide work, please %1$s with us with the error code below, so we can help you fix this.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://themeisle.com/contact">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
+				sprintf( '<a href="https://themeisle.com/contact" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'get in touch', 'templates-patterns-collection' ) )
 			),
 			'fsDown'                      => sprintf(
 			/* translators: %s - 'WP_Filesystem'. */

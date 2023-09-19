@@ -1,0 +1,240 @@
+.ob-ctrl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 24px 0;
+  &.small-gap {
+    margin: 0 0 9px 0;
+  }
+  h3 {
+    margin: 0;
+  }
+}
+
+.ob-ctrl-wrap {
+  display: flex;
+  flex-wrap: wrap;
+
+  &.palette, &.media, &.import-options {
+    flex-direction: column;
+  }
+
+  &.font {
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 70px;
+  }
+}
+
+.ob-active {
+  outline: 2px solid $primary;
+}
+
+/**
+ * Palette
+ */
+.ob-palette {
+  max-width: 100%;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 16px;
+  display: flex;
+  column-gap: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  .color {
+    width: 28px;
+    height: 28px;
+    border: 1px solid $border;
+    border-radius: 50%;
+  }
+}
+
+/**
+ * Font
+ */
+.ob-font-pair {
+  background-color: transparent;
+  border-radius: $button-radius;
+  padding: 16px 15.5px;
+  margin: 3px 0;
+  font-size: 24px;
+  line-height: 29px;
+  text-transform: capitalize;
+  letter-spacing: normal;
+  font-weight: 700;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.1);
+  color: $main-text;
+  width: 80px;
+  height: 60px;
+  justify-content: center;
+}
+
+.ob-font-default {
+  width: 100%;
+}
+
+/**
+ * Site Name
+ */
+.ob-site-name {
+  width: 100%;
+  input[type="text"]{
+    color: $secondary-text;
+  }
+}
+
+/**
+ * Logo
+ */
+.ob-media-controls{
+  position: relative;
+  margin-bottom: 12px;
+  .components-base-control__field{
+    margin: 0;
+    input[type="text"] {
+      padding-right: 77px;
+      width: 100%;
+      line-height: 55px;
+      border-color: $border;
+    }
+  }
+  button {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-decoration: none;
+  }
+}
+
+.ob-media-preview{
+  border: 1px dashed $border;
+  border-radius: 16px;
+  min-height: 56px;
+  outline: none;
+  position: relative;
+  line-height: 0;
+  text-align: center;
+  &.active {
+    border: none;
+    border-radius: 0;
+  }
+  img {
+    max-width: 100%;
+    max-height: 200px;
+  }
+  .ob-preview-overlay{
+    position: absolute;
+    background: rgba( 0, 0, 0, .5 );
+    opacity: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: opacity ease-in .1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      color: $inverted-text;
+      font-size: 16px;
+    }
+  }
+  &:hover .ob-preview-overlay{
+    opacity: 1;
+  }
+}
+
+/**
+ * Import options
+ */
+.ob-ctrl-wrap.import-options {
+  position: absolute;
+  bottom: 100%;
+  width: calc( 100% + 2px );
+  left: 0;
+  border: none;
+  background: $inverted-text;
+
+  button:hover {
+    color: $primary;
+  }
+
+  &.is-opened {
+    padding: 0;
+    .components-panel__body-title {
+      margin:0;
+    }
+  }
+
+  .toggle {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    padding: 16px 8px;
+    height: auto;
+    width: calc( 100% - 6px );
+    margin-left: 2px;
+  }
+}
+
+.ob-import-options-wrap {
+  height: 0;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ob-option-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid $border;
+  align-items: center;
+  &:last-child {
+    border: none;
+  }
+}
+
+.ob-option-name {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  font-size: 14px;
+  line-height: 28px;
+  align-items: center;
+  gap: 10px;
+}
+
+.ob-toggle-wrapper > div {
+  margin-bottom: 0;
+}
+
+.ob-import-plugins {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  h2, p {
+    margin: 0;
+  }
+
+  p, ul {
+    font-size: 14px;
+    line-height: 23.8px;
+    font-weight: 400;
+  }
+
+  ul {
+    color: $secondary-text;
+    padding: 0 18px;
+    li {
+      list-style-type: disc;
+    }
+  }
+}

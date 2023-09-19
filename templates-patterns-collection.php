@@ -58,6 +58,7 @@ function ti_tpc_load_textdomain() {
 define( 'TIOB_VERSION', '1.1.39' );
 define( 'TIOB_URL', plugin_dir_url( __FILE__ ) );
 define( 'TIOB_PATH', dirname( __FILE__ ) . '/' );
+define( 'TIOB_BASENAME', plugin_basename( __FILE__ ) );
 
 
 $autoload_path = __DIR__ . '/vendor/autoload.php';
@@ -77,3 +78,11 @@ function ti_tpc_run() {
 
 	\TIOB\Main::instance();
 }
+
+function ti_tpc_activation_redirect( $product ) {
+	if ( ( current_action() === 'activated_plugin' && $product === TIOB_BASENAME ) || current_action() === 'switch_theme' ) {
+		add_option( 'tpc_maybe_run_onboarding', true );
+	}
+}
+add_action( 'activated_plugin', 'ti_tpc_activation_redirect' );
+add_action( 'switch_theme', 'ti_tpc_activation_redirect' );

@@ -1,0 +1,34 @@
+.ob-tooltip-toggle {
+  display: flex;
+  align-items: center;
+
+  > svg {
+    fill: $primary;
+  }
+
+  &:hover, &:focus {
+    outline: none;
+    box-shadow: none;
+
+    .ob-tooltip-content {
+      opacity: 1;
+      pointer-events: all;
+      z-index: 11;
+    }
+  }
+}
+
+.ob-tooltip-content {
+  font-size: 13px;
+  top: 100%;
+  left: 1px;
+  position: absolute;
+  min-width: 264px;
+  background: $inverted-text;
+  box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
+  padding: 10px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  line-height: 1.75;
+}
