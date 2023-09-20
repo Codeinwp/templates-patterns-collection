@@ -105,8 +105,9 @@ export const track = async ( trackingId = '', data ) => {
 			console.error( jsonResponse.message );
 			return false;
 		}
+		const responseData = jsonResponse.data;
 
-		return jsonResponse.id || false;
+		return responseData.id || false;
 	} catch ( error ) {
 		console.error( error );
 		return false;
