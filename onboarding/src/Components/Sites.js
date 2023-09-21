@@ -11,6 +11,9 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 
 	const getFilteredSites = () => {
 		const allSites = getAllSites();
+		if ( Object.keys( allSites ).length === 0 ) {
+			return [];
+		}
 		let builderSites = allSites[ editor ];
 		builderSites = filterBySearch( builderSites );
 		builderSites = filterByCategory( builderSites, category );
