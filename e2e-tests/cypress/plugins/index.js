@@ -16,7 +16,7 @@ module.exports = (on) => {
       launchOptions.args.push('--window-size=1366,768');
       launchOptions.args.push('--force-device-scale-factor=1');
     }
-		return launchOptions;
+    return launchOptions;
   });
 };
 
