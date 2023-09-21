@@ -7,6 +7,7 @@ import { compose } from '@wordpress/compose';
 import { trailingSlashIt } from '../../utils/common';
 import { get } from '../../utils/rest';
 import SitePreview from '../SitePreview';
+import ImportError from '../ImportError';
 
 const CustomizeSite = ( {
 	siteData,
@@ -16,6 +17,7 @@ const CustomizeSite = ( {
 	setPluginOptions,
 	general,
 	setGeneral,
+	error,
 } ) => {
 	const [ siteStyle, setSiteStyle ] = useState( {
 		palette: 'base',
@@ -91,6 +93,18 @@ const CustomizeSite = ( {
 			} );
 	}, [] );
 
+	if ( error ) {
+		return (
+			<div className="ob-container narrow center">
+				<ImportError
+					message={ error.message || null }
+					code={ error.code || null }
+				/>
+				<hr />
+			</div>
+		);
+	}
+
 	return (
 		<div className="ob-container row ovf-initial">
 			<SiteSettings
@@ -107,10 +121,14 @@ const CustomizeSite = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getCurrentEditor, getCurrentSite, getThemeAction } = select(
-			'ti-onboarding'
-		);
+		const {
+			getCurrentEditor,
+			getCurrentSite,
+			getThemeAction,
+			getError,
+		} = select( 'ti-onboarding' );
 		return {
+			error: getError(),
 			editor: getCurrentEditor(),
 			siteData: getCurrentSite(),
 			themeData: getThemeAction() || false,

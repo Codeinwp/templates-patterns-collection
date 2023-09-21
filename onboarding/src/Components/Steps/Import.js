@@ -296,9 +296,21 @@ const Import = ( {
 		runImportCleanup();
 	}, [] );
 
+	if ( error ) {
+		return (
+			<div className="ob-container narrow center">
+				<ImportError
+					message={ error.message || null }
+					code={ error.code || null }
+				/>
+				<hr />
+			</div>
+		);
+	}
+
 	return (
 		<div className="ob-container narrow center">
-			{ 'done' !== currentStep && ! error && importing ? (
+			{ 'done' !== currentStep && importing ? (
 				<>
 					<div className="ob-importing-header-wrap">
 						<h1>
@@ -326,15 +338,6 @@ const Import = ( {
 				</>
 			) : (
 				<>
-					{ error && ! importing && (
-						<>
-							<ImportError
-								message={ error.message || null }
-								code={ error.code || null }
-							/>
-							<hr />
-						</>
-					) }
 					{ 'done' === currentStep && ! importing && (
 						<div className="ob-import-done">
 							<Icon icon="yes-alt" />
