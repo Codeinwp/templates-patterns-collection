@@ -13,6 +13,7 @@ module.exports = (on) => {
       if (headlessIndex > -1) {
         launchOptions.args[headlessIndex] = '--headless=new';
       }
+      launchOptions.args.push('--version=116');
       launchOptions.args.push('--window-size=1366,768');
       launchOptions.args.push('--force-device-scale-factor=1');
     }
