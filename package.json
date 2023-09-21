@@ -40,7 +40,7 @@
     "dist": "bash ./bin/dist.sh",
     "readme": "grunt wp_readme_to_markdown:main",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run --record --key df2abc71-7260-409f-b6fb-088ce88117e3"
+    "cypress:run": "cypress run --record --key df2abc71-7260-409f-b6fb-088ce88117e3 --browser chrome:canary"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",
