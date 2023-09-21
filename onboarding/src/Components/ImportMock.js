@@ -2,7 +2,7 @@ import { Button } from '@wordpress/components';
 
 const ImportMock = ( {} ) => (
 	<div className="ob-settings-wrap">
-		<div className="ob-settings-top">
+		<div className="ob-settings-top" style={ { gap: 0 } }>
 			<p
 				className="top-link is-loading"
 				style={ { height: 20, marginBottom: 10, width: 50 } }
