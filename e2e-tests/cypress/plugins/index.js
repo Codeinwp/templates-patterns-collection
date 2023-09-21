@@ -13,7 +13,7 @@ module.exports = (on) => {
 			launchOptions.args.push('--force-device-scale-factor=1');
 			launchOptions.args = launchOptions.args.map((arg) => {
 				if (arg === '--headless') {
-					return '--headless=new'
+					return '--headless=old'
 				}
 
 				return arg
