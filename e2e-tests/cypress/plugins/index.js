@@ -7,20 +7,23 @@ const htmlvalidate = require('cypress-html-validate/dist/plugin');
 module.exports = (on) => {
 	//	addMatchImageSnapshotPlugin(on, config);
 
-	on('before:browser:launch', (browser, launchOptions) => {
+	on('before:browser:launch', (browser = {}, launchOptions) => {
 		if (browser.name === 'chrome' && browser.isHeadless) {
-			launchOptions.args.push('--window-size=1366,768');
-			launchOptions.args.push('--force-device-scale-factor=1');
 			launchOptions.args = launchOptions.args.map((arg) => {
 				if (arg === '--headless') {
 					return '--headless=new'
 				}
 
+				launchOptions.args.push('--window-size=1366,768');
+				launchOptions.args.push('--force-device-scale-factor=1');
+
 				return arg
 			})
-			return launchOptions;
 		}
+
+		return launchOptions
 	});
+
 };
 
 // eslint-disable-next-line  @typescript-eslint/no-var-requires
