@@ -79,10 +79,10 @@ function ti_tpc_run() {
 	\TIOB\Main::instance();
 }
 
-//function ti_tpc_activation_redirect( $product ) {
-//	if ( ( current_action() === 'activated_plugin' && $product === TIOB_BASENAME ) || current_action() === 'switch_theme' ) {
-//		add_option( 'tpc_maybe_run_onboarding', true );
-//	}
-//}
-//add_action( 'activated_plugin', 'ti_tpc_activation_redirect' );
-//add_action( 'switch_theme', 'ti_tpc_activation_redirect' );
+function ti_tpc_activation_redirect( $product ) {
+	if ( ( current_action() === 'activated_plugin' && $product === TIOB_BASENAME ) || current_action() === 'switch_theme' ) {
+		add_option( 'tpc_maybe_run_onboarding', true );
+	}
+}
+add_action( 'activated_plugin', 'ti_tpc_activation_redirect' );
+add_action( 'switch_theme', 'ti_tpc_activation_redirect' );
