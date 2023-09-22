@@ -1,4 +1,4 @@
-describe('Dashboard Page - Default', function () {
+describe('Dashboard Page - Default', () => {
   const EDITORS = ['gutenberg', 'elementor'];
   const CATEGORIES = {
     all: 'All Categories',
@@ -11,11 +11,8 @@ describe('Dashboard Page - Default', function () {
     other: 'Other',
   };
 
-  before(function () {
-    cy.visit('/');
-  });
-
-  beforeEach(function () {
+  beforeEach(() => {
+    cy.loginToWp('admin', 'admin');
     cy.visit('/wp-admin/admin.php?page=tiob-starter-sites');
   });
 
@@ -169,7 +166,7 @@ describe('Importer Works', function () {
     cy.get('.ob-import-modal').wait(1000).find('button').contains('Import entire site').click();
 
     cy.wait('@installPlugins', { timeout: 20000 }).then((req) => {
-      console.log( req.response.statusCode );
+      console.log(req.response.statusCode);
       expect(req.response.statusCode).to.equal(200);
     });
 
