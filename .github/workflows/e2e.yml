@@ -32,6 +32,7 @@ jobs:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
         uses: cypress-io/github-action@v2
         with:
+          config-file: cypress.config.ts
           working-directory: ./e2e-tests
           env: host=localhost,port=8080
-          browser: chrome:canary
+          browser: chrome
