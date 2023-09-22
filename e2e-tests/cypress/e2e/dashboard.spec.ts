@@ -11,11 +11,8 @@ describe('Dashboard Page - Default', function () {
     other: 'Other',
   };
 
-  before(function () {
-    cy.visit('/');
-  });
-
   beforeEach(function () {
+    cy.loginToWp('admin', 'admin');
     cy.visit('/wp-admin/admin.php?page=tiob-starter-sites');
   });
 
