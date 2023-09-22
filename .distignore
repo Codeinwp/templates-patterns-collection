@@ -18,7 +18,6 @@ bin
 .nvmrc
 .idea
 .releaserc.yml
-cypress.json
 docker-compose.ci.yml
 Dockerfile
 .env
