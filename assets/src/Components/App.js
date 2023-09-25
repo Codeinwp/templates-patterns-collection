@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { withSelect } from '@wordpress/data';
 import classnames from 'classnames';
 
@@ -6,6 +7,11 @@ import { useState } from '@wordpress/element';
 import { LicensePanelContext } from './LicensePanelContext';
 
 const App = ( { onboarding, userStatus } ) => {
+	if ( onboarding && tiobDash.onboardingAllowed ) {
+		window.location.href = '/wp-admin/admin.php?page=neve-onboarding';
+		return;
+	}
+
 	const wrapClasses = classnames( [
 		'content-wrap',
 		'starter-sites',
