@@ -21,7 +21,7 @@
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "@wordpress/scripts": "^14.0.1",
-    "cypress": "^8.2.0",
+    "cypress": "13.2.0",
     "cypress-file-upload": "^5.0.3",
     "cypress-html-validate": "^2.0.2",
     "cypress-localstorage-commands": "^1.4.1",
@@ -44,5 +44,12 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "visual:test": "percy exec -- cypress run --config baseUrl=https://qa-neve.themeisle.com,video=false --spec 'cypress/integration/visual-regression/**/*.spec.js' --headless"
-  }
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead",
+    "not IE 9-11"
+  ]
 }

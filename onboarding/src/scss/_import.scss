@@ -1,0 +1,20 @@
+.ob-importing-header-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-bottom: 45px;
+  max-width: 504px;
+  p, h1 {
+    margin: 0;
+  }
+}
+
+.ob-import-done{
+  min-width: 367px;
+  .dashicons {
+    font-size: 79px;
+    width: 79px;
+    height: 79px;
+    color: $primary;
+  }
+}

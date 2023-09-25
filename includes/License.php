@@ -160,7 +160,7 @@ final class License {
 	 *
 	 * @return bool
 	 */
-	public static function has_active_license(): bool {
+	public static function has_active_license() {
 		$status = self::get_license_data();
 
 		if ( ! $status ) {
@@ -195,13 +195,18 @@ final class License {
 	 */
 	public static function get_license_tier( $default_tier = 0 ) {
 		$license = self::get_license_data();
+
 		if ( isset( $license->tier ) && absint( $license->tier ) >= 0 ) {
 			$tier = $license->tier;
+
 			if ( $license->tier !== 3 ) {
-				$tier = isset( self::NEVE_CATEGORY_MAPPING[ $license->tier ] ) ? self::NEVE_CATEGORY_MAPPING[ $license->tier ] : $license->tier;
+				$category_mapping = self::NEVE_CATEGORY_MAPPING;
+				$tier             = isset( $category_mapping[ $license->tier ] ) ? $category_mapping[ $license->tier ] : $license->tier;
 			}
+
 			return (int) $tier;
 		}
+
 		return $default_tier;
 	}
 

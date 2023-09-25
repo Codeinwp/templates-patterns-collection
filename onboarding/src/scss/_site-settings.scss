@@ -1,0 +1,55 @@
+.ob-site-settings {
+  position: relative;
+  width: 287px;
+  transition: width 0.3s ease;
+  z-index: 2;
+  overflow: auto;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ob-site-settings-container{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ob-settings-description {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-bottom: 37px;
+  .ob-back {
+    color: $primary;
+    padding: 0;
+    align-self: self-start;
+  }
+  h2 {
+    margin: 0;
+  }
+  p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 23.8px;
+    font-weight: 400;
+  }
+}
+
+.ob-settings-wrap{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.ob-settings-top {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.ob-settings-bottom {
+  position: relative;
+  margin-top: 100px;
+}

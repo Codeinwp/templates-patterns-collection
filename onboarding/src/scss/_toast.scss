@@ -1,0 +1,50 @@
+.ob-toast {
+  position: fixed;
+  bottom: 49px;
+  right: 18px;
+  opacity: 0;
+  transform: translateY(20px); /* Start 20px below the final position */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* Add transition */
+  display: inline-flex;
+  padding: 0 16px;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  border-radius: $button-radius;
+  border: 1px solid $border;
+  background: $light-bg;
+  box-shadow: 8px 8px 40px 0px rgba(0, 0, 0, 0.30);
+  height: 70px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.ob-toast-content {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 16px;
+  p {
+    color: $main-text;
+    font-size: 16px;
+  }
+  a {
+    text-decoration: none;
+    color: $primary;
+    font-weight: 700;
+  }
+}
+
+.ob-toast-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Add a class to control the appearance */
+.ob-toast.show {
+  opacity: 1; /* Show with full opacity */
+  transform: translateY(0); /* Move to the final position */
+}

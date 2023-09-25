@@ -1,0 +1,204 @@
+#ob-app {
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: $main-text;
+  font-size: 40px;
+  line-height: 54px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+  margin: 0 0 11px 0;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 700;
+}
+
+h4 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+p {
+  font-size: 18px;
+  line-height: 30.6px;
+  color: $secondary-text;
+  font-weight: 300;
+  margin: 21px 0;
+}
+
+label {
+  color: $secondary-text;
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: 300;
+}
+
+iframe {
+  flex: 1
+}
+
+.ob {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100000;
+  background: $inverted-text;
+  overflow: auto;
+}
+
+.ob-main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ob-container {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  &.narrow {
+    justify-content: center;
+    max-width: 559px;
+    margin: 0 auto;
+    overflow: initial;
+  }
+  &.wide {
+    padding: 43px;
+  }
+  &.row {
+    flex-direction: row;
+  }
+  &.center {
+    text-align: center;
+    align-items: center;
+  }
+}
+
+.ob-no-results{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ob-sites.is-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 23px;
+  grid-row-gap: 24px;
+}
+
+.ob-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/**
+ * Inputs.
+ */
+input.components-text-control__input,
+input.components-text-control__input[type="text"],
+input.components-text-control__input[type="email"],
+.ob-select.ob-select.ob-select select {
+  border: 1px solid $border;
+  border-radius: $input-radius;
+  height: 53px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 0 21px;
+  &:focus {
+    outline: 2px solid $primary;
+  }
+}
+
+.ob-select.ob-select.ob-select {
+  .components-input-control__backdrop {
+    border: none;
+  }
+  .components-spacer{
+    padding-right: 21px;
+    svg{
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+.ob-button {
+  display: flex;
+  height: 48px;
+  padding: 16px 32px;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px;
+  &.is-primary{
+    background: $primary;
+  }
+  &.full {
+    width: 100%;
+  }
+}
+
+.components-button.is-link.ob-link {
+  font-size: 16px;
+  line-height: 24px;
+  color: $secondary-text;
+  text-align: center;
+  margin-top: 17px;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.ob-pro-info {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  h4, p {
+    margin: 0;
+  }
+  p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 23.8px;
+  }
+}
+
+@mixin ob-general--laptop() {
+  .ob-sites {
+    &.is-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+}
+
+@mixin ob-general--tablet() {
+  .ob-sites {
+    &.is-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
