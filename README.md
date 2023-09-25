@@ -2,7 +2,7 @@
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** neve, templates, patterns, blocks, starter, sites, demo, content, import  
 **Requires at least:** 5.5  
-**Tested up to:** 6.3
+**Tested up to:** 6.3  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
 **License:** GPLv3  
@@ -39,10 +39,24 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 ## Changelog ##
 
+#### [Version 1.2.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.39...v1.2.0) (2023-09-25)
+
+- [Feat] New onboarding for Neve theme
+- [Fix] PHP Warning on import when having PHP 8.1
+- [Fix] Editing a template name does not work
+- [Fix] Error while trying to activate the plugin when having PHP 5.6
+- Increased the minimum required version of WordPress
+- Add a documentation notice after the import for the Podcast starter site
+- Increase the minimum required version of WordPress
+- Update plugin description
+
+
+
+
 ##### [Version 1.1.39](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.38...v1.1.39) (2023-06-19)
 
 - Feat: Allow post types from Pods plugin to be imported
-- Feat: Add support for Neve setting page 
+- Feat: Add support for Neve setting page
 - Fix: Import preview Elementor.
 - Fix: Improved Elementor styles for light and dark skin.
 - Fix: Error from TPC inside FSE editor.
@@ -272,7 +286,7 @@ Enhance compatibility with Mega menus import
 
 ##### [Version 1.1.11](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.10...v1.1.11) (2021-05-13)
 
-* Improve translations 
+* Improve translations
 * Improve texts and descriptions
 
 
@@ -297,7 +311,7 @@ Enhance compatibility with Mega menus import
 
 ##### [Version 1.1.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.7...v1.1.8) (2021-04-29)
 
-- Decode HTML entities in title 
+- Decode HTML entities in title
 - Improve Templates Cloud visibility
 - Fix meta not saving properly
 
