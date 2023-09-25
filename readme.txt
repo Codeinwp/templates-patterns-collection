@@ -39,6 +39,20 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 == Changelog ==
 
+#### [Version 1.2.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.39...v1.2.0) (2023-09-25)
+
+- [Feat] New onboarding for Neve theme
+- [Fix] PHP Warning on import when having PHP 8.1
+- [Fix] Editing a template name does not work
+- [Fix] Error while trying to activate the plugin when having PHP 5.6
+- Increased the minimum required version of WordPress
+- Add a documentation notice after the import for the Podcast starter site
+- Increase the minimum required version of WordPress
+- Update plugin description
+
+
+
+
 ##### [Version 1.1.39](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.38...v1.1.39) (2023-06-19)
 
 - Feat: Allow post types from Pods plugin to be imported
