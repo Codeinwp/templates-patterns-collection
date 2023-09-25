@@ -12,6 +12,7 @@ import WelcomeMock from '../WelcomeMock';
 const Welcome = ( { trackingId, setTrackingId, fetching, setFetching } ) => {
 	useEffect( () => {
 		if ( trackingId ) {
+			setFetching( false );
 			return;
 		}
 
