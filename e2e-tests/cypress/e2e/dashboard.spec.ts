@@ -118,11 +118,12 @@ describe('Dashboard Page - Onboarding', function () {
     cy.visit('/wp-admin/admin.php?page=tiob-starter-sites&onboarding=yes');
   });
 
-  it('Onboarding Works Properly', function () {
-    cy.get('.content-wrap.starter-sites').should('have.class', 'is-onboarding');
-    cy.get('.content-wrap').scrollTo('bottom').wait(100).scrollTo('bottom');
-    cy.get('button.close-onboarding').should('exist').click();
-    cy.get('.content-wrap.starter-sites').should('not.have.class', 'is-onboarding');
+  it('Onboarding opens Properly', function () {
+    cy.get('#ob-app').should('exist');
+    cy.get('.ob-container').should('exist');
+    cy.get('.ob-container h1').should('contain', 'What type of website are you creating?');
+    cy.get('.ob-header button[aria-label="Exit to dashboard"]').should('exist').click();
+    cy.get('#ob-app').should('not.exist');
   });
 });
 
@@ -166,7 +167,7 @@ describe('Importer Works', function () {
     cy.get('.ob-import-modal').wait(1000).find('button').contains('Import entire site').click();
 
     cy.wait('@installPlugins', { timeout: 20000 }).then((req) => {
-      console.log( req.response.statusCode );
+      console.log(req.response.statusCode);
       expect(req.response.statusCode).to.equal(200);
     });
 
