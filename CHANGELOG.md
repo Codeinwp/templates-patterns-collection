@@ -1,3 +1,7 @@
+##### [Version 1.2.1](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.0...v1.2.1) (2023-09-25)
+
+- [Fix] Open the new onboarding when Templates Patterns Collection is installed from Neve welcome notice
+
 #### [Version 1.2.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.1.39...v1.2.0) (2023-09-25)
 
 - [Feat] New onboarding for Neve theme
