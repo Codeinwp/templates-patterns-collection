@@ -690,6 +690,7 @@ class Admin {
 				'dashboard' => tsdk_utmify( 'https://store.themeisle.com/', 'onboarding_upsell' ),
 				'contact'   => tsdk_utmify( 'https://themeisle.com/contact/', 'onboarding_upsell' ),
 			),
+			'onboardingAllowed'   => $this->should_load_onboarding(),
 		);
 	}
 
