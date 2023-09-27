@@ -202,7 +202,10 @@ export const SiteSettings = ( {
 										<Button
 											isPrimary
 											className="ob-button full"
-											href="https://themeisle.com/themes/neve/upgrade/"
+											href={
+												tiobDash.onboardingUpsell
+													.upgrade
+											}
 											rel="external noreferrer noopener"
 											target="_blank"
 										>

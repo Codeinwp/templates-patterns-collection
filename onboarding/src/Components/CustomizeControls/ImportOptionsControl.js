@@ -91,6 +91,7 @@ const ImportOptionsControl = ( {
 						<a
 							href="https://wordpress.org/plugins/optimole-wp/"
 							target={ '_blank' }
+							rel="external noreferrer noopener"
 							style={ {
 								textDecoration: 'none',
 								display: 'inline-flex',
