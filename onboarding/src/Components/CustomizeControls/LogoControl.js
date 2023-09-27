@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
 import { withSelect, withDispatch } from '@wordpress/data';
-import { Button, TextControl, Icon } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { sendPostMessage } from '../../utils/common';
 import { MediaUpload } from '@wordpress/media-utils';
 import { addFilter } from '@wordpress/hooks';
@@ -37,26 +37,23 @@ const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 					value={ siteLogo?.id || '' }
 					render={ ( { open } ) => (
 						<>
-							<div className="ob-media-controls">
-								<TextControl
-									value={ logo }
-									onChange={ () => {} }
-								/>
-								<Button isLink onClick={ open }>
-									{ __(
-										'Browse',
+							<button
+								className={ classnames(
+									'ob-media',
+									logo ? 'has-logo' : ''
+								) }
+								onClick={ open }
+							>
+								{ ! logo &&
+									__(
+										'Select or upload image',
 										'templates-patterns-collection'
 									) }
-								</Button>
-							</div>
-							<div
-								className={ classnames(
-									'ob-media-preview',
-									logo ? 'active' : ''
-								) }
-							>
 								{ logo && (
-									<>
+									<span className="ob-responsive-wrapper">
+										<span
+											style={ { paddingBottom: '86px' } }
+										></span>
 										<img
 											src={ logo }
 											alt={ __(
@@ -64,24 +61,31 @@ const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 												'templates-patterns-collection'
 											) }
 										/>
-										<div className="ob-preview-overlay">
-											<Button
-												isTertiary
-												onClick={ () => {
-													setLogo( '' );
-													handleLogoChange( null );
-												} }
-											>
-												<Icon icon="no" />
-												{ __(
-													'Remove image',
-													'templates-patterns-collection'
-												) }
-											</Button>
-										</div>
-									</>
+									</span>
 								) }
-							</div>
+							</button>
+							{ logo && (
+								<div className="ob-media-actions">
+									<Button
+										isTertiary
+										onClick={ () => {
+											setLogo( '' );
+											handleLogoChange( null );
+										} }
+									>
+										{ __(
+											'Remove',
+											'templates-patterns-collection'
+										) }
+									</Button>
+									<Button isTertiary onClick={ open }>
+										{ __(
+											'Change',
+											'templates-patterns-collection'
+										) }
+									</Button>
+								</div>
+							) }
 						</>
 					) }
 				/>
@@ -123,13 +127,13 @@ export default compose(
 								: importDataDefault.theme_mods.custom_logo,
 							logo_logo: newLogo
 								? JSON.stringify( {
-										dark: newLogo.id,
-										light: newLogo.id,
-										same: true,
+									dark: newLogo.id,
+									light: newLogo.id,
+									same: true,
 								  } )
 								: JSON.stringify( {
-										...importDataDefault.theme_mods
-											.logo_logo,
+									...importDataDefault.theme_mods
+										.logo_logo,
 								  } ),
 						},
 					};
