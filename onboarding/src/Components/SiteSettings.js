@@ -147,137 +147,142 @@ export const SiteSettings = ( {
 			) }
 		>
 			{ ! fetching ? (
-				<div className="ob-site-settings-container">
-					<div className="ob-settings-description">
-						<Button
-							className="ob-back"
-							type="link"
-							onClick={ () => {
-								if ( step === 4 ) {
-									setOnboardingStep( 3 );
-									return;
-								}
-								setOnboardingStep( 2 );
-							} }
-						>
-							{ __( 'Go back', 'templates-patterns-collection' ) }
-						</Button>
-						<h2>{ heading }</h2>
-						<p>{ description }</p>
-					</div>
-					<div className="ob-settings-wrap">
-						<div className="ob-settings-top">
-							{ step === 3 && (
-								<>
-									<PaletteControl
-										siteStyle={ siteStyle }
-										setSiteStyle={ setSiteStyle }
-									/>
-									<TypographyControl
-										siteStyle={ siteStyle }
-										setSiteStyle={ setSiteStyle }
-									/>
-								</>
-							) }
-
-							{ step === 4 &&
-								( canImport ? (
+				<>
+					<div className="ob-site-settings-container">
+						<div className="ob-settings-description">
+							<Button
+								className="ob-back"
+								type="link"
+								onClick={ () => {
+									if ( step === 4 ) {
+										setOnboardingStep( 3 );
+										return;
+									}
+									setOnboardingStep( 2 );
+								} }
+							>
+								{ __(
+									'Go back',
+									'templates-patterns-collection'
+								) }
+							</Button>
+							<h2>{ heading }</h2>
+							<p>{ description }</p>
+						</div>
+						<div className="ob-settings-wrap">
+							<div className="ob-settings-top">
+								{ step === 3 && (
 									<>
-										<SiteNameControl
-											importDataDefault={
-												importDataDefault
-											}
+										<PaletteControl
+											siteStyle={ siteStyle }
+											setSiteStyle={ setSiteStyle }
 										/>
-										<LogoControl
-											importDataDefault={
-												importDataDefault
-											}
+										<TypographyControl
+											siteStyle={ siteStyle }
+											setSiteStyle={ setSiteStyle }
 										/>
 									</>
-								) : (
-									<Button
-										isPrimary
-										className="ob-button full"
-										href="https://themeisle.com/themes/neve/upgrade/"
-										rel="external noreferrer noopener"
-										target="_blank"
-									>
-										{ __(
-											'Unlock Access',
-											'templates-patterns-collection'
-										) }
-									</Button>
-								) ) }
-						</div>
-						<div className="ob-settings-bottom">
-							{ step === 3 && (
-								<Button
-									disabled={ fetching }
-									isPrimary
-									className="ob-button full"
-									onClick={ designChoicesSubmit }
-								>
-									{ __(
-										'Continue',
-										'templates-patterns-collection'
-									) }
-								</Button>
-							) }
-							{ step === 4 &&
-								( canImport ? (
-									<>
-										<ImportOptionsControl
-											general={ general }
-											setGeneral={ setGeneral }
-											setSettingsChanged={
-												setSettingsChanged
-											}
-										/>
+								) }
+
+								{ step === 4 &&
+									( canImport ? (
+										<>
+											<SiteNameControl
+												importDataDefault={
+													importDataDefault
+												}
+											/>
+											<LogoControl
+												importDataDefault={
+													importDataDefault
+												}
+											/>
+										</>
+									) : (
 										<Button
 											isPrimary
 											className="ob-button full"
-											onClick={ identityChoicesSubmit }
-											disabled={
-												fetching ||
-												( ! siteName &&
-													! siteLogo &&
-													! settingsChanged )
-											}
+											href="https://themeisle.com/themes/neve/upgrade/"
+											rel="external noreferrer noopener"
+											target="_blank"
 										>
 											{ __(
-												'Import Website',
+												'Unlock Access',
 												'templates-patterns-collection'
 											) }
 										</Button>
-										<Button
-											isLink
-											className="ob-link"
-											onClick={ () =>
-												identityChoicesSubmit( true )
-											}
-											disabled={ fetching }
-										>
-											{ __(
-												'Skip and import website',
-												'templates-patterns-collection'
-											) }
-										</Button>
-									</>
-								) : (
-									<div className="ob-pro-info">
-										<h4>
-											{ __(
-												'Already a customer',
-												'templates-patterns-collection'
-											) }
-										</h4>
-										<p>{ firstUpsell }</p>
-										<p>{ secondUpsell }</p>
-									</div>
-								) ) }
+									) ) }
+							</div>
 						</div>
 					</div>
-				</div>
+					<div className="ob-settings-bottom">
+						{ step === 3 && (
+							<Button
+								disabled={ fetching }
+								isPrimary
+								className="ob-button full"
+								onClick={ designChoicesSubmit }
+							>
+								{ __(
+									'Continue',
+									'templates-patterns-collection'
+								) }
+							</Button>
+						) }
+						{ step === 4 &&
+							( canImport ? (
+								<>
+									<ImportOptionsControl
+										general={ general }
+										setGeneral={ setGeneral }
+										setSettingsChanged={
+											setSettingsChanged
+										}
+									/>
+									<Button
+										isPrimary
+										className="ob-button full"
+										onClick={ identityChoicesSubmit }
+										disabled={
+											fetching ||
+											( ! siteName &&
+												! siteLogo &&
+												! settingsChanged )
+										}
+									>
+										{ __(
+											'Import Website',
+											'templates-patterns-collection'
+										) }
+									</Button>
+									<Button
+										isLink
+										className="ob-link"
+										onClick={ () =>
+											identityChoicesSubmit( true )
+										}
+										disabled={ fetching }
+									>
+										{ __(
+											'Skip and import website',
+											'templates-patterns-collection'
+										) }
+									</Button>
+								</>
+							) : (
+								<div className="ob-pro-info">
+									<h4>
+										{ __(
+											'Already a customer',
+											'templates-patterns-collection'
+										) }
+									</h4>
+									<p>{ firstUpsell }</p>
+									<p>{ secondUpsell }</p>
+								</div>
+							) ) }
+					</div>
+				</>
 			) : (
 				<ImportMock />
 			) }

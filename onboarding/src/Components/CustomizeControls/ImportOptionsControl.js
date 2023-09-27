@@ -32,9 +32,9 @@ const ImportOptionsControl = ( {
 		.join( '' );
 
 	const updateDivHeight = () => {
-		const element = document.querySelector( '.ob-settings-wrap' );
+		const element = document.querySelector( '.ob-site-settings-container' );
 		if ( element ) {
-			setDivHeight( element.offsetHeight + 30 );
+			setDivHeight( Math.max( element.offsetHeight, 480 ) );
 		}
 	};
 
@@ -130,15 +130,13 @@ const ImportOptionsControl = ( {
 
 	const toggleOpen = () => {
 		setOptionsOpened( ! optionsOpened );
-
+		updateDivHeight();
 		const optionsContainer = document.querySelector(
 			'.ob-import-options-toggles'
 		);
 		const pluginsContainer = document.querySelector( '.ob-import-plugins' );
 
-		const container = document.querySelector(
-			'.ob-site-settings-container'
-		);
+		const container = document.querySelector( '.ob-site-settings' );
 		if ( ! optionsOpened ) {
 			const newHeight =
 				optionsContainer.offsetHeight +
@@ -148,8 +146,6 @@ const ImportOptionsControl = ( {
 		} else {
 			container.style.minHeight = 'auto';
 		}
-
-		updateDivHeight();
 	};
 
 	return (
