@@ -52,7 +52,7 @@ const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 								{ logo && (
 									<span className="ob-responsive-wrapper">
 										<span
-											style={ { paddingBottom: '86px' } }
+											style={ { paddingBottom: '150px' } }
 										></span>
 										<img
 											src={ logo }

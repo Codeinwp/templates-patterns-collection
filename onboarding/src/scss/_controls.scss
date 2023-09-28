@@ -93,7 +93,7 @@
 .ob-media {
   border: 1px dashed $secondary-text;
   width: 100%;
-  padding: 31px 16px;
+  padding: 65px 16px;
   font-size: 16px;
   cursor: pointer;
   background: none;
@@ -133,13 +133,6 @@
   .components-button.is-tertiary {
     font-size: 14px;
     padding: 0;
-  }
-  .components-button.is-tertiary {
-    &:hover,&:focus {
-      &:not(:disabled) {
-        box-shadow: none;
-      }
-    }
   }
 }
 

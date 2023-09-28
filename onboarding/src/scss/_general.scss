@@ -139,6 +139,14 @@ input.components-text-control__input[type="email"],
   }
 }
 
+.components-button {
+  &:hover,&:focus {
+    &:not(:disabled) {
+      box-shadow: none;
+    }
+  }
+}
+
 .components-button.ob-button {
   display: flex;
   height: 48px;
