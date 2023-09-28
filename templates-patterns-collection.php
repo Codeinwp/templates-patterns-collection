@@ -60,6 +60,10 @@ define( 'TIOB_URL', plugin_dir_url( __FILE__ ) );
 define( 'TIOB_PATH', dirname( __FILE__ ) . '/' );
 define( 'TIOB_BASENAME', plugin_basename( __FILE__ ) );
 
+if ( empty( get_option( 'templates_patterns_collection_install' ) ) ) {
+	// If the installation time is not set, it means TPC is installed for the first time.
+	update_option( 'tpc_obd_new_user', 'yes' );
+}
 
 $autoload_path = __DIR__ . '/vendor/autoload.php';
 if ( is_file( $autoload_path ) ) {
