@@ -26,6 +26,9 @@
     color: $primary;
     padding: 0;
     align-self: self-start;
+    &:focus {
+      box-shadow: none;
+    }
   }
   h2 {
     margin: 0;

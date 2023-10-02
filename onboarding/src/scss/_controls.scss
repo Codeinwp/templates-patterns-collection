@@ -160,6 +160,9 @@
     height: auto;
     width: calc( 100% - 6px );
     margin-left: 2px;
+    &:focus {
+      box-shadow: none;
+    }
   }
 }
 
