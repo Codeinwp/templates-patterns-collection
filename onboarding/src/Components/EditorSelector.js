@@ -1,6 +1,6 @@
 /* global tiobDash */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import { Button, Dashicon } from '@wordpress/components';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -10,15 +10,36 @@ import { EDITOR_MAP } from '../utils/common';
 const EditorSelector = ( { editor, setCurrentEditor, sites } ) => {
 	const [ open, setOpen ] = useState( false );
 	const editorsOrderedFromAPI = Object.keys( sites );
+	const dropdownRef = useRef();
+
 	const toggleDropdown = () => setOpen( ! open );
+
+	const handleOutsideClick = ( e ) => {
+		if (
+			dropdownRef.current &&
+			! dropdownRef.current.contains( e.target )
+		) {
+			setOpen( false );
+		}
+	};
+
+	useEffect( () => {
+		const win = document.defaultView;
+		win.addEventListener( 'click', handleOutsideClick );
+
+		return () => {
+			win.removeEventListener( 'click', handleOutsideClick );
+		};
+	}, [] );
 
 	const toggleButtonClasses = classnames(
 		'select',
 		'ob-dropdown',
 		open ? 'active' : ''
 	);
+
 	return (
-		<div className="ob-editor-selector">
+		<div className="ob-editor-selector" ref={ dropdownRef }>
 			<Button
 				onClick={ toggleDropdown }
 				className={ toggleButtonClasses }
@@ -48,8 +69,8 @@ const EditorSelector = ( { editor, setCurrentEditor, sites } ) => {
 								}
 								return (
 									<li key={ index }>
-										<a
-											href="#"
+										<button
+											className="ob-editor-option"
 											onClick={ ( e ) => {
 												e.preventDefault();
 												setCurrentEditor( key );
@@ -68,7 +89,7 @@ const EditorSelector = ( { editor, setCurrentEditor, sites } ) => {
 													'templates-patterns-collection'
 												) }
 											/>
-										</a>
+										</button>
 									</li>
 								);
 							} ) }

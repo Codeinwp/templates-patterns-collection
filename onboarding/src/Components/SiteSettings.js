@@ -40,8 +40,8 @@ export const SiteSettings = ( {
 	let description =
 		step === 3
 			? __(
-					'Customise the design of your site, such as color and typography.',
-					'templates-patterns-collection'
+				'Customise the design of your site, such as color and typography.',
+				'templates-patterns-collection'
 			  )
 			: __(
 				'Optionally add your business name and logo. You can change these later.',

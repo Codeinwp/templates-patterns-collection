@@ -41,12 +41,14 @@ const ImportOptionsControl = ( {
 	useEffect( () => {
 		updateDivHeight(); // Get initial height
 
+		const win = document.defaultView;
+
 		// Attach event listener for window resize
-		window.addEventListener( 'resize', updateDivHeight );
+		win.addEventListener( 'resize', updateDivHeight );
 
 		// Clean up the event listener when the component unmounts
 		return () => {
-			window.removeEventListener( 'resize', updateDivHeight );
+			win.removeEventListener( 'resize', updateDivHeight );
 		};
 	}, [] );
 
@@ -88,6 +90,7 @@ const ImportOptionsControl = ( {
 				),
 				{
 					a: (
+						// eslint-disable-next-line jsx-a11y/anchor-has-content
 						<a
 							href="https://wordpress.org/plugins/optimole-wp/"
 							target={ '_blank' }

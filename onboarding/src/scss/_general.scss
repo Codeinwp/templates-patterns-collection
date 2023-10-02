@@ -139,14 +139,6 @@ input.components-text-control__input[type="email"],
   }
 }
 
-.components-button {
-  &:hover,&:focus {
-    &:not(:disabled) {
-      box-shadow: none;
-    }
-  }
-}
-
 .components-button.ob-button {
   display: flex;
   height: 48px;
@@ -159,9 +151,20 @@ input.components-text-control__input[type="email"],
   font-style: normal;
   font-weight: 700;
   line-height: 30px;
-  &.is-primary, &:disabled{
-    background: $primary;
+
+  &:hover,&:focus {
+    &:not(:disabled) {
+      box-shadow: none;
+    }
   }
+
+  &.is-primary{
+    background: $primary;
+    &:hover:not(:disabled) {
+      background: $dark-bg;
+    }
+  }
+
   &.full {
     width: 100%;
   }

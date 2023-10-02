@@ -1,5 +1,3 @@
-import { Button } from '@wordpress/components';
-
 const WelcomeMock = ( {} ) => (
 	<div className="fetching">
 		<span
