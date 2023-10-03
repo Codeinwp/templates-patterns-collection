@@ -508,10 +508,6 @@ class Admin {
 	 * @return bool
 	 */
 	private function should_load_onboarding() {
-		if ( ! current_user_can( 'install_plugins' ) ) {
-			return false;
-		}
-
 		if ( $this->is_starter_sites_disabled() ) {
 			return false;
 		}
