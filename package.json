@@ -38,7 +38,8 @@
     "dev": "npm-run-all --parallel watch:*",
     "release": "npx semantic-release",
     "dist": "bash ./bin/dist.sh",
-    "readme": "grunt wp_readme_to_markdown:main"
+    "readme": "grunt wp_readme_to_markdown:main",
+    "lint:onboarding": "wp-scripts lint-js ./onboarding/src/**/*.js"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",

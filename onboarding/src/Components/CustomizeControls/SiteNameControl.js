@@ -2,7 +2,6 @@ import { __ } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { TextControl } from '@wordpress/components';
-import { sendPostMessage } from '../../utils/common';
 import { useState, useEffect } from '@wordpress/element';
 
 const SiteNameControl = ( { userCustomSettings, handleSiteNameChange } ) => {
@@ -49,9 +48,11 @@ export default compose(
 	} ),
 	withDispatch(
 		( dispatch, { importData, userCustomSettings, importDataDefault } ) => {
-			const { setUserCustomSettings, setImportData } = dispatch(
-				'ti-onboarding'
-			);
+			const {
+				setUserCustomSettings,
+				setImportData,
+				setRefresh,
+			} = dispatch( 'ti-onboarding' );
 
 			return {
 				handleSiteNameChange: ( newSiteName ) => {
@@ -71,15 +72,7 @@ export default compose(
 						},
 					};
 					setImportData( newImportData );
-
-					const logoDisplay = newImportData?.theme_mods?.logo_display;
-					sendPostMessage( {
-						type: 'updateSiteInfo',
-						data: {
-							...updatedSettings,
-							logoDisplay,
-						},
-					} );
+					setRefresh( true );
 				},
 			};
 		}

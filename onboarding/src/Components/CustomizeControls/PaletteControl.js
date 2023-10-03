@@ -1,5 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import { sendPostMessage } from '../../utils/common';
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Button } from '@wordpress/components';
@@ -81,7 +80,7 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch, { importData, siteStyle, setSiteStyle } ) => {
-		const { setImportData } = dispatch( 'ti-onboarding' );
+		const { setImportData, setRefresh } = dispatch( 'ti-onboarding' );
 
 		return {
 			handlePaletteClick: ( paletteKey ) => {
@@ -102,11 +101,7 @@ export default compose(
 					},
 				};
 				setImportData( newImportData );
-
-				sendPostMessage( {
-					type: 'styleChange',
-					data: newStyle,
-				} );
+				setRefresh( true );
 			},
 		};
 	} )

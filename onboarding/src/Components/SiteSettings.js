@@ -37,16 +37,16 @@ export const SiteSettings = ( {
 			? __( 'Customise design', 'templates-patterns-collection' )
 			: __( 'Site details', 'templates-patterns-collection' );
 
-	let description =
-		step === 3
-			? __(
-				'Customise the design of your site, such as color and typography.',
-				'templates-patterns-collection'
-			  )
-			: __(
-				'Optionally add your business name and logo. You can change these later.',
-				'templates-patterns-collection'
-			  );
+	let description = __(
+		'Optionally add your business name and logo. You can change these later.',
+		'templates-patterns-collection'
+	);
+	if ( step === 3 ) {
+		description = __(
+			'Customise the design of your site, such as color and typography.',
+			'templates-patterns-collection'
+		);
+	}
 	if ( ! canImport && step === 4 ) {
 		heading = __(
 			'This is a Premium Starter Site!',

@@ -2,7 +2,6 @@ import { __ } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { Button } from '@wordpress/components';
-import { sendPostMessage } from '../../utils/common';
 import { MediaUpload } from '@wordpress/media-utils';
 import { addFilter } from '@wordpress/hooks';
 import classnames from 'classnames';
@@ -106,9 +105,11 @@ export default compose(
 	} ),
 	withDispatch(
 		( dispatch, { importData, userCustomSettings, importDataDefault } ) => {
-			const { setUserCustomSettings, setImportData } = dispatch(
-				'ti-onboarding'
-			);
+			const {
+				setUserCustomSettings,
+				setImportData,
+				setRefresh,
+			} = dispatch( 'ti-onboarding' );
 
 			return {
 				handleLogoChange: ( newLogo ) => {
@@ -138,16 +139,7 @@ export default compose(
 						},
 					};
 					setImportData( newImportData );
-
-					const logoDisplay = newImportData?.theme_mods?.logo_display;
-
-					sendPostMessage( {
-						type: 'updateSiteInfo',
-						data: {
-							...updatedSettings,
-							logoDisplay,
-						},
-					} );
+					setRefresh( true );
 				},
 			};
 		}
