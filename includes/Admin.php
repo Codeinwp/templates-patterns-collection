@@ -657,6 +657,7 @@ class Admin {
 				'upgradeToast' => tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding_toast' ),
 			),
 			'onboardingAllowed'   => $this->should_load_onboarding(),
+			'onboardingRedirect'  => admin_url( 'admin.php?page=neve-onboarding' ),
 		);
 	}
 
