@@ -123,7 +123,7 @@ export const getLogsFromServer = (args) => {
 		type: 'post',
 		url: ajaxurl,
 		data: {
-			action: 'external_get_logs',
+			action: 'tpc_get_logs',
 			nonce: tiobDash.nonce,
 		},
 		...args

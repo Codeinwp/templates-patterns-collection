@@ -173,13 +173,6 @@ class Logger {
 	}
 
 	/**
-	 * Clear the log file.
-	 */
-	private function clear_log() {
-		delete_transient( self::$log_transient_name );
-	}
-
-	/**
 	 * Log entry.
 	 *
 	 * @param string $message log message.

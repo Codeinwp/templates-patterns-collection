@@ -78,7 +78,7 @@ class Admin {
 		add_action( 'wp_ajax_mark_onboarding_done', array( $this, 'mark_onboarding_done' ) );
 		add_action( 'wp_ajax_nopriv_mark_onboarding_done', array( $this, 'mark_onboarding_done' ) );
 
-		add_action( 'wp_ajax_external_get_logs', array( $this, 'external_get_logs' ) );
+		add_action( 'wp_ajax_tpc_get_logs', array( $this, 'external_get_logs' ) );
 
 		$this->register_feedback_settings();
 
