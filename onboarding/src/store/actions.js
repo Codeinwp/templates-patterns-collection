@@ -65,4 +65,10 @@ export default {
 			payload: { trackingId },
 		};
 	},
+	setRefresh( refresh ) {
+		return {
+			type: 'SET_REFRESH',
+			payload: { refresh },
+		};
+	},
 };

@@ -32,21 +32,23 @@ const ImportOptionsControl = ( {
 		.join( '' );
 
 	const updateDivHeight = () => {
-		const element = document.querySelector( '.ob-settings-wrap' );
+		const element = document.querySelector( '.ob-site-settings-container' );
 		if ( element ) {
-			setDivHeight( element.offsetHeight + 30 );
+			setDivHeight( Math.max( element.offsetHeight, 480 ) );
 		}
 	};
 
 	useEffect( () => {
 		updateDivHeight(); // Get initial height
 
+		const win = document.defaultView;
+
 		// Attach event listener for window resize
-		window.addEventListener( 'resize', updateDivHeight );
+		win.addEventListener( 'resize', updateDivHeight );
 
 		// Clean up the event listener when the component unmounts
 		return () => {
-			window.removeEventListener( 'resize', updateDivHeight );
+			win.removeEventListener( 'resize', updateDivHeight );
 		};
 	}, [] );
 
@@ -88,9 +90,11 @@ const ImportOptionsControl = ( {
 				),
 				{
 					a: (
+						// eslint-disable-next-line jsx-a11y/anchor-has-content
 						<a
 							href="https://wordpress.org/plugins/optimole-wp/"
 							target={ '_blank' }
+							rel="external noreferrer noopener"
 							style={ {
 								textDecoration: 'none',
 								display: 'inline-flex',
@@ -130,15 +134,13 @@ const ImportOptionsControl = ( {
 
 	const toggleOpen = () => {
 		setOptionsOpened( ! optionsOpened );
-
+		updateDivHeight();
 		const optionsContainer = document.querySelector(
 			'.ob-import-options-toggles'
 		);
 		const pluginsContainer = document.querySelector( '.ob-import-plugins' );
 
-		const container = document.querySelector(
-			'.ob-site-settings-container'
-		);
+		const container = document.querySelector( '.ob-site-settings' );
 		if ( ! optionsOpened ) {
 			const newHeight =
 				optionsContainer.offsetHeight +
@@ -148,8 +150,6 @@ const ImportOptionsControl = ( {
 		} else {
 			container.style.minHeight = 'auto';
 		}
-
-		updateDivHeight();
 	};
 
 	return (

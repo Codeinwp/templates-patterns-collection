@@ -1,14 +1,14 @@
+/* global tiobDash */
 import { __ } from '@wordpress/i18n';
 import { createInterpolateElement, useEffect } from '@wordpress/element';
-import { withDispatch, withSelect } from '@wordpress/data';
-import { compose } from '@wordpress/compose';
+import { withDispatch } from '@wordpress/data';
 import Toast from '../Toast';
 import Filters from '../Filters';
 import Sites from '../Sites';
 import EditorSelector from '../EditorSelector';
 import SVG from '../../utils/svg';
 
-const SiteList = ( { showToast, setShowToast, setFetching, userStatus } ) => {
+const SiteList = ( { showToast, setShowToast, setFetching } ) => {
 	const toastMessage = createInterpolateElement(
 		__(
 			'Unlock Access to all premium templates with Neve PRO. <a></a>.',
@@ -17,7 +17,7 @@ const SiteList = ( { showToast, setShowToast, setFetching, userStatus } ) => {
 		{
 			a: (
 				<a
-					href="https://themeisle.com/themes/neve/upgrade/"
+					href={ tiobDash.onboardingUpsell.upgradeToast }
 					target="_blank"
 					rel="external noreferrer noopener"
 				>
@@ -53,7 +53,7 @@ const SiteList = ( { showToast, setShowToast, setFetching, userStatus } ) => {
 			</div>
 			<Filters />
 			<Sites />
-			{ ! userStatus && (
+			{ ! tiobDash.isValidLicense && (
 				<Toast
 					setShowToast={ setShowToast }
 					svgIcon={ SVG.logo }
@@ -65,17 +65,9 @@ const SiteList = ( { showToast, setShowToast, setFetching, userStatus } ) => {
 	);
 };
 
-export default compose(
-	withSelect( ( select ) => {
-		const { getUserStatus } = select( 'ti-onboarding' );
-		return {
-			userStatus: getUserStatus(),
-		};
-	} ),
-	withDispatch( ( dispatch ) => {
-		const { setFetching } = dispatch( 'ti-onboarding' );
-		return {
-			setFetching,
-		};
-	} )
-)( SiteList );
+export default withDispatch( ( dispatch ) => {
+	const { setFetching } = dispatch( 'ti-onboarding' );
+	return {
+		setFetching,
+	};
+} )( SiteList );

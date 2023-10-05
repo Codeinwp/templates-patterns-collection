@@ -1,21 +1,23 @@
 .ob-site-settings {
   position: relative;
-  width: 287px;
+  width: 350px;
   transition: width 0.3s ease;
   z-index: 2;
-  overflow: auto;
-  padding: 40px 24px;
   display: flex;
   flex-direction: column;
+  box-shadow: 4px 4px 40px 0 rgba(0, 0, 0, 0.10);
 }
 
 .ob-site-settings-container{
   display: flex;
   flex-direction: column;
   flex: 1;
+  padding: 0 24px;
+  overflow: auto;
 }
 
 .ob-settings-description {
+  padding-top: 24px;
   display: flex;
   flex-direction: column;
   gap: 11px;
@@ -24,6 +26,9 @@
     color: $primary;
     padding: 0;
     align-self: self-start;
+    &:focus {
+      box-shadow: none;
+    }
   }
   h2 {
     margin: 0;
@@ -50,6 +55,10 @@
 }
 
 .ob-settings-bottom {
-  position: relative;
-  margin-top: 100px;
+  overflow: auto;
+  position: sticky;
+  bottom: 0;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 4px 4px 40px 0 rgba(0, 0, 0, 0.10);
 }

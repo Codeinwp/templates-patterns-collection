@@ -3,7 +3,6 @@ import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
 import classnames from 'classnames';
 import SVG from '../../utils/svg';
-import { sendPostMessage } from '../../utils/common';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
@@ -92,7 +91,7 @@ export default compose(
 				defaultHeadingsFont,
 			}
 		) => {
-			const { setImportData } = dispatch( 'ti-onboarding' );
+			const { setImportData, setRefresh } = dispatch( 'ti-onboarding' );
 
 			return {
 				handleFontClick: ( fontKey ) => {
@@ -119,11 +118,7 @@ export default compose(
 						},
 					};
 					setImportData( newImportData );
-
-					sendPostMessage( {
-						type: 'styleChange',
-						data: newStyle,
-					} );
+					setRefresh( true );
 				},
 			};
 		}

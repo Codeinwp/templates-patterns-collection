@@ -502,38 +502,6 @@ class Admin {
 		echo '<div id="ob-app"/>';
 	}
 
-
-	/**
-	 * Determine if the current user is a new one.
-	 *
-	 * @return bool
-	 */
-	private function is_neve_new_user() {
-		$is_old_user = get_option( 'neve_is_old_user', false );
-
-		if ( $is_old_user ) {
-			return false;
-		}
-
-		$install_time = get_option( 'neve_install' );
-
-		if ( empty( $install_time ) ) {
-			update_option( 'neve_is_old_user', true );
-			return false;
-		}
-
-		$now         = time();
-		$one_day_ago = $now - 86400; // 86400 seconds in a day (24 hours)
-
-		$is_new_user = ( $install_time >= $one_day_ago );
-
-		if ( ! $is_new_user ) {
-			update_option( 'neve_is_old_user', true );
-		}
-
-		return $is_new_user;
-	}
-
 	/**
 	 * Decide if the new onboarding should load
 	 *
@@ -554,16 +522,12 @@ class Admin {
 			return false;
 		}
 
-		if ( ! $this->is_neve_new_user() ) {
-			return false;
-		}
-
 		$onboarding_done = get_option( 'tpc_onboarding_done', 'no' );
 		if ( $onboarding_done === 'yes' ) {
 			return false;
 		}
 
-		return true;
+		return get_option( 'tpc_obd_new_user', 'no' ) === 'yes';
 	}
 
 	/**
@@ -687,10 +651,13 @@ class Admin {
 				'dismissed' => get_option( self::FEEDBACK_DISMISSED_OPT, false ),
 			),
 			'onboardingUpsell'    => array(
-				'dashboard' => tsdk_utmify( 'https://store.themeisle.com/', 'onboarding_upsell' ),
-				'contact'   => tsdk_utmify( 'https://themeisle.com/contact/', 'onboarding_upsell' ),
+				'dashboard'    => tsdk_utmify( 'https://store.themeisle.com/', 'onboarding_upsell' ),
+				'contact'      => tsdk_utmify( 'https://themeisle.com/contact/', 'onboarding_upsell' ),
+				'upgrade'      => tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding_upsell' ),
+				'upgradeToast' => tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding_toast' ),
 			),
 			'onboardingAllowed'   => $this->should_load_onboarding(),
+			'onboardingRedirect'  => admin_url( 'admin.php?page=neve-onboarding' ),
 		);
 	}
 

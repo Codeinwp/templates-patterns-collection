@@ -315,7 +315,7 @@ const Import = ( {
 					<div className="ob-importing-header-wrap">
 						<h1>
 							{ __(
-								'We are importing your new site!',
+								'We are importing your new site…',
 								'templates-patterns-collection'
 							) }
 						</h1>
