@@ -129,18 +129,3 @@ export const getLogsFromServer = (args) => {
 		...args
 	})
 }
-
-/**
- * Create and download txt file.
- *
- * @param {any} data - Data to write to file
- * @param {string} fileName - Name of the file to download
- */
-export const createAndDownloadTxtFile = (data, fileName = "ti_theme_onboarding.log") => {
-	const element = document.createElement("a");
-	const file = new Blob([data], {type: 'text/plain'});
-	element.href = URL.createObjectURL(file);
-	element.download = fileName;
-	document.body.appendChild(element); // Required for this to work in FireFox
-	element.click();
-}
