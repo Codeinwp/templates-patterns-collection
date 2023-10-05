@@ -78,7 +78,7 @@ class Admin {
 		add_action( 'wp_ajax_mark_onboarding_done', array( $this, 'mark_onboarding_done' ) );
 		add_action( 'wp_ajax_nopriv_mark_onboarding_done', array( $this, 'mark_onboarding_done' ) );
 
-        add_action( 'wp_ajax_external_get_logs', array( $this, 'external_get_logs') );
+		add_action( 'wp_ajax_external_get_logs', array( $this, 'external_get_logs' ) );
 
 		$this->register_feedback_settings();
 
@@ -1207,25 +1207,24 @@ class Admin {
 		return true;
 	}
 
-    /**
-     * Get logs from transient via ajax.
-     */
-    public function external_get_logs() {
+	/**
+	 * Get logs from transient via ajax.
+	 */
+	public function external_get_logs() {
 
+		$nonce = $_POST['nonce'];
 
-        $nonce = $_POST['nonce'];
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			wp_die( __( 'Nonce verification failed', 'templates-patterns-collection' ) );
+		}
 
-        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            wp_die( __( 'Nonce verification failed', 'templates-patterns-collection' ) );
-        }
+		$data = get_transient( Logger::$log_transient_name );
 
-        $data = get_transient( Logger::$log_transient_name );
+		if ( ! empty( $data ) ) {
+			echo $data;
+			wp_die();
+		}
 
-        if ( ! empty( $data ) ) {
-            echo $data;
-            wp_die();
-        }
-
-        wp_die( __( 'No logs found', 'templates-patterns-collection' ) );
-    }
+		wp_die( __( 'No logs found', 'templates-patterns-collection' ) );
+	}
 }

@@ -45,21 +45,21 @@ class Logger {
 	 *
 	 * @var string
 	 */
-    private $log_file_name = 'ti-theme-onboarding.log';
+	private $log_file_name = 'ti-theme-onboarding.log';
 
-    /**
-     * Log transient name.
-     *
-     * @var string
-     */
+	/**
+	 * Log transient name.
+	 *
+	 * @var string
+	 */
 	public static $log_transient_name = 'ti_theme_onboarding';
 
-    /**
-     * The expiration time for the transient.
-     *
-     * @var float|int
-     */
-    private $log_transient_expiration = 2 * WEEK_IN_SECONDS;
+	/**
+	 * The expiration time for the transient.
+	 *
+	 * @var float|int
+	 */
+	private $log_transient_expiration = 2 * WEEK_IN_SECONDS;
 
 	/**
 	 * @var string
@@ -83,9 +83,9 @@ class Logger {
 			return;
 		}
 		require_once( ABSPATH . 'wp-admin/includes/file.php' ); // you have to load this file
-		add_action( 'shutdown', array( $this, 'log_to_transient') );
+		add_action( 'shutdown', array( $this, 'log_to_transient' ) );
 		$this->set_log_path();
-        $this->migrate_from_file_to_transient();
+		$this->migrate_from_file_to_transient();
 		$this->log_client_info();
 	}
 
@@ -199,14 +199,14 @@ class Logger {
 	 */
 	public function log_to_transient() {
 
-        $transient_data = get_transient( self::$log_transient_name );
+		$transient_data = get_transient( self::$log_transient_name );
 
-        if ( ! $transient_data ) {
-            $transient_data = '';
-        }
+		if ( ! $transient_data ) {
+			$transient_data = '';
+		}
 
-        $transient_data .= $this->log_string;
-        set_transient( self::$log_transient_name, $transient_data, $this->log_transient_expiration );
+		$transient_data .= $this->log_string;
+		set_transient( self::$log_transient_name, $transient_data, $this->log_transient_expiration );
 	}
 
 	/**
@@ -229,27 +229,27 @@ class Logger {
 		return $this->log_file_path_url . $this->log_transient_name;
 	}
 
-    /**
-     * Migrate from file to transient.
-     */
-    public function migrate_from_file_to_transient() {
-        $log_file = $this->log_file_path . $this->log_file_name;
-        global $wp_filesystem;
-        WP_Filesystem();
+	/**
+	 * Migrate from file to transient.
+	 */
+	public function migrate_from_file_to_transient() {
+		$log_file = $this->log_file_path . $this->log_file_name;
+		global $wp_filesystem;
+		WP_Filesystem();
 
-        $has_file = file_exists( $log_file );
+		$has_file = file_exists( $log_file );
 
-        if ( ! $has_file ) {
-            return;
-        }
+		if ( ! $has_file ) {
+			return;
+		}
 
-        $content  = $wp_filesystem->get_contents( $log_file );
-        $this->log_string .= $content;
+		$content           = $wp_filesystem->get_contents( $log_file );
+		$this->log_string .= $content;
 
-        $this->log_to_transient();
+		$this->log_to_transient();
 
-        if ( is_writable( $log_file ) ) {
-            unlink( $log_file );
-        }
-    }
+		if ( is_writable( $log_file ) ) {
+			unlink( $log_file );
+		}
+	}
 }
