@@ -37,10 +37,22 @@ const sendPostMessage = ( data ) => {
 	);
 };
 
+/**
+ * Convert text to file URL.
+ *
+ * @param {string} text - Text to convert
+ * @returns {string} - File URL
+ */
+const textToFileURL = ( text ) => {
+	const blob = new Blob( [ text ], { type: 'text/plain' } );
+	return URL.createObjectURL( blob );
+}
+
 export {
 	trailingSlashIt,
 	untrailingSlashIt,
 	sendPostMessage,
 	EDITOR_MAP,
 	ONBOARDING_CAT,
+	textToFileURL,
 };

@@ -113,3 +113,34 @@ export const track = async ( trackingId = '', data ) => {
 		return false;
 	}
 };
+
+/**
+ * Get logs from server using ajax.
+ * @param {Object} args - ajax arguments
+ */
+export const getLogsFromServer = (args) => {
+	jQuery.ajax({
+		type: 'post',
+		url: ajaxurl,
+		data: {
+			action: 'external_get_logs',
+			nonce: tiobDash.nonce,
+		},
+		...args
+	})
+}
+
+/**
+ * Create and download txt file.
+ *
+ * @param {any} data - Data to write to file
+ * @param {string} fileName - Name of the file to download
+ */
+export const createAndDownloadTxtFile = (data, fileName = "ti_theme_onboarding.log") => {
+	const element = document.createElement("a");
+	const file = new Blob([data], {type: 'text/plain'});
+	element.href = URL.createObjectURL(file);
+	element.download = fileName;
+	document.body.appendChild(element); // Required for this to work in FireFox
+	element.click();
+}
