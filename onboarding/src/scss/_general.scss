@@ -139,7 +139,7 @@ input.components-text-control__input[type="email"],
   }
 }
 
-.ob-button {
+.components-button.ob-button {
   display: flex;
   height: 48px;
   padding: 16px 32px;
@@ -151,9 +151,20 @@ input.components-text-control__input[type="email"],
   font-style: normal;
   font-weight: 700;
   line-height: 30px;
+
+  &:hover,&:focus {
+    &:not(:disabled) {
+      box-shadow: none;
+    }
+  }
+
   &.is-primary{
     background: $primary;
+    &:hover:not(:disabled) {
+      background: $dark-bg;
+    }
   }
+
   &.full {
     width: 100%;
   }
@@ -190,7 +201,7 @@ input.components-text-control__input[type="email"],
 @mixin ob-general--laptop() {
   .ob-sites {
     &.is-grid {
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: repeat( auto-fit, minmax(346px, 1fr) );
     }
   }
 }

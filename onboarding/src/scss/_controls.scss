@@ -15,7 +15,7 @@
   display: flex;
   flex-wrap: wrap;
 
-  &.palette, &.media, &.import-options {
+  &.palette, &.import-options {
     flex-direction: column;
   }
 
@@ -23,7 +23,6 @@
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    margin-bottom: 70px;
   }
 }
 
@@ -90,62 +89,50 @@
 /**
  * Logo
  */
-.ob-media-controls{
-  position: relative;
-  margin-bottom: 12px;
-  .components-base-control__field{
-    margin: 0;
-    input[type="text"] {
-      padding-right: 77px;
-      width: 100%;
-      line-height: 55px;
-      border-color: $border;
-    }
+
+.ob-media {
+  border: 1px dashed $secondary-text;
+  width: 100%;
+  padding: 65px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  background: none;
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+
+  &.has-logo {
+    padding: 0;
   }
-  button {
+
+  .ob-responsive-wrapper {
+    position: relative;
+    max-width: 100%;
+  }
+
+  span {
+    display: block;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
     position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    text-decoration: none;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
   }
 }
 
-.ob-media-preview{
-  border: 1px dashed $border;
-  border-radius: 16px;
-  min-height: 56px;
-  outline: none;
-  position: relative;
-  line-height: 0;
-  text-align: center;
-  &.active {
-    border: none;
-    border-radius: 0;
-  }
-  img {
-    max-width: 100%;
-    max-height: 200px;
-  }
-  .ob-preview-overlay{
-    position: absolute;
-    background: rgba( 0, 0, 0, .5 );
-    opacity: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    transition: opacity ease-in .1s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    button {
-      color: $inverted-text;
-      font-size: 16px;
-    }
-  }
-  &:hover .ob-preview-overlay{
-    opacity: 1;
+.ob-media-actions {
+  margin-top: 23px;
+  display: flex;
+  gap:18px;
+  .components-button.is-tertiary {
+    font-size: 14px;
+    padding: 0;
   }
 }
 
@@ -153,12 +140,6 @@
  * Import options
  */
 .ob-ctrl-wrap.import-options {
-  position: absolute;
-  bottom: 100%;
-  width: calc( 100% + 2px );
-  left: 0;
-  border: none;
-  background: $inverted-text;
 
   button:hover {
     color: $primary;
@@ -179,6 +160,9 @@
     height: auto;
     width: calc( 100% - 6px );
     margin-left: 2px;
+    &:focus {
+      box-shadow: none;
+    }
   }
 }
 
@@ -189,6 +173,9 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  &.is-opened {
+    height: auto;
+  }
 }
 
 .ob-option-row {

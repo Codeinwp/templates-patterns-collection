@@ -1,4 +1,4 @@
-/* global tiobDash  */
+/* global tiobDash, localStorage  */
 const { onboarding, licenseTIOB } = tiobDash;
 
 const firstEditor =
@@ -33,6 +33,7 @@ const initialState = {
 	pluginOptions: {},
 	error: null,
 	trackingId: '',
+	refresh: false,
 };
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
@@ -102,6 +103,12 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				trackingId,
+			};
+		case 'SET_REFRESH':
+			const { refresh } = action.payload;
+			return {
+				...state,
+				refresh,
 			};
 	}
 	return state;

@@ -17,10 +17,14 @@
       margin: 0;
     }
 
-    a {
+    .ob-editor-option {
       display: block;
       padding: 8px;
       text-align: left;
+      background: none;
+      border: none;
+      width: 100%;
+      cursor: pointer;
     }
   }
 

@@ -19,9 +19,10 @@ const Onboarding = ( { step, themeData } ) => {
 	const [ importing, setImporting ] = useState( false );
 	const [ showToast, setShowToast ] = useState( false );
 
+	const isPreviewStep = step === 3 || step === 4;
 	return (
 		<Fragment>
-			<Header importing={ importing } />
+			{ ! isPreviewStep && <Header importing={ importing } /> }
 			{ step === 1 && <Welcome /> }
 			{ step === 2 && (
 				<SiteList
@@ -29,7 +30,7 @@ const Onboarding = ( { step, themeData } ) => {
 					setShowToast={ setShowToast }
 				/>
 			) }
-			{ ( step === 3 || step === 4 ) && (
+			{ isPreviewStep && (
 				<CustomizeSite general={ general } setGeneral={ setGeneral } />
 			) }
 			{ step === 5 && (

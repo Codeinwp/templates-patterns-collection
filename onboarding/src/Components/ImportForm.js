@@ -116,6 +116,7 @@ const ImportForm = ( { trackingId } ) => {
 		<>
 			<p>
 				{ __(
+					// eslint-disable-next-line
 					'You\'re all set. Tell us a bit about yourself.',
 					'templates-patterns-collection'
 				) }

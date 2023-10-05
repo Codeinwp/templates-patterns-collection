@@ -8,7 +8,7 @@ import { LicensePanelContext } from './LicensePanelContext';
 
 const App = ( { onboarding, userStatus } ) => {
 	if ( onboarding && tiobDash.onboardingAllowed ) {
-		window.location.href = '/wp-admin/admin.php?page=neve-onboarding';
+		window.location.href = tiobDash.onboardingRedirect;
 		return;
 	}
 

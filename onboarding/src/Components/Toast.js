@@ -1,5 +1,3 @@
-import { useState } from '@wordpress/element';
-import { Button } from '@wordpress/components';
 import classnames from 'classnames';
 
 const Toast = ( { svgIcon, message, className, setShowToast } ) => {
