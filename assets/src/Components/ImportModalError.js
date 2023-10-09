@@ -1,7 +1,30 @@
 import { Dashicon, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import {useEffect, useState} from "@wordpress/element";
+import {getLogsFromServer} from "../../../onboarding/src/utils/rest";
+import {textToFileURL} from "../../../onboarding/src/utils/common";
 
 const ImportModalError = ( { message, code } ) => {
+
+	const [logs, setLogs] = useState( {} );
+
+	useEffect(() => {
+		getLogsFromServer({
+			success: function (response) {
+				setLogs({
+					raw: response,
+					url: textToFileURL(response),
+				});
+			},
+		});
+
+		return () => {
+			if ( logs?.url ) {
+				URL.revokeObjectURL(logs.url);
+			}
+		}
+	}, []);
+
 	return (
 		<div className="well error">
 			{ message && (
@@ -29,10 +52,17 @@ const ImportModalError = ( { message, code } ) => {
 				) }
 				<li>
 					{ __( 'Error log', 'templates-patterns-collection' ) }:{ ' ' }
-					<Button isLink href={ tiobDash.onboarding.logUrl }>
-						{ tiobDash.onboarding.logUrl }
-						<Dashicon icon="external" />
-					</Button>
+					<a download={"ti_theme_onboarding.log"} href={logs.url}>
+						{ __( 'Download Logs File', 'templates-patterns-collection' ) }
+					</a>
+					<details>
+						<summary>
+							{ __( 'See logs', 'templates-patterns-collection' ) }
+						</summary>
+						<div>
+							{ logs.raw }
+						</div>
+					</details>
 				</li>
 			</ul>
 		</div>

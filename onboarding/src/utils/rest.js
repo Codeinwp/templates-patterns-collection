@@ -113,3 +113,19 @@ export const track = async ( trackingId = '', data ) => {
 		return false;
 	}
 };
+
+/**
+ * Get logs from server using ajax.
+ * @param {Object} args - ajax arguments
+ */
+export const getLogsFromServer = (args) => {
+	jQuery.ajax({
+		type: 'post',
+		url: ajaxurl,
+		data: {
+			action: 'tpc_get_logs',
+			nonce: tiobDash.nonce,
+		},
+		...args
+	})
+}
