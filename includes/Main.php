@@ -35,7 +35,7 @@ class Main {
 	/**
 	 * Main
 	 *
-	 * @var Main
+	 * @var Main|null
 	 */
 	protected static $instance = null;
 	/**
@@ -93,7 +93,6 @@ class Main {
 	/**
 	 * Holds the sites data.
 	 *
-	 * @var null
 	 */
 	private function init() {
 		$this->setup_editor();
@@ -208,7 +207,7 @@ class Main {
 	/**
 	 * Get meta fields.
 	 *
-	 * @return void
+	 * @return array
 	 */
 	static public function get_meta_fields( $post_id, $type ) {
 		$fields = apply_filters( 'ti_tpc_template_meta', array(), $post_id, $type );

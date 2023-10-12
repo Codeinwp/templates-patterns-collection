@@ -1,0 +1,22 @@
+parameters:
+	level: 5
+	paths:
+		- %currentWorkingDirectory%/templates-patterns-collection.php
+		- %currentWorkingDirectory%/includes
+	scanDirectories:
+	    - %currentWorkingDirectory%/beaver/includes
+	bootstrapFiles:
+	    - %currentWorkingDirectory%/vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+	    - %currentWorkingDirectory%/vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
+	    - %currentWorkingDirectory%/vendor/php-stubs/wp-cli-stubs/wp-cli-commands-stubs.php
+	    - %currentWorkingDirectory%/vendor/php-stubs/wp-cli-stubs/wp-cli-i18n-stubs.php
+	excludePaths:
+		analyse:
+			- %currentWorkingDirectory%/includes/Importers
+			- %currentWorkingDirectory%/includes/TI_Beaver.php
+	dynamicConstantNames:
+		- TIOB_URL
+		- TPC_TEMPLATES_CLOUD_ENDPOINT
+
+includes:
+	- %currentWorkingDirectory%/vendor/szepeviktor/phpstan-wordpress/extension.neon

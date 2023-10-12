@@ -47,7 +47,7 @@ class Zelle_Importer {
 	/**
 	 * The callback of an ajax request when the user requests an import action.
 	 *
-	 * @return WP_Error
+	 * @return bool|int|WP_Error
 	 */
 	public function import_zelle_frontpage( $template_path, $theme_slug ) {
 		$this->previous_theme_content = get_option( 'theme_mods_' . $theme_slug );

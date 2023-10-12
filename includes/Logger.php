@@ -93,7 +93,7 @@ class Logger {
 	 * Log info.
 	 *
 	 * @param string $label log label.
-	 * @param string $value log value.
+	 * @param string|int|null $value log value.
 	 */
 	public function log_info( $label, $value = null ) {
 		if ( $value === null ) {
@@ -219,7 +219,7 @@ class Logger {
 	 * Get the log URL.
 	 */
 	public function get_log_url() {
-		return $this->log_file_path_url . $this->log_transient_name;
+		return $this->log_file_path_url . self::$log_transient_name;
 	}
 
 	/**
