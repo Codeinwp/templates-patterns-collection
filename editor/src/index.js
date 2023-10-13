@@ -7,6 +7,7 @@ import './editor.scss';
 import './data/index.js';
 import { iconBlack as icon } from './icon';
 import Exporter from './extension';
+import SiteEditorExporter from './site-editor-extension';
 import edit from './edit';
 
 registerBlockType( 'ti-tpc/templates-cloud', {
@@ -26,7 +27,7 @@ registerBlockType( 'ti-tpc/templates-cloud', {
 
 if ( parseInt( tiTpc.tier ) === 3 ) {
 	registerPlugin( 'ti-tpc', {
-		render: Exporter,
+		render: tiTpc.isSiteEditor ? SiteEditorExporter : Exporter,
 		icon,
 	} );
 }

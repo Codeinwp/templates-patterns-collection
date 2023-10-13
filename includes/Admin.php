@@ -17,7 +17,7 @@ use TIOB\Importers\Cleanup\Active_State;
 class Admin {
 	use White_Label_Config;
 
-	const API = 'api.themeisle.com';
+	const API = 'neve.test/wp-json';
 
 	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
 	const FEEDBACK_DISMISSED_OPT       = 'tiob_feedback_dismiss';
@@ -53,7 +53,7 @@ class Admin {
 	private $google_fonts = array();
 
 	public static function get_templates_cloud_endpoint() {
-		return 'https://' . self::API . '/templates-cloud/';
+		return 'https://' . self::API . '/templates-cloud/v1/';
 	}
 
 	/**

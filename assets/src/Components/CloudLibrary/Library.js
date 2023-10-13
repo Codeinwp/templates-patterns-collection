@@ -93,6 +93,9 @@ const Library = ( {
 			label: __( 'Beaver', 'templates-patterns-collection' ),
 			icon: 'beaver.jpg',
 		},
+		'fse-templates': {
+			label: __( 'FSE', 'templates-patterns-collection' ),
+		},
 	};
 
 	const loadTemplates = ( updateItem = {} ) => {

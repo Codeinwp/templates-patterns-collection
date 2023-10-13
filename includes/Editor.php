@@ -49,6 +49,7 @@ class Editor {
 			define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', Admin::get_templates_cloud_endpoint() );
 		}
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_block' ), 11 );
+		$this->tpc_register_settings();
 		$this->register_post_meta();
 	}
 
@@ -64,12 +65,6 @@ class Editor {
 		}
 
 		if ( $screen->id === 'widgets' ) {
-			return;
-		}
-
-		// Don't load on site editor. Until FSE support in TPC is added.
-		// We can remove this check once Codeinwp/templates-patterns-collection/issues/248 is implemented.
-		if ( $screen->id === 'site-editor' ) {
 			return;
 		}
 
@@ -96,6 +91,7 @@ class Editor {
 					'metaKeys'     => apply_filters( 'ti_tpc_template_meta', array(), $post_id = get_the_ID(), $type = 'gutenberg' ),
 					'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
 					'allowed_post' => self::get_allowed_post_types(),
+					'isSiteEditor' => $screen->id === 'site-editor',
 				)
 			)
 		);
@@ -114,6 +110,36 @@ class Editor {
 			array(
 				'editor_script' => $this->handle,
 				'editor_style'  => $this->handle,
+			)
+		);
+	}
+
+	public function tpc_register_settings() {
+		register_setting(
+			'',
+			'templates_patterns_collection_fse_templates',
+			array(
+				'default'      => '',
+				'show_in_rest' => array(
+					'schema' => array(
+						'type'                 => 'object',
+						'additionalProperties' => array(
+							'type'       => 'object',
+							'properties' => array(
+								'_ti_tpc_template_id' => array(
+									'type' => 'string',
+								),
+								'_ti_tpc_template_sync' => array(
+									'type' => 'boolean',
+								),
+							),
+						),
+						'propertyNames'        => array(
+							'type' => 'string', // Specify that the key is a string
+						),
+					),
+				),
+				'type'         => 'object',
 			)
 		);
 	}
