@@ -7,7 +7,6 @@
 
 namespace TIOB;
 
-use FLBuilder;
 use TIOB\Importers\Cleanup\Active_State;
 
 /**
@@ -55,7 +54,7 @@ class Main {
 	/**
 	 * Beaver
 	 *
-	 * @var Beaver
+	 * @var TI_Beaver
 	 */
 	public $beaver = null;
 
