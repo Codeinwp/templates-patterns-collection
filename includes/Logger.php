@@ -219,7 +219,7 @@ class Logger {
 	 * Get the log URL.
 	 */
 	public function get_log_url() {
-		return $this->log_file_path_url . $this->log_transient_name;
+		return $this->log_file_path_url . self::$log_transient_name;
 	}
 
 	/**
