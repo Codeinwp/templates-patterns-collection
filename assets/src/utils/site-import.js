@@ -53,8 +53,7 @@ export const importTemplates = async ( data ) => {
  * @return {Promise} Promise resolving to the import results.
  */
 export const importFseTemplate = async ( data ) => {
-	const url = tiobDash.siteUrl + 'wp-json/wp/v2/templates?_locale=user';
-
+	const url = tiobDash.siteUrl + 'wp-json/wp/v2/templates';
 	const requests = data.map( async ( template ) => {
 		const requestData = {
 			slug: 'wp-custom-template-' + template.template_id,
