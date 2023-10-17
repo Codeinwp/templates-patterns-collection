@@ -1,3 +1,8 @@
+##### [Version 1.2.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.3...v1.2.4) (2023-10-17)
+
+### Bug Fixes
+- **Dashboard notification**: Ensure proper syntax is utilized to access the static variable in the logger.
+
 ##### [Version 1.2.3](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.2...v1.2.3) (2023-10-09)
 
 ### Bug Fixes
