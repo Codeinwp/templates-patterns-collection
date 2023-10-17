@@ -33,14 +33,13 @@ import api from '@wordpress/api';
 const { omit } = lodash;
 
 const SiteEditorExporter = () => {
-	const { settingId, postType, template } = useSelect( ( select ) => {
+	const { settingId, template } = useSelect( ( select ) => {
 		const editSite = select( 'core/edit-site' );
 		const editedPostId = editSite.getEditedPostId();
 		const editedPostType = editSite.getEditedPostType();
 
 		return {
 			settingId: editedPostId,
-			postType: editedPostType,
 			template: select( coreStore ).getEntityRecord(
 				'postType',
 				editedPostType,
@@ -87,6 +86,7 @@ const SiteEditorExporter = () => {
 			}
 
 			const res = await response.json();
+
 			if ( hasError( res ) ) {
 				return;
 			}
@@ -118,6 +118,7 @@ const SiteEditorExporter = () => {
 					template_site_slug: templateData?._ti_tpc_site_slug || '',
 					template_thumbnail:
 						templateData?._ti_tpc_screenshot_url || '',
+					content: template?.content?.raw || '',
 				},
 			} );
 		}
@@ -126,13 +127,14 @@ const SiteEditorExporter = () => {
 			url:
 				window.tiTpc.endpoint +
 				'templates/' +
-				templateData._ti_tpc_template_id,
+				templateData?._ti_tpc_template_id,
 			query: {
 				...omit( tiTpc.params, 'meta' ),
 				meta: JSON.stringify( templateData ),
 				template_name:
 					template?.title?.raw ||
 					__( 'FSE Template', 'templates-patterns-collection' ),
+				content: template?.content?.raw || '',
 			},
 		} );
 	};
@@ -166,6 +168,14 @@ const SiteEditorExporter = () => {
 					{
 						type: 'snackbar',
 					}
+				);
+				return true;
+			case 'rest_template_invalid_id':
+				createErrorNotice(
+					__(
+						'Could not save template, invalid template ID.',
+						'templates-patterns-collection'
+					)
 				);
 				return true;
 			default:
@@ -262,17 +272,11 @@ const SiteEditorExporter = () => {
 
 		const settings = new api.models.Settings();
 		settings.fetch().then( ( response ) => {
-			if (
+			setTemplateData(
 				response.templates_patterns_collection_fse_templates[
 					settingId
-				]
-			) {
-				setTemplateData(
-					response.templates_patterns_collection_fse_templates[
-						settingId
-					]
-				);
-			}
+				] || {}
+			);
 		} );
 	}, [ settingId ] );
 
@@ -298,17 +302,20 @@ const SiteEditorExporter = () => {
 			>
 				<PanelBody>
 					{ __(
-						'Save this page as a template in your Templates Cloud library.'
+						'Save this page as a template in your Templates Cloud library.',
+						'templates-patterns-collection'
 					) }
 
 					<Button
 						isPrimary
 						isBusy={ isLoading }
 						disabled={ isLoading }
-						// onClick={ onSavePage }
 						onClick={ onSavePage }
 					>
-						{ __( 'Save Page to Templates Cloud' ) }
+						{ __(
+							'Save Page to Templates Cloud',
+							'templates-patterns-collection'
+						) }
 					</Button>
 
 					<ToggleControl

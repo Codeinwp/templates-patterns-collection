@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import VizSensor from 'react-visibility-sensor';
 
 import { chevronLeft, chevronRight, close } from '@wordpress/icons';
-import {useEffect, useState, Fragment, useContext} from '@wordpress/element';
+import { useEffect, useState, Fragment, useContext } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Spinner, Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
@@ -16,7 +16,7 @@ import PreviewFrame from './PreviewFrame';
 import ImportTemplatesModal from './ImportTemplatesModal';
 import Logo from '../Icon';
 import { LicensePanelContext } from '../LicensePanelContext';
-import FeedbackNotice from "./FeedbackNotice";
+import FeedbackNotice from './FeedbackNotice';
 
 const Library = ( {
 	isGeneral,
@@ -39,11 +39,13 @@ const Library = ( {
 		gutenberg: 0,
 		elementor: 0,
 		beaver: 0,
+		'fse-templates': 0,
 	} );
 	const [ totalPages, setTotalPages ] = useState( {
 		gutenberg: 0,
 		elementor: 0,
 		beaver: 0,
+		'fse-templates': 0,
 	} );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isSearch, setSearch ] = useState( false );
@@ -69,12 +71,14 @@ const Library = ( {
 			gutenberg: 0,
 			elementor: 0,
 			beaver: 0,
+			'fse-templates': 0,
 		} );
 
 		setTotalPages( {
 			gutenberg: 0,
 			elementor: 0,
 			beaver: 0,
+			'fse-templates': 0,
 		} );
 
 		loadTemplates();
@@ -288,8 +292,12 @@ const Library = ( {
 
 	const { upgradeURLTpc } = window.tiobDash;
 
-	const UpsellModal = ( { title, description, showUpgradeBtn = true, showLicenseToggle = true } ) => {
-
+	const UpsellModal = ( {
+		title,
+		description,
+		showUpgradeBtn = true,
+		showLicenseToggle = true,
+	} ) => {
 		const { setLicenseOpen } = useContext( LicensePanelContext );
 
 		return (
@@ -323,16 +331,28 @@ const Library = ( {
 									<Button
 										variant="primary"
 										isPrimary
-										href={upgradeURLTpc}
+										href={ upgradeURLTpc }
 										target="_blank"
 									>
-										{ __( 'Upgrade to PRO', 'templates-patterns-collection' ) }
+										{ __(
+											'Upgrade to PRO',
+											'templates-patterns-collection'
+										) }
 									</Button>
 								) }
 
 								{ showLicenseToggle && (
-									<Button isLink style={{ marginLeft: '12px' }} onClick={ () => { setLicenseOpen(true) } }>
-										{ __( 'I already have a key', 'template-patterns-collection' ) }
+									<Button
+										isLink
+										style={ { marginLeft: '12px' } }
+										onClick={ () => {
+											setLicenseOpen( true );
+										} }
+									>
+										{ __(
+											'I already have a key',
+											'template-patterns-collection'
+										) }
 									</Button>
 								) }
 							</div>
@@ -349,11 +369,14 @@ const Library = ( {
 	if ( ! userStatus && ! isGeneral ) {
 		return (
 			<UpsellModal
-				title={ __( 'Templates Cloud is a PRO Feature', 'templates-patterns-collection' ) }
+				title={ __(
+					'Templates Cloud is a PRO Feature',
+					'templates-patterns-collection'
+				) }
 				description={ __(
-						'Unlock the Templates Cloud features and save your pages or posts in the cloud.',
-						'template-patterns-collection'
-					) }
+					'Unlock the Templates Cloud features and save your pages or posts in the cloud.',
+					'template-patterns-collection'
+				) }
 			/>
 		);
 	}
@@ -391,7 +414,7 @@ const Library = ( {
 							</span>
 						</a>
 					) ) }
-					<FeedbackNotice importTemplate={templateModal} />
+					<FeedbackNotice importTemplate={ templateModal } />
 				</div>
 				<Filters
 					currentTab={ currentTab }
@@ -459,12 +482,21 @@ const Library = ( {
 								src={
 									window.tiobDash.assets + '/img/layout.jpg'
 								}
-								alt={ __( 'No Templates Found', 'templates-patterns-collection' ) }
+								alt={ __(
+									'No Templates Found',
+									'templates-patterns-collection'
+								) }
 							/>
-							<h3>{ __( 'There are no templates yet', 'templates-patterns-collection' ) }</h3>
+							<h3>
+								{ __(
+									'There are no templates yet',
+									'templates-patterns-collection'
+								) }
+							</h3>
 							<p>
 								{ __(
-									'You can add a page or post to the cloud by accessing it with the WordPress or Elementor/Beaver editor. Learn more about this in our docs.', 'templates-patterns-collection'
+									'You can add a page or post to the cloud by accessing it with the WordPress or Elementor/Beaver editor. Learn more about this in our docs.',
+									'templates-patterns-collection'
 								) }
 							</p>
 							<Button
@@ -473,7 +505,10 @@ const Library = ( {
 								href="https://docs.themeisle.com/article/1354-neve-template-cloud-library?utm_medium=nevedashboard&utm_source=wpadmin&utm_campaign=templatescloud&utm_content=neve"
 								target="_blank"
 							>
-								{ __( 'Learn more', 'templates-patterns-collection' ) }
+								{ __(
+									'Learn more',
+									'templates-patterns-collection'
+								) }
 							</Button>
 						</div>
 					) ) }
@@ -485,7 +520,10 @@ const Library = ( {
 								isPrimary
 								onClick={ () => handleImport( previewedItem ) }
 							>
-								{ __( 'Import Template', 'templates-patterns-collection' ) }
+								{ __(
+									'Import Template',
+									'templates-patterns-collection'
+								) }
 							</Button>
 						}
 						heading={ previewedItem.template_name }

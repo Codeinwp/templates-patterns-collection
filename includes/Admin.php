@@ -617,6 +617,7 @@ class Admin {
 			'assets'              => TIOB_URL . 'assets/',
 			'upgradeURL'          => $upgrade_url,
 			'upgradeURLTpc'       => $upgrade_url_tpc,
+			'siteUrl'             => trailingslashit( get_site_url() ),
 			'strings'             => array(
 				/* translators: %s - Theme name */
 				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
