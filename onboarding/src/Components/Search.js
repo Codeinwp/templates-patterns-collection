@@ -87,7 +87,7 @@ export default compose(
 						license_id: tiobDash.license,
 						site: tiobDash.onboarding.homeUrl || '',
 						search: query,
-						cat: category,
+						cat: 'all',
 						step_id: 1,
 						step_status: 'completed',
 					};
