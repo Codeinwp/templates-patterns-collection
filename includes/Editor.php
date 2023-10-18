@@ -126,10 +126,19 @@ class Editor {
 						'additionalProperties' => array(
 							'type'       => 'object',
 							'properties' => array(
-								'_ti_tpc_template_id' => array(
+								'_ti_tpc_template_id'     => array(
 									'type' => 'string',
 								),
-								'_ti_tpc_template_sync' => array(
+								'_ti_tpc_template_sync'   => array(
+									'type' => 'boolean',
+								),
+								'__ti_tpc_screenshot_url' => array(
+									'type' => 'string',
+								),
+								'_ti_tpc_site_slug'       => array(
+									'type' => 'string',
+								),
+								'_ti_tpc_published'       => array(
 									'type' => 'boolean',
 								),
 							),

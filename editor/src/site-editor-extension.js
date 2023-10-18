@@ -2,60 +2,62 @@
 /* eslint-disable camelcase */
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
-import { serialize } from '@wordpress/blocks';
 import {
 	Button,
 	Icon,
 	PanelBody,
-	TextControl,
 	ToggleControl,
+	TextControl,
 } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/edit-site';
-import { Fragment, useState, useEffect } from '@wordpress/element';
+import { Fragment, useEffect, useState } from '@wordpress/element';
+import { store as coreStore } from '@wordpress/core-data';
+import api from '@wordpress/api';
 
+import classnames from 'classnames';
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
-import classnames from 'classnames';
-
 import { iconBlack } from './icon';
 import { getTemplate, publishTemplate } from './data/templates-cloud';
-import Notices from './components/notices';
-
-import { store as coreStore } from '@wordpress/core-data';
-import {
-	__experimentalUseNavigator as useNavigator,
-	ExternalLink,
-} from '@wordpress/components';
-
-import api from '@wordpress/api';
 
 const { omit } = lodash;
 
 const SiteEditorExporter = () => {
-	const { settingId, template } = useSelect( ( select ) => {
-		const editSite = select( 'core/edit-site' );
-		const editedPostId = editSite.getEditedPostId();
-		const editedPostType = editSite.getEditedPostType();
-
+	const { settingId } = useSelect( ( select ) => {
 		return {
-			settingId: editedPostId,
-			template: select( coreStore ).getEntityRecord(
-				'postType',
-				editedPostType,
-				editedPostId
-			),
+			settingId: select( 'core/edit-site' ).getEditedPostId(),
 		};
 	} );
-
 	const [ isLoading, setLoading ] = useState( false );
 	const [ templateData, setTemplateData ] = useState( {} );
 	const { createErrorNotice, createSuccessNotice } = useDispatch(
 		'core/notices'
 	);
+	const [ isPostSavingPrev, setIsPostSavingPrev ] = useState( false );
 
 	// This parameter is used internally to be able to publish a template.
-	const { canPredefine } = window.tiTpc;
+	const canPredefine = true; //window.tiTpc;
+
+	/**
+	 * Get the template data.
+	 *
+	 * @return {Promise<void>} Promise.
+	 */
+	const fetchTemplate = async () => {
+		const { getEditedPostId, getEditedPostType } = wp.data.select(
+			'core/edit-site'
+		);
+		const { getEntityRecord } = wp.data.select( coreStore );
+		const editedPostId = getEditedPostId();
+		const editedPostType = getEditedPostType();
+
+		return await getEntityRecord(
+			'postType',
+			editedPostType,
+			editedPostId
+		);
+	};
 
 	/**
 	 * Save the template.
@@ -65,46 +67,49 @@ const SiteEditorExporter = () => {
 	const onSavePage = async () => {
 		setLoading( true );
 
-		const data = {
-			__file: 'wp_export',
-			version: 2,
-			content: template?.content?.raw || '',
-		};
+		await fetchTemplate().then( async ( template ) => {
+			const data = {
+				__file: 'wp_export',
+				version: 2,
+				content: template?.content?.raw || '',
+			};
 
-		const url = getRequestUrl();
+			const url = getRequestUrl( template );
 
-		try {
-			const response = await apiFetch( {
-				url,
-				method: 'POST',
-				data,
-				parse: false,
-			} );
+			try {
+				const response = await apiFetch( {
+					url,
+					method: 'POST',
+					data,
+					parse: false,
+				} );
 
-			if ( ! response.ok ) {
-				return;
+				if ( ! response.ok ) {
+					return;
+				}
+
+				const res = await response.json();
+
+				if ( hasError( res ) ) {
+					return;
+				}
+
+				handleSaveSuccess( res );
+			} catch ( error ) {
+				handleSaveError( error );
 			}
 
-			const res = await response.json();
-
-			if ( hasError( res ) ) {
-				return;
-			}
-
-			handleSaveSuccess( res );
-		} catch ( error ) {
-			handleSaveError( error );
-		}
-
-		setLoading( false );
+			setLoading( false );
+		} );
 	};
 
 	/**
 	 * Get the request URL.
 	 *
+	 * @param {Object} template Template object.
 	 * @return {string} Request URL.
 	 */
-	const getRequestUrl = () => {
+	const getRequestUrl = ( template ) => {
 		if ( ! templateData?._ti_tpc_template_id ) {
 			return stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
@@ -281,10 +286,113 @@ const SiteEditorExporter = () => {
 	}, [ settingId ] );
 
 	useEffect( () => {
-		if ( isPostSaving && templateData._ti_tpc_template_sync ) {
+		/**
+		 * Call onSavePost only after the save post happened, so we can get the correct content of the template.
+		 */
+		if (
+			isPostSavingPrev &&
+			! isPostSaving &&
+			templateData._ti_tpc_template_sync
+		) {
 			onSavePage();
 		}
-	}, [ isPostSaving, templateData ] );
+
+		// Update the previous value of isPostSaving
+		setIsPostSavingPrev( isPostSaving );
+	}, [ isPostSaving, templateData, isPostSavingPrev ] );
+
+	/**
+	 * Handle save.
+	 *
+	 * @return {JSX.Element|null} Save button.
+	 */
+	const PublishButton = () => {
+		if ( ! canPredefine ) {
+			return null;
+		}
+
+		const {
+			_ti_tpc_template_id,
+			_ti_tpc_site_slug,
+			_ti_tpc_screenshot_url,
+			_ti_tpc_published,
+		} = templateData;
+
+		const onPublish = async () => {
+			setLoading( 'publishing' );
+			try {
+				await publishTemplate(
+					_ti_tpc_template_id,
+					_ti_tpc_site_slug,
+					_ti_tpc_screenshot_url,
+					! _ti_tpc_published,
+					'https://cadourilafix.ro'
+				).then( async ( r ) => {
+					if ( r.success ) {
+						await getTemplate( _ti_tpc_template_id ).then(
+							( results ) => {
+								if (
+									_ti_tpc_template_id === results.template_id
+								) {
+									const newTemplateData = {
+										...templateData,
+										_ti_tpc_screenshot_url:
+											results.template_thumbnail,
+										_ti_tpc_published: ! templateData._ti_tpc_published,
+									};
+
+									setTemplateData( newTemplateData );
+									saveSettings( settingId, newTemplateData );
+									createSuccessNotice(
+										newTemplateData._ti_tpc_published
+											? __(
+												'Template Unpublished.',
+												'templates-patterns-collection'
+											  )
+											: __(
+												'Template Published.',
+												'templates-patterns-collection'
+											  ),
+										{
+											type: 'snackbar',
+										}
+									);
+								}
+							}
+						);
+					}
+				} );
+			} catch ( error ) {
+				createErrorNotice(
+					__(
+						'Something happened when publishing the template.',
+						'templates-patterns-collection'
+					)
+				);
+			}
+			setLoading( false );
+		};
+
+		return (
+			<Button
+				isSecondary
+				onClick={ onPublish }
+				disabled={ false !== isLoading }
+				className={ classnames( {
+					'is-loading': 'publishing' === isLoading,
+				} ) }
+			>
+				{ templateData._ti_tpc_published &&
+					( 'publishing' === isLoading
+						? __( 'Unpublishing', 'templates-patterns-collection' )
+						: __( 'Unpublish', 'templates-patterns-collection' ) ) }
+				{ ! templateData._ti_tpc_published &&
+					( 'publishing' === isLoading
+						? __( 'Publishing', 'templates-patterns-collection' )
+						: __( 'Publish', 'templates-patterns-collection' ) ) }
+			</Button>
+		);
+	};
 
 	return (
 		<Fragment>
@@ -331,53 +439,63 @@ const SiteEditorExporter = () => {
 						}
 					/>
 				</PanelBody>
-				{ /*{ canPredefine && (*/ }
-				{ /*	<PanelBody>*/ }
-				{ /*		<h4>{ __( 'Publish Settings' ) }</h4>*/ }
-				{ /*		<TextControl*/ }
-				{ /*			label={ __( 'Screenshot URL' ) }*/ }
-				{ /*			value={ screenshotURL }*/ }
-				{ /*			help={ __(*/ }
-				{ /*				'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',*/ }
-				{ /*				'templates-patterns-collection'*/ }
-				{ /*			) }*/ }
-				{ /*			type="url"*/ }
-				{ /*			onChange={ setScreenshotURL }*/ }
-				{ /*		/>*/ }
-				{ /*		<TextControl*/ }
-				{ /*			label={ __( 'Site Slug' ) }*/ }
-				{ /*			value={ siteSlug }*/ }
-				{ /*			help={ __(*/ }
-				{ /*				'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.',*/ }
-				{ /*				'templates-patterns-collection'*/ }
-				{ /*			) }*/ }
-				{ /*			type="url"*/ }
-				{ /*			onChange={ setSiteSlug }*/ }
-				{ /*		/>*/ }
-				{ /*		<PublishButton />*/ }
-				{ /*		{ published && (*/ }
-				{ /*			<Button*/ }
-				{ /*				isLink*/ }
-				{ /*				icon="image-rotate"*/ }
-				{ /*				onClick={ refreshData }*/ }
-				{ /*				disabled={ false !== isLoading }*/ }
-				{ /*				className={ classnames( {*/ }
-				{ /*					'is-loading': 'publishing' === isLoading,*/ }
-				{ /*				} ) }*/ }
-				{ /*				style={ {*/ }
-				{ /*					marginLeft: '12px',*/ }
-				{ /*					textDecoration: 'none',*/ }
-				{ /*				} }*/ }
-				{ /*			>*/ }
-				{ /*				{ __(*/ }
-				{ /*					'Refresh',*/ }
-				{ /*					'templates-patterns-collection'*/ }
-				{ /*				) }*/ }
-				{ /*			</Button>*/ }
-				{ /*		) }*/ }
-				{ /*		<Notices />*/ }
-				{ /*	</PanelBody>*/ }
-				{ /*) }*/ }
+				{ canPredefine && (
+					<PanelBody>
+						<h4>{ __( 'Publish Settings' ) }</h4>
+						<TextControl
+							label={ __( 'Screenshot URL' ) }
+							value={ templateData._ti_tpc_screenshot_url || '' }
+							help={ __(
+								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
+								'templates-patterns-collection'
+							) }
+							type="url"
+							onChange={ ( newValue ) =>
+								setTemplateData( {
+									...templateData,
+									_ti_tpc_screenshot_url: newValue,
+								} )
+							}
+						/>
+						<TextControl
+							label={ __( 'Site Slug' ) }
+							value={ templateData._ti_tpc_site_slug }
+							help={ __(
+								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.',
+								'templates-patterns-collection'
+							) }
+							type="url"
+							onChange={ ( newValue ) =>
+								setTemplateData( {
+									...templateData,
+									_ti_tpc_site_slug: newValue,
+								} )
+							}
+						/>
+						<PublishButton />
+						{ /*		{ published && (*/ }
+						{ /*			<Button*/ }
+						{ /*				isLink*/ }
+						{ /*				icon="image-rotate"*/ }
+						{ /*				onClick={ refreshData }*/ }
+						{ /*				disabled={ false !== isLoading }*/ }
+						{ /*				className={ classnames( {*/ }
+						{ /*					'is-loading': 'publishing' === isLoading,*/ }
+						{ /*				} ) }*/ }
+						{ /*				style={ {*/ }
+						{ /*					marginLeft: '12px',*/ }
+						{ /*					textDecoration: 'none',*/ }
+						{ /*				} }*/ }
+						{ /*			>*/ }
+						{ /*				{ __(*/ }
+						{ /*					'Refresh',*/ }
+						{ /*					'templates-patterns-collection'*/ }
+						{ /*				) }*/ }
+						{ /*			</Button>*/ }
+						{ /*		) }*/ }
+						{ /*		<Notices />*/ }
+					</PanelBody>
+				) }
 			</PluginSidebar>
 		</Fragment>
 	);
