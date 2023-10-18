@@ -70,7 +70,7 @@ export default compose(
 			trackingId: getTrackingId(),
 		};
 	} ),
-	withDispatch( ( dispatch, { step, query, trackingId, category } ) => {
+	withDispatch( ( dispatch, { step, query, trackingId } ) => {
 		const { setSearchQuery, setCategory, setOnboardingStep } = dispatch(
 			'ti-onboarding'
 		);
