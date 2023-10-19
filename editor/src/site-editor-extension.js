@@ -31,7 +31,7 @@ const SiteEditorExporter = () => {
 	const modalState = useState( false );
 
 	// This parameter is used internally to be able to publish a template.
-	const canPredefine = true; //window.tiTpc;
+	const { canPredefine } = window.tiTpc;
 
 	/**
 	 * Get the template data.
@@ -361,9 +361,9 @@ const SiteEditorExporter = () => {
 						createErrorNotice={ createErrorNotice }
 						createSuccessNotice={ createSuccessNotice }
 						isLoading={ isLoading }
-						saveMeta={ () =>
-							saveSettings( settingId, templateData )
-						}
+						saveMeta={ ( newTemplateData ) => {
+							saveSettings( settingId, newTemplateData );
+						} }
 					/>
 				) }
 			</PluginSidebar>

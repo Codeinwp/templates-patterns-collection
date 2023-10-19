@@ -10,7 +10,13 @@ import {
 	update,
 } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Button, Icon, Popover, TextControl, Tooltip } from '@wordpress/components';
+import {
+	Button,
+	Icon,
+	Popover,
+	TextControl,
+	Tooltip,
+} from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
@@ -98,13 +104,15 @@ const ListItem = ( {
 					} ) }
 				>
 					<div className="preview-actions">
-						<Button
-							isSecondary
-							disabled={ false !== isLoading }
-							onClick={ importPreview }
-						>
-							{ __( 'Preview' ) }
-						</Button>
+						{ ! item.link && (
+							<Button
+								isSecondary
+								disabled={ false !== isLoading }
+								onClick={ importPreview }
+							>
+								{ __( 'Preview' ) }
+							</Button>
+						) }
 
 						<Button
 							isPrimary
@@ -121,15 +129,20 @@ const ListItem = ( {
 									<Button
 										label={ __( 'Edit' ) }
 										icon={
-											'updating' === isLoading ? update : edit
+											'updating' === isLoading
+												? update
+												: edit
 										}
 										disabled={
 											isEditing || false !== isLoading
 										}
 										className={ classnames( {
-											'is-loading': 'updating' === isLoading,
+											'is-loading':
+												'updating' === isLoading,
 										} ) }
-										onClick={ () => setEditing( ! isEditing ) }
+										onClick={ () =>
+											setEditing( ! isEditing )
+										}
 									>
 										{ isEditing && (
 											<Popover
@@ -150,18 +163,21 @@ const ListItem = ( {
 													<Button
 														label={ __( 'Update' ) }
 														icon={
-															'updating' === isLoading
+															'updating' ===
+															isLoading
 																? update
 																: check
 														}
 														disabled={
 															false !== isLoading
 														}
-														className={ classnames( {
-															'is-loading':
-																'updating' ===
-																isLoading,
-														} ) }
+														className={ classnames(
+															{
+																'is-loading':
+																	'updating' ===
+																	isLoading,
+															}
+														) }
 														onClick={ updateItem }
 													/>
 												</div>
@@ -233,7 +249,9 @@ const ListItem = ( {
 			{ deletable && (
 				<div className="row-controls">
 					{ item.link ? (
-						<Tooltip text={ __( 'This template is synced to a page.' ) }>
+						<Tooltip
+							text={ __( 'This template is synced to a page.' ) }
+						>
 							<Button
 								label={ __( 'Edit' ) }
 								icon={ edit }

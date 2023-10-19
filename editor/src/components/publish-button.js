@@ -44,7 +44,10 @@ const PublishButton = ( {
 							if ( _ti_tpc_template_id === results.template_id ) {
 								setScreenshotURL( results.template_thumbnail );
 								setPublished( ! published );
-								saveMeta();
+								saveMeta( {
+									...templateData,
+									_ti_tpc_published: ! published,
+								} );
 								if ( published ) {
 									createSuccessNotice(
 										__(

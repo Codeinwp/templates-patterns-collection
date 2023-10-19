@@ -52,8 +52,14 @@ const TemplatePredefine = ( {
 					if (
 						templateData._ti_tpc_template_id === results.template_id
 					) {
-						setScreeShotUrl( results.template_thumbnail );
-						saveMeta();
+						if ( results.template_thumbnail ) {
+							setScreeShotUrl( results.template_thumbnail );
+							saveMeta( {
+								...templateData,
+								_ti_tpc_screenshot_url:
+									results.template_thumbnail,
+							} );
+						}
 						createSuccessNotice(
 							__(
 								'Template Data Refreshed.',
@@ -115,7 +121,7 @@ const TemplatePredefine = ( {
 				setLoading={ setLoading }
 				templateData={ {
 					...templateData,
-					link: 'https://themeisle.com',
+					link: '',
 				} }
 				setScreenshotURL={ setScreeShotUrl }
 				setPublished={ setPublished }

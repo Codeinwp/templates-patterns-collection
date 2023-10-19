@@ -10,7 +10,7 @@ import Exporter from './extension';
 import SiteEditorExporter from './site-editor-extension';
 import edit from './edit';
 
-if ( tiTpc.params.type === 'gutenberg' ) {
+if ( ! tiTpc.isSiteEditor ) {
 	registerBlockType( 'ti-tpc/templates-cloud', {
 		title: __( 'Templates Cloud' ),
 		description: __(
