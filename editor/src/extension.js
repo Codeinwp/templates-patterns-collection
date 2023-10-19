@@ -24,7 +24,8 @@ import { v4 as uuidv4 } from 'uuid';
 import classnames from 'classnames';
 
 import { iconBlack } from './icon';
-import { getTemplate, publishTemplate } from './data/templates-cloud';
+import { getTemplate } from './data/templates-cloud';
+import PublishButton from './components/publish-button';
 import Notices from './components/notices';
 
 const { omit } = lodash;
@@ -33,7 +34,7 @@ const Exporter = () => {
 	const [ isOpen, setOpen ] = useState( false );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ title, setTitle ] = useState( '' );
-	const { canPredefine } = window.tiTpc;
+	const { canPredefine } = tiTpc;
 
 	const { createErrorNotice, createSuccessNotice } = useDispatch(
 		'core/notices'
@@ -155,20 +156,28 @@ const Exporter = () => {
 	const refreshData = async () => {
 		setLoading( 'publishing' );
 		try {
-			await getTemplate(_ti_tpc_template_id).then((results) => {
-				if (_ti_tpc_template_id === results.template_id) {
-					setScreenshotURL(results.template_thumbnail);
-					saveMeta(templateID, false);
+			await getTemplate( _ti_tpc_template_id ).then( ( results ) => {
+				if ( _ti_tpc_template_id === results.template_id ) {
+					setScreenshotURL( results.template_thumbnail );
+					saveMeta( templateID, false );
 					createSuccessNotice(
-						__('Template Data Refreshed.', 'templates-patterns-collection'),
+						__(
+							'Template Data Refreshed.',
+							'templates-patterns-collection'
+						),
 						{
 							type: 'snackbar',
 						}
 					);
 				}
-			});
+			} );
 		} catch ( error ) {
-			createErrorNotice( __( 'Something happened when refreshing the template data.', 'templates-patterns-collection') )
+			createErrorNotice(
+				__(
+					'Something happened when refreshing the template data.',
+					'templates-patterns-collection'
+				)
+			);
 		}
 		setLoading( false );
 	};
@@ -208,7 +217,8 @@ const Exporter = () => {
 						message === 'Sorry, you are not allowed to do that.'
 					) {
 						message = __(
-							'Could not save template, check that the template is not empty.', 'templates-patterns-collection'
+							'Could not save template, check that the template is not empty.',
+							'templates-patterns-collection'
 						);
 					}
 					createErrorNotice( message, {
@@ -217,9 +227,15 @@ const Exporter = () => {
 				} else {
 					window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
-					createSuccessNotice( __( 'Template saved.', 'templates-patterns-collection' ), {
-						type: 'snackbar',
-					} );
+					createSuccessNotice(
+						__(
+							'Template saved.',
+							'templates-patterns-collection'
+						),
+						{
+							type: 'snackbar',
+						}
+					);
 				}
 			}
 		} catch ( error ) {
@@ -255,17 +271,17 @@ const Exporter = () => {
 			return;
 		}
 
-		let meta = tiTpc.params.meta;
+		let currentMeta = tiTpc.params.meta;
 		// For Custom Layouts attach additional meta to check on import.
 		if ( type === 'neve_custom_layouts' ) {
-			meta = { ...tiTpc.params.meta, postType: type };
+			currentMeta = { ...tiTpc.params.meta, postType: type };
 		}
 		if ( ! doesExist ) {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
 				query: {
 					...omit( tiTpc.params, 'meta' ),
-					meta: JSON.stringify( meta ),
+					meta: JSON.stringify( currentMeta ),
 					template_name: postTitle,
 					template_type: 'gutenberg',
 					template_site_slug: _ti_tpc_site_slug || '',
@@ -302,7 +318,8 @@ const Exporter = () => {
 						message === 'Sorry, you are not allowed to do that.'
 					) {
 						message = __(
-							'Could not save template, check that the template is not empty.', 'templates-patterns-collection'
+							'Could not save template, check that the template is not empty.',
+							'templates-patterns-collection'
 						);
 					}
 					createErrorNotice( message, {
@@ -311,9 +328,15 @@ const Exporter = () => {
 				} else {
 					window.localStorage.setItem( 'tpcCacheBuster', uuidv4() );
 
-					createSuccessNotice( __( 'Template saved.', 'templates-patterns-collection' ), {
-						type: 'snackbar',
-					} );
+					createSuccessNotice(
+						__(
+							'Template saved.',
+							'templates-patterns-collection'
+						),
+						{
+							type: 'snackbar',
+						}
+					);
 
 					if ( res.template_id ) {
 						setTemplateID( res.template_id );
@@ -334,67 +357,6 @@ const Exporter = () => {
 		setLoading( false );
 	};
 
-	const PublishButton = () => {
-		if ( ! canPredefine ) {
-			return null;
-		}
-
-		const onPublish = async () => {
-			setLoading( 'publishing' );
-			try {
-				await publishTemplate(
-					_ti_tpc_template_id,
-					_ti_tpc_site_slug,
-					_ti_tpc_screenshot_url,
-					!_ti_tpc_published,
-					link
-				).then(async (r) => {
-					if (r.success) {
-						await getTemplate(_ti_tpc_template_id).then((results) => {
-							if (_ti_tpc_template_id === results.template_id) {
-								setScreenshotURL(results.template_thumbnail);
-								setPublished(!published);
-								saveMeta();
-								createSuccessNotice(
-									published
-										? __('Template Unpublished.', 'templates-patterns-collection')
-										: __('Template Published.', 'templates-patterns-collection'),
-									{
-										type: 'snackbar',
-									}
-								);
-							}
-						});
-
-					}
-				});
-			} catch ( error ) {
-				createErrorNotice( __( 'Something happened when publishing the template.', 'templates-patterns-collection') )
-			}
-			setLoading( false );
-		};
-
-		return (
-			<Button
-				isSecondary
-				onClick={ onPublish }
-				disabled={ false !== isLoading }
-				className={ classnames( {
-					'is-loading': 'publishing' === isLoading,
-				} ) }
-			>
-				{ published &&
-					( 'publishing' === isLoading
-						? __( 'Unpublishing', 'templates-patterns-collection' )
-						: __( 'Unpublish', 'templates-patterns-collection' ) ) }
-				{ ! published &&
-					( 'publishing' === isLoading
-						? __( 'Publishing', 'templates-patterns-collection' )
-						: __( 'Publish', 'templates-patterns-collection' ) ) }
-			</Button>
-		);
-	};
-
 	const saveMeta = ( ID = templateID, togglePublish = true ) => {
 		let post = null;
 
@@ -404,6 +366,10 @@ const Exporter = () => {
 			post = new wp.api.models.Page( { id: postId } );
 		} else if ( type === 'neve_custom_layouts' ) {
 			post = new wp.api.models.Neve_custom_layouts( { id: postId } );
+		}
+
+		if ( ! post ) {
+			return;
 		}
 
 		post.set( 'meta', {
@@ -424,7 +390,10 @@ const Exporter = () => {
 	return (
 		<Fragment>
 			<PluginBlockSettingsMenuItem
-				label={ __( 'Save to Templates Cloud', 'templates-patterns-collection' ) }
+				label={ __(
+					'Save to Templates Cloud',
+					'templates-patterns-collection'
+				) }
 				icon={ 'none' } // We don't want an icon, as new UI of Gutenberg does't have icons for Menu Items, but the component doesn't allow that so we pass an icon which doesn't exist.
 				onClick={ () => setOpen( true ) }
 			/>
@@ -485,7 +454,18 @@ const Exporter = () => {
 							type="url"
 							onChange={ setSiteSlug }
 						/>
-						<PublishButton />
+						<PublishButton
+							canPredefine={ canPredefine }
+							setLoading={ setLoading }
+							templateData={ { ...meta, link } }
+							setScreenshotURL={ setScreenshotURL }
+							setPublished={ setPublished }
+							saveMeta={ saveMeta }
+							creteErrorNotice={ createErrorNotice }
+							createSuccessNotice={ createSuccessNotice }
+							published={ published }
+							isLoading={ isLoading }
+						/>
 						{ published && (
 							<Button
 								isLink
@@ -495,9 +475,15 @@ const Exporter = () => {
 								className={ classnames( {
 									'is-loading': 'publishing' === isLoading,
 								} ) }
-								style={ {marginLeft: '12px', textDecoration: 'none'} }
+								style={ {
+									marginLeft: '12px',
+									textDecoration: 'none',
+								} }
 							>
-								{ __( 'Refresh', 'templates-patterns-collection') }
+								{ __(
+									'Refresh',
+									'templates-patterns-collection'
+								) }
 							</Button>
 						) }
 						<Notices />
