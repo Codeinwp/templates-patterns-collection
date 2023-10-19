@@ -10,20 +10,22 @@ import Exporter from './extension';
 import SiteEditorExporter from './site-editor-extension';
 import edit from './edit';
 
-registerBlockType( 'ti-tpc/templates-cloud', {
-	title: __( 'Templates Cloud' ),
-	description: __(
-		'A cloud based templates library which enables you to create ready-made website in no time.'
-	),
-	icon,
-	category: 'design',
-	keywords: [ 'templates cloud', 'patterns', 'template library' ],
-	supports: {
-		html: false,
-	},
-	edit,
-	save: () => null,
-} );
+if ( tiTpc.params.type === 'gutenberg' ) {
+	registerBlockType( 'ti-tpc/templates-cloud', {
+		title: __( 'Templates Cloud' ),
+		description: __(
+			'A cloud based templates library which enables you to create ready-made website in no time.'
+		),
+		icon,
+		category: 'design',
+		keywords: [ 'templates cloud', 'patterns', 'template library' ],
+		supports: {
+			html: false,
+		},
+		edit,
+		save: () => null,
+	} );
+}
 
 if ( parseInt( tiTpc.tier ) === 3 ) {
 	registerPlugin( 'ti-tpc', {

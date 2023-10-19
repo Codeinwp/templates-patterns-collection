@@ -12,6 +12,7 @@ import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 import { iconBlack } from './icon';
 import TemplatePredefine from './components/template-predefine';
+import ImportModal from './components/import-modal';
 
 const { omit } = lodash;
 
@@ -27,6 +28,7 @@ const SiteEditorExporter = () => {
 		'core/notices'
 	);
 	const [ isPostSavingPrev, setIsPostSavingPrev ] = useState( false );
+	const modalState = useState( false );
 
 	// This parameter is used internally to be able to publish a template.
 	const canPredefine = true; //window.tiTpc;
@@ -338,6 +340,18 @@ const SiteEditorExporter = () => {
 						}
 					/>
 				</PanelBody>
+				<PanelBody>
+					{ __(
+						'Import a template from your Templates Cloud library.',
+						'templates-patterns-collection'
+					) }
+					<Button isPrimary onClick={ () => modalState[ 1 ]( true ) }>
+						{ __(
+							'Import from Templates Cloud',
+							'templates-patterns-collection'
+						) }
+					</Button>
+				</PanelBody>
 				{ canPredefine && (
 					<TemplatePredefine
 						templateData={ templateData }
@@ -353,6 +367,11 @@ const SiteEditorExporter = () => {
 					/>
 				) }
 			</PluginSidebar>
+			<ImportModal
+				isFse={ true }
+				autoLoad={ false }
+				modalState={ modalState }
+			/>
 		</Fragment>
 	);
 };
