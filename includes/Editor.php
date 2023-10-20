@@ -114,7 +114,39 @@ class Editor {
 		);
 	}
 
+	/**
+	 * Register global settings for FSE templates.
+	 */
 	public function tpc_register_settings() {
+		$can_predefine = apply_filters( 'ti_tpc_can_predefine', false );
+		$properties    = array(
+			'_ti_tpc_template_id'   => array(
+				'type' => 'string',
+			),
+			'_ti_tpc_template_sync' => array(
+				'type' => 'boolean',
+			),
+		);
+		if ( $can_predefine ) {
+			$properties = array_merge(
+				$properties,
+				array(
+					'__ti_tpc_screenshot_url' => array(
+						'type' => 'string',
+					),
+					'_ti_tpc_site_slug'       => array(
+						'type' => 'string',
+					),
+					'_ti_tpc_published'       => array(
+						'type' => 'boolean',
+					),
+					'_ti_tpc_previewer_url'   => array(
+						'type' => 'string',
+					),
+				)
+			);
+		}
+
 		register_setting(
 			'',
 			'templates_patterns_collection_fse_templates',
@@ -125,23 +157,7 @@ class Editor {
 						'type'                 => 'object',
 						'additionalProperties' => array(
 							'type'       => 'object',
-							'properties' => array(
-								'_ti_tpc_template_id'     => array(
-									'type' => 'string',
-								),
-								'_ti_tpc_template_sync'   => array(
-									'type' => 'boolean',
-								),
-								'__ti_tpc_screenshot_url' => array(
-									'type' => 'string',
-								),
-								'_ti_tpc_site_slug'       => array(
-									'type' => 'string',
-								),
-								'_ti_tpc_published'       => array(
-									'type' => 'boolean',
-								),
-							),
+							'properties' => $properties,
 						),
 						'propertyNames'        => array(
 							'type' => 'string', // Specify that the key is a string

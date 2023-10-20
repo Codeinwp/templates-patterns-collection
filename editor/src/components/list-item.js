@@ -104,16 +104,13 @@ const ListItem = ( {
 					} ) }
 				>
 					<div className="preview-actions">
-						{ ! item.link && (
-							<Button
-								isSecondary
-								disabled={ false !== isLoading }
-								onClick={ importPreview }
-							>
-								{ __( 'Preview' ) }
-							</Button>
-						) }
-
+						<Button
+							isSecondary
+							disabled={ false !== isLoading }
+							onClick={ importPreview }
+						>
+							{ __( 'Preview' ) }
+						</Button>
 						<Button
 							isPrimary
 							isBusy={ 'importing' === isLoading }

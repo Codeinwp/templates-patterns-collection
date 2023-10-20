@@ -99,6 +99,7 @@ const Library = ( {
 		},
 		'fse-templates': {
 			label: __( 'FSE', 'templates-patterns-collection' ),
+			icon: 'gutenberg.jpg',
 		},
 	};
 

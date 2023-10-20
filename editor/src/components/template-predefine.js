@@ -116,12 +116,27 @@ const TemplatePredefine = ( {
 					} )
 				}
 			/>
+			<TextControl
+				label={ __( 'Previewer URL', 'templates-patterns-collection' ) }
+				value={ templateData._ti_tpc_previewer_url || '' }
+				help={ __(
+					'Provide a URL to a previewer for this template. This will be used to display a preview of the template in the editor.',
+					'templates-patterns-collection'
+				) }
+				type="url"
+				onChange={ ( newValue ) =>
+					setTemplateData( {
+						...templateData,
+						_ti_tpc_previewer_url: newValue,
+					} )
+				}
+			/>
 			<PublishButton
 				canPredefine={ canPredefine }
 				setLoading={ setLoading }
 				templateData={ {
 					...templateData,
-					link: '',
+					link: templateData._ti_tpc_previewer_url,
 				} }
 				setScreenshotURL={ setScreeShotUrl }
 				setPublished={ setPublished }
