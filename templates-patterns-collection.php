@@ -21,7 +21,6 @@ add_action( 'init', 'ti_tpc_flush_premalinks' );
 /**
  * Flush the permalinks after import
  *
- * @return bool
  */
 function ti_tpc_flush_premalinks() {
 	$flash_rules = get_transient( 'ti_tpc_should_flush_permalinks' );

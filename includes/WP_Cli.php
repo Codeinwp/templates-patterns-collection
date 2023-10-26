@@ -101,7 +101,7 @@ class WP_Cli {
 	/**
 	 * Get all sites as (string) $slug => (array) $args
 	 *
-	 * @param string $builder what editor to get sites for.
+	 * @param string|boolean $builder what editor to get sites for.
 	 *
 	 * @return array
 	 */

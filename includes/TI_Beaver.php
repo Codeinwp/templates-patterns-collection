@@ -100,6 +100,7 @@ class TI_Beaver extends FLBuilderModule {
 
 			// Merge and update the layout data.
 			$data = array_merge( $layout_data, $response->nodes );
+
 			FLBuilderModel::update_layout_data( $data );
 
 			// Merge and update the layout settings.
@@ -303,7 +304,7 @@ class TI_Beaver extends FLBuilderModule {
 			$url,
 			array(
 				'headers' => array(
-					'Authorization' => 'Bearer ' . isset( $bearer['bearer'] ) ? $bearer['bearer'] : '',
+					'Authorization' => 'Bearer ' . ( ! empty( $bearer['bearer'] ) && is_string( $bearer['bearer'] ) ? $bearer['bearer'] : '' ),
 				),
 			)
 		);

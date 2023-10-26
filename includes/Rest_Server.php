@@ -294,6 +294,7 @@ class Rest_Server {
 		foreach ( $params as $template ) {
 			$id = $this->insert_single_template( $template );
 
+			// @phpstan-ignore-next-line
 			if ( $id instanceof \WP_Error ) {
 				return new WP_REST_Response(
 					array(
@@ -333,7 +334,7 @@ class Rest_Server {
 	 * Insert Single Template
 	 *
 	 * @param $template
-	 * @return int|\WP_Error
+	 * @return int
 	 */
 	private function insert_single_template( $template ) {
 		add_filter(
