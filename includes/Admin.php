@@ -642,7 +642,7 @@ class Admin {
 				'ajaxURL'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'      => wp_create_nonce( 'skip_subscribe_nonce' ),
 				'skipStatus' => $this->get_skip_subscribe_status() ? 'yes' : 'no',
-				'email'      => ( ! empty( $user ) ) ? $user->user_email : '',
+				'email'      => ( ! empty( $user->user_email ) ) ? $user->user_email : '',
 			),
 			'onboardingDone'      => array(
 				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
@@ -1017,7 +1017,7 @@ class Admin {
 	 *
 	 * @param array $theme_support the theme support array.
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	private function get_migrateable( $theme_support ) {
 		if ( ! isset( $theme_support['can_migrate'] ) ) {
@@ -1071,7 +1071,7 @@ class Admin {
 	 *
 	 * @param string $previous_theme Previous theme slug.
 	 *
-	 * @return string
+	 * @return string|bool
 	 */
 	private function get_parent_theme( $previous_theme ) {
 		$available_themes = wp_get_themes();

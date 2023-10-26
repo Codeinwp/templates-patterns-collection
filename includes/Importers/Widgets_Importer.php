@@ -65,7 +65,7 @@ class Widgets_Importer {
 	 * Widget import process.
 	 *
 	 * @param array $data Widgets data.
-	 * @return \WP_Error
+	 * @return \WP_Error|void
 	 */
 	public function actually_import( $data ) {
 		global $wp_registered_sidebars;
@@ -115,7 +115,7 @@ class Widgets_Importer {
 				$instance_id_number = str_replace( $id_base . '-', '', $widget_instance_id );
 
 				// Does site support this widget?
-				if ( ! $fail && ! isset( $available_widgets[ $id_base ] ) ) {
+				if ( ! isset( $available_widgets[ $id_base ] ) ) {
 					$fail = true;
 				}
 

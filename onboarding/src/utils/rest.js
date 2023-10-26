@@ -1,4 +1,4 @@
-/* global tiobDash, FormData, fetch */
+/* global tiobDash, FormData, fetch, jQuery, ajaxurl */
 /* eslint-disable no-console */
 
 export const send = ( route, data, simple = false ) => {
@@ -116,16 +116,17 @@ export const track = async ( trackingId = '', data ) => {
 
 /**
  * Get logs from server using ajax.
+ *
  * @param {Object} args - ajax arguments
  */
-export const getLogsFromServer = (args) => {
-	jQuery.ajax({
+export const getLogsFromServer = ( args ) => {
+	jQuery.ajax( {
 		type: 'post',
 		url: ajaxurl,
 		data: {
 			action: 'tpc_get_logs',
 			nonce: tiobDash.nonce,
 		},
-		...args
-	})
-}
+		...args,
+	} );
+};
