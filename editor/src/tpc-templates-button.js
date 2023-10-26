@@ -5,9 +5,14 @@ import { createPortal, useLayoutEffect, useRef } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 
 /**
+ * Internal dependencies
+ */
+import TpcTemplatesButton from './components/tpc-templates-button';
+
+/**
  * A wrapper for the TPC templates button that renders it inside post header center.
  */
-function WrappedTPCTemplatesButton() {
+function WrappedTpcTemplatesButton() {
 	const root = useRef( null );
 	const referenceNode = useRef( null );
 
@@ -25,7 +30,7 @@ function WrappedTPCTemplatesButton() {
 
 	useLayoutEffect( () => {
 		referenceNode.current = document.querySelector(
-			'.edit-post-header__center'
+			'.edit-post-header__toolbar'
 		);
 
 		if ( referenceNode.current ) {
@@ -46,8 +51,8 @@ function WrappedTPCTemplatesButton() {
 	}, [ isEditedPostSaveable, isViewable ] );
 
 	return root.current
-		? createPortal( <button>Hi</button>, root.current )
+		? createPortal( <TpcTemplatesButton />, root.current )
 		: null;
 }
 
-export const render = WrappedTPCTemplatesButton;
+export const render = WrappedTpcTemplatesButton;
