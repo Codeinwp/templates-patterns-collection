@@ -1,3 +1,9 @@
+##### [Version 1.2.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.4...v1.2.5) (2023-10-26)
+
+### Improvements
+- **Enhance code quality**: Elevated the code quality for the recently introduced onboarding feature
+- **Fine-tune development processes and rectify minor issues**: Integrated the PHPStan tool to fine-tune the development workflow, proactively preventing potential code errors
+
 ##### [Version 1.2.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.3...v1.2.4) (2023-10-17)
 
 ### Bug Fixes
