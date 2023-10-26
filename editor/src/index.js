@@ -7,6 +7,8 @@ import './editor.scss';
 import './data/index.js';
 import { iconBlack as icon } from './icon';
 import Exporter from './extension';
+import { render as renderWrappedButton } from './tpc-templates-button'; // Adjust the import path based on your file structure
+
 import edit from './edit';
 
 registerBlockType( 'ti-tpc/templates-cloud', {
@@ -28,5 +30,9 @@ if ( parseInt( tiTpc.tier ) === 3 ) {
 	registerPlugin( 'ti-tpc', {
 		render: Exporter,
 		icon,
+	} );
+
+	registerPlugin( 'ti-tpc-templates-button', {
+		render: renderWrappedButton,
 	} );
 }
