@@ -70,7 +70,7 @@ export default compose(
 			trackingId: getTrackingId(),
 		};
 	} ),
-	withDispatch( ( dispatch, { step, query, trackingId, category } ) => {
+	withDispatch( ( dispatch, { step, query, trackingId } ) => {
 		const { setSearchQuery, setCategory, setOnboardingStep } = dispatch(
 			'ti-onboarding'
 		);
@@ -87,7 +87,7 @@ export default compose(
 						license_id: tiobDash.license,
 						site: tiobDash.onboarding.homeUrl || '',
 						search: query,
-						cat: category,
+						cat: 'all',
 						step_id: 1,
 						step_status: 'completed',
 					};
