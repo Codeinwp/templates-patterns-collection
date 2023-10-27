@@ -27,6 +27,7 @@ const ImportModal = ( {
 	currentTab,
 	removeBlock,
 	replaceBlocks,
+	insertBlocks,
 	closePreview,
 	autoLoad = true,
 	modalState,
@@ -138,6 +139,7 @@ const ImportModal = ( {
 			const meta = {
 				...omit( { ...fields }, '_wp_page_template' ),
 			};
+
 			editPost( { meta } );
 
 			if ( 'page' === type && fields._wp_page_template ) {
@@ -147,7 +149,14 @@ const ImportModal = ( {
 			}
 		}
 
-		replaceBlocks( clientId, parse( content ) );
+		if ( ! clientId ) {
+			// Insert a new block at the end of the post.
+			insertBlocks( parse( content ) );
+		} else {
+			replaceBlocks( clientId, parse( content ) );
+		}
+
+		closeModal();
 	};
 
 	const importFromPreview = async () => {
@@ -273,7 +282,7 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { removeBlock, replaceBlocks } = dispatch(
+		const { removeBlock, replaceBlocks, insertBlocks } = dispatch(
 			'core/block-editor'
 		);
 		const { togglePreview } = dispatch( 'tpc/block-editor' );
@@ -283,6 +292,7 @@ export default compose(
 		return {
 			removeBlock,
 			replaceBlocks,
+			insertBlocks,
 			closePreview,
 		};
 	} )

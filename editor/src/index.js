@@ -6,8 +6,8 @@ import { registerBlockType } from '@wordpress/blocks';
 import './editor.scss';
 import './data/index.js';
 import { iconBlack as icon } from './icon';
-import Exporter from './extension';
-import { render as renderWrappedButton } from './tpc-templates-button'; // Adjust the import path based on your file structure
+import Exporter from './plugins/extension';
+import { render as renderWrappedButton } from './plugins/wrapped-tpc-templates-button'; // Adjust the import path based on your file structure
 
 import edit from './edit';
 

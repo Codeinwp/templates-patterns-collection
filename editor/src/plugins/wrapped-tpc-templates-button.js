@@ -7,10 +7,10 @@ import { useSelect } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import TpcTemplatesButton from './components/tpc-templates-button';
+import TpcTemplatesButton from '../components/tpc-templates-button';
 
 /**
- * A wrapper for the TPC templates button that renders it inside post header center.
+ * A wrapper for the TPC templates button that renders it inside post header toolbar.
  */
 function WrappedTpcTemplatesButton() {
 	const root = useRef( null );
