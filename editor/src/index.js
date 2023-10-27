@@ -6,8 +6,9 @@ import { registerBlockType } from '@wordpress/blocks';
 import './editor.scss';
 import './data/index.js';
 import { iconBlack as icon } from './icon';
-import Exporter from './extension';
-import SiteEditorExporter from './site-editor-extension';
+import Exporter from './plugins/extension';
+import { render as renderWrappedButton } from './plugins/wrapped-tpc-templates-button'; // Adjust the import path based on your file structure
+
 import edit from './edit';
 
 if ( ! tiTpc.isSiteEditor ) {
@@ -31,5 +32,9 @@ if ( parseInt( tiTpc.tier ) === 3 ) {
 	registerPlugin( 'ti-tpc', {
 		render: tiTpc.isSiteEditor ? SiteEditorExporter : Exporter,
 		icon,
+	} );
+
+	registerPlugin( 'ti-tpc-templates-button', {
+		render: renderWrappedButton,
 	} );
 }

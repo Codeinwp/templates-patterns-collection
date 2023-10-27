@@ -23,10 +23,10 @@ import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 import classnames from 'classnames';
 
-import { iconBlack } from './icon';
-import { getTemplate } from './data/templates-cloud';
+import { iconBlack } from '../icon';
+import { getTemplate, publishTemplate } from '../data/templates-cloud';
 import PublishButton from './components/publish-button';
-import Notices from './components/notices';
+import Notices from '../components/notices';
 
 const { omit } = lodash;
 
@@ -34,7 +34,7 @@ const Exporter = () => {
 	const [ isOpen, setOpen ] = useState( false );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ title, setTitle ] = useState( '' );
-	const { canPredefine } = tiTpc;
+	const { canPredefine } = window.tiTpc;
 
 	const { createErrorNotice, createSuccessNotice } = useDispatch(
 		'core/notices'

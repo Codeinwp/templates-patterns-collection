@@ -28,6 +28,7 @@ const ImportModal = ( {
 	removeBlock,
 	replaceBlocks,
 	resetBlocks,
+	insertBlocks,
 	closePreview,
 	autoLoad = true,
 	isFse = false,
@@ -128,13 +129,6 @@ const ImportModal = ( {
 	};
 
 	const importBlocks = ( content, metaFields = [] ) => {
-		if ( isFse ) {
-			resetBlocks( parse( content ) ).then( () => {
-				setModalOpen( false );
-			} );
-			return;
-		}
-
 		updateLibrary( [] );
 		updateTemplates( [] );
 		const { allowed_post } = window.tiTpc;
@@ -147,6 +141,7 @@ const ImportModal = ( {
 			const meta = {
 				...omit( { ...fields }, '_wp_page_template' ),
 			};
+
 			editPost( { meta } );
 
 			if ( 'page' === type && fields._wp_page_template ) {
@@ -156,7 +151,13 @@ const ImportModal = ( {
 			}
 		}
 
-		replaceBlocks( clientId, parse( content ) );
+		if ( ! clientId ) {
+			isFse ? resetBlocks( parse( content ) ) : insertBlocks( parse( content ) );
+		} else {
+			replaceBlocks( clientId, parse( content ) );
+		}
+
+		closeModal();
 	};
 
 	const importFromPreview = async () => {
@@ -285,7 +286,9 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { removeBlock, replaceBlocks, resetBlocks } = dispatch( 'core/block-editor' );
+		const { removeBlock, replaceBlocks, insertBlocks, resetBlocks } = dispatch(
+			'core/block-editor'
+		);
 		const { togglePreview } = dispatch( 'tpc/block-editor' );
 
 		const closePreview = () => togglePreview( false );
@@ -294,6 +297,7 @@ export default compose(
 			removeBlock,
 			replaceBlocks,
 			resetBlocks,
+			insertBlocks,
 			closePreview,
 		};
 	} )
