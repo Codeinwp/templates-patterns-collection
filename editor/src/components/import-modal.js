@@ -128,7 +128,7 @@ const ImportModal = ( {
 		return false;
 	};
 
-	const importBlocks = ( content, metaFields = [] ) => {
+	const importBlocks = ( content, metaFields = [], template_type = '' ) => {
 		updateLibrary( [] );
 		updateTemplates( [] );
 		const { allowed_post } = window.tiTpc;
@@ -152,7 +152,11 @@ const ImportModal = ( {
 		}
 
 		if ( ! clientId ) {
-			isFse ? resetBlocks( parse( content ) ) : insertBlocks( parse( content ) );
+			if ( template_type === 'fse' ) {
+				resetBlocks( parse( content ) );
+			} else {
+				insertBlocks( parse( content ) );
+			}
 		} else {
 			replaceBlocks( clientId, parse( content ) );
 		}
@@ -166,7 +170,11 @@ const ImportModal = ( {
 			if ( r.__file && r.content && 'wp_export' === r.__file ) {
 				closePreview();
 				setImporting( false );
-				importBlocks( r.content, previewData.meta || [] );
+				importBlocks(
+					r.content,
+					previewData.meta || [],
+					previewData.template_type
+				);
 				return false;
 			}
 
@@ -286,9 +294,12 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { removeBlock, replaceBlocks, insertBlocks, resetBlocks } = dispatch(
-			'core/block-editor'
-		);
+		const {
+			removeBlock,
+			replaceBlocks,
+			insertBlocks,
+			resetBlocks,
+		} = dispatch( 'core/block-editor' );
 		const { togglePreview } = dispatch( 'tpc/block-editor' );
 
 		const closePreview = () => togglePreview( false );

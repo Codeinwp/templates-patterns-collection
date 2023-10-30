@@ -45,7 +45,7 @@ const ListItem = ( {
 		const data = await importTemplate( item.template_id );
 
 		if ( data.__file && data.content && 'wp_export' === data.__file ) {
-			importBlocks( data.content, item.meta || [] );
+			importBlocks( data.content, item.meta || [], item.template_type );
 		}
 		setLoading( false );
 	};
@@ -218,6 +218,9 @@ const ListItem = ( {
 
 				<div className="card-footer">
 					<p>{ item.template_name }</p>
+					{ item.template_type === 'fse' && (
+						<div className="type-label">FSE</div>
+					) }
 				</div>
 			</div>
 		);
@@ -242,6 +245,12 @@ const ListItem = ( {
 					item.template_name
 				) }
 			</div>
+
+			{ item.template_type === 'fse' && (
+				<div className="row-type">
+					<div className="type-label">FSE</div>
+				</div>
+			) }
 
 			{ deletable && (
 				<div className="row-controls">

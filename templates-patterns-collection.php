@@ -92,3 +92,4 @@ add_action( 'switch_theme', 'ti_tpc_activation_redirect' );
 
 // TODO: remove this filter
 add_filter( 'ti_tpc_can_predefine', '__return_true' );
+//update_option( 'templates_patterns_collection_fse_templates', null );

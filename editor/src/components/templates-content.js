@@ -24,6 +24,7 @@ const TemplatesContent = ( {
 } ) => {
 	const { setFetching } = useDispatch( 'tpc/block-editor' );
 	const [ layout, setLayout ] = useState( 'grid' );
+	const [ showFSE, setShowFSE ] = useState( false );
 
 	const [ isSearch, setSearch ] = useState( {
 		templates: false,
@@ -58,11 +59,13 @@ const TemplatesContent = ( {
 		if ( isGeneral ) {
 			await fetchTemplates( {
 				search: getSearchQuery(),
+				showFSE,
 				...order,
 			} );
 		} else {
 			await fetchLibrary( {
 				search: getSearchQuery(),
+				showFSE,
 				...order,
 			} );
 		}
@@ -121,6 +124,32 @@ const TemplatesContent = ( {
 		setFetching( false );
 	};
 
+	const onFSEChange = async () => {
+		setFetching( true );
+
+		const newValue = ! showFSE;
+		setShowFSE( newValue );
+
+		const order = getOrder();
+		const search = getSearchQuery();
+
+		if ( isGeneral ) {
+			await fetchTemplates( {
+				search,
+				...order,
+				showFSE: newValue,
+			} );
+		} else {
+			await fetchLibrary( {
+				search,
+				...order,
+				showFSE: newValue,
+			} );
+		}
+
+		setFetching( false );
+	};
+
 	const changeOrder = async ( order ) => {
 		setFetching( true );
 		if ( isGeneral ) {
@@ -142,6 +171,8 @@ const TemplatesContent = ( {
 		return (
 			<Fragment>
 				<Filters
+					showFSE={ showFSE }
+					onFSEChange={ onFSEChange }
 					layout={ layout }
 					sortingOrder={ getOrder() }
 					setLayout={ setLayout }
@@ -164,6 +195,8 @@ const TemplatesContent = ( {
 		return (
 			<div className="table-content">
 				<Filters
+					showFSE={ showFSE }
+					onFSEChange={ onFSEChange }
 					layout={ layout }
 					sortingOrder={ getOrder() }
 					setLayout={ setLayout }
@@ -187,6 +220,8 @@ const TemplatesContent = ( {
 	return (
 		<Fragment>
 			<Filters
+				showFSE={ showFSE }
+				onFSEChange={ onFSEChange }
 				layout={ layout }
 				sortingOrder={ getOrder() }
 				setLayout={ setLayout }

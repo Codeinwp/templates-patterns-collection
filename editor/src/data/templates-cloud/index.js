@@ -29,6 +29,10 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 		...additionalParams,
 	};
 
+	if ( tiTpc.params.type === 'gutenberg' && params.showFSE ) {
+		params.type = JSON.stringify( [ 'gutenberg', 'fse' ] );
+	}
+
 	const url = stringifyUrl( {
 		url: tiTpc.endpoint + 'page-templates',
 		query: params,
@@ -64,6 +68,10 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 		page: 0,
 		...additionalParams,
 	};
+
+	if ( tiTpc.params.type === 'gutenberg' && params.showFSE ) {
+		params.type = JSON.stringify( [ 'gutenberg', 'fse' ] );
+	}
 
 	const url = stringifyUrl( {
 		url: tiTpc.endpoint + 'templates',
