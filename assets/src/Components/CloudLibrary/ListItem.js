@@ -100,7 +100,7 @@ const ListItem = ( {
 					page: 0,
 					...sortingOrder,
 				} );
-				if ( item.template_type === 'fse-templates' ) {
+				if ( item.template_type === 'fse' ) {
 					removeFromFseGlobalOption( item.template_id );
 				}
 				setLoading( false );
@@ -224,7 +224,12 @@ const ListItem = ( {
 							/>
 						</form>
 					) : (
-						<p>{ itemName }</p>
+						<>
+							<p>{ itemName }</p>
+							{ item.template_type === 'fse' && (
+								<div className="type-label">FSE</div>
+							) }
+						</>
 					) }
 				</div>
 			</div>
@@ -246,6 +251,12 @@ const ListItem = ( {
 					itemName
 				) }
 			</div>
+
+			{ item.template_type === 'fse' && (
+				<div className="type">
+					<div className="type-label">FSE</div>
+				</div>
+			) }
 
 			{ userTemplate && (
 				<div className="controls">

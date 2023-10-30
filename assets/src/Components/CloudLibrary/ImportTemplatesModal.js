@@ -120,7 +120,7 @@ const ImportTemplatesModal = ( {
 				const templateType = item.template_type;
 				const mergedTemplate = { ...item, ...templates[ index ] };
 
-				if ( templateType === 'fse-templates' ) {
+				if ( templateType === 'fse' ) {
 					acc.fseTemplates.push( mergedTemplate );
 				} else {
 					acc.otherTemplates.push( mergedTemplate );
@@ -330,7 +330,7 @@ const ImportTemplatesModal = ( {
 			template_type: templateType,
 		} = templatesData[ 0 ];
 
-		if ( templateType === 'fse-templates' ) {
+		if ( templateType === 'fse' ) {
 			return __(
 				'This import will add a new Full Site Editing template to your site.',
 				'templates-patterns-collection'

@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { alignJustify, closeSmall, grid, search } from '@wordpress/icons';
 import { ENTER } from '@wordpress/keycodes';
 import { __ } from '@wordpress/i18n';
-import { Button } from '@wordpress/components';
+import { Button, ToggleControl } from '@wordpress/components';
 
 const sortByOptions = {
 	date: __( 'Date' ),
@@ -20,6 +20,9 @@ const Filters = ( {
 	sortingOrder,
 	setSortingOrder,
 	changeOrder,
+	showFSE,
+	setShowFSE,
+	type,
 } ) => {
 	return (
 		<div className="filters">
@@ -58,6 +61,15 @@ const Filters = ( {
 							</Button>
 						) ) }
 					</div>
+					{ type === 'gutenberg' && (
+						<div className="filter-fse">
+							<ToggleControl
+								label={ __( 'Show FSE Templates' ) }
+								onChange={ setShowFSE }
+								checked={ showFSE }
+							/>
+						</div>
+					) }
 				</div>
 
 				<div className="display-filters">

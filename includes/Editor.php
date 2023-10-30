@@ -85,7 +85,7 @@ class Editor {
 					'params'       => array(
 						'site_url'   => get_site_url(),
 						'license_id' => apply_filters( 'tiob_license_key', 'free' ),
-						'type'       => $screen->id === 'site-editor' ? 'fse-templates' : 'gutenberg',
+						'type'       => 'gutenberg',
 						'meta'       => Main::get_meta_fields( $post_id = get_the_ID(), $type = 'gutenberg' ),
 					),
 					'metaKeys'     => apply_filters( 'ti_tpc_template_meta', array(), $post_id = get_the_ID(), $type = 'gutenberg' ),

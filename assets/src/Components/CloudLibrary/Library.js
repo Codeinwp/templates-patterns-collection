@@ -34,18 +34,17 @@ const Library = ( {
 	const [ type, setType ] = useState( 'gutenberg' );
 	const [ toImport, setToImport ] = useState( [] );
 	const [ isGrid, setIsGrid ] = useState( isGeneral );
+	const [ showFSE, setShowFSE ] = useState( false );
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ currentPage, setCurrentPage ] = useState( {
 		gutenberg: 0,
 		elementor: 0,
 		beaver: 0,
-		'fse-templates': 0,
 	} );
 	const [ totalPages, setTotalPages ] = useState( {
 		gutenberg: 0,
 		elementor: 0,
 		beaver: 0,
-		'fse-templates': 0,
 	} );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ isSearch, setSearch ] = useState( false );
@@ -71,14 +70,12 @@ const Library = ( {
 			gutenberg: 0,
 			elementor: 0,
 			beaver: 0,
-			'fse-templates': 0,
 		} );
 
 		setTotalPages( {
 			gutenberg: 0,
 			elementor: 0,
 			beaver: 0,
-			'fse-templates': 0,
 		} );
 
 		loadTemplates();
@@ -97,10 +94,6 @@ const Library = ( {
 			label: __( 'Beaver', 'templates-patterns-collection' ),
 			icon: 'beaver.jpg',
 		},
-		'fse-templates': {
-			label: __( 'FSE', 'templates-patterns-collection' ),
-			icon: 'gutenberg.jpg',
-		},
 	};
 
 	const loadTemplates = ( updateItem = {} ) => {
@@ -118,6 +111,10 @@ const Library = ( {
 
 		if ( searchQuery ) {
 			params.search = searchQuery;
+		}
+
+		if ( type === 'gutenberg' && showFSE ) {
+			params.type = JSON.stringify( [ 'gutenberg', 'fse' ] );
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
@@ -186,6 +183,44 @@ const Library = ( {
 		if ( isGeneral ) {
 			params.template_site_slug = 'general';
 			params.premade = true;
+		}
+
+		if ( type === 'gutenberg' && showFSE ) {
+			params.type = JSON.stringify( [ 'gutenberg', 'fse' ] );
+		}
+
+		fetchLibrary( isGeneral, params ).then( ( r ) => {
+			setLibrary( {
+				...library,
+				[ type ]: [ ...r.templates ],
+			} );
+			setTotalPages( {
+				...totalPages,
+				[ type ]: r.total,
+			} );
+			setLoading( false );
+		} );
+	};
+
+	const handleFSEToggle = () => {
+		setLoading( true );
+
+		const newValue = ! showFSE;
+		setShowFSE( newValue );
+
+		const params = {
+			search: searchQuery,
+			type,
+			...getOrder(),
+		};
+
+		if ( isGeneral ) {
+			params.template_site_slug = 'general';
+			params.premade = true;
+		}
+
+		if ( type === 'gutenberg' && newValue ) {
+			params.type = JSON.stringify( [ 'gutenberg', 'fse' ] );
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
@@ -420,6 +455,8 @@ const Library = ( {
 				<Filters
 					currentTab={ currentTab }
 					isGrid={ isGrid }
+					showFSE={ showFSE }
+					setShowFSE={ handleFSEToggle }
 					setGrid={ setIsGrid }
 					isSearch={ isSearch }
 					searchQuery={ searchQuery }
@@ -428,6 +465,7 @@ const Library = ( {
 					sortingOrder={ getOrder() }
 					setSortingOrder={ setSorting }
 					changeOrder={ changeOrder }
+					type={ type }
 				/>
 				{ isLoading && <Loading isGrid={ isGrid } /> }
 				{ ! isLoading &&

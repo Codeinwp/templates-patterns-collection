@@ -10,9 +10,9 @@ import api from '@wordpress/api';
 
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
-import { iconBlack } from './icon';
-import TemplatePredefine from './components/template-predefine';
-import ImportModal from './components/import-modal';
+import { iconBlack } from '../icon';
+import TemplatePredefine from '../components/template-predefine';
+import ImportModal from '../components/import-modal';
 
 const { omit } = lodash;
 
@@ -39,18 +39,62 @@ const SiteEditorExporter = () => {
 	 * @return {Promise<void>} Promise.
 	 */
 	const fetchTemplate = async () => {
-		const { getEditedPostId, getEditedPostType } = wp.data.select(
-			'core/edit-site'
-		);
+		const {
+			getEditedPostId,
+			getEditedPostType,
+			getCurrentTemplateTemplateParts,
+		} = wp.data.select( 'core/edit-site' );
+
+		// Current template content
 		const { getEntityRecord } = wp.data.select( coreStore );
 		const editedPostId = getEditedPostId();
 		const editedPostType = getEditedPostType();
-
-		return await getEntityRecord(
+		const template = getEntityRecord(
 			'postType',
 			editedPostType,
 			editedPostId
 		);
+		let templateContent = template.content.raw;
+
+		// Current template parts
+		const currentTemplateParts = getCurrentTemplateTemplateParts();
+
+		// Iterate over the current templates and replace the content with the template part content
+		currentTemplateParts.forEach( ( currentTemplatePart ) => {
+			templateContent = replaceStringBySlugAndTheme(
+				templateContent,
+				currentTemplatePart.block.attributes.slug,
+				currentTemplatePart.block.attributes.theme,
+				currentTemplatePart.templatePart.content.raw
+			);
+		} );
+
+		return {
+			...template,
+			content: { ...template.content, raw: templateContent },
+		};
+	};
+
+	/**
+	 * Replace the template part content in the template content.
+	 *
+	 * @param {string} inputString The template content.
+	 * @param {string} targetSlug The template part slug.
+	 * @param {string} targetTheme The template part theme.
+	 * @param {string} replacement The template part content.
+	 * @return {string} The template content with the template part content replaced.
+	 */
+	const replaceStringBySlugAndTheme = (
+		inputString,
+		targetSlug,
+		targetTheme,
+		replacement
+	) => {
+		const regex = new RegExp(
+			`<!--\\s*wp:template-part\\s*{[^}]*"slug":"${ targetSlug }"[^}]*"theme":"${ targetTheme }"[^}]*}\\s*\\/-->`,
+			'g'
+		);
+		return inputString.replace( regex, replacement );
 	};
 
 	/**
@@ -113,7 +157,7 @@ const SiteEditorExporter = () => {
 					template_name:
 						template?.title?.raw ||
 						__( 'FSE Template', 'templates-patterns-collection' ),
-					template_type: 'fse-templates',
+					template_type: 'fse',
 					template_site_slug: templateData?._ti_tpc_site_slug || '',
 					template_thumbnail:
 						templateData?._ti_tpc_screenshot_url || '',

@@ -25,7 +25,7 @@ import classnames from 'classnames';
 
 import { iconBlack } from '../icon';
 import { getTemplate, publishTemplate } from '../data/templates-cloud';
-import PublishButton from './components/publish-button';
+import PublishButton from '../components/publish-button';
 import Notices from '../components/notices';
 
 const { omit } = lodash;
