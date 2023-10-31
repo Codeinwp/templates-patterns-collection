@@ -24,7 +24,9 @@ const TemplatesContent = ( {
 } ) => {
 	const { setFetching } = useDispatch( 'tpc/block-editor' );
 	const [ layout, setLayout ] = useState( 'grid' );
-	const [ showFSE, setShowFSE ] = useState( false );
+	const [ showFSE, setShowFSE ] = useState(
+		window?.localStorage?.tpcShowFse === 'true' || false
+	);
 
 	const [ isSearch, setSearch ] = useState( {
 		templates: false,
@@ -129,6 +131,7 @@ const TemplatesContent = ( {
 
 		const newValue = ! showFSE;
 		setShowFSE( newValue );
+		window.localStorage.setItem( 'tpcShowFse', newValue.toString() );
 
 		const order = getOrder();
 		const search = getSearchQuery();

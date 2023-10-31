@@ -24,11 +24,17 @@ import ImportModal from '../components/import-modal';
 const { omit } = lodash;
 
 const SiteEditorExporter = () => {
-	const { settingId } = useSelect( ( select ) => {
+	const { settingId, postType } = useSelect( ( select ) => {
 		return {
 			settingId: select( 'core/edit-site' ).getEditedPostId(),
+			postType: select( 'core/edit-site' ).getEditedPostType(),
 		};
 	} );
+
+	// Current template
+	const { getEntityRecord } = wp.data.select( coreStore );
+	const template = getEntityRecord( 'postType', postType, settingId );
+
 	const [ isOpen, setOpen ] = useState( false );
 	const [ title, setTitle ] = useState( '' );
 	const [ isLoading, setLoading ] = useState( false );
@@ -48,62 +54,28 @@ const SiteEditorExporter = () => {
 	 * @return {Promise<void>} Promise.
 	 */
 	const fetchTemplate = async () => {
-		const {
-			getEditedPostId,
-			getEditedPostType,
-			getCurrentTemplateTemplateParts,
-		} = wp.data.select( 'core/edit-site' );
-
-		// Current template content
-		const { getEntityRecord } = wp.data.select( coreStore );
-		const editedPostId = getEditedPostId();
-		const editedPostType = getEditedPostType();
-		const template = getEntityRecord(
-			'postType',
-			editedPostType,
-			editedPostId
+		const { getCurrentTemplateTemplateParts } = wp.data.select(
+			'core/edit-site'
 		);
-		let templateContent = template.content.raw;
+
+		let templateContent = wp.blocks.serialize(
+			wp.data.select( 'core/editor' ).getBlocks()
+		);
 
 		// Current template parts
 		const currentTemplateParts = getCurrentTemplateTemplateParts();
 
 		// Iterate over the current templates and replace the content with the template part content
 		currentTemplateParts.forEach( ( currentTemplatePart ) => {
-			templateContent = replaceStringBySlugAndTheme(
-				templateContent,
-				currentTemplatePart.block.attributes.slug,
-				currentTemplatePart.block.attributes.theme,
-				currentTemplatePart.templatePart.content.raw
-			);
+			const toReplace = wp.blocks.serialize( currentTemplatePart.block );
+			const replaceWith = currentTemplatePart.templatePart.content.raw;
+			templateContent = templateContent.replace( toReplace, replaceWith );
 		} );
 
 		return {
 			...template,
 			content: { ...template.content, raw: templateContent },
 		};
-	};
-
-	/**
-	 * Replace the template part content in the template content.
-	 *
-	 * @param {string} inputString The template content.
-	 * @param {string} targetSlug The template part slug.
-	 * @param {string} targetTheme The template part theme.
-	 * @param {string} replacement The template part content.
-	 * @return {string} The template content with the template part content replaced.
-	 */
-	const replaceStringBySlugAndTheme = (
-		inputString,
-		targetSlug,
-		targetTheme,
-		replacement
-	) => {
-		const regex = new RegExp(
-			`<!--\\s*wp:template-part\\s*{[^}]*"slug":"${ targetSlug }"[^}]*"theme":"${ targetTheme }"[^}]*}\\s*\\/-->`,
-			'g'
-		);
-		return inputString.replace( regex, replacement );
 	};
 
 	/**
@@ -114,14 +86,14 @@ const SiteEditorExporter = () => {
 	const onSavePage = async () => {
 		setLoading( true );
 
-		await fetchTemplate().then( async ( template ) => {
+		await fetchTemplate().then( async ( resultedTemplate ) => {
 			const data = {
 				__file: 'wp_export',
 				version: 2,
-				content: template?.content?.raw || '',
+				content: resultedTemplate?.content?.raw || '',
 			};
 
-			const url = getRequestUrl( template );
+			const url = getRequestUrl();
 
 			try {
 				const response = await apiFetch( {
@@ -154,10 +126,9 @@ const SiteEditorExporter = () => {
 	/**
 	 * Get the request URL.
 	 *
-	 * @param {Object} template Template object.
 	 * @return {string} Request URL.
 	 */
-	const getRequestUrl = ( template ) => {
+	const getRequestUrl = () => {
 		if ( ! templateData?._ti_tpc_template_id ) {
 			return stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
@@ -172,7 +143,6 @@ const SiteEditorExporter = () => {
 					template_site_slug: templateData?._ti_tpc_site_slug || '',
 					template_thumbnail:
 						templateData?._ti_tpc_screenshot_url || '',
-					content: template?.content?.raw || '',
 				},
 			} );
 		}
@@ -189,7 +159,6 @@ const SiteEditorExporter = () => {
 					title ||
 					template?.title?.raw ||
 					__( 'FSE Template', 'templates-patterns-collection' ),
-				content: template?.content?.raw || '',
 			},
 		} );
 	};
@@ -375,7 +344,13 @@ const SiteEditorExporter = () => {
 						isPrimary
 						isBusy={ isLoading }
 						disabled={ isLoading }
-						onClick={ () => setOpen( true ) }
+						onClick={ async () => {
+							if ( templateData?._ti_tpc_template_id ) {
+								await onSavePage();
+							} else {
+								setOpen( true );
+							}
+						} }
 					>
 						{ __(
 							'Save Page to Templates Cloud',
@@ -439,7 +414,7 @@ const SiteEditorExporter = () => {
 							'Template Name',
 							'templates-patterns-collection'
 						) }
-						value={ title }
+						value={ title || template?.title?.raw || '' }
 						onChange={ setTitle }
 					/>
 

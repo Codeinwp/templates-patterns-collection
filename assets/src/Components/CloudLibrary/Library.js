@@ -34,7 +34,9 @@ const Library = ( {
 	const [ type, setType ] = useState( 'gutenberg' );
 	const [ toImport, setToImport ] = useState( [] );
 	const [ isGrid, setIsGrid ] = useState( isGeneral );
-	const [ showFSE, setShowFSE ] = useState( false );
+	const [ showFSE, setShowFSE ] = useState(
+		window?.localStorage?.tpcShowFse === 'true' || false
+	);
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ currentPage, setCurrentPage ] = useState( {
 		gutenberg: 0,
@@ -207,6 +209,7 @@ const Library = ( {
 
 		const newValue = ! showFSE;
 		setShowFSE( newValue );
+		window.localStorage.setItem( 'tpcShowFse', newValue.toString() );
 
 		const params = {
 			search: searchQuery,
