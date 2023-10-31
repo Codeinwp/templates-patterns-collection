@@ -24,7 +24,7 @@ import { v4 as uuidv4 } from 'uuid';
 import classnames from 'classnames';
 
 import { iconBlack } from '../icon';
-import { getTemplate, publishTemplate } from '../data/templates-cloud';
+import { getTemplate } from '../data/templates-cloud';
 import PublishButton from '../components/publish-button';
 import Notices from '../components/notices';
 

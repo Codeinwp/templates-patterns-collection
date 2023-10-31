@@ -1,3 +1,4 @@
+/* global tiobDash */
 import classnames from 'classnames';
 import { alignJustify, closeSmall, grid, search } from '@wordpress/icons';
 import { ENTER } from '@wordpress/keycodes';
@@ -61,7 +62,7 @@ const Filters = ( {
 							</Button>
 						) ) }
 					</div>
-					{ type === 'gutenberg' && (
+					{ type === 'gutenberg' && tiobDash.isFSETheme && (
 						<div className="filter-fse">
 							<ToggleControl
 								label={ __( 'Show FSE Templates' ) }

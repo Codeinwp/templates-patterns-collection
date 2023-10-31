@@ -60,7 +60,7 @@ const Filters = ( {
 						</Button>
 					) ) }
 				</div>
-				{ tiTpc.params.type === 'gutenberg' && (
+				{ tiTpc.params.type === 'gutenberg' && tiTpc.isFSETheme && (
 					<div className="filter-fse">
 						<ToggleControl
 							label={ __( 'Show FSE Templates' ) }

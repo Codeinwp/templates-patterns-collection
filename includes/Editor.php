@@ -92,6 +92,7 @@ class Editor {
 					'canPredefine' => apply_filters( 'ti_tpc_can_predefine', false ),
 					'allowed_post' => self::get_allowed_post_types(),
 					'isSiteEditor' => $screen->id === 'site-editor',
+					'isFSETheme'   => Admin::is_fse_theme(),
 				)
 			)
 		);

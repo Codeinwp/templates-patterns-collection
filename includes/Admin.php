@@ -663,7 +663,24 @@ class Admin {
 			),
 			'onboardingAllowed'   => $this->should_load_onboarding(),
 			'onboardingRedirect'  => admin_url( 'admin.php?page=neve-onboarding' ),
+			'isFSETheme'          => self::is_fse_theme(),
 		);
+	}
+
+	/**
+	 * Check if the current theme is a FSE theme,
+	 *
+	 * @return string
+	 */
+	public static function is_fse_theme() {
+		if ( function_exists( 'wp_is_block_theme' ) ) {
+			return (bool) wp_is_block_theme();
+		}
+		if ( function_exists( 'gutenberg_is_fse_theme' ) ) {
+			return (bool) gutenberg_is_fse_theme();
+		}
+
+		return false;
 	}
 
 	/**

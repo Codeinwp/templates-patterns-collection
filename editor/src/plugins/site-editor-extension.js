@@ -1,7 +1,14 @@
 /* eslint-disable no-undef */
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
-import { Button, Icon, PanelBody, ToggleControl } from '@wordpress/components';
+import {
+	Button,
+	Icon,
+	PanelBody,
+	ToggleControl,
+	Modal,
+	TextControl,
+} from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/edit-site';
 import { Fragment, useEffect, useState } from '@wordpress/element';
@@ -22,6 +29,8 @@ const SiteEditorExporter = () => {
 			settingId: select( 'core/edit-site' ).getEditedPostId(),
 		};
 	} );
+	const [ isOpen, setOpen ] = useState( false );
+	const [ title, setTitle ] = useState( '' );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ templateData, setTemplateData ] = useState( {} );
 	const { createErrorNotice, createSuccessNotice } = useDispatch(
@@ -137,6 +146,7 @@ const SiteEditorExporter = () => {
 				handleSaveError( error );
 			}
 
+			setOpen( false );
 			setLoading( false );
 		} );
 	};
@@ -155,6 +165,7 @@ const SiteEditorExporter = () => {
 					...omit( tiTpc.params, 'meta' ),
 					meta: JSON.stringify( templateData ),
 					template_name:
+						title ||
 						template?.title?.raw ||
 						__( 'FSE Template', 'templates-patterns-collection' ),
 					template_type: 'fse',
@@ -175,6 +186,7 @@ const SiteEditorExporter = () => {
 				...omit( tiTpc.params, 'meta' ),
 				meta: JSON.stringify( templateData ),
 				template_name:
+					title ||
 					template?.title?.raw ||
 					__( 'FSE Template', 'templates-patterns-collection' ),
 				content: template?.content?.raw || '',
@@ -363,7 +375,7 @@ const SiteEditorExporter = () => {
 						isPrimary
 						isBusy={ isLoading }
 						disabled={ isLoading }
-						onClick={ onSavePage }
+						onClick={ () => setOpen( true ) }
 					>
 						{ __(
 							'Save Page to Templates Cloud',
@@ -372,7 +384,10 @@ const SiteEditorExporter = () => {
 					</Button>
 
 					<ToggleControl
-						label={ __( 'Automatically sync to the cloud' ) }
+						label={ __(
+							'Automatically sync to the cloud',
+							'templates-patterns-collection'
+						) }
 						checked={ templateData._ti_tpc_template_sync || false }
 						onChange={ () =>
 							setTemplateData( {
@@ -411,6 +426,33 @@ const SiteEditorExporter = () => {
 					/>
 				) }
 			</PluginSidebar>
+			{ isOpen && (
+				<Modal
+					title={ __(
+						'Save Template',
+						'templates-patterns-collection'
+					) }
+					onRequestClose={ () => setOpen( false ) }
+				>
+					<TextControl
+						label={ __(
+							'Template Name',
+							'templates-patterns-collection'
+						) }
+						value={ title }
+						onChange={ setTitle }
+					/>
+
+					<Button
+						isPrimary
+						isBusy={ isLoading }
+						disabled={ isLoading }
+						onClick={ onSavePage }
+					>
+						{ __( 'Save', 'templates-patterns-collection' ) }
+					</Button>
+				</Modal>
+			) }
 			<ImportModal
 				isFse={ true }
 				autoLoad={ false }
