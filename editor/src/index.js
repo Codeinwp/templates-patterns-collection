@@ -27,15 +27,15 @@ if ( ! tiTpc.isSiteEditor ) {
 		edit,
 		save: () => null,
 	} );
+
+	registerPlugin( 'ti-tpc-templates-button', {
+		render: renderWrappedButton,
+	} );
 }
 
 if ( parseInt( tiTpc.tier ) === 3 ) {
 	registerPlugin( 'ti-tpc', {
 		render: tiTpc.isSiteEditor ? SiteEditorExporter : Exporter,
 		icon,
-	} );
-
-	registerPlugin( 'ti-tpc-templates-button', {
-		render: renderWrappedButton,
 	} );
 }

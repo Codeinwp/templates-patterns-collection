@@ -51,9 +51,9 @@ const SiteEditorExporter = () => {
 	/**
 	 * Get the template data.
 	 *
-	 * @return {Promise<void>} Promise.
+	 * @return {Object} Template data.
 	 */
-	const fetchTemplate = async () => {
+	const fetchTemplate = () => {
 		const { getCurrentTemplateTemplateParts } = wp.data.select(
 			'core/edit-site'
 		);
@@ -86,41 +86,41 @@ const SiteEditorExporter = () => {
 	const onSavePage = async () => {
 		setLoading( true );
 
-		await fetchTemplate().then( async ( resultedTemplate ) => {
-			const data = {
-				__file: 'wp_export',
-				version: 2,
-				content: resultedTemplate?.content?.raw || '',
-			};
+		const resultedTemplate = fetchTemplate();
 
-			const url = getRequestUrl();
+		const data = {
+			__file: 'wp_export',
+			version: 2,
+			content: resultedTemplate?.content?.raw || '',
+		};
 
-			try {
-				const response = await apiFetch( {
-					url,
-					method: 'POST',
-					data,
-					parse: false,
-				} );
+		const url = getRequestUrl();
 
-				if ( ! response.ok ) {
-					return;
-				}
+		try {
+			const response = await apiFetch( {
+				url,
+				method: 'POST',
+				data,
+				parse: false,
+			} );
 
-				const res = await response.json();
-
-				if ( hasError( res ) ) {
-					return;
-				}
-
-				handleSaveSuccess( res );
-			} catch ( error ) {
-				handleSaveError( error );
+			if ( ! response.ok ) {
+				return;
 			}
 
-			setOpen( false );
-			setLoading( false );
-		} );
+			const res = await response.json();
+
+			if ( hasError( res ) ) {
+				return;
+			}
+
+			handleSaveSuccess( res );
+		} catch ( error ) {
+			handleSaveError( error );
+		}
+
+		setOpen( false );
+		setLoading( false );
 	};
 
 	/**
