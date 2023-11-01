@@ -1,3 +1,4 @@
+/* global tiTpc */
 import { __ } from '@wordpress/i18n';
 import { Placeholder, Spinner } from '@wordpress/components';
 import { withSelect, useDispatch } from '@wordpress/data';
@@ -25,7 +26,7 @@ const TemplatesContent = ( {
 	const { setFetching } = useDispatch( 'tpc/block-editor' );
 	const [ layout, setLayout ] = useState( 'grid' );
 	const [ showFSE, setShowFSE ] = useState(
-		window?.localStorage?.tpcShowFse === 'true' || false
+		tiTpc.isFSETheme ? window?.localStorage?.tpcShowFse === 'true' : false
 	);
 
 	const [ isSearch, setSearch ] = useState( {

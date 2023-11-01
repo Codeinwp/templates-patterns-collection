@@ -1,3 +1,4 @@
+/* global tiobDash */
 import classnames from 'classnames';
 import VizSensor from 'react-visibility-sensor';
 
@@ -6,7 +7,7 @@ import { useEffect, useState, Fragment, useContext } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Spinner, Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
-import { __, isRTL, sprintf } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 
 import { fetchLibrary } from './common';
 import ListItem from './ListItem';
@@ -35,7 +36,9 @@ const Library = ( {
 	const [ toImport, setToImport ] = useState( [] );
 	const [ isGrid, setIsGrid ] = useState( isGeneral );
 	const [ showFSE, setShowFSE ] = useState(
-		window?.localStorage?.tpcShowFse === 'true' || false
+		tiobDash.isFSETheme
+			? window?.localStorage?.tpcShowFse === 'true'
+			: false
 	);
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ currentPage, setCurrentPage ] = useState( {
