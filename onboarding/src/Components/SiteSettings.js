@@ -245,7 +245,9 @@ export const SiteSettings = ( {
 									<Button
 										isPrimary
 										className="ob-button full"
-										onClick={ () => identityChoicesSubmit() }
+										onClick={ () =>
+											identityChoicesSubmit()
+										}
 										disabled={
 											fetching ||
 											( ! siteName &&

@@ -93,7 +93,7 @@ class Logger {
 	 * Log info.
 	 *
 	 * @param string $label log label.
-	 * @param string $value log value.
+	 * @param string|int|null $value log value.
 	 */
 	public function log_info( $label, $value = null ) {
 		if ( $value === null ) {

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Templates Patterns Collection
  * Description:       This plugin is an add-on to Neve WordPress theme which offers access to Templates and Block Patterns library service to be used with the theme.
- * Version:           1.2.4
+ * Version:           1.2.5
  * Author:            ThemeIsle
  * Author URI:        https://themeisle.com
  * License:           GPLv3
@@ -21,7 +21,6 @@ add_action( 'init', 'ti_tpc_flush_premalinks' );
 /**
  * Flush the permalinks after import
  *
- * @return bool
  */
 function ti_tpc_flush_premalinks() {
 	$flash_rules = get_transient( 'ti_tpc_should_flush_permalinks' );
@@ -55,7 +54,7 @@ function ti_tpc_load_textdomain() {
 	load_plugin_textdomain( 'templates-patterns-collection', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
-define( 'TIOB_VERSION', '1.2.4' );
+define( 'TIOB_VERSION', '1.2.5' );
 define( 'TIOB_URL', plugin_dir_url( __FILE__ ) );
 define( 'TIOB_PATH', dirname( __FILE__ ) . '/' );
 define( 'TIOB_BASENAME', plugin_basename( __FILE__ ) );

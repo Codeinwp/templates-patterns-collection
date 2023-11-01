@@ -7,6 +7,8 @@
     <arg value="ps"/>
     <arg name="extensions" value="php"/>
 
+    <config name="php_version" value="50600"/>
+
     <exclude-pattern type="relative">beaver/includes</exclude-pattern>
     <exclude-pattern type="relative">vendor</exclude-pattern>
     <exclude-pattern type="relative">sample-theme</exclude-pattern>
