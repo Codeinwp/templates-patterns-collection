@@ -181,9 +181,6 @@ const Exporter = () => {
 		};
 
 		const { meta, ...filteredParams } = window.tiTpc.params;
-		console.log( { meta, filteredParams } );
-		console.log( tiTpc.params );
-		return;
 
 		const url = stringifyUrl( {
 			url: window.tiTpc.endpoint + 'templates',
