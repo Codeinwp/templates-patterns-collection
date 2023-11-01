@@ -1,14 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable camelcase */
-import {
-	withDispatch,
-	withSelect,
-	useDispatch,
-	useSelect,
-} from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 import { Modal, Button } from '@wordpress/components';
-import { compose } from '@wordpress/compose';
 import { parse } from '@wordpress/blocks';
 import { close } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
@@ -20,18 +14,21 @@ import { importTemplate } from '../data/templates-cloud';
 
 const { omit } = lodash;
 
-const ImportModal = ( {
-	clientId,
-	isPreview,
-	previewData,
-	currentTab,
-	removeBlock,
-	replaceBlocks,
-	insertBlocks,
-	closePreview,
-	autoLoad = true,
-	modalState,
-} ) => {
+const ImportModal = ( { clientId, autoLoad = true, modalState } ) => {
+	const { isPreview, currentTab, previewData } = useSelect( ( select ) => ( {
+		isPreview: select( 'tpc/block-editor' ).isPreview(),
+		currentTab: select( 'tpc/block-editor' ).getCurrentTab(),
+		previewData: select( 'tpc/block-editor' ).getPreview(),
+	} ) );
+
+	const { removeBlock, replaceBlocks, insertBlocks } = useDispatch(
+		'core/block-editor'
+	);
+
+	const { togglePreview } = useDispatch( 'tpc/block-editor' );
+
+	const closePreview = () => togglePreview( false );
+
 	const { type } = useSelect( ( select ) => ( {
 		type: select( 'core/editor' ).getEditedPostAttribute( 'type' ),
 	} ) );
@@ -270,30 +267,4 @@ const ImportModal = ( {
 	);
 };
 
-export default compose(
-	withSelect( ( select ) => {
-		const { isPreview, getPreview, getCurrentTab } = select(
-			'tpc/block-editor'
-		);
-		return {
-			isPreview: isPreview(),
-			currentTab: getCurrentTab(),
-			previewData: getPreview().item,
-		};
-	} ),
-	withDispatch( ( dispatch ) => {
-		const { removeBlock, replaceBlocks, insertBlocks } = dispatch(
-			'core/block-editor'
-		);
-		const { togglePreview } = dispatch( 'tpc/block-editor' );
-
-		const closePreview = () => togglePreview( false );
-
-		return {
-			removeBlock,
-			replaceBlocks,
-			insertBlocks,
-			closePreview,
-		};
-	} )
-)( ImportModal );
+export default ImportModal;
