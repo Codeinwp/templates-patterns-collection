@@ -670,7 +670,7 @@ class Admin {
 	/**
 	 * Check if the current theme is a FSE theme,
 	 *
-	 * @return string
+	 * @return bool
 	 */
 	public static function is_fse_theme() {
 		if ( function_exists( 'wp_is_block_theme' ) ) {
