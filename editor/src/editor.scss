@@ -509,6 +509,10 @@
 	}
 }
 
+.edit-post-header__center {
+	justify-content: left;
+}
+
 @media (max-width: 1439px) {
 	.tpc-template-cloud-modal {
 		.components-modal__frame {

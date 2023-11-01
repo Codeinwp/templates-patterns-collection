@@ -8,7 +8,7 @@ import './data/index.js';
 import { iconBlack as icon } from './icon';
 import Exporter from './plugins/extension';
 import SiteEditorExporter from './plugins/site-editor-extension';
-import { render as renderWrappedButton } from './plugins/wrapped-tpc-templates-button'; // Adjust the import path based on your file structure
+import WrappedTpcTemplatesButton from './plugins/wrapped-tpc-templates-button'; // Adjust the import path based on your file structure
 
 import edit from './edit';
 
@@ -29,7 +29,7 @@ if ( ! tiTpc.isSiteEditor ) {
 	} );
 
 	registerPlugin( 'ti-tpc-templates-button', {
-		render: renderWrappedButton,
+		render: WrappedTpcTemplatesButton,
 	} );
 }
 

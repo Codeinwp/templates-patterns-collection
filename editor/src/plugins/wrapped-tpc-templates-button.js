@@ -12,7 +12,7 @@ import TpcTemplatesButton from '../components/tpc-templates-button';
 /**
  * A wrapper for the TPC templates button that renders it inside post header toolbar.
  */
-function WrappedTpcTemplatesButton() {
+const WrappedTpcTemplatesButton = () => {
 	const root = useRef( null );
 	const referenceNode = useRef( null );
 
@@ -30,7 +30,7 @@ function WrappedTpcTemplatesButton() {
 
 	useLayoutEffect( () => {
 		referenceNode.current = document.querySelector(
-			'.edit-post-header__toolbar'
+			'.edit-post-header__center'
 		);
 
 		if ( referenceNode.current ) {
@@ -53,6 +53,6 @@ function WrappedTpcTemplatesButton() {
 	return root.current
 		? createPortal( <TpcTemplatesButton />, root.current )
 		: null;
-}
+};
 
-export const render = WrappedTpcTemplatesButton;
+export default WrappedTpcTemplatesButton;
