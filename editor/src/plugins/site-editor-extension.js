@@ -43,7 +43,7 @@ const SiteEditorExporter = () => {
 		'core/notices'
 	);
 	const [ isPostSavingPrev, setIsPostSavingPrev ] = useState( false );
-	const modalState = useState( false );
+	const [ modalOpen, setModalOpen ] = useState( false );
 
 	// This parameter is used internally to be able to publish a template.
 	const { canPredefine } = window.tiTpc;
@@ -379,7 +379,7 @@ const SiteEditorExporter = () => {
 						'Import a template from your Templates Cloud library.',
 						'templates-patterns-collection'
 					) }
-					<Button isPrimary onClick={ () => modalState[ 1 ]( true ) }>
+					<Button isPrimary onClick={ () => setModalOpen( true ) }>
 						{ __(
 							'Import from Templates Cloud',
 							'templates-patterns-collection'
@@ -431,7 +431,8 @@ const SiteEditorExporter = () => {
 			<ImportModal
 				isFse={ true }
 				autoLoad={ false }
-				modalState={ modalState }
+				modalOpen={ modalOpen }
+				setModalOpen={ setModalOpen }
 			/>
 		</Fragment>
 	);

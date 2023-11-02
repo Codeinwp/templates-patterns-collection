@@ -5,19 +5,23 @@ import ImportModal from './import-modal';
 import { iconBlack as icon } from '../icon';
 
 const TpcTemplatesButton = () => {
-	const modalState = useState( false );
+	const [ modalOpen, setModalOpen ] = useState( false );
 
 	return (
 		<>
 			<Button
 				icon={ icon }
 				isPrimary
-				onClick={ () => modalState[ 1 ]( true ) }
+				onClick={ () => setModalOpen( true ) }
 				style={ { backgroundColor: '#000', margin: '0 10px' } }
 			>
 				{ __( 'Templates Cloud', 'templates-patterns-collection' ) }
 			</Button>
-			<ImportModal autoLoad={ false } modalState={ modalState } />
+			<ImportModal
+				autoLoad={ false }
+				modalOpen={ modalOpen }
+				setModalOpen={ setModalOpen }
+			/>
 		</>
 	);
 };
