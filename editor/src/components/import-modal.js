@@ -12,9 +12,12 @@ import Content from './content';
 import PreviewFrame from '../../../assets/src/Components/CloudLibrary/PreviewFrame';
 import { importTemplate } from '../data/templates-cloud';
 
-const { omit } = lodash;
-
-const ImportModal = ( { clientId, autoLoad = true, modalState } ) => {
+const ImportModal = ( {
+	clientId,
+	autoLoad = true,
+	modalOpen,
+	setModalOpen,
+} ) => {
 	const { isPreview, currentTab, previewData } = useSelect( ( select ) => ( {
 		isPreview: select( 'tpc/block-editor' ).isPreview(),
 		currentTab: select( 'tpc/block-editor' ).getCurrentTab(),
@@ -41,7 +44,6 @@ const ImportModal = ( { clientId, autoLoad = true, modalState } ) => {
 		'tpc/block-editor'
 	);
 
-	const [ modalOpen, setModalOpen ] = modalState;
 	const [ importing, setImporting ] = useState( false );
 
 	const [ searchQuery, setSearchQuery ] = useState( {
@@ -133,9 +135,10 @@ const ImportModal = ( { clientId, autoLoad = true, modalState } ) => {
 			allowed_post.includes( type )
 		) {
 			const fields = JSON.parse( metaFields );
-			const meta = {
-				...omit( { ...fields }, '_wp_page_template' ),
-			};
+
+			// eslint-disable-next-line no-unused-vars
+			const { _wp_page_template, ...restFields } = fields;
+			const meta = { ...restFields };
 
 			editPost( { meta } );
 
