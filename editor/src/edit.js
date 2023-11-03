@@ -2,11 +2,15 @@ import { useState } from '@wordpress/element';
 import ImportModal from './components/import-modal';
 
 const Edit = ( { autoLoad = true } ) => {
-	const modalState = useState( false );
+	const [ modalOpen, setModalOpen ] = useState( false );
 
 	return (
 		<>
-			<ImportModal autoLoad={ autoLoad } modalState={ modalState } />
+			<ImportModal
+				autoLoad={ autoLoad }
+				modalOpen={ modalOpen }
+				setModalOpen={ setModalOpen }
+			/>
 		</>
 	);
 };
