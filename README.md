@@ -2,7 +2,7 @@
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** neve, templates, patterns, blocks, starter, sites, demo, content, import  
 **Requires at least:** 5.5  
-**Tested up to:** 6.3  
+**Tested up to:** 6.4  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
 **License:** GPLv3  
