@@ -344,10 +344,11 @@ class Admin {
 	 * Utility method to add a theme page from an array.
 	 *
 	 * @param array $page_data Page data.
+	 * @param int $offset Offset for the menu position.
 	 *
 	 * @return void
 	 */
-	private function add_theme_page_for_tiob( $page_data ) {
+	private function add_theme_page_for_tiob( $page_data, $offset = 2 ) {
 
 		if ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ) {
 			global $submenu;
@@ -363,11 +364,6 @@ class Admin {
 				$page_data['callback']
 			);
 
-			$offset = 2;
-			if ( $this->page_slug !== $page_data['menu_slug'] ) {
-				$offset = 3;
-			}
-
 			$item = array_pop( $submenu[ $theme_page ] );
 			array_splice( $submenu[ $theme_page ], $offset, 0, array( $item ) );
 			return;
@@ -382,12 +378,49 @@ class Admin {
 		);
 	}
 
+	private function add_subpage_for_tiob( $page_data ) {
+		$capability = 'activate_plugins';
+		add_submenu_page(
+			$page_data['parent_slug'],
+			$page_data['page_title'],
+			$page_data['menu_title'],
+			$capability,
+			$page_data['menu_slug'],
+			$page_data['callback']
+		);
+	}
+
 	/**
 	 * Register theme options page.
 	 *
 	 * @return bool|void
 	 */
 	public function register() {
+		$icon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI3LjQuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAzMiAzMiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzIgMzI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7ZmlsbDojRkZGRkZGO30KPC9zdHlsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTAsMS42QzAsMC43LDAuNywwLDEuNiwwaDI4LjhDMzEuMywwLDMyLDAuNywzMiwxLjZWMzBjMCwwLjktMC43LDEuNi0xLjYsMS42SDEuNkMwLjcsMzEuNSwwLDMwLjgsMCwzMFYxLjZ6CgkgTTEzLDE1Ljh2Ny41SDkuMVY4YzAtMC4xLDAtMC4xLDAuMS0wLjJjMCwwLDAuMSwwLDAuMiwwLjFsOS42LDcuOFY4LjJoMy44djE1LjJjMCwwLjEsMCwwLjEtMC4xLDAuMmMwLDAtMC4xLDAtMC4yLTAuMUwxMywxNS44egoJIE0yMi44LDI1LjdIOS4xVjI3aDEzLjdWMjUuN3oiLz4KPC9zdmc+Cg==';
+		$priority   = 61;  // The position of the menu item, 60 is the position of the Appearance menu.
+		$plugin_page = 'tiob-plugin';
+
+		$tpc_menu_page_data = array(
+			'page_title' => __( 'Template Cloud', 'templates-patterns-collection' ),
+			'menu_title' => __( 'Template Cloud', 'templates-patterns-collection' ),
+			'capability' => 'activate_plugins',
+			'menu_slug'  => $plugin_page,
+			'callback'   => array(
+				$this,
+				'render_starter_sites',
+			),
+		);
+
+		add_menu_page(
+			$tpc_menu_page_data['page_title'],
+			$tpc_menu_page_data['menu_title'],
+			$tpc_menu_page_data['capability'],
+			$tpc_menu_page_data['menu_slug'],
+			$tpc_menu_page_data['callback'],
+			$icon,
+			$priority
+		);
+
 		if ( $this->is_library_disabled() && $this->is_starter_sites_disabled() ) {
 			return false;
 		}
@@ -413,24 +446,43 @@ class Admin {
 			),
 		);
 
-		$library_data = array(
-			'page_title' => __( 'My Library', 'templates-patterns-collection' ),
-			'menu_title' => $prefix . __( 'My Library', 'templates-patterns-collection' ),
+		$page_templates_data = array(
+			'page_title' => __( 'Page Templates', 'templates-patterns-collection' ),
+			'menu_title' => $prefix . __( 'Page Templates', 'templates-patterns-collection' ),
 			'capability' => 'activate_plugins',
-			'menu_slug'  => ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '#library',
+			'menu_slug'  => ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '#pageTemplates',
 			'callback'   => '',
 		);
 
+		$library_data = array(
+			'parent_slug' => $plugin_page,
+			'page_title'  => __( 'My Library', 'templates-patterns-collection' ),
+			'menu_title'  => $prefix . __( 'My Library', 'templates-patterns-collection' ),
+			'capability'  => 'activate_plugins',
+			'menu_slug'   => $plugin_page,
+			'callback'    => $tpc_menu_page_data['callback'],
+		);
+		$settings_data = array(
+			'parent_slug' => $plugin_page,
+			'page_title'  => __( 'Settings', 'templates-patterns-collection' ),
+			'menu_title'  => $prefix . __( 'Settings', 'templates-patterns-collection' ),
+			'capability'  => 'activate_plugins',
+			'menu_slug'   => 'admin.php?page=' . $plugin_page . '#settings',
+			'callback'    => '',
+		);
+
 		if ( $this->is_starter_sites_disabled() && ! $this->is_library_disabled() ) {
-			$library_data['menu_slug'] = $this->page_slug;
+			$library_data['menu_slug'] = $plugin_page;
 			$library_data['callback']  = array(
 				$this,
 				'render_starter_sites',
 			);
-			$this->add_theme_page_for_tiob( $library_data );
+			$this->add_subpage_for_tiob( $library_data );
+			$this->add_subpage_for_tiob( $settings_data );
 			return false;
 		}
-		$this->add_theme_page_for_tiob( $starter_site_data );
+		$this->add_theme_page_for_tiob( $starter_site_data, 2 );
+		$this->add_theme_page_for_tiob( $page_templates_data, 3 );
 
 		if ( $this->should_load_onboarding() ) {
 			$onboarding_data = array(
@@ -443,13 +495,14 @@ class Admin {
 					'render_onboarding',
 				),
 			);
-			$this->add_theme_page_for_tiob( $onboarding_data );
+			$this->add_theme_page_for_tiob( $onboarding_data, 4 );
 		}
 
 		if ( $this->is_library_disabled() ) {
 			return false;
 		}
-		$this->add_theme_page_for_tiob( $library_data );
+		$this->add_subpage_for_tiob( $library_data );
+		$this->add_subpage_for_tiob( $settings_data );
 	}
 
 	/**
@@ -569,7 +622,9 @@ class Admin {
 			}
 		}
 
-		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false ) {
+		error_log( var_export( $screen->id, true ) );
+		$is_tiob_page = strpos( $screen->id, '_page_tiob-plugin' ) !== false;
+		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false && ! $is_tiob_page ) {
 			return;
 		}
 
@@ -585,7 +640,11 @@ class Admin {
 		wp_enqueue_style( 'tiob' );
 
 		wp_register_script( 'tiob', TIOB_URL . 'assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates' ) ), $dependencies['version'], true );
-		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
+		$tiobDash = apply_filters( 'neve_dashboard_page_data', $this->get_localization() );
+		if ( $is_tiob_page ) {
+			$tiobDash['hideStarterSites'] = true;
+		}
+		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $tiobDash ) );
 		wp_enqueue_script( 'tiob' );
 	}
 
