@@ -629,7 +629,6 @@ class Admin {
 			}
 		}
 
-		error_log( var_export( $screen->id, true ) );
 		$is_tiob_page = strpos( $screen->id, '_page_tiob-plugin' ) !== false;
 		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false && ! $is_tiob_page ) {
 			return;
