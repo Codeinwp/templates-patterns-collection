@@ -396,7 +396,7 @@ class Admin {
 	 * @return bool|void
 	 */
 	public function register() {
-		$icon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI3LjQuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAzMiAzMiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzIgMzI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7ZmlsbDojRkZGRkZGO30KPC9zdHlsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTAsMS42QzAsMC43LDAuNywwLDEuNiwwaDI4LjhDMzEuMywwLDMyLDAuNywzMiwxLjZWMzBjMCwwLjktMC43LDEuNi0xLjYsMS42SDEuNkMwLjcsMzEuNSwwLDMwLjgsMCwzMFYxLjZ6CgkgTTEzLDE1Ljh2Ny41SDkuMVY4YzAtMC4xLDAtMC4xLDAuMS0wLjJjMCwwLDAuMSwwLDAuMiwwLjFsOS42LDcuOFY4LjJoMy44djE1LjJjMCwwLjEsMCwwLjEtMC4xLDAuMmMwLDAtMC4xLDAtMC4yLTAuMUwxMywxNS44egoJIE0yMi44LDI1LjdIOS4xVjI3aDEzLjdWMjUuN3oiLz4KPC9zdmc+Cg==';
+		$icon = 'data:image/svg+xml;base64,PHN2ZwogICAgICAgIHdpZHRoPSIxMDAiCiAgICAgICAgaGVpZ2h0PSIxMDAiCiAgICAgICAgdmlld0JveD0iMCAwIDEwMCAxMDAiCiAgICAgICAgZmlsbD0iI2YwZjBmMSIKICAgICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCj4KICAgIDxwYXRoCiAgICAgICAgICAgIGQ9Ik05NS4wMjY0IDEwMEg0Ljk3MzU2QzIuMjI3OTcgMTAwIDAgOTcuNzcyIDAgOTUuMDI2NFY0Ljk3MzU2QzAgMi4yMjc5NyAyLjIyNzk3IDAgNC45NzM1NiAwSDk1LjAyNjRDOTcuNzcyIDAgMTAwIDIuMjI3OTcgMTAwIDQuOTczNTZWOTUuMDI2NEMxMDAgOTcuNzcyIDk3Ljc3MiAxMDAgOTUuMDI2NCAxMDBaIE04Mi42OTQxIDg2Ljc0NDhWMzAuODIwNVYxOC40NjUzSDcwLjM1MDJIMTQuNDE0NkwyNi43NTg0IDMwLjgyMDVINzAuMzUwMlY3NC40MDFMODIuNjk0MSA4Ni43NDQ4WiBNNDIuMjQxNiA1OC45MjkxTDQyLjI1MjggNzEuMTgzTDUzLjIzNTIgODIuMTY1M0w1My4xOTAyIDQ3Ljk4MDZMMTguOTk0MSA0Ny45MzU1TDI5Ljk3NjUgNTguOTA2Nkw0Mi4yNDE2IDU4LjkyOTFaIgogICAgICAgICAgICBmaWxsPSIjZjBmMGYxIgogICAgLz4KPC9zdmc+Cg==';
 		$priority   = 61;  // The position of the menu item, 60 is the position of the Appearance menu.
 		$plugin_page = 'tiob-plugin';
 
@@ -457,7 +457,7 @@ class Admin {
 		$library_data = array(
 			'parent_slug' => $plugin_page,
 			'page_title'  => __( 'My Library', 'templates-patterns-collection' ),
-			'menu_title'  => $prefix . __( 'My Library', 'templates-patterns-collection' ),
+			'menu_title'  => __( 'My Library', 'templates-patterns-collection' ),
 			'capability'  => 'activate_plugins',
 			'menu_slug'   => $plugin_page,
 			'callback'    => $tpc_menu_page_data['callback'],
@@ -465,7 +465,7 @@ class Admin {
 		$settings_data = array(
 			'parent_slug' => $plugin_page,
 			'page_title'  => __( 'Settings', 'templates-patterns-collection' ),
-			'menu_title'  => $prefix . __( 'Settings', 'templates-patterns-collection' ),
+			'menu_title'  => __( 'Settings', 'templates-patterns-collection' ),
 			'capability'  => 'activate_plugins',
 			'menu_slug'   => 'admin.php?page=' . $plugin_page . '#settings',
 			'callback'    => '',
@@ -719,6 +719,26 @@ class Admin {
 			),
 			'onboardingAllowed'   => $this->should_load_onboarding(),
 			'onboardingRedirect'  => admin_url( 'admin.php?page=neve-onboarding' ),
+			'links' => array(
+				array(
+					'label' => __( 'Support', 'templates-patterns-collection' ),
+					'url' => tsdk_utmify( 'https://themeisle.com/contact/', 'settings_page' ),
+				),
+				array(
+					'label' => __( 'Feature request', 'templates-patterns-collection' ),
+					'target' => '_self',
+					'url' => admin_url( 'admin.php?page=tiob-plugin&tab=feedback#settings' ),
+				),
+				array(
+					'label' => __( 'Leave a review', 'templates-patterns-collection' ),
+					'url' => 'https://wordpress.org/support/plugin/templates-patterns-collection/reviews/#new-post',
+				),
+				array(
+					'label' => __( 'Documentation', 'templates-patterns-collection' ),
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/article/1354-neve-template-cloud-library', 'settings_page' ),
+					'is_button' => true,
+				)
+			)
 		);
 	}
 

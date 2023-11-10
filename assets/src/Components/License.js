@@ -104,10 +104,11 @@ const License = ( { setLicense, license } ) => {
 
 	const children = () => (
 		<>
-			<form onSubmit={ toggleLicense }>
+			<form className="license-form" onSubmit={ toggleLicense }>
 				<TextControl
 					disabled={ isValid }
 					onChange={ setLicenseKey }
+					label={ __( 'License Key', 'templates-patterns-collection' ) }
 					value={
 						isValid
 							? '******************************' +
@@ -145,10 +146,6 @@ const License = ( { setLicense, license } ) => {
 	return (
 		<Card
 			classNames={ 'license' }
-			title={
-				'Templates Collection ' +
-				__( 'License', 'templates-patterns-collection' )
-			}
 			description={ description() }
 			children={ children() }
 		/>

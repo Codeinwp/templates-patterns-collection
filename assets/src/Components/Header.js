@@ -154,7 +154,7 @@ const TabNavigation = ( {
 			{/*		</Button>*/}
 			{/*	);*/}
 			{/*} ) }*/}
-			{ currentTab !== 'starterSites' && ! tiobDash.hideMyLibrary && (
+			{ currentTab !== 'starterSites' && currentTab !== 'settings' && ! tiobDash.hideMyLibrary && (
 				<Button
 					icon={ update }
 					onClick={ sync }
@@ -216,6 +216,9 @@ const BrandTitle = ( currentTab ) => {
 			break;
 		case 'library':
 			title = __( 'My Library', 'templates-patterns-collection' );
+			break;
+		case 'settings':
+			title = __( 'Settings', 'templates-patterns-collection' );
 			break;
 	}
 
