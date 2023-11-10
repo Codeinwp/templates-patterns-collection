@@ -332,7 +332,7 @@ const Library = ( {
 								) }
 
 								{ showLicenseToggle && (
-									<Button isLink style={{ marginLeft: '12px' }} onClick={ () => { setLicenseOpen(true) } }>
+									<Button isLink style={{ marginLeft: '12px' }} href={ tiobDash?.tiobSettings }>
 										{ __( 'I already have a key', 'template-patterns-collection' ) }
 									</Button>
 								) }

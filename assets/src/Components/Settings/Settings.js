@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { Button, TextareaControl, Flex, FlexItem, Spinner } from '@wordpress/components';
+import { Button, TextareaControl, Flex, FlexItem, Spinner, ExternalLink } from '@wordpress/components';
 import {useEffect, useState} from "@wordpress/element";
 import classnames from "classnames";
 import License from "../License";
@@ -200,6 +200,7 @@ const Settings = () => {
                 <div className="links">
                     { links && links.map( ( link ) => {
                             const isButton = link?.is_button || false;
+                            const isExternal = link?.is_external || false;
 
                             return (
 
@@ -211,12 +212,19 @@ const Settings = () => {
                                             { link?.label || '' }
                                         </Button>
                                     ) : (
-                                        <a
-                                            href={ link?.url || '#' }
-                                            target={ link?.target || '_blank' }
-                                        >
-                                            { link?.label || '' }
-                                        </a>
+                                        isExternal ? (
+                                            <ExternalLink
+                                                href={ link?.url || '#' }>
+                                                { link?.label || '' }
+                                            </ExternalLink>
+                                        ) : (
+                                            <a
+                                                href={ link?.url || '#' }
+                                                target={ link?.target || '_blank' }
+                                            >
+                                                { link?.label || '' }
+                                            </a>
+                                        )
                                     )
                             );
                         } )

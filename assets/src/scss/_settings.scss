@@ -53,11 +53,41 @@
   }
 
   .license {
+    border: 0;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+    background: none;
+
     .license-form {
       display: flex;
+      grid-gap: 8px;
       .components-base-control__field {
         margin: 0;
+        .components-base-control__label {
+          text-transform: initial;
+          font-size: 14px;
+        }
+        .components-text-control__input {
+          font-size: 14px;
+          padding: 8px 16px;
+        }
       }
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+      grid-gap: 8px;
+      margin-top: 16px;
+      .dashicon.verified {
+        color: green;
+        & + span {
+          color: green;
+        }
+      }
+    }
+
+    .components-notice.is-error {
+      margin: 0;
     }
   }
 }
