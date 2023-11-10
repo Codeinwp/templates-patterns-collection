@@ -48,7 +48,6 @@ const TabNavigation = ( {
 
 	const onHashChanged = () => {
 		const hash = getTabHash( buttons );
-		console.log( hash );
 		if ( null === hash ) {
 			return;
 		}
@@ -59,12 +58,8 @@ const TabNavigation = ( {
 		}
 		const tiobMenu = document.getElementById( 'toplevel_page_tiob-plugin' );
 
-		console.log( {menu} );
-		console.log( {tiobMenu} );
-
 		const lookupHashList = [ '#pageTemplates', '#settings' ];
 		const itemHashList = lookupHashList.map( ( itemHash ) => {
-			console.log( {itemHash} );
 			return {
 				hash: itemHash,
 				item: menu.querySelector( `a[href="themes.php?page=tiob-starter-sites${ itemHash }"]` )
@@ -72,14 +67,13 @@ const TabNavigation = ( {
 					|| tiobMenu.querySelector( `a[href="admin.php?page=tiob-plugin${ itemHash }"]` ),
 			}
 		} );
-		console.log( {itemHashList} );
 
 		const hasAllItemsDefined = itemHashList.reduce( ( acc, link ) => { return ( link?.item ) ? ++acc : acc }, 0 ) === itemHashList.length;
 
+		// The logic here is to ensure the sidebar menu items appear as active when the user navigates to a page via the URL hash (through react).
 		if ( hasAllItemsDefined ) {
 			for ( let i in itemHashList ) {
 				const link = itemHashList[ i ];
-				console.log( link.hash, hash );
 				if ( link.hash.replace('#', '') === hash ) {
 					let siblings = link.item.parentElement.parentElement.children;
 					for ( let child of siblings ) {
@@ -89,44 +83,6 @@ const TabNavigation = ( {
 				}
 			}
 		}
-
-		//const menu = document.getElementById( 'menu-appearance' );
-		// const libraryLink = menu.querySelector(
-		// 	'a[href="themes.php?page=tiob-starter-sites#library"]'
-		// ) ||  menu.querySelector(
-		// 	'a[href="admin.php?page=tiob-starter-sites#library"]'
-		// );
-		// const pageTemplatesLink = menu.querySelector(
-		// 	'a[href="themes.php?page=tiob-starter-sites#pageTemplates"]'
-		// );
-		// const starterLink = menu.querySelector(
-		// 	'a[href="themes.php?page=tiob-starter-sites"]'
-		// );
-
-		// console.log( libraryLink );
-
-		// This is used only to set the active state of the links from the left admin nav.
-		// So we check that those items exist before trying to mutate them.
-		// if ( libraryLink && starterLink ) {
-		// 	const libraryItem = libraryLink.parentElement;
-		// 	const pageTemplatesItem = pageTemplatesLink.parentElement;
-		// 	const starterSitesItem = starterLink.parentElement;
-		// 	const activeItem = menu.querySelector( '.current' );
-		//
-		// 	activeItem.classList.remove( 'current' );
-		// 	libraryItem.classList.remove( 'current' );
-		// 	pageTemplatesItem.classList.remove( 'current' );
-		// 	switch ( hash ) {
-		// 		case 'library':
-		// 			libraryItem.classList.add( 'current' );
-		// 			break;
-		// 		case 'pageTemplates':
-		// 			pageTemplatesItem.classList.add( 'current' );
-		// 			break;
-		// 		default:
-		// 			starterSitesItem.classList.add( 'current' );
-		// 	}
-		// }
 		setCurrentTab( hash );
 	};
 
@@ -137,23 +93,6 @@ const TabNavigation = ( {
 
 	return (
 		<div className="header-nav">
-			{/*{ Object.keys( buttons ).map( ( slug ) => {*/}
-			{/*	return (*/}
-			{/*		<Button*/}
-			{/*			href={ '#' + slug }*/}
-			{/*			key={ slug }*/}
-			{/*			isTertiary*/}
-			{/*			isPressed={ slug === currentTab }*/}
-			{/*			onClick={ ( e ) => {*/}
-			{/*				e.preventDefault();*/}
-			{/*				setCurrentTab( slug );*/}
-			{/*				addUrlHash( slug );*/}
-			{/*			} }*/}
-			{/*		>*/}
-			{/*			{ buttons[ slug ] }*/}
-			{/*		</Button>*/}
-			{/*	);*/}
-			{/*} ) }*/}
 			{ currentTab !== 'starterSites' && currentTab !== 'settings' && ! tiobDash.hideMyLibrary && (
 				<Button
 					icon={ update }
@@ -172,29 +111,6 @@ const TabNavigation = ( {
 					) }
 				/>
 			) }
-			{/*{ currentTab !== 'starterSites' && ! tiobDash.hideMyLibrary && (*/}
-			{/*	<>*/}
-			{/*		<Button*/}
-			{/*			icon={ ! isLicenseOpen ? cloud : close }*/}
-			{/*			onClick={ () => {*/}
-			{/*				setLicenseOpen( ! isLicenseOpen );*/}
-			{/*			} }*/}
-			{/*			label={ __(*/}
-			{/*				'License',*/}
-			{/*				'templates-patterns-collection'*/}
-			{/*			) }*/}
-			{/*			className={ classnames( 'is-icon-btn', {*/}
-			{/*				'is-not-valid': ! isLicenseOpen && ! isValid,*/}
-			{/*				'is-valid': ! isLicenseOpen && isValid,*/}
-			{/*			} ) }*/}
-			{/*			data-content={ __(*/}
-			{/*				'License',*/}
-			{/*				'templates-patterns-collection'*/}
-			{/*			) }*/}
-			{/*		/>*/}
-			{/*		{ isLicenseOpen && <License /> }*/}
-			{/*	</>*/}
-			{/*) }*/}
 		</div>
 	);
 };
