@@ -386,7 +386,7 @@ class Admin {
 	 * @return void
 	 */
 	private function add_subpage_for_tiob( $page_data ) {
-		$capability = 'activate_plugins';
+		$capability = 'manage_options';
 		add_submenu_page(
 			$page_data['parent_slug'],
 			$page_data['page_title'],
@@ -410,7 +410,7 @@ class Admin {
 		$tpc_menu_page_data = array(
 			'page_title' => __( 'Template Cloud', 'templates-patterns-collection' ),
 			'menu_title' => __( 'Template Cloud', 'templates-patterns-collection' ),
-			'capability' => 'activate_plugins',
+			'capability' => 'manage_options',
 			'menu_slug'  => $plugin_page,
 			'callback'   => array(
 				$this,
