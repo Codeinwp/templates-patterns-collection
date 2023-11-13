@@ -137,6 +137,7 @@ const ListItem = ( {
 													setEditing( ! isEditing )
 												}
 												className="controls-popover"
+												inline
 											>
 												<div className="popover-content">
 													<TextControl

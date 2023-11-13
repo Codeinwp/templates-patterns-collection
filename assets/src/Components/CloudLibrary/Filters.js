@@ -60,6 +60,7 @@ const EditorSelector = ( { type, setType } ) => {
 						position="bottom center"
 						onClose={ toggleDropdown }
 						noArrow
+						inline
 					>
 						{ open && (
 							<ul className="options">
