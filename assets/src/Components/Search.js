@@ -39,6 +39,7 @@ const Search = ( {
 						<Popover
 							position="bottom center"
 							onClose={ toggleDropdown }
+							inline
 							noArrow
 						>
 							{ open && (
@@ -134,6 +135,7 @@ const Search = ( {
 						<Popover
 							position="bottom center"
 							onClose={ toggleDropdown }
+							inline
 							noArrow
 						>
 							{ open && (
