@@ -21,8 +21,6 @@ import { iconBlack } from '../icon';
 import TemplatePredefine from '../components/template-predefine';
 import ImportModal from '../components/import-modal';
 
-const { omit } = lodash;
-
 const SiteEditorExporter = () => {
 	const { settingId, postType } = useSelect( ( select ) => {
 		return {
@@ -129,11 +127,12 @@ const SiteEditorExporter = () => {
 	 * @return {string} Request URL.
 	 */
 	const getRequestUrl = () => {
+		const { meta, ...filteredParams } = tiTpc.params;
 		if ( ! templateData?._ti_tpc_template_id ) {
 			return stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
 				query: {
-					...omit( tiTpc.params, 'meta' ),
+					...filteredParams,
 					meta: JSON.stringify( templateData ),
 					template_name:
 						title ||
@@ -153,7 +152,7 @@ const SiteEditorExporter = () => {
 				'templates/' +
 				templateData?._ti_tpc_template_id,
 			query: {
-				...omit( tiTpc.params, 'meta' ),
+				...filteredParams,
 				meta: JSON.stringify( templateData ),
 				template_name:
 					title ||
