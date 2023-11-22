@@ -341,6 +341,21 @@ class Admin {
 	}
 
 	/**
+	 * Use the features defined in the TIOB plugin to check for specific support.
+	 *
+	 * @param string $feature The feature to check for.
+	 *
+	 * @return bool
+	 */
+	private function tiob_has_support( $feature ) {
+		if ( defined( 'TIOB_FEATURES' ) ) {
+			$features = TIOB_FEATURES;
+			return isset( $features[ $feature ] );
+		}
+		return false;
+	}
+
+	/**
 	 * Utility method to add a theme page from an array.
 	 *
 	 * @param array $page_data Page data.
@@ -366,6 +381,11 @@ class Admin {
 
 			$item = array_pop( $submenu[ $theme_page ] );
 			array_splice( $submenu[ $theme_page ], $offset, 0, array( $item ) );
+			return;
+		}
+
+		// When using the new menu location we will not register items on the theme page anymore.
+		if ( $this->tiob_has_support( 'new_menu' ) ) {
 			return;
 		}
 
