@@ -18,8 +18,6 @@ import Content from './components/content';
 import PreviewFrame from '../../assets/src/Components/CloudLibrary/PreviewFrame';
 import { importTemplate } from './data/templates-cloud';
 
-const { omit } = lodash;
-
 const Edit = ( {
 	clientId,
 	isPreview,
@@ -133,8 +131,9 @@ const Edit = ( {
 			allowed_post.includes( type )
 		) {
 			const fields = JSON.parse( metaFields );
+			const { _wp_page_template, ...filteredFields } = { ...fields };
 			const meta = {
-				...omit( { ...fields }, '_wp_page_template' ),
+				...filteredFields,
 			};
 			editPost( { meta } );
 
