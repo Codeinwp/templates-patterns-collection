@@ -150,6 +150,47 @@ export const getTemplate = async ( template ) => {
 	}
 };
 
+/**
+ * Loop through an Elementor element and apply the function.
+ *
+ * @param {any} element  Elementor element.
+ * @param {*} applyFunc The function to apply on each child element.
+ */
+const loopElementorElement = ( element, applyFunc ) => {
+	applyFunc( element );
+
+	element?.elements?.forEach( ( item ) => {
+		loopElementorElement( item, applyFunc );
+	} );
+};
+
+/**
+ * Clean the template content from unnecessary data.
+ *
+ * @param {any} templateContent The template content.
+ * @param {Function} cleanFunc The function to apply on each element.
+ * @return {any} The cleaned template content.
+ */
+const cleanTemplateContent = ( templateContent, cleanFunc ) => {
+	if ( undefined === templateContent.content ) {
+		return templateContent;
+	}
+
+	const content = templateContent.content;
+
+	if ( Array.isArray( content ) ) {
+		content.forEach( ( item ) => {
+			loopElementorElement( item, cleanFunc );
+		} );
+	}
+};
+
+/**
+ * Import a template from TPC server for Elementor.
+ *
+ * @param {string} template The template slug.
+ * @return {any} The template content.
+ */
 export const importTemplate = async ( template ) => {
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ template }/import`,
@@ -180,6 +221,11 @@ export const importTemplate = async ( template ) => {
 			dispatchNotification( error.message );
 		}
 	}
+
+	cleanTemplateContent( content, ( element ) => {
+		// Remove imported images ID since they are not available on the current site via Media Library.
+		delete element?.settings?.background_image?.id;
+	} );
 
 	return content;
 };
