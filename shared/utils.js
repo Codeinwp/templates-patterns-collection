@@ -17,20 +17,9 @@ const loopElementorElement = ( element, applyFunc ) => {
  *
  * @param {any} templateContent The template content.
  * @param {Function} cleanFunc The function to apply on each element.
- * @return {any} The cleaned template content.
  */
 export const cleanTemplateContent = ( templateContent, cleanFunc ) => {
-	if ( undefined === templateContent.content ) {
-		return templateContent;
-	}
-
-	console.log( templateContent );
-
-	const content = templateContent.content;
-
-	if ( Array.isArray( content ) ) {
-		content.forEach( ( item ) => {
-			loopElementorElement( item, cleanFunc );
-		} );
-	}
+	templateContent?.content?.forEach?.( ( item ) => {
+		loopElementorElement( item, cleanFunc );
+	} );
 };
