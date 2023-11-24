@@ -64,10 +64,31 @@
       }
     }
   }
+
+  &.filter-selector {
+    margin-left: 8px;
+    width: inherit;
+    button {
+      border-radius: 8px;
+      border: 1px solid transparent;
+      padding: 5px 10px;
+      &:hover {
+        border: 1px solid $grey;
+      }
+    }
+    .dashicon + .editor-icon {
+      margin: 0 0 0 12px;
+    }
+    .options a {
+      min-width: 59px;
+      display: flex;
+      justify-content: center;
+    }
+  }
 }
 
 @mixin ob-editor-selector--laptop() {
-  .ob-body .ob-dropdown.editor-selector {
+  .ob-body .ob-dropdown.editor-selector:not(.filter-selector) {
     display: none;
   }
 }

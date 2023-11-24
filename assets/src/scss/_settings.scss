@@ -1,0 +1,93 @@
+.tiob-settings {
+  display: flex;
+  margin-top: 24px;
+  column-gap: 16px;
+  .panel {
+    background-color: #FFF;
+    min-height: 120px;
+    width: 100%;
+    padding: 16px 24px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    &.is-secondary {
+      flex-basis: 30%;
+      height: fit-content;
+    }
+
+    .setting-tabs {
+      display: flex;
+      box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+      button.tab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 14px;
+        width: auto;
+        padding: 16px 24px;
+        color: #2E2E2E;
+        border-radius: 0;
+
+        &:hover, &:focus {
+          color: #0566D5;
+          cursor: pointer;
+        }
+        &.active {
+          color: #0366D5;
+          box-shadow: 0 -4px 0 0 #0566D5 inset;
+        }
+      }
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      grid-gap: 12px;
+      padding: 12px 0;
+
+      .components-button {
+        justify-content: center;
+        margin-top: 12px;
+      }
+    }
+  }
+
+  .license {
+    border: 0;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+    background: none;
+
+    .license-form {
+      display: flex;
+      grid-gap: 8px;
+      .components-base-control__field {
+        margin: 0;
+        .components-base-control__label {
+          text-transform: initial;
+          font-size: 14px;
+        }
+        .components-text-control__input {
+          font-size: 14px;
+          padding: 8px 16px;
+        }
+      }
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+      grid-gap: 8px;
+      margin-top: 16px;
+      .dashicon.verified {
+        color: green;
+        & + span {
+          color: green;
+        }
+      }
+    }
+
+    .components-notice.is-error {
+      margin: 0;
+    }
+  }
+}
