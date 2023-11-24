@@ -179,12 +179,12 @@ const ImportTemplatesModal = ( {
 						<p className="description">
 							{ isSingle
 								? __(
-									'Template was successfully imported!',
-									'templates-patterns-collection'
+										'Template was successfully imported!',
+										'templates-patterns-collection'
 								  )
 								: __(
-									'Templates were successfully imported!',
-									'templates-patterns-collection'
+										'Templates were successfully imported!',
+										'templates-patterns-collection'
 								  ) }
 						</p>
 					</div>
@@ -197,7 +197,9 @@ const ImportTemplatesModal = ( {
 											icon={ pageIcon }
 											className="active"
 										/>
-										<span>{ parseEntities( page.title ) }</span>
+										<span>
+											{ parseEntities( page.title ) }
+										</span>
 										<div className="actions">
 											<Button
 												isTertiary
@@ -274,16 +276,16 @@ const ImportTemplatesModal = ( {
 
 		const text = isSingle
 			? sprintf(
-				/* translators: %s  the name of the template */
-				__(
-					'The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed.',
-						'templates-patterns-collection'
-				),
-				templatesData[ 0 ].template_name
+					/* translators: %s  the name of the template */
+					__(
+						'The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed.',
+					'templates-patterns-collection'
+					),
+					templatesData[ 0 ].template_name
 			  )
 			: __(
-				'All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed.',
-				'templates-patterns-collection'
+					'All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed.',
+					'templates-patterns-collection'
 			  );
 
 		return text;
@@ -307,13 +309,13 @@ const ImportTemplatesModal = ( {
 								isSingle
 									? /* translators: name of starter site */
 									  __(
-										'Import the %s template',
-										'templates-patterns-collection'
+											'Import the %s template',
+											'templates-patterns-collection'
 									  )
 									: /* translators: name of template */
 									  __(
-										'Import all templates from %s',
-										'templates-patterns-collection'
+											'Import all templates from %s',
+											'templates-patterns-collection'
 									  ),
 								isSingle
 									? templatesData[ 0 ].template_name
@@ -346,8 +348,8 @@ const ImportTemplatesModal = ( {
 						{ importing
 							? __( 'Importing' ) + '...'
 							: isSingle
-								? __( 'Import' )
-								: __( 'Import All Pages' ) }
+							? __( 'Import' )
+							: __( 'Import All Pages' ) }
 					</Button>
 				</div>
 			</>
@@ -358,8 +360,12 @@ const ImportTemplatesModal = ( {
 		<Modal
 			className={ classnames( [ 'ob-import-modal', { fetching } ] ) }
 			onRequestClose={ cancel }
-			shouldCloseOnClickOutside={ ( ! importing || importing === 'done' ) && ! fetching }
-			isDismissible={ ( ! importing || importing === 'done' ) && ! fetching }
+			shouldCloseOnClickOutside={
+				( ! importing || importing === 'done' ) && ! fetching
+			}
+			isDismissible={
+				( ! importing || importing === 'done' ) && ! fetching
+			}
 		>
 			{ importing === 'done' ? <ImportDone /> : <ModalContent /> }
 		</Modal>
@@ -375,10 +381,9 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const {
-			setTemplateModal,
-			setImportModalStatus,
-		} = dispatch( 'neve-onboarding' );
+		const { setTemplateModal, setImportModalStatus } = dispatch(
+			'neve-onboarding'
+		);
 
 		return {
 			cancel: () => {
