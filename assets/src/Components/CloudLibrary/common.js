@@ -4,7 +4,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 import { models, loadPromise } from '@wordpress/api';
-import { cleanTemplateContent } from '../../utils/common';
+import { cleanTemplateContent } from '../../../../shared/utils';
 
 export const changeOption = ( option, value ) => {
 	const model = new models.Settings( {

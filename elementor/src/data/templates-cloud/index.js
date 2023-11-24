@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch, select } from '@wordpress/data';
-import { cleanTemplateContent } from '../utils.js';
+import { cleanTemplateContent } from '../../../../shared/utils';
 
 const { omit } = lodash;
 
