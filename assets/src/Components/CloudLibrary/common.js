@@ -173,7 +173,9 @@ export const fetchBulkData = async ( templates ) => {
 				data.forEach( ( template ) => {
 					cleanTemplateContent( template, ( element ) => {
 						// Remove imported images ID since they are not available on the current site via Media Library.
+						delete element?.settings?.image?.id;
 						delete element?.settings?.background_image?.id;
+						delete element?.settings?.background_overlay_image?.id;
 					} );
 				} );
 			}
