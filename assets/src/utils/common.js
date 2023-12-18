@@ -1,19 +1,19 @@
 import { __ } from '@wordpress/i18n';
 
-const addUrlHash = (hash) => {
+const addUrlHash = ( hash ) => {
 	window.location.hash = hash;
 };
 
 const getTabHash = ( tabs ) => {
 	let hash = window.location.hash;
 
-	if ('string' !== typeof window.location.hash) {
+	if ( 'string' !== typeof window.location.hash ) {
 		return null;
 	}
 
-	hash = hash.substring(1);
+	hash = hash.substring( 1 );
 
-	if (!Object.keys(tabs).includes(hash)) {
+	if ( ! Object.keys( tabs ).includes( hash ) ) {
 		return null;
 	}
 
@@ -80,4 +80,14 @@ const EDITOR_MAP_ARCHIVED = {
 	},
 };
 
-export { addUrlHash, getTabHash, trailingSlashIt, untrailingSlashIt, isTabbedEditor, CATEGORIES, EDITOR_MAP, EDITOR_MAP_ARCHIVED, TAGS };
+export {
+	addUrlHash,
+	getTabHash,
+	trailingSlashIt,
+	untrailingSlashIt,
+	isTabbedEditor,
+	CATEGORIES,
+	EDITOR_MAP,
+	EDITOR_MAP_ARCHIVED,
+	TAGS,
+};
