@@ -234,12 +234,12 @@ const ImportTemplatesModal = ( {
 						<p className="description">
 							{ isSingle
 								? __(
-									'Template was successfully imported!',
-									'templates-patterns-collection'
+										'Template was successfully imported!',
+										'templates-patterns-collection'
 								  )
 								: __(
-									'Templates were successfully imported!',
-									'templates-patterns-collection'
+										'Templates were successfully imported!',
+										'templates-patterns-collection'
 								  ) }
 						</p>
 					</div>
@@ -347,8 +347,8 @@ const ImportTemplatesModal = ( {
 				templateName
 			  )
 			: __(
-				'All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed.',
-				'templates-patterns-collection'
+					'All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed.',
+					'templates-patterns-collection'
 			  );
 	};
 
@@ -370,13 +370,13 @@ const ImportTemplatesModal = ( {
 								isSingle
 									? /* translators: name of starter site */
 									  __(
-										'Import the %s template',
-										'templates-patterns-collection'
+											'Import the %s template',
+											'templates-patterns-collection'
 									  )
 									: /* translators: name of template */
 									  __(
-										'Import all templates from %s',
-										'templates-patterns-collection'
+											'Import all templates from %s',
+											'templates-patterns-collection'
 									  ),
 								isSingle
 									? templatesData[ 0 ].template_name
@@ -409,8 +409,8 @@ const ImportTemplatesModal = ( {
 						{ importing
 							? __( 'Importing' ) + '...'
 							: isSingle
-								? __( 'Import' )
-								: __( 'Import All Pages' ) }
+							? __( 'Import' )
+							: __( 'Import All Pages' ) }
 					</Button>
 				</div>
 			</>

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch, select } from '@wordpress/data';
+import { cleanTemplateContent } from '../../../../shared/utils';
 
 const dispatchNotification = ( message ) =>
 	elementor.notifications.showToast( { message } );
@@ -154,6 +155,12 @@ export const getTemplate = async ( template ) => {
 	}
 };
 
+/**
+ * Import a template from TPC server for Elementor.
+ *
+ * @param {string} template The template slug.
+ * @return {any} The template content.
+ */
 export const importTemplate = async ( template ) => {
 	const { meta, ...filteredParams } = tiTpc.params;
 
@@ -186,6 +193,13 @@ export const importTemplate = async ( template ) => {
 			dispatchNotification( error.message );
 		}
 	}
+
+	cleanTemplateContent( content, ( element ) => {
+		// Remove imported images ID since they are not available on the current site via Media Library.
+		delete element?.settings?.image?.id;
+		delete element?.settings?.background_image?.id;
+		delete element?.settings?.background_overlay_image?.id;
+	} );
 
 	return content;
 };

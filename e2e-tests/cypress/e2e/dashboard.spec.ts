@@ -12,7 +12,7 @@ describe('Dashboard Page - Default', function () {
   };
 
   beforeEach(function () {
-    cy.loginToWp('admin', 'admin');
+    cy.visit('/');
     cy.visit('/wp-admin/admin.php?page=tiob-starter-sites');
   });
 

@@ -18,6 +18,8 @@ import ImportTemplatesModal from './ImportTemplatesModal';
 import Logo from '../Icon';
 import { LicensePanelContext } from '../LicensePanelContext';
 import FeedbackNotice from './FeedbackNotice';
+import {EDITOR_MAP} from '../../utils/common';
+import EditorSelector from '../EditorSelector';
 
 const Library = ( {
 	isGeneral,
@@ -66,6 +68,8 @@ const Library = ( {
 			orderby: 'date',
 		},
 	} );
+
+
 
 	useEffect( () => {
 		setLoading( true );
@@ -384,17 +388,8 @@ const Library = ( {
 								) }
 
 								{ showLicenseToggle && (
-									<Button
-										isLink
-										style={ { marginLeft: '12px' } }
-										onClick={ () => {
-											setLicenseOpen( true );
-										} }
-									>
-										{ __(
-											'I already have a key',
-											'template-patterns-collection'
-										) }
+									<Button isLink style={{ marginLeft: '12px' }} href={ tiobDash?.tiobSettings }>
+										{ __( 'I already have a key', 'template-patterns-collection' ) }
 									</Button>
 								) }
 							</div>
@@ -426,37 +421,8 @@ const Library = ( {
 	return (
 		<div className={ wrapClasses }>
 			<>
-				<div className="editor-tabs">
-					{ Object.keys( EDITORS ).map( ( key ) => (
-						// eslint-disable-next-line jsx-a11y/anchor-is-valid
-						<a
-							key={ key }
-							href="#"
-							onClick={ () => {
-								setType( key );
-								setSearch( false );
-							} }
-							className={ classnames( 'tab', {
-								active: type === key,
-							} ) }
-						>
-							<span className="icon-wrap">
-								<img
-									className="editor-icon"
-									src={
-										window.tiobDash.assets +
-										'img/' +
-										EDITORS[ key ].icon
-									}
-									alt={ EDITORS[ key ].label }
-								/>
-							</span>
-							<span className="editor">
-								{ EDITORS[ key ].label }
-							</span>
-						</a>
-					) ) }
-					<FeedbackNotice importTemplate={ templateModal } />
+				<div style={ { display: "flex" } }>
+					<FeedbackNotice importTemplate={templateModal} />
 				</div>
 				<Filters
 					currentTab={ currentTab }
@@ -472,6 +438,7 @@ const Library = ( {
 					setSortingOrder={ setSorting }
 					changeOrder={ changeOrder }
 					type={ type }
+					setType={ setType }
 				/>
 				{ isLoading && <Loading isGrid={ isGrid } /> }
 				{ ! isLoading &&

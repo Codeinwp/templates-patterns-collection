@@ -74,6 +74,13 @@ function ti_tpc_run() {
 		require_once 'includes/WP_Cli.php';
 	}
 
+	define(
+		'TIOB_FEATURES',
+		array(
+			'new_menu' => true,
+		)
+	);
+
 	\TIOB\Main::instance();
 }
 

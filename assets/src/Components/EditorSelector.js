@@ -44,6 +44,7 @@ const EditorSelector = ( {
 						onClose={ toggleDropdown }
 						inline
 						noArrow
+						inline
 					>
 						{ open && (
 							<ul className="options">

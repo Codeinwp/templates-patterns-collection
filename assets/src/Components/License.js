@@ -84,10 +84,14 @@ const License = ( { setLicense, license } ) => {
 		event.preventDefault();
 	};
 
+	const futureDate = new Date( new Date().setFullYear( new Date().getFullYear() + 10 ) );
+	const expiration = isValid && license?.expires === 'lifetime' ? futureDate.toDateString() : new Date( license.expires ).toDateString();
+
 	const licenseStatusMsg = isValid ? (
 		<>
-			<Icon size={ 32 } className="verified" icon="yes-alt" />{ ' ' }
-			{ 'Verified - Expires at'} { new Date( license.expires ).toDateString() }
+			<Icon size={ 24 } className="verified" icon="yes-alt" />
+			<span>{ 'Verified - Expires at'} { expiration }</span>
+
 		</>
 	) : (
 		''
@@ -104,10 +108,11 @@ const License = ( { setLicense, license } ) => {
 
 	const children = () => (
 		<>
-			<form onSubmit={ toggleLicense }>
+			<form className="license-form" onSubmit={ toggleLicense }>
 				<TextControl
 					disabled={ isValid }
 					onChange={ setLicenseKey }
+					label={ __( 'License Key', 'templates-patterns-collection' ) }
 					value={
 						isValid
 							? '******************************' +
@@ -145,10 +150,6 @@ const License = ( { setLicense, license } ) => {
 	return (
 		<Card
 			classNames={ 'license' }
-			title={
-				'Templates Collection ' +
-				__( 'License', 'templates-patterns-collection' )
-			}
 			description={ description() }
 			children={ children() }
 		/>
