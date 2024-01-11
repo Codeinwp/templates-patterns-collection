@@ -23,9 +23,9 @@ import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 import classnames from 'classnames';
 
-import { iconBlack } from './icon';
-import { getTemplate, publishTemplate } from './data/templates-cloud';
-import Notices from './components/notices';
+import { iconBlack } from '../icon';
+import { getTemplate, publishTemplate } from '../data/templates-cloud';
+import Notices from '../components/notices';
 
 const Exporter = () => {
 	const [ isOpen, setOpen ] = useState( false );

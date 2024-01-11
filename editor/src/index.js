@@ -6,7 +6,9 @@ import { registerBlockType } from '@wordpress/blocks';
 import './editor.scss';
 import './data/index.js';
 import { iconBlack as icon } from './icon';
-import Exporter from './extension';
+import Exporter from './plugins/extension';
+import WrappedTpcTemplatesButton from './plugins/wrapped-tpc-templates-button';
+
 import edit from './edit';
 
 registerBlockType( 'ti-tpc/templates-cloud', {
@@ -22,6 +24,10 @@ registerBlockType( 'ti-tpc/templates-cloud', {
 	},
 	edit,
 	save: () => null,
+} );
+
+registerPlugin( 'ti-tpc-templates-button', {
+	render: WrappedTpcTemplatesButton,
 } );
 
 if ( parseInt( tiTpc.tier ) === 3 ) {
