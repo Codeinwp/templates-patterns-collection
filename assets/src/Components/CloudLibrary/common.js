@@ -4,6 +4,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 import { models, loadPromise } from '@wordpress/api';
+import { cleanTemplateContent } from '../../../../shared/utils';
 
 export const changeOption = ( option, value ) => {
 	const model = new models.Settings( {
@@ -23,10 +24,10 @@ export const changeOption = ( option, value ) => {
 
 export const fetchOptions = () => {
 	let settings;
-	return loadPromise.then(() => {
+	return loadPromise.then( () => {
 		settings = new models.Settings();
 		return settings.fetch();
-	});
+	} );
 };
 
 export const fetchLibrary = async (
@@ -143,14 +144,17 @@ export const deleteTemplate = async ( id ) => {
 };
 
 export const fetchBulkData = async ( templates ) => {
-	const url = stringifyUrl( {
-		url: `${ tiobDash.endpoint }templates/bulk-import`,
-		query: {
-			templates,
-			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...tiobDash.params,
+	const url = stringifyUrl(
+		{
+			url: `${ tiobDash.endpoint }templates/bulk-import`,
+			query: {
+				templates,
+				cache: localStorage.getItem( 'tpcCacheBuster' ),
+				...tiobDash.params,
+			},
 		},
-	}, {arrayFormat: 'index'} );
+		{ arrayFormat: 'index' }
+	);
 
 	try {
 		const response = await apiFetch( { url, method: 'GET', parse: false } );
@@ -163,6 +167,17 @@ export const fetchBulkData = async ( templates ) => {
 
 			if ( data.message ) {
 				return { success: false, message: data.message };
+			}
+
+			if ( Array.isArray( data ) ) {
+				data.forEach( ( template ) => {
+					cleanTemplateContent( template, ( element ) => {
+						// Remove imported images ID since they are not available on the current site via Media Library.
+						delete element?.settings?.image?.id;
+						delete element?.settings?.background_image?.id;
+						delete element?.settings?.background_overlay_image?.id;
+					} );
+				} );
 			}
 
 			return { success: true, templates: data };

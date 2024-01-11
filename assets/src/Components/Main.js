@@ -9,6 +9,7 @@ import ImportModal from './ImportModal';
 import DemoSiteTemplatesImport from './CloudLibrary/DemoSiteTemplatesImport';
 import Header from './Header';
 import OnboardingContent from './OnboardingContent';
+import Settings from "./Settings/Settings";
 
 const Onboarding = ( {
 	getSites,
@@ -41,6 +42,7 @@ const Onboarding = ( {
 						{ 'pageTemplates' === currentTab && (
 							<Library isGeneral={ true } />
 						) }
+						{ 'settings' === currentTab && <Settings /> }
 					</div>
 				</div>
 			</div>

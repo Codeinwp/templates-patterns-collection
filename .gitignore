@@ -8,3 +8,4 @@ languages/*.pot
 **/build/*
 **/.DS_Store
 .phpunit.result.cache
+.vscode

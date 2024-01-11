@@ -140,7 +140,7 @@
 						display: flex;
 						align-items: center;
 						font-size: 11px;
-				
+
 						.sorting-label {
 							flex-grow: 1;
 							text-align: left;
@@ -148,7 +148,7 @@
 							border-right: 1px solid #d5dadf;
 							text-transform: uppercase;
 						}
-				
+
 						.sorting-filter {
 							.components-button {
 								padding: 0 0 0 20px;
@@ -156,20 +156,20 @@
 								color: inherit;
 								font-size: inherit;
 								text-transform: uppercase;
-				
+
 								&::after {
 									width: 11px;
 									content: " ";
 									margin-left: 3px;
 								}
-				
+
 								&.is-selected {
 									&::after {
 										font-family: dashicons;
 										content: "\f142";
 										margin-left: 3px;
 									}
-				
+
 									&.is-asc {
 										&::after {
 											content: "\f140";
@@ -187,7 +187,7 @@
 							width: 200px;
 							position: relative;
 							margin-right: 20px;
-				
+
 							input {
 								width: 100%;
 								max-height: 36px;
@@ -221,12 +221,12 @@
 						.components-button {
 							&.is-pressed {
 								background: transparent;
-	
+
 								svg {
 									fill: #0073aa;
 								}
 							}
-	
+
 							svg {
 								fill: #d9d9d9;
 							}
@@ -493,6 +493,10 @@
 			}
 		}
 	}
+}
+
+.edit-post-header__center {
+	justify-content: left;
 }
 
 @media (min-width: 1440px) {
