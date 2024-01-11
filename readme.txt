@@ -39,6 +39,21 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 == Changelog ==
 
+##### [Version 1.2.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.5...v1.2.6) (2024-01-11)
+
+### New Features
+- **New button** to import a TPC template directly into a post, page, or custom layout
+
+### Improvements
+- **Updated dependencies**
+
+### Bug Fixes
+- **Fixed Elementor content** on template import.
+- **Fixed typo** in onboarding text.
+
+
+
+
 ##### [Version 1.2.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.4...v1.2.5) (2023-10-26)
 
 ### Improvements
