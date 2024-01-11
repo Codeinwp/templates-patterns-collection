@@ -341,13 +341,29 @@ class Admin {
 	}
 
 	/**
+	 * Use the features defined in the TIOB plugin to check for specific support.
+	 *
+	 * @param string $feature The feature to check for.
+	 *
+	 * @return bool
+	 */
+	private function tiob_has_support( $feature ) {
+		if ( defined( 'TIOB_FEATURES' ) ) {
+			$features = TIOB_FEATURES;
+			return isset( $features[ $feature ] );
+		}
+		return false;
+	}
+
+	/**
 	 * Utility method to add a theme page from an array.
 	 *
 	 * @param array $page_data Page data.
+	 * @param int $offset Offset for the menu position.
 	 *
 	 * @return void
 	 */
-	private function add_theme_page_for_tiob( $page_data ) {
+	private function add_theme_page_for_tiob( $page_data, $offset = 2 ) {
 
 		if ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ) {
 			global $submenu;
@@ -363,13 +379,13 @@ class Admin {
 				$page_data['callback']
 			);
 
-			$offset = 2;
-			if ( $this->page_slug !== $page_data['menu_slug'] ) {
-				$offset = 3;
-			}
-
 			$item = array_pop( $submenu[ $theme_page ] );
 			array_splice( $submenu[ $theme_page ], $offset, 0, array( $item ) );
+			return;
+		}
+
+		// When using the new menu location we will not register items on the theme page anymore.
+		if ( $this->tiob_has_support( 'new_menu' ) ) {
 			return;
 		}
 
@@ -383,11 +399,55 @@ class Admin {
 	}
 
 	/**
+	 * Utility method to add a plugin sub-page from an array.
+	 *
+	 * @param array $page_data Page data.
+	 *
+	 * @return void
+	 */
+	private function add_subpage_for_tiob( $page_data ) {
+		$capability = 'manage_options';
+		add_submenu_page(
+			$page_data['parent_slug'],
+			$page_data['page_title'],
+			$page_data['menu_title'],
+			$capability,
+			$page_data['menu_slug'],
+			$page_data['callback']
+		);
+	}
+
+	/**
 	 * Register theme options page.
 	 *
 	 * @return bool|void
 	 */
 	public function register() {
+		$icon        = 'data:image/svg+xml;base64,PHN2ZwogICAgICAgIHdpZHRoPSIxMDAiCiAgICAgICAgaGVpZ2h0PSIxMDAiCiAgICAgICAgdmlld0JveD0iMCAwIDEwMCAxMDAiCiAgICAgICAgZmlsbD0iI2YwZjBmMSIKICAgICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCj4KICAgIDxwYXRoCiAgICAgICAgICAgIGQ9Ik05NS4wMjY0IDEwMEg0Ljk3MzU2QzIuMjI3OTcgMTAwIDAgOTcuNzcyIDAgOTUuMDI2NFY0Ljk3MzU2QzAgMi4yMjc5NyAyLjIyNzk3IDAgNC45NzM1NiAwSDk1LjAyNjRDOTcuNzcyIDAgMTAwIDIuMjI3OTcgMTAwIDQuOTczNTZWOTUuMDI2NEMxMDAgOTcuNzcyIDk3Ljc3MiAxMDAgOTUuMDI2NCAxMDBaIE04Mi42OTQxIDg2Ljc0NDhWMzAuODIwNVYxOC40NjUzSDcwLjM1MDJIMTQuNDE0NkwyNi43NTg0IDMwLjgyMDVINzAuMzUwMlY3NC40MDFMODIuNjk0MSA4Ni43NDQ4WiBNNDIuMjQxNiA1OC45MjkxTDQyLjI1MjggNzEuMTgzTDUzLjIzNTIgODIuMTY1M0w1My4xOTAyIDQ3Ljk4MDZMMTguOTk0MSA0Ny45MzU1TDI5Ljk3NjUgNTguOTA2Nkw0Mi4yNDE2IDU4LjkyOTFaIgogICAgICAgICAgICBmaWxsPSIjZjBmMGYxIgogICAgLz4KPC9zdmc+Cg==';
+		$priority    = 61;  // The position of the menu item, 60 is the position of the Appearance menu.
+		$plugin_page = 'tiob-plugin';
+
+		$tpc_menu_page_data = array(
+			'page_title' => __( 'Template Cloud', 'templates-patterns-collection' ),
+			'menu_title' => __( 'Template Cloud', 'templates-patterns-collection' ),
+			'capability' => 'manage_options',
+			'menu_slug'  => $plugin_page,
+			'callback'   => array(
+				$this,
+				'render_starter_sites',
+			),
+		);
+
+		add_menu_page(
+			$tpc_menu_page_data['page_title'],
+			$tpc_menu_page_data['menu_title'],
+			$tpc_menu_page_data['capability'],
+			$tpc_menu_page_data['menu_slug'],
+			$tpc_menu_page_data['callback'],
+			$icon,
+			$priority
+		);
+
 		if ( $this->is_library_disabled() && $this->is_starter_sites_disabled() ) {
 			return false;
 		}
@@ -413,24 +473,43 @@ class Admin {
 			),
 		);
 
-		$library_data = array(
-			'page_title' => __( 'My Library', 'templates-patterns-collection' ),
-			'menu_title' => $prefix . __( 'My Library', 'templates-patterns-collection' ),
+		$page_templates_data = array(
+			'page_title' => __( 'Page Templates', 'templates-patterns-collection' ),
+			'menu_title' => $prefix . __( 'Page Templates', 'templates-patterns-collection' ),
 			'capability' => 'activate_plugins',
-			'menu_slug'  => ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '#library',
+			'menu_slug'  => ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '#pageTemplates',
 			'callback'   => '',
 		);
 
+		$library_data  = array(
+			'parent_slug' => $plugin_page,
+			'page_title'  => __( 'My Library', 'templates-patterns-collection' ),
+			'menu_title'  => __( 'My Library', 'templates-patterns-collection' ),
+			'capability'  => 'activate_plugins',
+			'menu_slug'   => $plugin_page,
+			'callback'    => $tpc_menu_page_data['callback'],
+		);
+		$settings_data = array(
+			'parent_slug' => $plugin_page,
+			'page_title'  => __( 'Settings', 'templates-patterns-collection' ),
+			'menu_title'  => __( 'Settings', 'templates-patterns-collection' ),
+			'capability'  => 'activate_plugins',
+			'menu_slug'   => 'admin.php?page=' . $plugin_page . '#settings',
+			'callback'    => '',
+		);
+
 		if ( $this->is_starter_sites_disabled() && ! $this->is_library_disabled() ) {
-			$library_data['menu_slug'] = $this->page_slug;
+			$library_data['menu_slug'] = $plugin_page;
 			$library_data['callback']  = array(
 				$this,
 				'render_starter_sites',
 			);
-			$this->add_theme_page_for_tiob( $library_data );
+			$this->add_subpage_for_tiob( $library_data );
+			$this->add_subpage_for_tiob( $settings_data );
 			return false;
 		}
-		$this->add_theme_page_for_tiob( $starter_site_data );
+		$this->add_theme_page_for_tiob( $starter_site_data, 2 );
+		$this->add_theme_page_for_tiob( $page_templates_data, 3 );
 
 		if ( $this->should_load_onboarding() ) {
 			$onboarding_data = array(
@@ -443,13 +522,14 @@ class Admin {
 					'render_onboarding',
 				),
 			);
-			$this->add_theme_page_for_tiob( $onboarding_data );
+			$this->add_theme_page_for_tiob( $onboarding_data, 4 );
 		}
 
 		if ( $this->is_library_disabled() ) {
 			return false;
 		}
-		$this->add_theme_page_for_tiob( $library_data );
+		$this->add_subpage_for_tiob( $library_data );
+		$this->add_subpage_for_tiob( $settings_data );
 	}
 
 	/**
@@ -569,7 +649,8 @@ class Admin {
 			}
 		}
 
-		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false ) {
+		$is_tiob_page = strpos( $screen->id, '_page_tiob-plugin' ) !== false;
+		if ( strpos( $screen->id, '_page_' . $this->page_slug ) === false && ! $is_tiob_page ) {
 			return;
 		}
 
@@ -585,7 +666,11 @@ class Admin {
 		wp_enqueue_style( 'tiob' );
 
 		wp_register_script( 'tiob', TIOB_URL . 'assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates' ) ), $dependencies['version'], true );
-		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
+		$tiob_dash = apply_filters( 'neve_dashboard_page_data', $this->get_localization() );
+		if ( $is_tiob_page ) {
+			$tiob_dash['hideStarterSites'] = true;
+		}
+		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $tiob_dash ) );
 		wp_enqueue_script( 'tiob' );
 	}
 
@@ -660,6 +745,29 @@ class Admin {
 			),
 			'onboardingAllowed'   => $this->should_load_onboarding(),
 			'onboardingRedirect'  => admin_url( 'admin.php?page=neve-onboarding' ),
+			'tiobSettings'        => admin_url( 'admin.php?page=tiob-plugin#settings' ),
+			'links'               => array(
+				array(
+					'label'       => __( 'Support', 'templates-patterns-collection' ),
+					'is_external' => true,
+					'url'         => tsdk_utmify( 'https://themeisle.com/contact/', 'settings_page' ),
+				),
+				array(
+					'label'  => __( 'Feature request', 'templates-patterns-collection' ),
+					'target' => '_self',
+					'url'    => admin_url( 'admin.php?page=tiob-plugin&tab=feedback#settings' ),
+				),
+				array(
+					'label'       => __( 'Leave a review', 'templates-patterns-collection' ),
+					'is_external' => true,
+					'url'         => 'https://wordpress.org/support/plugin/templates-patterns-collection/reviews/#new-post',
+				),
+				array(
+					'label'     => __( 'Documentation', 'templates-patterns-collection' ),
+					'url'       => tsdk_utmify( 'https://docs.themeisle.com/article/1354-neve-template-cloud-library', 'settings_page' ),
+					'is_button' => true,
+				),
+			),
 		);
 	}
 

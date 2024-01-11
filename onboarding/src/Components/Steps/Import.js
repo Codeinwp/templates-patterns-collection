@@ -321,7 +321,7 @@ const Import = ( {
 						</h1>
 						<p>
 							{ __(
-								'Sit tight as we import a website based on your references.',
+								'Sit tight as we import a website based on your preferences.',
 								'templates-patterns-collection'
 							) }
 						</p>

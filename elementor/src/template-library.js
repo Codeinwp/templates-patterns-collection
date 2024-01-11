@@ -9,8 +9,6 @@ import Content from './components/content.js';
 import { importTemplate } from './data/templates-cloud/index.js';
 import { setPostModel } from './data/utils';
 
-const { omit } = lodash;
-
 const TemplateLibrary = ( { currentTab, setFetching } ) => {
 	const [ searchQuery, setSearchQuery ] = useState( {
 		templates: '',
@@ -164,9 +162,10 @@ const TemplateLibrary = ( { currentTab, setFetching } ) => {
 			0 < Object.keys( tryParseJSON( meta ) || {} ).length
 		) {
 			meta = { ...JSON.parse( meta ) };
+			const { _wp_page_template, ...filteredFields } = meta;
 
 			window.tiTpc.postModel.set( 'meta', {
-				...omit( meta, '_wp_page_template' ),
+				...filteredFields,
 			} );
 			window.tiTpc.postModel.save();
 

@@ -27,8 +27,6 @@ import { iconBlack } from '../icon';
 import { getTemplate, publishTemplate } from '../data/templates-cloud';
 import Notices from '../components/notices';
 
-const { omit } = lodash;
-
 const Exporter = () => {
 	const [ isOpen, setOpen ] = useState( false );
 	const [ isLoading, setLoading ] = useState( false );
@@ -182,10 +180,12 @@ const Exporter = () => {
 			content,
 		};
 
+		const { meta, ...filteredParams } = window.tiTpc.params;
+
 		const url = stringifyUrl( {
 			url: window.tiTpc.endpoint + 'templates',
 			query: {
-				...omit( tiTpc.params, 'meta' ),
+				...filteredParams,
 				template_name: title,
 				template_type: 'gutenberg',
 			},
@@ -255,7 +255,7 @@ const Exporter = () => {
 			return;
 		}
 
-		let meta = tiTpc.params.meta;
+		let { meta, ...filteredParams } = window.tiTpc.params;
 		// For Custom Layouts attach additional meta to check on import.
 		if ( type === 'neve_custom_layouts' ) {
 			meta = { ...tiTpc.params.meta, postType: type };
@@ -264,7 +264,7 @@ const Exporter = () => {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
 				query: {
-					...omit( tiTpc.params, 'meta' ),
+					...filteredParams,
 					meta: JSON.stringify( meta ),
 					template_name: postTitle,
 					template_type: 'gutenberg',
@@ -277,7 +277,7 @@ const Exporter = () => {
 			url = stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates/' + templateID,
 				query: {
-					...omit( tiTpc.params, 'meta' ),
+					...filteredParams,
 					meta: JSON.stringify( meta ),
 					template_name: postTitle,
 					link,
