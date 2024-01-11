@@ -128,6 +128,8 @@ const SiteEditorExporter = () => {
 	 */
 	const getRequestUrl = () => {
 		const { meta, ...filteredParams } = tiTpc.params;
+		console.warn( { filteredParams } );
+		console.warn( { templateData } );
 		if ( ! templateData?._ti_tpc_template_id ) {
 			return stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',

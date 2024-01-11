@@ -123,7 +123,7 @@ const Library = ( {
 		}
 
 		if ( type === 'gutenberg' && showFSE ) {
-			params.type = JSON.stringify( [ 'gutenberg', 'fse' ] );
+			params.type = [ 'gutenberg', 'fse' ];
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
@@ -195,7 +195,7 @@ const Library = ( {
 		}
 
 		if ( type === 'gutenberg' && showFSE ) {
-			params.type = JSON.stringify( [ 'gutenberg', 'fse' ] );
+			params.type = [ 'gutenberg', 'fse' ];
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
@@ -230,7 +230,7 @@ const Library = ( {
 		}
 
 		if ( type === 'gutenberg' && newValue ) {
-			params.type = JSON.stringify( [ 'gutenberg', 'fse' ] );
+			params.type = [ 'gutenberg', 'fse' ];
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {

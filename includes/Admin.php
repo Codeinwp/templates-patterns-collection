@@ -18,7 +18,8 @@ class Admin {
 	use White_Label_Config;
 
 	// TODO: revert this after implementation
-	const API = 'neve.test/wp-json';
+	// const API = 'neve.test/wp-json';
+	const API = 'api.themeisle.com';
 
 	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
 	const FEEDBACK_DISMISSED_OPT       = 'tiob_feedback_dismiss';
@@ -54,8 +55,7 @@ class Admin {
 	private $google_fonts = array();
 
 	public static function get_templates_cloud_endpoint() {
-		// TODO: revert this after implementation
-		return 'https://' . self::API . '/templates-cloud/v1/';
+		return 'https://' . self::API . '/templates-cloud/';
 	}
 
 	/**
