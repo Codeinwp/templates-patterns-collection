@@ -430,8 +430,8 @@ class Admin {
 		$plugin_page = 'tiob-plugin';
 
 		$tpc_menu_page_data = array(
-			'page_title' => __( 'Template Cloud', 'templates-patterns-collection' ),
-			'menu_title' => __( 'Template Cloud', 'templates-patterns-collection' ),
+			'page_title' => __( 'Templates Cloud', 'templates-patterns-collection' ),
+			'menu_title' => __( 'Templates Cloud', 'templates-patterns-collection' ),
 			'capability' => 'manage_options',
 			'menu_slug'  => $plugin_page,
 			'callback'   => array(

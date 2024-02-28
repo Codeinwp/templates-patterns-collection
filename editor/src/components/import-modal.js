@@ -15,7 +15,7 @@ import { importTemplate } from '../data/templates-cloud';
 const ImportModal = ( {
 	clientId,
 	autoLoad = true,
-	isFse = false,
+    isFse = false,
 	modalOpen,
 	setModalOpen,
 } ) => {
@@ -26,11 +26,11 @@ const ImportModal = ( {
 	} ) );
 
 	const {
-		removeBlock,
-		replaceBlocks,
-		insertBlocks,
-		resetBlocks,
-	} = useDispatch( 'core/block-editor' );
+        removeBlock,
+        replaceBlocks,
+        insertBlocks,
+        resetBlocks,
+    } = useDispatch( 'core/block-editor' );
 
 	const { togglePreview } = useDispatch( 'tpc/block-editor' );
 

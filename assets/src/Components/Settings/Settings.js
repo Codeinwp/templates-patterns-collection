@@ -86,7 +86,7 @@ const Feedback = () => {
                     'feedback_details': true,
                     'invalid': 'emptyFeedback' === feedbackStatus,
                 }) }
-                placeholder={ __( 'Tell us how can we help you better with Template Cloud', 'template-patterns-collection' ) }
+                placeholder={ __( 'Tell us how can we help you better with Templates Cloud', 'template-patterns-collection' ) }
                 value={ feedbackDetails }
                 help={ feedbackStatusText[feedbackStatus] || false }
                 rows={7}

@@ -2,7 +2,7 @@
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** neve, templates, patterns, blocks, starter, sites, demo, content, import  
 **Requires at least:** 5.5  
-**Tested up to:** 6.3  
+**Tested up to:** 6.4  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
 **License:** GPLv3  
@@ -38,6 +38,30 @@ You can check the full collection on [demosites.io](https://demosites.io/)
 Yes, you can. You can either chose to import one template or the entire starter site.
 
 ## Changelog ##
+
+##### [Version 1.2.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.6...v1.2.7) (2024-02-23)
+
+### Fixes
+- Text improvements
+- Updated dependencies
+
+
+
+
+##### [Version 1.2.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.5...v1.2.6) (2024-01-11)
+
+### New Features
+- **New button** to import a TPC template directly into a post, page, or custom layout
+
+### Improvements
+- **Updated dependencies**
+
+### Bug Fixes
+- **Fixed Elementor content** on template import.
+- **Fixed typo** in onboarding text.
+
+
+
 
 ##### [Version 1.2.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.4...v1.2.5) (2023-10-26)
 
