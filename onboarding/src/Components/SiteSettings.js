@@ -53,7 +53,7 @@ export const SiteSettings = ( {
 			'templates-patterns-collection'
 		);
 		description = __(
-			'Upgrade to Neve Pro to enjoy unlimited access to all templates in the library.',
+			'Upgrade to Neve Business plan to enjoy unlimited access to all templates in the library.',
 			'templates-patterns-collection'
 		);
 	}
