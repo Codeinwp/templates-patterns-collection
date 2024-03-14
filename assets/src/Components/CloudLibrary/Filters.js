@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { alignJustify, closeSmall, grid, search } from '@wordpress/icons';
 import { ENTER } from '@wordpress/keycodes';
 import { __ } from '@wordpress/i18n';
-import { Button, Dashicon, Popover } from '@wordpress/components';
+import { Button, ToggleControl, Dashicon, Popover } from '@wordpress/components';
 import {useState} from "@wordpress/element";
 
 const sortByOptions = {
@@ -110,6 +110,8 @@ const Filters = ( {
 	EDITOR_MAP,
 	type,
 	setType,
+	showFSE,
+	setShowFSE,
 } ) => {
 	return (
 		<div className="filters">
@@ -148,6 +150,15 @@ const Filters = ( {
 							</Button>
 						) ) }
 					</div>
+					{ type === 'gutenberg' && tiobDash.isFSETheme && (
+						<div className="filter-fse">
+							<ToggleControl
+								label={ __( 'Show FSE Templates' ) }
+								onChange={ setShowFSE }
+								checked={ showFSE }
+							/>
+						</div>
+					) }
 				</div>
 
 				<div className="display-filters">

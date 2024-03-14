@@ -5,13 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch, select } from '@wordpress/data';
 
-const { omit } = lodash;
-
 const dispatchNotification = ( message ) => FLBuilder.alert( message );
 
 const { setFetching } = dispatch( 'tpc/beaver' );
 
 export const fetchTemplates = async ( additionalParams = {} ) => {
+	const { isScroll, ...filteredAdditionalParams } = additionalParams;
 	const params = {
 		cache: localStorage.getItem( 'tpcCacheBuster' ),
 		...window.tiTpc.params,
@@ -19,7 +18,7 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 		page: 0,
 		premade: true,
 		template_site_slug: 'general',
-		...omit( additionalParams, 'isScroll' ),
+		...filteredAdditionalParams,
 	};
 
 	const url = stringifyUrl( {
@@ -67,10 +66,11 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 };
 
 export const fetchLibrary = async ( additionalParams = {} ) => {
+	const { isScroll, ...filteredAdditionalParams } = additionalParams;
 	const params = {
 		per_page: 20,
 		page: 0,
-		...omit( additionalParams, 'isScroll' ),
+		...filteredAdditionalParams,
 	};
 
 	const url = stringifyUrl( {

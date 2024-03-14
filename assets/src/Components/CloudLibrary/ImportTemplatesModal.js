@@ -1,15 +1,16 @@
 import { parseEntities } from 'parse-entities';
-import { withSelect, withDispatch } from '@wordpress/data';
-import { Modal, Button, Icon } from '@wordpress/components';
+import { withDispatch, withSelect } from '@wordpress/data';
+import { Button, Icon, Modal } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
 import { page as pageIcon } from '@wordpress/icons';
 import { useEffect, useState } from '@wordpress/element';
 
 import {
-	importTemplates,
-	installTheme,
 	activateTheme,
+	importTemplates,
+	importFseTemplate,
+	installTheme,
 } from '../../utils/site-import';
 import { fetchBulkData, getUserTemplateData } from './common';
 import classnames from 'classnames';
@@ -71,6 +72,7 @@ const ImportTemplatesModal = ( {
 			<>
 				<div className="modal-body">
 					<div className="header">
+						{ /* eslint-disable-next-line jsx-a11y/heading-has-content */ }
 						<h1
 							className="is-loading"
 							style={ {
@@ -108,14 +110,39 @@ const ImportTemplatesModal = ( {
 
 	const runTemplatesImport = () => {
 		setImporting( true );
-		const data = templatesData.map( ( item, index ) => {
-			return { ...item, ...templates[ index ] };
-		} );
 
+		/**
+		 * Please note that templatesData is an array of objects, but currently we only send one template at a time.
+		 * In the future we might send more than one template to bulk-import templates.
+		 */
+		const { fseTemplates, otherTemplates } = templatesData.reduce(
+			( acc, item, index ) => {
+				const templateType = item.template_type;
+				const mergedTemplate = { ...item, ...templates[ index ] };
+
+				if ( templateType === 'fse' ) {
+					acc.fseTemplates.push( mergedTemplate );
+				} else {
+					acc.otherTemplates.push( mergedTemplate );
+				}
+
+				return acc;
+			},
+			{ fseTemplates: [], otherTemplates: [] }
+		);
+
+		/**
+		 * Function to import templates that are not FSE.
+		 */
 		const callbackImportTemplate = () => {
+			if ( ! otherTemplates ) {
+				return;
+			}
+
 			try {
-				importTemplates( data ).then( ( r ) => {
+				importTemplates( otherTemplates ).then( ( r ) => {
 					if ( ! r.success ) {
+						// eslint-disable-next-line no-console
 						console.log( r.message );
 						return false;
 					}
@@ -124,26 +151,54 @@ const ImportTemplatesModal = ( {
 					setImporting( 'done' );
 				} );
 			} catch ( e ) {
+				// eslint-disable-next-line no-console
+				console.log( e );
+			}
+		};
+
+		/**
+		 * Function to import FSE templates.
+		 */
+		const callbackImportFse = () => {
+			if ( ! fseTemplates ) {
+				return;
+			}
+
+			try {
+				importFseTemplate( fseTemplates ).then( ( r ) => {
+					if ( ! r.success ) {
+						// eslint-disable-next-line no-console
+						setError( r.message );
+						return false;
+					}
+
+					// setImported( r.pages );
+					setImporting( 'done' );
+				} );
+			} catch ( e ) {
+				// eslint-disable-next-line no-console
 				console.log( e );
 			}
 		};
 
 		if (
 			! themeData ||
-			( data[ 0 ].template_site_slug === 'general' &&
-				data[ 0 ].premade === 'yes' )
+			( otherTemplates[ 0 ]?.template_site_slug === 'general' &&
+				otherTemplates[ 0 ]?.premade === 'yes' )
 		) {
 			callbackImportTemplate();
 			return false;
 		}
 
 		const callbackError = ( err ) => {
+			// eslint-disable-next-line no-console
 			console.error( err );
 		};
 
 		// skip activation or install for user templates
 		if ( isUserTemplate ) {
 			callbackImportTemplate();
+			callbackImportFse();
 			return false;
 		}
 
@@ -270,33 +325,39 @@ const ImportTemplatesModal = ( {
 	};
 
 	const description = () => {
-		const map = {
-			strong: <strong>{ __( 'does not' ) }</strong>,
-		};
+		const {
+			template_name: templateName,
+			template_type: templateType,
+		} = templatesData[ 0 ];
 
-		const text = isSingle
+		if ( templateType === 'fse' ) {
+			return __(
+				'This import will add a new Full Site Editing template to your site.',
+				'templates-patterns-collection'
+			);
+		}
+
+		return isSingle
 			? sprintf(
-					/* translators: %s  the name of the template */
-					__(
-						'The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed.',
+				/* translators: %s  the name of the template */
+				__(
+					'The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed.',
 					'templates-patterns-collection'
-					),
-					templatesData[ 0 ].template_name
+				),
+				templateName
 			  )
 			: __(
 					'All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed.',
 					'templates-patterns-collection'
 			  );
-
-		return text;
 	};
 
-	const ModalContent = () => {
+	const ModalContent = ( props ) => {
 		if ( fetching ) {
 			return <Mock />;
 		}
 
-		if ( error ) {
+		if ( props.error ) {
 			return <Error />;
 		}
 
@@ -367,7 +428,11 @@ const ImportTemplatesModal = ( {
 				( ! importing || importing === 'done' ) && ! fetching
 			}
 		>
-			{ importing === 'done' ? <ImportDone /> : <ModalContent /> }
+			{ importing === 'done' && ! error ? (
+				<ImportDone />
+			) : (
+				<ModalContent error={ error } />
+			) }
 		</Modal>
 	);
 };

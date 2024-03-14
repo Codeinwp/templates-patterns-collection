@@ -1,12 +1,13 @@
+/* global tiobDash */
 import classnames from 'classnames';
 import VizSensor from 'react-visibility-sensor';
 
 import { chevronLeft, chevronRight, close } from '@wordpress/icons';
-import {useEffect, useState, Fragment, useContext} from '@wordpress/element';
+import { useEffect, useState, Fragment, useContext } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Spinner, Button, Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
-import { __, isRTL, sprintf } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 
 import { fetchLibrary } from './common';
 import ListItem from './ListItem';
@@ -16,9 +17,9 @@ import PreviewFrame from './PreviewFrame';
 import ImportTemplatesModal from './ImportTemplatesModal';
 import Logo from '../Icon';
 import { LicensePanelContext } from '../LicensePanelContext';
-import FeedbackNotice from "./FeedbackNotice";
-import {EDITOR_MAP} from "../../utils/common";
-import EditorSelector from "../EditorSelector";
+import FeedbackNotice from './FeedbackNotice';
+import {EDITOR_MAP} from '../../utils/common';
+import EditorSelector from '../EditorSelector';
 
 const Library = ( {
 	isGeneral,
@@ -36,6 +37,11 @@ const Library = ( {
 	const [ type, setType ] = useState( 'gutenberg' );
 	const [ toImport, setToImport ] = useState( [] );
 	const [ isGrid, setIsGrid ] = useState( isGeneral );
+	const [ showFSE, setShowFSE ] = useState(
+		tiobDash.isFSETheme
+			? window?.localStorage?.tpcShowFse === 'true'
+			: false
+	);
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 	const [ currentPage, setCurrentPage ] = useState( {
 		gutenberg: 0,
@@ -116,6 +122,10 @@ const Library = ( {
 			params.search = searchQuery;
 		}
 
+		if ( type === 'gutenberg' && showFSE ) {
+			params.type = [ 'gutenberg', 'fse' ];
+		}
+
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
 			setLibrary( {
 				...library,
@@ -182,6 +192,45 @@ const Library = ( {
 		if ( isGeneral ) {
 			params.template_site_slug = 'general';
 			params.premade = true;
+		}
+
+		if ( type === 'gutenberg' && showFSE ) {
+			params.type = [ 'gutenberg', 'fse' ];
+		}
+
+		fetchLibrary( isGeneral, params ).then( ( r ) => {
+			setLibrary( {
+				...library,
+				[ type ]: [ ...r.templates ],
+			} );
+			setTotalPages( {
+				...totalPages,
+				[ type ]: r.total,
+			} );
+			setLoading( false );
+		} );
+	};
+
+	const handleFSEToggle = () => {
+		setLoading( true );
+
+		const newValue = ! showFSE;
+		setShowFSE( newValue );
+		window.localStorage.setItem( 'tpcShowFse', newValue.toString() );
+
+		const params = {
+			search: searchQuery,
+			type,
+			...getOrder(),
+		};
+
+		if ( isGeneral ) {
+			params.template_site_slug = 'general';
+			params.premade = true;
+		}
+
+		if ( type === 'gutenberg' && newValue ) {
+			params.type = [ 'gutenberg', 'fse' ];
 		}
 
 		fetchLibrary( isGeneral, params ).then( ( r ) => {
@@ -289,8 +338,12 @@ const Library = ( {
 
 	const { upgradeURLTpc } = window.tiobDash;
 
-	const UpsellModal = ( { title, description, showUpgradeBtn = true, showLicenseToggle = true } ) => {
-
+	const UpsellModal = ( {
+		title,
+		description,
+		showUpgradeBtn = true,
+		showLicenseToggle = true,
+	} ) => {
 		const { setLicenseOpen } = useContext( LicensePanelContext );
 
 		return (
@@ -324,10 +377,13 @@ const Library = ( {
 									<Button
 										variant="primary"
 										isPrimary
-										href={upgradeURLTpc}
+										href={ upgradeURLTpc }
 										target="_blank"
 									>
-										{ __( 'Upgrade to PRO', 'templates-patterns-collection' ) }
+										{ __(
+											'Upgrade to PRO',
+											'templates-patterns-collection'
+										) }
 									</Button>
 								) }
 
@@ -350,11 +406,14 @@ const Library = ( {
 	if ( ! userStatus && ! isGeneral ) {
 		return (
 			<UpsellModal
-				title={ __( 'Templates Cloud is a PRO Feature', 'templates-patterns-collection' ) }
+				title={ __(
+					'Templates Cloud is a PRO Feature',
+					'templates-patterns-collection'
+				) }
 				description={ __(
-						'Unlock the Templates Cloud features and save your pages or posts in the cloud.',
-						'template-patterns-collection'
-					) }
+					'Unlock the Templates Cloud features and save your pages or posts in the cloud.',
+					'template-patterns-collection'
+				) }
 			/>
 		);
 	}
@@ -368,6 +427,8 @@ const Library = ( {
 				<Filters
 					currentTab={ currentTab }
 					isGrid={ isGrid }
+					showFSE={ showFSE }
+					setShowFSE={ handleFSEToggle }
 					setGrid={ setIsGrid }
 					isSearch={ isSearch }
 					searchQuery={ searchQuery }
@@ -433,12 +494,21 @@ const Library = ( {
 								src={
 									window.tiobDash.assets + '/img/layout.jpg'
 								}
-								alt={ __( 'No Templates Found', 'templates-patterns-collection' ) }
+								alt={ __(
+									'No Templates Found',
+									'templates-patterns-collection'
+								) }
 							/>
-							<h3>{ __( 'There are no templates yet', 'templates-patterns-collection' ) }</h3>
+							<h3>
+								{ __(
+									'There are no templates yet',
+									'templates-patterns-collection'
+								) }
+							</h3>
 							<p>
 								{ __(
-									'You can add a page or post to the cloud by accessing it with the WordPress or Elementor/Beaver editor. Learn more about this in our docs.', 'templates-patterns-collection'
+									'You can add a page or post to the cloud by accessing it with the WordPress or Elementor/Beaver editor. Learn more about this in our docs.',
+									'templates-patterns-collection'
 								) }
 							</p>
 							<Button
@@ -447,7 +517,10 @@ const Library = ( {
 								href="https://docs.themeisle.com/article/1354-neve-template-cloud-library?utm_medium=nevedashboard&utm_source=wpadmin&utm_campaign=templatescloud&utm_content=neve"
 								target="_blank"
 							>
-								{ __( 'Learn more', 'templates-patterns-collection' ) }
+								{ __(
+									'Learn more',
+									'templates-patterns-collection'
+								) }
 							</Button>
 						</div>
 					) ) }
@@ -459,7 +532,10 @@ const Library = ( {
 								isPrimary
 								onClick={ () => handleImport( previewedItem ) }
 							>
-								{ __( 'Import Template', 'templates-patterns-collection' ) }
+								{ __(
+									'Import Template',
+									'templates-patterns-collection'
+								) }
 							</Button>
 						}
 						heading={ previewedItem.template_name }

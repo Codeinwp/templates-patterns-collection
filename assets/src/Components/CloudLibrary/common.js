@@ -34,6 +34,14 @@ export const fetchLibrary = async (
 	premade = false,
 	additionalParams = {}
 ) => {
+	console.warn( {additionalParams} );
+
+	// if ( additionalParams?.type ) {
+	// 	if ( Array.isArray( additionalParams.type ) ) {
+	// 		additionalParams.type = additionalParams.type.join( ','	);
+	// 	}
+	// }
+
 	const url = stringifyUrl( {
 		url: tiobDash.endpoint + ( premade ? 'page-templates' : 'templates' ),
 		query: {
@@ -41,7 +49,8 @@ export const fetchLibrary = async (
 			...tiobDash.params,
 			...additionalParams,
 		},
-	} );
+	}, { arrayFormat: 'bracket' } );
+	console.log( {url} );
 
 	try {
 		const response = await apiFetch( {

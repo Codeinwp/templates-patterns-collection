@@ -1,7 +1,8 @@
+/* global tiTpc */
 import classnames from 'classnames';
 import { alignJustify, closeSmall, grid, search } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Button } from '@wordpress/components';
+import { Button, ToggleControl } from '@wordpress/components';
 import { ENTER } from '@wordpress/keycodes';
 
 const sortByOptions = {
@@ -11,6 +12,8 @@ const sortByOptions = {
 };
 
 const Filters = ( {
+	showFSE,
+	onFSEChange,
 	layout,
 	sortingOrder,
 	setLayout,
@@ -57,6 +60,15 @@ const Filters = ( {
 						</Button>
 					) ) }
 				</div>
+				{ tiTpc.params.type === 'gutenberg' && tiTpc.isFSETheme && (
+					<div className="filter-fse">
+						<ToggleControl
+							label={ __( 'Show FSE Templates' ) }
+							onChange={ onFSEChange }
+							checked={ showFSE }
+						/>
+					</div>
+				) }
 			</div>
 
 			<div className="view-filters">
