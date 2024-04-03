@@ -2,7 +2,7 @@
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** neve, templates, patterns, blocks, starter, sites, demo, content, import  
 **Requires at least:** 5.5  
-**Tested up to:** 6.4  
+**Tested up to:** 6.5  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
 **License:** GPLv3  
@@ -38,6 +38,15 @@ You can check the full collection on [demosites.io](https://demosites.io/)
 Yes, you can. You can either chose to import one template or the entire starter site.
 
 ## Changelog ##
+
+##### [Version 1.2.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.7...v1.2.8) (2024-04-03)
+
+### Improvements
+- Added compatibility for importing templates of Full Site Editing (FSE) themes.
+- Updated internal dependencies for better performance and stability.
+
+
+
 
 ##### [Version 1.2.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.6...v1.2.7) (2024-02-23)
 

@@ -1,3 +1,9 @@
+##### [Version 1.2.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.7...v1.2.8) (2024-04-03)
+
+### Improvements
+- Added compatibility for importing templates of Full Site Editing (FSE) themes.
+- Updated internal dependencies for better performance and stability.
+
 ##### [Version 1.2.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.6...v1.2.7) (2024-02-23)
 
 ### Fixes
