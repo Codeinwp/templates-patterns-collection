@@ -11,7 +11,7 @@ import SVG from '../../utils/svg';
 const SiteList = ( { showToast, setShowToast, setFetching } ) => {
 	const toastMessage = createInterpolateElement(
 		__(
-			'Unlock Access to all premium templates with Neve PRO. <a></a>.',
+			'Unlock Access to all premium templates with Neve Business plan. <a></a>.',
 			'templates-patterns-collection'
 		),
 		{
