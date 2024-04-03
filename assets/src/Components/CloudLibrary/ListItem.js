@@ -3,6 +3,7 @@
 import { check, edit, page, trash, update } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import { Button, Icon, TextControl, Tooltip } from '@wordpress/components';
+import api from '@wordpress/api';
 
 import { useState } from '@wordpress/element';
 import classnames from 'classnames';
@@ -51,6 +52,37 @@ const ListItem = ( {
 		setLoading( false );
 	};*/
 
+	/**
+	 * Remove the template from the global option.
+	 *
+	 * @param {string} templateId The template ID.
+	 */
+	const removeFromFseGlobalOption = ( templateId ) => {
+		const settings = new api.models.Settings();
+
+		settings.fetch().then( ( response ) => {
+			const newSettings = Object.keys(
+				response.templates_patterns_collection_fse_templates
+			).reduce( ( acc, key ) => {
+				const template =
+					response.templates_patterns_collection_fse_templates[ key ];
+				const updatedTemplate = { ...template };
+
+				if ( template._ti_tpc_template_id === templateId ) {
+					// Skip the item you want to delete
+					return acc;
+				}
+
+				acc[ key ] = updatedTemplate;
+				return acc;
+			}, {} );
+
+			settings.save( {
+				templates_patterns_collection_fse_templates: newSettings,
+			} );
+		} );
+	};
+
 	const deleteItem = async () => {
 		if (
 			! window.confirm(
@@ -68,6 +100,9 @@ const ListItem = ( {
 					page: 0,
 					...sortingOrder,
 				} );
+				if ( item.template_type === 'fse' ) {
+					removeFromFseGlobalOption( item.template_id );
+				}
 				setLoading( false );
 			}
 		} );
@@ -119,13 +154,20 @@ const ListItem = ( {
 									<Button
 										label={ __( 'Edit' ) }
 										icon={
-											'updating' === isLoading ? update : edit
+											'updating' === isLoading
+												? update
+												: edit
 										}
-										disabled={ isEditing || false !== isLoading }
+										disabled={
+											isEditing || false !== isLoading
+										}
 										className={ classnames( {
-											'is-loading': 'updating' === isLoading,
+											'is-loading':
+												'updating' === isLoading,
 										} ) }
-										onClick={ () => setEditing( ! isEditing ) }
+										onClick={ () =>
+											setEditing( ! isEditing )
+										}
 									/>
 								) }
 
@@ -182,7 +224,12 @@ const ListItem = ( {
 							/>
 						</form>
 					) : (
-						<p>{ itemName }</p>
+						<>
+							<p>{ itemName }</p>
+							{ item.template_type === 'fse' && (
+								<div className="type-label">FSE</div>
+							) }
+						</>
 					) }
 				</div>
 			</div>
@@ -204,6 +251,12 @@ const ListItem = ( {
 					itemName
 				) }
 			</div>
+
+			{ item.template_type === 'fse' && (
+				<div className="type">
+					<div className="type-label">FSE</div>
+				</div>
+			) }
 
 			{ userTemplate && (
 				<div className="controls">

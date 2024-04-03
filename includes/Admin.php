@@ -17,6 +17,8 @@ use TIOB\Importers\Cleanup\Active_State;
 class Admin {
 	use White_Label_Config;
 
+	// TODO: revert this after implementation
+	// const API = 'neve.test/wp-json';
 	const API = 'api.themeisle.com';
 
 	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
@@ -702,6 +704,7 @@ class Admin {
 			'assets'              => TIOB_URL . 'assets/',
 			'upgradeURL'          => $upgrade_url,
 			'upgradeURLTpc'       => $upgrade_url_tpc,
+			'siteUrl'             => trailingslashit( get_site_url() ),
 			'strings'             => array(
 				/* translators: %s - Theme name */
 				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
@@ -768,7 +771,24 @@ class Admin {
 					'is_button' => true,
 				),
 			),
+			'isFSETheme'          => self::is_fse_theme(),
 		);
+	}
+
+	/**
+	 * Check if the current theme is a FSE theme,
+	 *
+	 * @return bool
+	 */
+	public static function is_fse_theme() {
+		if ( function_exists( 'wp_is_block_theme' ) ) {
+			return (bool) wp_is_block_theme();
+		}
+		if ( function_exists( 'gutenberg_is_fse_theme' ) ) {
+			return (bool) gutenberg_is_fse_theme();
+		}
+
+		return false;
 	}
 
 	/**

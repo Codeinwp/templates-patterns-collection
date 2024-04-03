@@ -10,7 +10,13 @@ import {
 	update,
 } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Button, Icon, Popover, TextControl, Tooltip } from '@wordpress/components';
+import {
+	Button,
+	Icon,
+	Popover,
+	TextControl,
+	Tooltip,
+} from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
@@ -39,7 +45,7 @@ const ListItem = ( {
 		const data = await importTemplate( item.template_id );
 
 		if ( data.__file && data.content && 'wp_export' === data.__file ) {
-			importBlocks( data.content, item.meta || [] );
+			importBlocks( data.content, item.meta || [], item.template_type );
 		}
 		setLoading( false );
 	};
@@ -105,7 +111,6 @@ const ListItem = ( {
 						>
 							{ __( 'Preview' ) }
 						</Button>
-
 						<Button
 							isPrimary
 							isBusy={ 'importing' === isLoading }
@@ -121,15 +126,20 @@ const ListItem = ( {
 									<Button
 										label={ __( 'Edit' ) }
 										icon={
-											'updating' === isLoading ? update : edit
+											'updating' === isLoading
+												? update
+												: edit
 										}
 										disabled={
 											isEditing || false !== isLoading
 										}
 										className={ classnames( {
-											'is-loading': 'updating' === isLoading,
+											'is-loading':
+												'updating' === isLoading,
 										} ) }
-										onClick={ () => setEditing( ! isEditing ) }
+										onClick={ () =>
+											setEditing( ! isEditing )
+										}
 									>
 										{ isEditing && (
 											<Popover
@@ -151,18 +161,21 @@ const ListItem = ( {
 													<Button
 														label={ __( 'Update' ) }
 														icon={
-															'updating' === isLoading
+															'updating' ===
+															isLoading
 																? update
 																: check
 														}
 														disabled={
 															false !== isLoading
 														}
-														className={ classnames( {
-															'is-loading':
-																'updating' ===
-																isLoading,
-														} ) }
+														className={ classnames(
+															{
+																'is-loading':
+																	'updating' ===
+																	isLoading,
+															}
+														) }
 														onClick={ updateItem }
 													/>
 												</div>
@@ -206,6 +219,9 @@ const ListItem = ( {
 
 				<div className="card-footer">
 					<p>{ item.template_name }</p>
+					{ item.template_type === 'fse' && (
+						<div className="type-label">FSE</div>
+					) }
 				</div>
 			</div>
 		);
@@ -231,10 +247,18 @@ const ListItem = ( {
 				) }
 			</div>
 
+			{ item.template_type === 'fse' && (
+				<div className="row-type">
+					<div className="type-label">FSE</div>
+				</div>
+			) }
+
 			{ deletable && (
 				<div className="row-controls">
 					{ item.link ? (
-						<Tooltip text={ __( 'This template is synced to a page.' ) }>
+						<Tooltip
+							text={ __( 'This template is synced to a page.' ) }
+						>
 							<Button
 								label={ __( 'Edit' ) }
 								icon={ edit }

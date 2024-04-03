@@ -6,20 +6,20 @@ import apiFetch from '@wordpress/api-fetch';
 import { dispatch, select } from '@wordpress/data';
 import { cleanTemplateContent } from '../../../../shared/utils';
 
-const { omit } = lodash;
-
 const dispatchNotification = ( message ) =>
 	elementor.notifications.showToast( { message } );
 
 export const fetchTemplates = async ( additionalParams = {} ) => {
+	const { meta, ...filteredParams } = tiTpc.params;
+	const { isScroll, ...filteredAdditionalParams } = additionalParams;
 	const params = {
 		cache: localStorage.getItem( 'tpcCacheBuster' ),
-		...omit( tiTpc.params, 'meta' ),
+		...filteredParams,
 		per_page: 20,
 		page: 0,
 		premade: true,
 		template_site_slug: 'general',
-		...omit( additionalParams, 'isScroll' ),
+		...filteredAdditionalParams,
 	};
 
 	const url = stringifyUrl( {
@@ -69,17 +69,19 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 		return;
 	}
 
+	const { meta, ...filteredParams } = tiTpc.params;
+	const { isScroll, ...filteredAdditionalParams } = additionalParams;
 	const params = {
 		per_page: 20,
 		page: 0,
-		...omit( additionalParams, 'isScroll' ),
+		...filteredAdditionalParams,
 	};
 
 	const url = stringifyUrl( {
 		url: window.tiTpc.endpoint + 'templates',
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...omit( tiTpc.params, 'meta' ),
+			...filteredParams,
 			...params,
 		},
 	} );
@@ -122,11 +124,13 @@ export const fetchLibrary = async ( additionalParams = {} ) => {
 };
 
 export const getTemplate = async ( template ) => {
+	const { meta, ...filteredParams } = tiTpc.params;
+
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ template }`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...omit( tiTpc.params, 'meta' ),
+			...filteredParams,
 		},
 	} );
 
@@ -158,11 +162,13 @@ export const getTemplate = async ( template ) => {
  * @return {any} The template content.
  */
 export const importTemplate = async ( template ) => {
+	const { meta, ...filteredParams } = tiTpc.params;
+
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ template }/import`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...omit( tiTpc.params, 'meta' ),
+			...filteredParams,
 		},
 	} );
 
@@ -199,11 +205,12 @@ export const importTemplate = async ( template ) => {
 };
 
 export const duplicateTemplate = async ( id ) => {
+	const { meta, ...filteredParams } = tiTpc.params;
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ id }/clone`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...omit( tiTpc.params, 'meta' ),
+			...filteredParams,
 		},
 	} );
 
@@ -229,13 +236,15 @@ export const duplicateTemplate = async ( id ) => {
 };
 
 export const updateTemplate = async ( params ) => {
+	const { meta, ...filteredParams } = tiTpc.params;
+	const { content, ...filteredAdditionalParams } = params;
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ params.template_id }`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
-			...omit( tiTpc.params, 'meta' ),
+			...filteredParams,
 			meta: JSON.stringify( tiTpc.params.meta ),
-			...omit( params, 'content' ),
+			...filteredAdditionalParams,
 		},
 	} );
 
@@ -280,12 +289,13 @@ export const updateTemplate = async ( params ) => {
 };
 
 export const deleteTemplate = async ( template ) => {
+	const { meta, ...filteredParams } = tiTpc.params;
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ template }`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			_method: 'DELETE',
-			...omit( tiTpc.params, 'meta' ),
+			...filteredParams,
 		},
 	} );
 
@@ -324,7 +334,7 @@ export const exportTemplate = async ( {
 		content,
 	};
 
-	const meta = window.tiTpc.params.meta;
+	const { meta, ...filteredParams } = window.tiTpc.params;
 
 	const currentTemplate = elementor.documents
 		.getCurrent()
@@ -337,7 +347,7 @@ export const exportTemplate = async ( {
 	const url = stringifyUrl( {
 		url: window.tiTpc.endpoint + 'templates',
 		query: {
-			...omit( tiTpc.params, 'meta' ),
+			...filteredParams,
 			meta: 'page' === type ? JSON.stringify( meta ) : '',
 			template_name: title || window.tiTpc.exporter.textPlaceholder,
 			template_type: 'elementor',
@@ -373,13 +383,15 @@ export const exportTemplate = async ( {
 };
 
 export const publishTemplate = async ( params ) => {
+	const { meta, ...filteredParams } = tiTpc.params;
+	const { template_id, ...filteredAdditionalParams } = params;
 	const url = stringifyUrl( {
 		url: `${ window.tiTpc.endpoint }templates/${ params.template_id }/publish`,
 		query: {
 			cache: localStorage.getItem( 'tpcCacheBuster' ),
 			method: 'POST',
-			...omit( tiTpc.params, 'meta' ),
-			...omit( params, 'template_id' ),
+			...filteredParams,
+			...filteredAdditionalParams,
 		},
 	} );
 

@@ -15,6 +15,7 @@ import { importTemplate } from '../data/templates-cloud';
 const ImportModal = ( {
 	clientId,
 	autoLoad = true,
+    isFse = false,
 	modalOpen,
 	setModalOpen,
 } ) => {
@@ -24,9 +25,12 @@ const ImportModal = ( {
 		previewData: select( 'tpc/block-editor' ).getPreview(),
 	} ) );
 
-	const { removeBlock, replaceBlocks, insertBlocks } = useDispatch(
-		'core/block-editor'
-	);
+	const {
+        removeBlock,
+        replaceBlocks,
+        insertBlocks,
+        resetBlocks,
+    } = useDispatch( 'core/block-editor' );
 
 	const { togglePreview } = useDispatch( 'tpc/block-editor' );
 
@@ -125,7 +129,7 @@ const ImportModal = ( {
 		return false;
 	};
 
-	const importBlocks = ( content, metaFields = [] ) => {
+	const importBlocks = ( content, metaFields = [], template_type = '' ) => {
 		updateLibrary( [] );
 		updateTemplates( [] );
 		const { allowed_post } = window.tiTpc;
@@ -135,7 +139,6 @@ const ImportModal = ( {
 			allowed_post.includes( type )
 		) {
 			const fields = JSON.parse( metaFields );
-
 			// eslint-disable-next-line no-unused-vars
 			const { _wp_page_template, ...restFields } = fields;
 			const meta = { ...restFields };
@@ -150,8 +153,11 @@ const ImportModal = ( {
 		}
 
 		if ( ! clientId ) {
-			// Insert a new block at the end of the post.
-			insertBlocks( parse( content ) );
+			if ( template_type === 'fse' ) {
+				resetBlocks( parse( content ) );
+			} else {
+				insertBlocks( parse( content ) );
+			}
 		} else {
 			replaceBlocks( clientId, parse( content ) );
 		}
@@ -165,7 +171,11 @@ const ImportModal = ( {
 			if ( r.__file && r.content && 'wp_export' === r.__file ) {
 				closePreview();
 				setImporting( false );
-				importBlocks( r.content, previewData.meta || [] );
+				importBlocks(
+					r.content,
+					previewData.meta || [],
+					previewData.template_type
+				);
 				return false;
 			}
 
@@ -183,6 +193,9 @@ const ImportModal = ( {
 	const closeModal = () => {
 		setModalOpen( false );
 		setImporting( false );
+		if ( ! isFse ) {
+			removeBlock( clientId );
+		}
 	};
 
 	useEffect( () => {
