@@ -42,6 +42,7 @@ const EditorSelector = ( {
 					<Popover
 						position="bottom center"
 						onClose={ toggleDropdown }
+						inline
 						noArrow
 						inline
 					>
