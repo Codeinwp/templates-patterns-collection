@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "841566cf7ee7e9d5017c8e65df35f551",
+    "content-hash": "f8ff08a56250eed81317ed0f468a3516",
     "packages": [
         {
             "name": "codeinwp/themeisle-sdk",
-            "version": "3.3.17",
+            "version": "3.3.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeinwp/themeisle-sdk.git",
-                "reference": "b5698f21640d0156bd6777aa5c71e0704748755c"
+                "reference": "d1b92f3ab74f1b3f0afad7e23ddb1c058d66c03c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/b5698f21640d0156bd6777aa5c71e0704748755c",
-                "reference": "b5698f21640d0156bd6777aa5c71e0704748755c",
+                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/d1b92f3ab74f1b3f0afad7e23ddb1c058d66c03c",
+                "reference": "d1b92f3ab74f1b3f0afad7e23ddb1c058d66c03c",
                 "shasum": ""
             },
             "require-dev": {
@@ -42,9 +42,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeinwp/themeisle-sdk/issues",
-                "source": "https://github.com/Codeinwp/themeisle-sdk/tree/v3.3.17"
+                "source": "https://github.com/Codeinwp/themeisle-sdk/tree/v3.3.20"
             },
-            "time": "2024-04-01T07:35:31+00:00"
+            "time": "2024-04-16T12:27:32+00:00"
         }
     ],
     "packages-dev": [
@@ -470,16 +470,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.66",
+            "version": "1.10.67",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd"
+                "reference": "16ddbe776f10da6a95ebd25de7c1dbed397dc493"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/94779c987e4ebd620025d9e5fdd23323903950bd",
-                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/16ddbe776f10da6a95ebd25de7c1dbed397dc493",
+                "reference": "16ddbe776f10da6a95ebd25de7c1dbed397dc493",
                 "shasum": ""
             },
             "require": {
@@ -522,13 +522,9 @@
                 {
                     "url": "https://github.com/phpstan",
                     "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
-                    "type": "tidelift"
                 }
             ],
-            "time": "2024-03-28T16:17:31+00:00"
+            "time": "2024-04-16T07:22:02+00:00"
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",
