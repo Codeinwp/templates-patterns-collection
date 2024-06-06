@@ -34,6 +34,12 @@ init_environment(){
     # Install dependent plugins
     docker-compose -f $DOCKER_FILE run --rm -u root cli wp --allow-root plugin install --force --activate otter-blocks
     docker-compose -f $DOCKER_FILE run --rm -u root cli wp --allow-root plugin install --force --activate optimole-wp
+
+    # Disable Neve Onboarding
+    docker-compose -f $DOCKER_FILE run --rm -u root cli wp --allow-root config set TI_ONBOARDING_DISABLED true --raw
+
+    # Disable Otter Onboarding
+    docker-compose -f $DOCKER_FILE run --rm -u root cli wp --allow-root config set ENABLE_OTTER_PRO_DEV true --raw
 }
 
 docker-compose -f $DOCKER_FILE run --rm -u root wordpress mkdir -p /var/www/html/wp-content/uploads
