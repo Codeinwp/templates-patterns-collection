@@ -10,7 +10,7 @@ import {
 	TextControl,
 } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/edit-site';
+import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/edit-post';
 import { Fragment, useEffect, useState } from '@wordpress/element';
 import { store as coreStore } from '@wordpress/core-data';
 import api from '@wordpress/api';
