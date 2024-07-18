@@ -71,7 +71,7 @@ class Editor {
 		wp_register_script(
 			$this->handle,
 			TIOB_URL . 'editor/build/index.js',
-			array_merge( $deps['dependencies'], array( 'wp-api' ) ),
+			array_merge( $deps['dependencies'], array( 'wp-api', 'regenerator-runtime' ) ),
 			$deps['version']
 		);
 

@@ -634,7 +634,7 @@ class Admin {
 			wp_style_add_data( 'tiobObd', 'rtl', 'replace' );
 			wp_enqueue_style( 'tiobObd' );
 
-			wp_register_script( 'tiobObd', TIOB_URL . 'onboarding/build/index.js', array_merge( $onboarding_dependencies['dependencies'], array( 'updates' ) ), $onboarding_dependencies['version'], true );
+			wp_register_script( 'tiobObd', TIOB_URL . 'onboarding/build/index.js', array_merge( $onboarding_dependencies['dependencies'], array( 'updates', 'regenerator-runtime' ) ), $onboarding_dependencies['version'], true );
 			wp_localize_script( 'tiobObd', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
 			wp_enqueue_script( 'tiobObd' );
 
@@ -667,7 +667,7 @@ class Admin {
 		wp_style_add_data( 'tiob', 'rtl', 'replace' );
 		wp_enqueue_style( 'tiob' );
 
-		wp_register_script( 'tiob', TIOB_URL . 'assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates' ) ), $dependencies['version'], true );
+		wp_register_script( 'tiob', TIOB_URL . 'assets/build/app.js', array_merge( $dependencies['dependencies'], array( 'updates', 'regenerator-runtime' ) ), $dependencies['version'], true );
 		$tiob_dash = apply_filters( 'neve_dashboard_page_data', $this->get_localization() );
 		if ( $is_tiob_page ) {
 			$tiob_dash['hideStarterSites'] = true;
