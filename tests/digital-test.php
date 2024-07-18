@@ -41,7 +41,7 @@ class Digital_Rest_Test extends WP_UnitTestCase {
 	/**
 	 * setUp
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		wp_set_current_user( self::$admin_id );
 		add_theme_support(
