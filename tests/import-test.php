@@ -14,7 +14,7 @@ use TIOB\Importers\WP\WP_Import;
  */
 class Import_Test extends WP_UnitTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		register_taxonomy(
 			'product_type',
