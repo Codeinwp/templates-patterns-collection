@@ -113,6 +113,43 @@ const ImportOptionsControl = ( {
 				}
 			),
 		},
+		hyveLite: {
+			title: __( 'AI Chatbot', 'templates-patterns-collection' ),
+			icon: 'admin-comments',
+			tooltip: createInterpolateElement(
+				sprintf(
+					// translators: %s is Hyve plugin name.
+					__(
+						'Hyve is an AI-powered chatbot that transforms your WordPress content into engaging conversations. <a><span>%s</span><icon/></a>',
+						'templates-patterns-collection'
+					),
+					'Hyve'
+				),
+				{
+					a: (
+						// eslint-disable-next-line jsx-a11y/anchor-has-content
+						<a
+							href="https://wordpress.org/plugins/hyve-lite/"
+							target={ '_blank' }
+							rel="external noreferrer noopener"
+							style={ {
+								textDecoration: 'none',
+								display: 'inline-flex',
+								alignItems: 'center',
+							} }
+						/>
+					),
+					icon: (
+						<Icon
+							size={ 10 }
+							icon="external"
+							style={ { marginLeft: 0 } }
+						/>
+					),
+					span: <div />,
+				}
+			),
+		},
 	};
 
 	if ( cleanupAllowed === 'yes' ) {
