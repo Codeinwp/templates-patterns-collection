@@ -118,12 +118,14 @@ const ImportOptionsControl = ( {
 			icon: 'admin-comments',
 			tooltip: createInterpolateElement(
 				sprintf(
-					// translators: %s is Hyve plugin name.
 					__(
-						'Hyve is an AI-powered chatbot that transforms your WordPress content into engaging conversations. <a><span>%s</span><icon/></a>',
+						// translators: %1$s is the opening tag for the link.
+						// translators: %2$s is the closing tag for the link.
+						'Hyve is an AI-powered chatbot that transforms your WordPress content into engaging conversations. %1$sHyve%2$s',
 						'templates-patterns-collection'
 					),
-					'Hyve'
+					'<a><span>',
+					'</span><icon/></a>'
 				),
 				{
 					a: (

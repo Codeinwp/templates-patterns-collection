@@ -271,10 +271,11 @@ const ImportModal = ( {
 					sprintf(
 						// translators: %s is Hyve plugin name.
 						__(
-							'Hyve is an AI-powered chatbot that transforms your WordPress content into engaging conversations. <a><span>%s</span><icon/></a>',
+							'Hyve is an AI-powered chatbot that transforms your WordPress content into engaging conversations. %sHyve%s',
 							'templates-patterns-collection'
 						),
-						'Hyve'
+						'<a><span>',
+						'</span><icon/></a>'
 					),
 					{
 						a: (
