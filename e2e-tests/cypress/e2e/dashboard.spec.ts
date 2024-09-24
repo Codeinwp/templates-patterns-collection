@@ -17,7 +17,6 @@ describe('Dashboard Page - Default', function () {
   });
 
   it('Preview Works', function () {
-    cy.wait(1000);
     cy.get('.starter-site-card').first().as('firstCard');
     cy.get('@firstCard').realHover();
     cy.get('@firstCard').find('button').should('have.length', 2);
@@ -145,6 +144,7 @@ describe('Importer Works', function () {
     cy.intercept('POST', '**import_theme_mods*').as('importCustomizer');
     cy.intercept('POST', '**import_widgets*').as('importWidgets');
 
+    cy.wait(1000);
     cy.get('.starter-site-card').first().as('firstCard');
     cy.get('@firstCard').trigger('mouseover');
     cy.get('@firstCard').find('button').should('have.length', 2);
