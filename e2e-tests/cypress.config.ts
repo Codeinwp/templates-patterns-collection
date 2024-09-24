@@ -9,6 +9,8 @@ export default defineConfig({
   numTestsKeptInMemory: 0,
   watchForFileChanges: false,
   experimentalStudio: true,
+  defaultCommandTimeout: 10000,
+  pageLoadTimeout:10000,
   e2e: {
     setupNodeEvents(on, config) {
       return require('./cypress/plugins/index.js')(on, config);
