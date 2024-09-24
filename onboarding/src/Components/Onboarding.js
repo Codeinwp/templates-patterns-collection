@@ -14,6 +14,7 @@ const Onboarding = ( { step, themeData } ) => {
 		widgets: true,
 		cleanup: false,
 		performanceAddon: true,
+		hyveLite: true,
 		theme_install: themeData !== false,
 	} );
 	const [ importing, setImporting ] = useState( false );

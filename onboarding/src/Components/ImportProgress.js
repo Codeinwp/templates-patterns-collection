@@ -22,6 +22,7 @@ const ImportProgress = ( { currentStep, actionsNb, actionsDone } ) => {
 			'Installing Performance Features',
 			'templates-patterns-collection'
 		),
+		hyveLite: __( 'Installing Chatbot', 'templates-patterns-collection' ),
 	};
 
 	const increaseAmount = 100 / ( actionsNb + 1 );
