@@ -17,10 +17,9 @@ describe('Dashboard Page - Default', function () {
   });
 
   it('Preview Works', function () {
-    cy.wait(1000);
     cy.get('.starter-site-card').first().as('firstCard');
     cy.get('@firstCard').realHover();
-    cy.get('@firstCard').find('button').should('have.length', 3);
+    cy.get('@firstCard').find('button').should('have.length', 2);
     cy.get('@firstCard').find('button').contains('Preview').click();
 
     cy.get('.ob-preview').as('previewWrap');
