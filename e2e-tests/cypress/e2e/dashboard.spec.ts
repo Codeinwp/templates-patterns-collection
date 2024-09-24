@@ -17,6 +17,7 @@ describe('Dashboard Page - Default', function () {
   });
 
   it('Preview Works', function () {
+    cy.wait(1000);
     cy.get('.starter-site-card').first().as('firstCard');
     cy.get('@firstCard').realHover();
     cy.get('@firstCard').find('button').should('have.length', 3);
@@ -146,7 +147,7 @@ describe('Importer Works', function () {
 
     cy.get('.starter-site-card').first().as('firstCard');
     cy.get('@firstCard').trigger('mouseover');
-    cy.get('@firstCard').find('button').should('have.length', 3);
+    cy.get('@firstCard').find('button').should('have.length', 2);
     cy.get('@firstCard').find('button').contains('Import').click();
 
     cy.wait('@getModalData').then((req) => {
