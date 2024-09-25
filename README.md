@@ -39,6 +39,13 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 ## Changelog ##
 
+##### [Version 1.2.11](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.10...v1.2.11) (2024-09-25)
+
+- Onboarding wizard changes.
+
+
+
+
 ##### [Version 1.2.10](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.9...v1.2.10) (2024-07-18)
 
 - Fixed Navigation block error
