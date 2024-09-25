@@ -53,6 +53,7 @@ const ImportModal = ( {
 		widgets: true,
 		cleanup: false,
 		performanceAddon: true,
+		hyveLite: true,
 		theme_install: themeData !== false,
 	} );
 	const site = tiobDash.onboarding.homeUrl || '';
@@ -61,6 +62,7 @@ const ImportModal = ( {
 	const [ performanceAddonProgress, setPerformanceAddonProgress ] = useState(
 		false
 	);
+	const [ hyveLiteProgress, setHyveLiteProgress ] = useState( false );
 	const [ cleanupProgress, setCleanupProgress ] = useState( false );
 	const [ pluginsProgress, setPluginsProgress ] = useState( false );
 	const [ contentProgress, setContentProgress ] = useState( false );
@@ -81,7 +83,9 @@ const ImportModal = ( {
 		cleanupAllowed
 	);
 	const [ email, setEmail ] = useState( tiobDash.emailSubscribe.email || '' );
-	const [ skipSubscribe, setSkipSubscribe ] = useState( 'yes' === tiobDash?.emailSubscribe?.skipStatus );
+	const [ skipSubscribe, setSkipSubscribe ] = useState(
+		'yes' === tiobDash?.emailSubscribe?.skipStatus
+	);
 	const [ processingSub, setProcessingSub ] = useState( false );
 
 	useEffect( () => {
@@ -260,6 +264,44 @@ const ImportModal = ( {
 					}
 				),
 			},
+			hyveLite: {
+				title: __( 'AI Chatbot', 'templates-patterns-collection' ),
+				icon: 'admin-comments',
+				tooltip: createInterpolateElement(
+					sprintf(
+						// translators: %s is Hyve plugin name.
+						__(
+							'Hyve is an AI-powered chatbot that transforms your WordPress content into engaging conversations. %sHyve%s',
+							'templates-patterns-collection'
+						),
+						'<a><span>',
+						'</span><icon/></a>'
+					),
+					{
+						a: (
+							// eslint-disable-next-line jsx-a11y/anchor-has-content
+							<a
+								href="https://wordpress.org/plugins/hyve-lite/"
+								target={ '_blank' }
+								rel="external noreferrer noopener"
+								style={ {
+									textDecoration: 'none',
+									display: 'inline-flex',
+									alignItems: 'center',
+								} }
+							/>
+						),
+						icon: (
+							<Icon
+								size={ 10 }
+								icon="external"
+								style={ { marginLeft: 0 } }
+							/>
+						),
+						span: <div />,
+					}
+				),
+			},
 		};
 
 		if ( isCleanupAllowed === 'yes' ) {
@@ -305,7 +347,11 @@ const ImportModal = ( {
 							<span>{ title }</span>
 							{ tooltip && (
 								<CustomTooltip
-									toLeft={ id === 'performanceAddon' || id === 'cleanup' }
+									toLeft={ [
+										'performanceAddon',
+										'cleanup',
+										'hyveLite',
+									].includes( id ) }
 									rightOffset={ id === 'cleanup' ? -90 : 0 }
 								>
 									{ tooltip }
@@ -343,15 +389,19 @@ const ImportModal = ( {
 			return null;
 		}
 
-		const [ pluginsOpened, setPluginsOpened ] = useState( Object.keys( allPlugins ).length < 3 );
+		const [ pluginsOpened, setPluginsOpened ] = useState(
+			Object.keys( allPlugins ).length < 3
+		);
 
 		const toggleOpen = () => {
 			setPluginsOpened( ! pluginsOpened );
 		};
 
-		const pluginsList = Object.keys( allPlugins ).map( ( slug, index ) => {
-			return allPlugins[ slug ];
-		} ).join( ', ' );
+		const pluginsList = Object.keys( allPlugins )
+			.map( ( slug, index ) => {
+				return allPlugins[ slug ];
+			} )
+			.join( ', ' );
 
 		return (
 			<>
@@ -392,18 +442,21 @@ const ImportModal = ( {
 						);
 					} ) }
 				</PanelBody>
-				{ ! pluginsOpened && (<i className="plugin-summary">
-					<CustomTooltip
-						toLeft={false}
-					>
-						<span
-							dangerouslySetInnerHTML={ {
-								__html: pluginsList,
-							} }
-						/>
-					</CustomTooltip>
-					{ __( 'Additional plugins are required for this Starter Site in order to work properly. ', 'templates-patterns-collection' ) }
-				</i>) }
+				{ ! pluginsOpened && (
+					<i className="plugin-summary">
+						<CustomTooltip toLeft={ false }>
+							<span
+								dangerouslySetInnerHTML={ {
+									__html: pluginsList,
+								} }
+							/>
+						</CustomTooltip>
+						{ __(
+							'Additional plugins are required for this Starter Site in order to work properly. ',
+							'templates-patterns-collection'
+						) }
+					</i>
+				) }
 			</>
 		);
 	};
@@ -495,7 +548,11 @@ const ImportModal = ( {
 
 	function runImportPlugins() {
 		// console.clear();
-		if ( ! pluginOptions && ! general.performanceAddon ) {
+		if (
+			! pluginOptions &&
+			! general.performanceAddon &&
+			! general.hyveLite
+		) {
 			console.log( '[S] Plugins.' );
 			runImportContent();
 			return false;
@@ -602,7 +659,7 @@ const ImportModal = ( {
 	function runPerformanceAddonInstall() {
 		if ( ! general.performanceAddon ) {
 			console.log( '[S] Performance Addon.' );
-			importDone();
+			runHyveLiteInstall();
 			return false;
 		}
 		setCurrentStep( 'performanceAddon' );
@@ -616,10 +673,34 @@ const ImportModal = ( {
 				}
 				console.log( '[D] Performance Addon.' );
 				setPerformanceAddonProgress( 'done' );
-				importDone();
+				runHyveLiteInstall();
 			} )
 			.catch( ( incomingError ) =>
 				handleError( incomingError, 'performanceAddon' )
+			);
+	}
+
+	function runHyveLiteInstall() {
+		if ( ! general.hyveLite ) {
+			console.log( '[S] Hyve Lite.' );
+			importDone();
+			return false;
+		}
+		setCurrentStep( 'hyveLite' );
+		console.log( '[P] Hyve Lite.' );
+
+		installPlugins( { 'hyve-lite': true } )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					handleError( response, 'hyveLite' );
+					return false;
+				}
+				console.log( '[D] Hyve Lite.' );
+				setHyveLiteProgress( 'done' );
+				importDone();
+			} )
+			.catch( ( incomingError ) =>
+				handleError( incomingError, 'hyveLite' )
 			);
 	}
 
@@ -671,6 +752,10 @@ const ImportModal = ( {
 				'Something went wrong while installing the performance addon.',
 				'templates-patterns-collection'
 			),
+			hyveLite: __(
+				'Something went wrong while installing the Hyve Lite plugin.',
+				'templates-patterns-collection'
+			),
 		};
 
 		switch ( step ) {
@@ -691,6 +776,9 @@ const ImportModal = ( {
 				break;
 			case 'performanceAddon':
 				setPerformanceAddonProgress( 'error' );
+				break;
+			case 'hyveLite':
+				setHyveLiteProgress( 'error' );
 				break;
 		}
 		setError(
@@ -735,10 +823,7 @@ const ImportModal = ( {
 		'templates-patterns-collection'
 	);
 	if ( skipSubscribe ) {
-		viewWebsiteText = __(
-			'View Website',
-			'templates-patterns-collection'
-		);
+		viewWebsiteText = __( 'View Website', 'templates-patterns-collection' );
 		skipText = __(
 			'Add your own content',
 			'templates-patterns-collection'
@@ -746,13 +831,17 @@ const ImportModal = ( {
 	}
 
 	const markSubscribeSkip = ( redirect, data = {} ) => {
-		ajaxAction( tiobDash.emailSubscribe.ajaxURL, 'skip_subscribe',  tiobDash.emailSubscribe.nonce, data )
-			.then(() => {
-				setSkipSubscribe(true);
-				setProcessingSub( false );
-				window.location.href = redirect;
-			});
-	}
+		ajaxAction(
+			tiobDash.emailSubscribe.ajaxURL,
+			'skip_subscribe',
+			tiobDash.emailSubscribe.nonce,
+			data
+		).then( () => {
+			setSkipSubscribe( true );
+			setProcessingSub( false );
+			window.location.href = redirect;
+		} );
+	};
 
 	const goToEditContent = () => {
 		if ( skipSubscribe ) {
@@ -779,34 +868,36 @@ const ImportModal = ( {
 		fetch( 'https://api.themeisle.com/tracking/subscribe', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({
+			body: JSON.stringify( {
 				slug: 'templates-patterns-collection',
 				site,
-				email
-			})
-		})
-			.then( r => r.json() )
+				email,
+			} ),
+		} )
+			.then( ( r ) => r.json() )
 			.then( ( response ) => {
 				if ( 'success' === response.code ) {
-					markSubscribeSkip( site )
+					markSubscribeSkip( site );
 				}
-			})?.catch( ( error ) => {
+			} )
+			?.catch( ( error ) => {
 				console.error( error );
-			markSubscribeSkip( site, { isTempSkip: true } )
-		});
-	}
+				markSubscribeSkip( site, { isTempSkip: true } );
+			} );
+	};
 
-	let modalTitle = importData ?
-		sprintf(
+	let modalTitle = importData
+		? sprintf(
 			/* translators: name of starter site */
 			__(
 				'Import %s as a complete site',
 				'templates-patterns-collection'
 			),
 			importData.title
-		) : '';
+		  )
+		: '';
 	if ( 'done' === currentStep && ! error ) {
 		modalTitle = __(
 			'Content was successfully imported',
@@ -832,12 +923,14 @@ const ImportModal = ( {
 							siteData.doc_url && (
 								<DocNotice
 									data={ {
-										text: __( 'Learn more about this starter site', 'templates-patterns-collection' ),
+										text: __(
+										'Learn more about this starter site',
+										'templates-patterns-collection'
+									),
 										url: siteData.doc_url,
 									} }
 								/>
-							)
-						}
+							) }
 						{ ! importing && 'done' !== currentStep && ! error ? (
 							<>
 								<ModalHead />
@@ -869,6 +962,7 @@ const ImportModal = ( {
 											customizer: customizerProgress,
 											widgets: widgetsProgress,
 											performanceAddon: performanceAddonProgress,
+											hyveLite: hyveLiteProgress,
 										} }
 										currentStep={ currentStep }
 										willDo={ general }
@@ -876,11 +970,18 @@ const ImportModal = ( {
 								) }
 								{ 'done' === currentStep && ! skipSubscribe && (
 									<>
-										<p className="tpc-subscribe-email-text">{ __( 'Stay up-to-date on news, tips and product updates', 'templates-patterns-collection' ) }</p>
+										<p className="tpc-subscribe-email-text">
+											{ __(
+												'Stay up-to-date on news, tips and product updates',
+												'templates-patterns-collection'
+											) }
+										</p>
 
 										<TextControl
-											aria-label={ __( 'Enter your email', 'templates-patterns-collection' ) }
-
+											aria-label={ __(
+												'Enter your email',
+												'templates-patterns-collection'
+											) }
 											type="email"
 											value={ email }
 											onChange={ setEmail }
@@ -889,7 +990,12 @@ const ImportModal = ( {
 									</>
 								) }
 								{ 'done' === currentStep && skipSubscribe && (
-									<span style={{display: 'block', marginBottom: '60px'}}/>
+									<span
+										style={ {
+											display: 'block',
+											marginBottom: '60px',
+										} }
+									/>
 								) }
 							</>
 						) }
@@ -932,7 +1038,9 @@ const ImportModal = ( {
 								<div className="import-done-actions">
 									<Button
 										isLink
-										className={ classnames( 'close', { 'is-grayed': ! skipSubscribe } ) }
+										className={ classnames( 'close', {
+											'is-grayed': ! skipSubscribe,
+										} ) }
 										disabled={ processingSub }
 										onClick={ goToEditContent }
 									>

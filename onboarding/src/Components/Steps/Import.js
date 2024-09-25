@@ -121,7 +121,11 @@ const Import = ( {
 	}
 
 	function runImportPlugins() {
-		if ( ! pluginOptions && ! general.performanceAddon ) {
+		if (
+			! pluginOptions &&
+			! general.performanceAddon &&
+			! general.hyveLite
+		) {
 			console.log( '[S] Plugins.' );
 			runImportContent();
 			return false;
@@ -226,7 +230,7 @@ const Import = ( {
 	function runPerformanceAddonInstall() {
 		if ( ! general.performanceAddon ) {
 			console.log( '[S] Performance Addon.' );
-			importDone();
+			runHyveLiteInstall();
 			return false;
 		}
 		setCurrentStep( 'performanceAddon' );
@@ -240,10 +244,34 @@ const Import = ( {
 				}
 				console.log( '[D] Performance Addon.' );
 				setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
-				setTimeout( importDone, 2000 );
+				runHyveLiteInstall();
 			} )
 			.catch( ( incomingError ) =>
 				handleError( incomingError, 'performanceAddon' )
+			);
+	}
+
+	function runHyveLiteInstall() {
+		if ( ! general.hyveLite ) {
+			console.log( '[S] Hyve Lite.' );
+			importDone();
+			return false;
+		}
+		setCurrentStep( 'hyveLite' );
+		console.log( '[P] Hyve Lite.' );
+
+		installPlugins( { 'hyve-lite': true } )
+			.then( ( response ) => {
+				if ( ! response.success ) {
+					handleError( response, 'hyveLite' );
+					return false;
+				}
+				console.log( '[D] Hyve Lite.' );
+				setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
+				setTimeout( importDone, 2000 );
+			} )
+			.catch( ( incomingError ) =>
+				handleError( incomingError, 'hyveLite' )
 			);
 	}
 
@@ -280,6 +308,10 @@ const Import = ( {
 			),
 			performanceAddon: __(
 				'Something went wrong while installing the performance addon.',
+				'templates-patterns-collection'
+			),
+			hyveLite: __(
+				'Something went wrong while installing the Hyve Lite theme.',
 				'templates-patterns-collection'
 			),
 		};
