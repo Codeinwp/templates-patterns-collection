@@ -1,4 +1,3 @@
-/* global Blob */
 import { __ } from '@wordpress/i18n';
 
 const untrailingSlashIt = ( str ) => str.replace( /\/$/, '' );

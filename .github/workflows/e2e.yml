@@ -14,16 +14,20 @@ jobs:
     name: E2E Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: lts/gallium # 16.x
+          node-version: lts/hydrogen # 18.x
       - name: Build
         run: |
           yarn install --frozen-lockfile
           composer install --no-dev --prefer-dist --no-progress --no-suggest
           yarn run build
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - name: Install testing env
         run: bash ./bin/e2e-env.sh
       - name: Run Cypress tests

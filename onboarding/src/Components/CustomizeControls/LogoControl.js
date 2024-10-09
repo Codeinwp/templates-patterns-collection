@@ -95,9 +95,8 @@ const LogoControl = ( { userCustomSettings, handleLogoChange } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getUserCustomSettings, getImportData } = select(
-			'ti-onboarding'
-		);
+		const { getUserCustomSettings, getImportData } =
+			select( 'ti-onboarding' );
 		return {
 			userCustomSettings: getUserCustomSettings(),
 			importData: getImportData(),
@@ -105,11 +104,8 @@ export default compose(
 	} ),
 	withDispatch(
 		( dispatch, { importData, userCustomSettings, importDataDefault } ) => {
-			const {
-				setUserCustomSettings,
-				setImportData,
-				setRefresh,
-			} = dispatch( 'ti-onboarding' );
+			const { setUserCustomSettings, setImportData, setRefresh } =
+				dispatch( 'ti-onboarding' );
 
 			return {
 				handleLogoChange: ( newLogo ) => {
@@ -128,13 +124,13 @@ export default compose(
 								: importDataDefault.theme_mods.custom_logo,
 							logo_logo: newLogo
 								? JSON.stringify( {
-									dark: newLogo.id,
-									light: newLogo.id,
-									same: true,
+										dark: newLogo.id,
+										light: newLogo.id,
+										same: true,
 								  } )
 								: JSON.stringify( {
-									...importDataDefault.theme_mods
-										.logo_logo,
+										...importDataDefault.theme_mods
+											.logo_logo,
 								  } ),
 						},
 					};

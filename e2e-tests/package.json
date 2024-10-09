@@ -44,12 +44,5 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "visual:test": "percy exec -- cypress run --config baseUrl=https://qa-neve.themeisle.com,video=false --spec 'cypress/integration/visual-regression/**/*.spec.js' --headless"
-  },
-  "browserslist": [
-    "> 0.5%",
-    "last 2 versions",
-    "Firefox ESR",
-    "not dead",
-    "not IE 9-11"
-  ]
+  }
 }

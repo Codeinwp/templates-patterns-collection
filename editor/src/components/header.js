@@ -41,13 +41,17 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 		await fetchTemplates( {
 			search: getSearchQuery(),
 			...order,
-			showFSE: tiTpc.isFSETheme ? window?.localStorage?.tpcShowFse === 'true' : false,
+			showFSE: tiTpc.isFSETheme
+				? window?.localStorage?.tpcShowFse === 'true'
+				: false,
 		} );
 
 		await fetchLibrary( {
 			search: getSearchQuery(),
 			...order,
-			showFSE: tiTpc.isFSETheme ? window?.localStorage?.tpcShowFse === 'true' : false,
+			showFSE: tiTpc.isFSETheme
+				? window?.localStorage?.tpcShowFse === 'true'
+				: false,
 		} );
 
 		setFetching( false );
