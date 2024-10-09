@@ -96,11 +96,14 @@ const Export = ( { updateCurrentTab } ) => {
 	const refreshData = async () => {
 		setLoading( true );
 		try {
-			await getTemplate(templateID).then((results) => {
-				if (templateID === results.template_id) {
+			await getTemplate( templateID ).then( ( results ) => {
+				if ( templateID === results.template_id ) {
 					setScreenshotURL( results.template_thumbnail );
 					elementor.notifications.showToast( {
-						message: __('Template Data Refreshed.', 'templates-patterns-collection'),
+						message: __(
+							'Template Data Refreshed.',
+							'templates-patterns-collection'
+						),
 					} );
 					window.tiTpc.postModel.set( 'meta', {
 						_ti_tpc_template_id: templateID,
@@ -112,10 +115,11 @@ const Export = ( { updateCurrentTab } ) => {
 
 					window.tiTpc.postModel.save();
 				}
-			});
+			} );
 		} catch ( error ) {
 			elementor.notifications.showToast( {
-				message: 'Something happened when refreshing the template data.',
+				message:
+					'Something happened when refreshing the template data.',
 			} );
 		}
 		setLoading( false );
@@ -247,10 +251,12 @@ const Export = ( { updateCurrentTab } ) => {
 									}
 								/>
 							</div>
-							<p style={descriptionStyles}>{ __(
-								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
-								'templates-patterns-collection'
-							) }</p>
+							<p style={ descriptionStyles }>
+								{ __(
+									'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
+									'templates-patterns-collection'
+								) }
+							</p>
 
 							<div className="ti-tpc-template-library-blank-field">
 								<label
@@ -269,10 +275,12 @@ const Export = ( { updateCurrentTab } ) => {
 									}
 								/>
 							</div>
-							<p style={descriptionStyles}>{ __(
-								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.',
-								'templates-patterns-collection'
-							) }</p>
+							<p style={ descriptionStyles }>
+								{ __(
+									'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.',
+									'templates-patterns-collection'
+								) }
+							</p>
 
 							<div className="ti-tpc-template-library-blank-field">
 								<Button
@@ -297,18 +305,27 @@ const Export = ( { updateCurrentTab } ) => {
 									<Button
 										className={ classnames(
 											'elementor-button elementor-button-success',
-											{ 'elementor-button-state': isLoading }
+											{
+												'elementor-button-state':
+													isLoading,
+											}
 										) }
 										onClick={ refreshData }
-										style={ { backgroundColor: 'dimgray', marginLeft: '12px' } }
+										style={ {
+											backgroundColor: 'dimgray',
+											marginLeft: '12px',
+										} }
 									>
-									<span className="elementor-state-icon">
-										<i
-											className="eicon-loading eicon-animation-spin"
-											aria-hidden="true"
-										></i>
-									</span>
-										{ __( 'Refresh', 'templates-patterns-collection') }
+										<span className="elementor-state-icon">
+											<i
+												className="eicon-loading eicon-animation-spin"
+												aria-hidden="true"
+											></i>
+										</span>
+										{ __(
+											'Refresh',
+											'templates-patterns-collection'
+										) }
 									</Button>
 								) }
 							</div>

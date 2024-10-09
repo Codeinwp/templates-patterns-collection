@@ -121,12 +121,8 @@ const CustomizeSite = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const {
-			getCurrentEditor,
-			getCurrentSite,
-			getThemeAction,
-			getError,
-		} = select( 'ti-onboarding' );
+		const { getCurrentEditor, getCurrentSite, getThemeAction, getError } =
+			select( 'ti-onboarding' );
 		return {
 			error: getError(),
 			editor: getCurrentEditor(),
@@ -135,12 +131,8 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const {
-			setFetching,
-			setImportData,
-			setPluginOptions,
-			setError,
-		} = dispatch( 'ti-onboarding' );
+		const { setFetching, setImportData, setPluginOptions, setError } =
+			dispatch( 'ti-onboarding' );
 		return {
 			setFetching,
 			setImportData,

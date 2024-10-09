@@ -71,9 +71,8 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch, { step, query, trackingId } ) => {
-		const { setSearchQuery, setCategory, setOnboardingStep } = dispatch(
-			'ti-onboarding'
-		);
+		const { setSearchQuery, setCategory, setOnboardingStep } =
+			dispatch( 'ti-onboarding' );
 		return {
 			onSearch: ( searchQuery ) => setSearchQuery( searchQuery ),
 			deleteQuery: () => setSearchQuery( '' ),
