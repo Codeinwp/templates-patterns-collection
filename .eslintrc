@@ -5,11 +5,9 @@
         "ecmaFeatures": {
             "jsx": true
         },
-        "ecmaVersion": 2018,
         "sourceType": "module"
     },
     "rules": {
-        "indent": ["error", "tab", { "SwitchCase": 1 }],
         "linebreak-style": [
             "error",
             "unix"
@@ -23,7 +21,7 @@
             "always"
         ],
         "no-unused-vars": [
-            "error", {
+            "warn", {
                 "vars": "all",
                 "args": "after-used",
                 "ignoreRestSiblings": false
@@ -32,7 +30,10 @@
         "react/jsx-uses-react": "error",
         "react/jsx-uses-vars": "error",
         "no-alert": 0,
-        "no-nested-ternary": 0
+        "no-nested-ternary": 0,
+        "prettier/prettier": "off",
+        "no-shadow": "warn",
+        "camelcase": "warn"
     },
 	"ignorePatterns": ["**/vendor/**"]
 }

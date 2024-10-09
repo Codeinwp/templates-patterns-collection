@@ -404,7 +404,11 @@ class TI_Beaver extends FLBuilderModule {
 					),
 					'actions'        => array(
 						'sync'     => __( 'Sync Library', 'templates-patterns-collection' ),
-						'save'     => sprintf( __( 'Save to %s', 'templates-patterns-collection' ), 'templates-patterns-collection' ),
+						'save'     => sprintf(
+							// translators: %s: templates location.
+							__( 'Save to %s', 'templates-patterns-collection' ),
+							'templates-patterns-collection'
+						),
 						'update'   => __( 'Update', 'templates-patterns-collection' ),
 						'close'    => __( 'Close', 'templates-patterns-collection' ),
 						'edit'     => __( 'Edit', 'templates-patterns-collection' ),
@@ -429,7 +433,11 @@ class TI_Beaver extends FLBuilderModule {
 					),
 					'export'         => array(
 						'save'            => __( 'Save', 'templates-patterns-collection' ),
-						'title'           => sprintf( __( 'Save your page to %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
+						'title'           => sprintf(
+							// translators: %s: Templates Cloud
+							__( 'Save your page to %s', 'templates-patterns-collection' ),
+							'Templates Cloud'
+						),
 						'labelScreenshot' => __( 'Screenshot URL', 'templates-patterns-collection' ),
 						'labelSlug'       => __( 'Site Slug', 'templates-patterns-collection' ),
 						'publish'         => __( 'Publish', 'templates-patterns-collection' ),

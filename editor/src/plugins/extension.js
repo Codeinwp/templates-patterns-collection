@@ -34,9 +34,8 @@ const Exporter = () => {
 	const [ title, setTitle ] = useState( '' );
 	const { canPredefine } = window.tiTpc;
 
-	const { createErrorNotice, createSuccessNotice } = useDispatch(
-		'core/notices'
-	);
+	const { createErrorNotice, createSuccessNotice } =
+		useDispatch( 'core/notices' );
 
 	const { editPost } = useDispatch( 'core/editor' );
 
@@ -113,9 +112,8 @@ const Exporter = () => {
 	} ) );
 
 	const isPostSaving = useSelect( ( select, { forceIsSaving } ) => {
-		const { isSavingPost, isPublishingPost, isAutosavingPost } = select(
-			'core/editor'
-		);
+		const { isSavingPost, isPublishingPost, isAutosavingPost } =
+			select( 'core/editor' );
 
 		const isSaving = forceIsSaving || isSavingPost();
 		const isAutoSaving = isAutosavingPost();
@@ -274,7 +272,7 @@ const Exporter = () => {
 		let { meta, ...filteredParams } = window.tiTpc.params;
 		// For Custom Layouts attach additional meta to check on import.
 		if ( type === 'neve_custom_layouts' ) {
-            meta = { ...tiTpc.params.meta, postType: type };
+			meta = { ...tiTpc.params.meta, postType: type };
 		}
 		if ( ! doesExist ) {
 			url = stringifyUrl( {

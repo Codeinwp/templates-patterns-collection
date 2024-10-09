@@ -18,9 +18,8 @@ const WrappedTpcTemplatesButton = () => {
 
 	const { isEditedPostSaveable, isViewable } = useSelect(
 		( select ) => ( {
-			isEditedPostSaveable: select(
-				'core/editor'
-			).isEditedPostSaveable(),
+			isEditedPostSaveable:
+				select( 'core/editor' ).isEditedPostSaveable(),
 			isViewable: select( 'core' ).getPostType(
 				select( 'core/editor' ).getEditedPostAttribute( 'type' )
 			)?.viewable,
