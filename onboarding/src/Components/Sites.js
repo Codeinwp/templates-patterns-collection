@@ -106,12 +106,8 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 };
 
 export default withSelect( ( select ) => {
-	const {
-		getCurrentEditor,
-		getCurrentCategory,
-		getSites,
-		getSearchQuery,
-	} = select( 'ti-onboarding' );
+	const { getCurrentEditor, getCurrentCategory, getSites, getSearchQuery } =
+		select( 'ti-onboarding' );
 	return {
 		editor: getCurrentEditor(),
 		category: getCurrentCategory(),

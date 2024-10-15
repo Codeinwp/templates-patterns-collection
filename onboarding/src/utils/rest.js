@@ -1,4 +1,4 @@
-/* global tiobDash, FormData, fetch, jQuery, ajaxurl */
+/* global tiobDash, jQuery, ajaxurl */
 /* eslint-disable no-console */
 
 export const send = ( route, data, simple = false ) => {

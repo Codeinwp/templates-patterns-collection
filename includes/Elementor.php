@@ -63,7 +63,11 @@ class Elementor {
 					'postType'         => get_post_type(),
 					'placeholderIndex' => '-1',
 					'exporter'         => array(
-						'exportLabel'         => sprintf( __( 'Save to %s', 'templates-patterns-collection' ), 'Templates Cloud' ),
+						'exportLabel'         => sprintf(
+							// translators: %s: templates location.
+							__( 'Save to %s', 'templates-patterns-collection' ),
+							'Templates Cloud'
+						),
 						'modalLabel'          => __( 'Save Templates', 'templates-patterns-collection' ),
 						'textLabel'           => __( 'Template Name', 'templates-patterns-collection' ),
 						'textPlaceholder'     => __( 'Template', 'templates-patterns-collection' ),
@@ -92,7 +96,7 @@ class Elementor {
 						'actions'        => array(
 							'sync'      => __( 'Sync Library', 'templates-patterns-collection' ),
 							'save'      => sprintf(
-								// translators: %s: Templates Cloud
+								// translators: %s: templates location.
 								__( 'Save to %s', 'templates-patterns-collection' ),
 								'Templates Cloud'
 							),
