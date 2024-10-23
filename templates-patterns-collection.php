@@ -95,4 +95,3 @@ function ti_tpc_activation_redirect( $product ) {
 }
 add_action( 'activated_plugin', 'ti_tpc_activation_redirect' );
 add_action( 'switch_theme', 'ti_tpc_activation_redirect' );
-add_filter( 'templates-patterns-collection_sdk_enable_private_translations', '__return_true' );
