@@ -413,9 +413,8 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
-		const { setImportModalStatus, setThemeAction, setError } = dispatch(
-			'ti-onboarding'
-		);
+		const { setImportModalStatus, setThemeAction, setError } =
+			dispatch( 'ti-onboarding' );
 
 		return {
 			setModal: ( status ) => setImportModalStatus( status ),

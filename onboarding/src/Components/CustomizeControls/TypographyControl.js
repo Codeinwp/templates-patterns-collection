@@ -46,9 +46,8 @@ const TypographyControl = ( { siteStyle, handleFontClick, importData } ) => {
 				</Button>
 
 				{ Object.keys( tiobDash.fontParings ).map( ( slug ) => {
-					const { headingFont, bodyFont } = tiobDash.fontParings[
-						slug
-					];
+					const { headingFont, bodyFont } =
+						tiobDash.fontParings[ slug ];
 					const headingStyle = {
 						fontFamily: headingFont.font,
 					};
