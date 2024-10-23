@@ -270,9 +270,8 @@ const Content = ( {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { isFetching, isPreview, getCurrentTab, getPreview } = select(
-			'tpc/elementor'
-		);
+		const { isFetching, isPreview, getCurrentTab, getPreview } =
+			select( 'tpc/elementor' );
 
 		return {
 			isFetching: isFetching(),

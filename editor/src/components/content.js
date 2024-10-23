@@ -44,9 +44,8 @@ const Content = ( {
 };
 
 export default withSelect( ( select ) => {
-	const { isPreview, isFetching, getCurrentTab } = select(
-		'tpc/block-editor'
-	);
+	const { isPreview, isFetching, getCurrentTab } =
+		select( 'tpc/block-editor' );
 	return {
 		isPreview: isPreview(),
 		isFetching: isFetching(),
