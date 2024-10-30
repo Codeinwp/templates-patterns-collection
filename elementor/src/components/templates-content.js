@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { Button, Placeholder, Spinner } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { Fragment, useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 import Template from './template.js';
 
@@ -148,10 +149,18 @@ const TemplatesContent = ( {
 
 			{ 0 === items.length &&
 				( isGeneral ? (
-					<p>{ 'No templates found. Check again later!' }</p>
+					<p>
+						{ __(
+							'No templates found. Check again later!',
+							'templates-patterns-collection'
+						) }
+					</p>
 				) : (
 					<p style={ { marginLeft: '10px' } }>
-						{ 'No templates available. Try adding few templates.' }
+						{ __(
+							'No templates available. Try adding few templates.',
+							'templates-patterns-collection'
+						) }
 					</p>
 				) ) }
 
