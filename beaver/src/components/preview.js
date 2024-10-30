@@ -19,12 +19,16 @@ const Preview = ( { isFetching, importTemplate } ) => {
 		<div className="tpc-modal-content">
 			<div className="preview-header">
 				<div className="left">
-					{ item.template_name || __( 'Template' ) }
+					{ item.template_name ||
+						__( 'Template', 'templates-patterns-collection' ) }
 				</div>
 
 				<div className="right">
 					<Button isSecondary onClick={ togglePreview }>
-						{ __( 'Close Preview' ) }
+						{ __(
+							'Close Preview',
+							'templates-patterns-collection'
+						) }
 					</Button>
 
 					<Button
@@ -33,7 +37,7 @@ const Preview = ( { isFetching, importTemplate } ) => {
 						disabled={ isFetching }
 						onClick={ importItem }
 					>
-						{ __( 'Import' ) }
+						{ __( 'Import', 'templates-patterns-collection' ) }
 					</Button>
 				</div>
 			</div>

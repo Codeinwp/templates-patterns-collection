@@ -236,7 +236,7 @@ const ImportModal = ( {
 					__(
 						sprintf(
 							// translators: %s is Optimole plugin name.
-							'Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free.',
+							__('Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free.', 'templates-patterns-collection' ),
 							'Optimole'
 						),
 						'templates-patterns-collection'
@@ -250,7 +250,7 @@ const ImportModal = ( {
 									textDecoration: 'none',
 									display: 'inline-flex',
 									alignItems: 'center',
-								} }
+								} } rel="noreferrer"
 							/>
 						),
 						icon: (
@@ -452,7 +452,7 @@ const ImportModal = ( {
 							/>
 						</CustomTooltip>
 						{ __(
-							'Additional plugins are required for this Starter Site in order to work properly. ',
+							'Additional plugins are required for this Starter Site in order to work properly.',
 							'templates-patterns-collection'
 						) }
 					</i>

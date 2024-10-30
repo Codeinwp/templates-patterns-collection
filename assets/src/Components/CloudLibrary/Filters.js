@@ -4,12 +4,12 @@ import { alignJustify, closeSmall, grid, search } from '@wordpress/icons';
 import { ENTER } from '@wordpress/keycodes';
 import { __ } from '@wordpress/i18n';
 import { Button, ToggleControl, Dashicon, Popover } from '@wordpress/components';
-import {useState} from "@wordpress/element";
+import {useState} from '@wordpress/element';
 
 const sortByOptions = {
-	date: __( 'Date' ),
-	template_name: __( 'Name' ),
-	modified: __( 'Last Modified' ),
+	date: __( 'Date', 'templates-patterns-collection' ),
+	template_name: __( 'Name', 'templates-patterns-collection' ),
+	modified: __( 'Last Modified', 'templates-patterns-collection' ),
 };
 
 const EditorSelector = ( { type, setType } ) => {
@@ -95,7 +95,7 @@ const EditorSelector = ( { type, setType } ) => {
 			</Button>
 		</div>
 	);
-}
+};
 
 const Filters = ( {
 	isGrid,
@@ -117,7 +117,7 @@ const Filters = ( {
 		<div className="filters">
 			<div className="header-form">
 				<div className="display-sorting">
-					<div className="sorting-label">{ __( 'Sort by' ) }</div>
+					<div className="sorting-label">{ __( 'Sort by', 'templates-patterns-collection' ) }</div>
 
 					<div className="sorting-filter">
 						{ Object.keys( sortByOptions ).map( ( i ) => (
@@ -153,7 +153,7 @@ const Filters = ( {
 					{ type === 'gutenberg' && tiobDash.isFSETheme && (
 						<div className="filter-fse">
 							<ToggleControl
-								label={ __( 'Show FSE Templates' ) }
+								label={ __( 'Show FSE Templates', 'templates-patterns-collection' ) }
 								onChange={ setShowFSE }
 								checked={ showFSE }
 							/>
@@ -164,7 +164,7 @@ const Filters = ( {
 				<div className="display-filters">
 					<div className="display-filters__search">
 						<input
-							placeholder={ __( 'Search' ) }
+							placeholder={ __( 'Search', 'templates-patterns-collection' ) }
 							value={ searchQuery }
 							onChange={ ( e ) =>
 								setSearchQuery( e.target.value )
@@ -178,7 +178,7 @@ const Filters = ( {
 
 						{ isSearch ? (
 							<Button
-								label={ __( 'Clear search query' ) }
+								label={ __( 'Clear search query', 'templates-patterns-collection' ) }
 								icon={ closeSmall }
 								onClick={ () => {
 									setSearchQuery( '' );
@@ -187,7 +187,7 @@ const Filters = ( {
 							/>
 						) : (
 							<Button
-								label={ __( 'Search' ) }
+								label={ __( 'Search', 'templates-patterns-collection' ) }
 								icon={ search }
 								onClick={ () => onSearch() }
 							/>
@@ -195,14 +195,14 @@ const Filters = ( {
 					</div>
 
 					<Button
-						label={ __( 'List View' ) }
+						label={ __( 'List View', 'templates-patterns-collection' ) }
 						icon={ alignJustify }
 						onClick={ () => setGrid( false ) }
 						isPressed={ ! isGrid }
 					/>
 
 					<Button
-						label={ __( 'Grid View' ) }
+						label={ __( 'Grid View', 'templates-patterns-collection' ) }
 						icon={ grid }
 						onClick={ () => setGrid( true ) }
 						isPressed={ isGrid }

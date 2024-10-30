@@ -322,12 +322,15 @@ const SiteEditorExporter = () => {
 				icon={ <Icon icon={ iconBlack } /> }
 				target="ti-tpc"
 			>
-				{ __( 'Templates Cloud' ) }
+				{ __( 'Templates Cloud', 'templates-patterns-collection' ) }
 			</PluginSidebarMoreMenuItem>
 
 			<PluginSidebar
 				name="ti-tpc"
-				title={ __( 'Templates Cloud' ) }
+				title={ __(
+					'Templates Cloud',
+					'templates-patterns-collection'
+				) }
 				className="ti-tpc-components-panel"
 			>
 				<PanelBody>

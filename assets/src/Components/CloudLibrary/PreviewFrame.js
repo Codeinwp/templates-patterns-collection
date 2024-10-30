@@ -14,7 +14,7 @@ const PreviewFrame = ( {
 		query: { tpcpreview: 'yes' },
 	} );
 
-	const iframeTitle = title || __( 'Preview' );
+	const iframeTitle = title || __( 'Preview', 'templates-patterns-collection' );
 	return (
 		<div className="ob-preview single-templates">
 			<div className="preview">

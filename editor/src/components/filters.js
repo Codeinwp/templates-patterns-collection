@@ -6,9 +6,9 @@ import { Button, ToggleControl } from '@wordpress/components';
 import { ENTER } from '@wordpress/keycodes';
 
 const sortByOptions = {
-	date: __( 'Date' ),
-	template_name: __( 'Name' ),
-	modified: __( 'Last Modified' ),
+	date: __( 'Date', 'templates-patterns-collection' ),
+	template_name: __( 'Name', 'templates-patterns-collection' ),
+	modified: __( 'Last Modified', 'templates-patterns-collection' ),
 };
 
 const Filters = ( {
@@ -63,7 +63,10 @@ const Filters = ( {
 				{ tiTpc.params.type === 'gutenberg' && tiTpc.isFSETheme && (
 					<div className="filter-fse">
 						<ToggleControl
-							label={ __( 'Show FSE Templates' ) }
+							label={ __(
+								'Show FSE Templates',
+								'templates-patterns-collection'
+							) }
 							onChange={ onFSEChange }
 							checked={ showFSE }
 						/>
@@ -74,7 +77,10 @@ const Filters = ( {
 			<div className="view-filters">
 				<div className="search-filters">
 					<input
-						placeholder={ __( 'Search for a template…' ) }
+						placeholder={ __(
+							'Search for a template…',
+							'templates-patterns-collection'
+						) }
 						className="filter-search"
 						value={ searchQuery }
 						onChange={ ( e ) => setSearchQuery( e.target.value ) }
@@ -87,7 +93,10 @@ const Filters = ( {
 
 					{ isSearch ? (
 						<Button
-							label={ __( 'Clear search query' ) }
+							label={ __(
+								'Clear search query',
+								'templates-patterns-collection'
+							) }
 							icon={ closeSmall }
 							onClick={ () => {
 								setSearchQuery( '' );
@@ -96,7 +105,10 @@ const Filters = ( {
 						/>
 					) : (
 						<Button
-							label={ __( 'Search' ) }
+							label={ __(
+								'Search',
+								'templates-patterns-collection'
+							) }
 							icon={ search }
 							onClick={ () => onSearch() }
 						/>
@@ -104,14 +116,14 @@ const Filters = ( {
 				</div>
 
 				<Button
-					label={ __( 'List View' ) }
+					label={ __( 'List View', 'templates-patterns-collection' ) }
 					icon={ alignJustify }
 					onClick={ () => setLayout( 'list' ) }
 					isPressed={ 'list' === layout }
 				/>
 
 				<Button
-					label={ __( 'Grid View' ) }
+					label={ __( 'Grid View', 'templates-patterns-collection' ) }
 					icon={ grid }
 					onClick={ () => setLayout( 'grid' ) }
 					isPressed={ 'grid' === layout }

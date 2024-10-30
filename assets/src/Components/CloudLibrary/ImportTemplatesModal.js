@@ -283,7 +283,7 @@ const ImportTemplatesModal = ( {
 				</div>
 				<div className="modal-footer">
 					<Button isPrimary className="import" onClick={ cancel }>
-						{ __( 'Close' ) }
+						{ __( 'Close', 'templates-patterns-collection' ) }
 					</Button>
 				</div>
 			</>
@@ -303,7 +303,7 @@ const ImportTemplatesModal = ( {
 						</h1>
 						<p className="description">
 							{ error === true
-								? __( 'Please refresh the page and try again.' )
+								? __( 'Please refresh the page and try again.', 'templates-patterns-collection' )
 								: error }
 						</p>
 					</div>
@@ -317,7 +317,7 @@ const ImportTemplatesModal = ( {
 							cancel();
 						} }
 					>
-						{ __( 'Close' ) }
+						{ __( 'Close', 'templates-patterns-collection' ) }
 					</Button>
 				</div>
 			</>
@@ -407,10 +407,10 @@ const ImportTemplatesModal = ( {
 						onClick={ runTemplatesImport }
 					>
 						{ importing
-							? __( 'Importing' ) + '...'
+							? __( 'Importing', 'templates-patterns-collection' ) + '...'
 							: isSingle
-							? __( 'Import' )
-							: __( 'Import All Pages' ) }
+							? __( 'Import', 'templates-patterns-collection' )
+							: __( 'Import All Pages', 'templates-patterns-collection' ) }
 					</Button>
 				</div>
 			</>
