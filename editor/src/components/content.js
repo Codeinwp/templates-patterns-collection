@@ -37,16 +37,16 @@ const Content = ( {
 			) }
 			{ currentTab === 'patterns' &&
 				__(
-					'We are still working on this. Please check back later. Thank you!'
+					'We are still working on this. Please check back later. Thank you!',
+					'templates-patterns-collection'
 				) }
 		</div>
 	);
 };
 
 export default withSelect( ( select ) => {
-	const { isPreview, isFetching, getCurrentTab } = select(
-		'tpc/block-editor'
-	);
+	const { isPreview, isFetching, getCurrentTab } =
+		select( 'tpc/block-editor' );
 	return {
 		isPreview: isPreview(),
 		isFetching: isFetching(),

@@ -118,9 +118,8 @@ const ImportOptionsControl = ( {
 			icon: 'admin-comments',
 			tooltip: createInterpolateElement(
 				sprintf(
+					// translators: %1$s is the opening tag for the link  %2$s is the closing tag for the link.
 					__(
-						// translators: %1$s is the opening tag for the link.
-						// translators: %2$s is the closing tag for the link.
 						'Hyve is an AI-powered chatbot that transforms your WordPress content into engaging conversations. %1$sHyve%2$s',
 						'templates-patterns-collection'
 					),
@@ -261,13 +260,13 @@ const ImportOptionsControl = ( {
 								<h2>
 									{ __(
 										'Plugins',
-										'templates-pattern-collection'
+										'templates-patterns-collection'
 									) }
 								</h2>
 								<p>
 									{ __(
-										'The following plugins are required for this Starter Site in order to work properly: ',
-										'templates-pattern-collection'
+										'The following plugins are required for this Starter Site in order to work properly:',
+										'templates-patterns-collection'
 									) }
 								</p>
 								<ul

@@ -1,4 +1,4 @@
-/* global tiobDash, fetch */
+/* global tiobDash */
 /* eslint-disable no-console */
 import { __ } from '@wordpress/i18n';
 import { TextControl, Button, SelectControl } from '@wordpress/components';
@@ -117,7 +117,7 @@ const ImportForm = ( { trackingId } ) => {
 			<p>
 				{ __(
 					// eslint-disable-next-line
-					'You\'re all set. Tell us a bit about yourself.',
+					"You're all set. Tell us a bit about yourself.",
 					'templates-patterns-collection'
 				) }
 			</p>

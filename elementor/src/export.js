@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-/* eslint-disable @wordpress/no-global-event-listener */
 /* global elementor */
 import classnames from 'classnames';
 import { Button, Modal, TextControl } from '@wordpress/components';
@@ -33,10 +32,8 @@ if ( parseInt( window.tiTpc.tier ) === 3 ) {
 			publishButton.addEventListener( 'click', async () => {
 				await window.tiTpc.postModel.fetch();
 
-				const {
-					_ti_tpc_template_sync,
-					_ti_tpc_template_id,
-				} = window.tiTpc.postModel.getMetas();
+				const { _ti_tpc_template_sync, _ti_tpc_template_id } =
+					window.tiTpc.postModel.getMetas();
 
 				const doesExist = await getTemplate( _ti_tpc_template_id );
 

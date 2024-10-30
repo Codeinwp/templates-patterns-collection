@@ -212,7 +212,10 @@ const TemplatesContent = ( {
 					changeOrder={ changeOrder }
 				/>
 
-				{ __( 'No templates available. Add a new one?' ) }
+				{ __(
+					'No templates available. Add a new one?',
+					'templates-patterns-collection'
+				) }
 			</div>
 		);
 	}

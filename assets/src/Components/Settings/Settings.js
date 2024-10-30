@@ -1,26 +1,26 @@
 import { __ } from '@wordpress/i18n';
 import { Button, TextareaControl, Flex, FlexItem, Spinner, ExternalLink } from '@wordpress/components';
-import {useEffect, useState} from "@wordpress/element";
-import classnames from "classnames";
-import License from "../License";
+import {useEffect, useState} from '@wordpress/element';
+import classnames from 'classnames';
+import License from '../License';
 
 const Feedback = () => {
     const feedbackStatusText = {
-        error: __( 'There was a problem submitting your feedback.', 'template-patterns-collection' ),
-        emptyFeedback: __( 'Please provide a feedback before submitting the form.', 'template-patterns-collection' ),
-        submitted: __( 'Thank you for helping us improve Templates Cloud!', 'template-patterns-collection' ),
+        error: __( 'There was a problem submitting your feedback.', 'templates-patterns-collection' ),
+        emptyFeedback: __( 'Please provide a feedback before submitting the form.', 'templates-patterns-collection' ),
+        submitted: __( 'Thank you for helping us improve Templates Cloud!', 'templates-patterns-collection' ),
     };
 
     const { version } = window.tiobDash;
 
     const collectedInfo = [
         {
-            name: __( 'Plugin version',  'template-patterns-collection' ),
+            name: __( 'Plugin version',  'templates-patterns-collection' ),
             value: version
         },
         {
-            name: __( 'Feedback Details', 'otter-blocks' ),
-            value: __( 'Text from the above text area', 'template-patterns-collection' )
+            name: __( 'Feedback Details', 'templates-patterns-collection' ),
+            value: __( 'Text from the above text area', 'templates-patterns-collection' )
         }
     ];
 
@@ -46,8 +46,8 @@ const Feedback = () => {
                 },
                 body: JSON.stringify({
                     slug: 'templates-patterns-collection',
-                    version: version,
-                    feedback: feedback,
+                    version,
+                    feedback,
                     data: {
                         'feedback-area': 'template-patterns-collection-page-templates',
                         'feedback-option': 'other'
@@ -73,20 +73,20 @@ const Feedback = () => {
     useEffect( () => {
         const info = document.querySelector( '.tiob_feedback_collect.info' );
         if ( info ) {
-            info.style.height = showInfo ? `180px` : '0';
+            info.style.height = showInfo ? '180px' : '0';
         }
 
     }, [ showInfo ]);
 
     return (
         <div className="tiob-feedback-form">
-            <h3>{ __( 'What\'s one thing you need in Templates Cloud?', 'template-patterns-collection' ) }</h3>
+            <h3>{ __( 'What\'s one thing you need in Templates Cloud?', 'templates-patterns-collection' ) }</h3>
             <TextareaControl
                 className={ classnames({
                     'feedback_details': true,
                     'invalid': 'emptyFeedback' === feedbackStatus,
                 }) }
-                placeholder={ __( 'Tell us how can we help you better with Templates Cloud', 'template-patterns-collection' ) }
+                placeholder={ __( 'Tell us how can we help you better with Templates Cloud', 'templates-patterns-collection' ) }
                 value={ feedbackDetails }
                 help={ feedbackStatusText[feedbackStatus] || false }
                 rows={7}
@@ -100,7 +100,7 @@ const Feedback = () => {
             />
             <div className="tiob_feedback_collect info">
                 <div className="wrapper">
-                    <p>{ __( 'We value privacy, that\'s why no domain name, email address or IP addresses are collected after you submit the survey. Below is a detailed view of all data that Themeisle will receive if you fill in this survey.', 'template-patterns-collection' ) }</p>
+                    <p>{ __( 'We value privacy, that\'s why no domain name, email address or IP addresses are collected after you submit the survey. Below is a detailed view of all data that Themeisle will receive if you fill in this survey.', 'templates-patterns-collection' ) }</p>
                     { collectedInfo.map( ( row, index ) => {
                         return (
                             <div className="info-row" key={ index }>
@@ -123,7 +123,7 @@ const Feedback = () => {
                         onClick={ submitFeedback }
                         disabled={ 'loading' === feedbackStatus }
                     >
-                        { 'loading' === feedbackStatus ? <Spinner /> : __( 'Submit feedback', 'template-patterns-collection' ) }
+                        { 'loading' === feedbackStatus ? <Spinner /> : __( 'Submit feedback', 'templates-patterns-collection' ) }
                     </Button>
                 </FlexItem>
                 <FlexItem>
@@ -134,7 +134,7 @@ const Feedback = () => {
                         isLink
                         onClick={() => setShowInfo( ! showInfo )}
                     >
-                        { __( 'What info do we collect?', 'template-patterns-collection' ) }
+                        { __( 'What info do we collect?', 'templates-patterns-collection' ) }
                     </Button>
                 </FlexItem>
             </Flex>
@@ -233,6 +233,6 @@ const Settings = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Settings;

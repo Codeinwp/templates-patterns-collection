@@ -389,7 +389,7 @@ const Library = ( {
 
 								{ showLicenseToggle && (
 									<Button isLink style={{ marginLeft: '12px' }} href={ tiobDash?.tiobSettings }>
-										{ __( 'I already have a key', 'template-patterns-collection' ) }
+										{ __( 'I already have a key', 'templates-patterns-collection' ) }
 									</Button>
 								) }
 							</div>
@@ -412,7 +412,7 @@ const Library = ( {
 				) }
 				description={ __(
 					'Unlock the Templates Cloud features and save your pages or posts in the cloud.',
-					'template-patterns-collection'
+					'templates-patterns-collection'
 				) }
 			/>
 		);

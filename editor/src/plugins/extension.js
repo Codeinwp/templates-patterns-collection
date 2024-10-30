@@ -34,9 +34,8 @@ const Exporter = () => {
 	const [ title, setTitle ] = useState( '' );
 	const { canPredefine } = window.tiTpc;
 
-	const { createErrorNotice, createSuccessNotice } = useDispatch(
-		'core/notices'
-	);
+	const { createErrorNotice, createSuccessNotice } =
+		useDispatch( 'core/notices' );
 
 	const { editPost } = useDispatch( 'core/editor' );
 
@@ -113,9 +112,8 @@ const Exporter = () => {
 	} ) );
 
 	const isPostSaving = useSelect( ( select, { forceIsSaving } ) => {
-		const { isSavingPost, isPublishingPost, isAutosavingPost } = select(
-			'core/editor'
-		);
+		const { isSavingPost, isPublishingPost, isAutosavingPost } =
+			select( 'core/editor' );
 
 		const isSaving = forceIsSaving || isSavingPost();
 		const isAutoSaving = isAutosavingPost();
@@ -274,7 +272,7 @@ const Exporter = () => {
 		let { meta, ...filteredParams } = window.tiTpc.params;
 		// For Custom Layouts attach additional meta to check on import.
 		if ( type === 'neve_custom_layouts' ) {
-            meta = { ...tiTpc.params.meta, postType: type };
+			meta = { ...tiTpc.params.meta, postType: type };
 		}
 		if ( ! doesExist ) {
 			url = stringifyUrl( {
@@ -402,17 +400,21 @@ const Exporter = () => {
 				icon={ <Icon icon={ iconBlack } /> }
 				target="ti-tpc"
 			>
-				{ __( 'Templates Cloud' ) }
+				{ __( 'Templates Cloud', 'templates-patterns-collection' ) }
 			</PluginSidebarMoreMenuItem>
 
 			<PluginSidebar
 				name="ti-tpc"
-				title={ __( 'Templates Cloud' ) }
+				title={ __(
+					'Templates Cloud',
+					'templates-patterns-collection'
+				) }
 				className="ti-tpc-components-panel"
 			>
 				<PanelBody>
 					{ __(
-						'Save this page as a template in your Templates Cloud library.'
+						'Save this page as a template in your Templates Cloud library.',
+						'templates-patterns-collection'
 					) }
 
 					<Button
@@ -421,21 +423,35 @@ const Exporter = () => {
 						disabled={ isLoading }
 						onClick={ onSavePage }
 					>
-						{ __( 'Save Page to Templates Cloud' ) }
+						{ __(
+							'Save Page to Templates Cloud',
+							'templates-patterns-collection'
+						) }
 					</Button>
 
 					<ToggleControl
-						label={ __( 'Automatically sync to the cloud' ) }
+						label={ __(
+							'Automatically sync to the cloud',
+							'templates-patterns-collection'
+						) }
 						checked={ templateSync }
 						onChange={ () => setTemplateSync( ! templateSync ) }
 					/>
 				</PanelBody>
 				{ canPredefine && (
 					<PanelBody>
-						<h4>{ __( 'Publish Settings' ) }</h4>
+						<h4>
+							{ __(
+								'Publish Settings',
+								'templates-patterns-collection'
+							) }
+						</h4>
 
 						<TextControl
-							label={ __( 'Screenshot URL' ) }
+							label={ __(
+								'Screenshot URL',
+								'templates-patterns-collection'
+							) }
 							value={ screenshotURL }
 							help={ __(
 								'Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview.',
@@ -445,7 +461,10 @@ const Exporter = () => {
 							onChange={ setScreenshotURL }
 						/>
 						<TextControl
-							label={ __( 'Site Slug' ) }
+							label={ __(
+								'Site Slug',
+								'templates-patterns-collection'
+							) }
 							value={ siteSlug }
 							help={ __(
 								'Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site.',
@@ -493,11 +512,17 @@ const Exporter = () => {
 
 			{ isOpen && (
 				<Modal
-					title={ __( 'Save Template' ) }
+					title={ __(
+						'Save Template',
+						'templates-patterns-collection'
+					) }
 					onRequestClose={ () => setOpen( false ) }
 				>
 					<TextControl
-						label={ __( 'Template Name' ) }
+						label={ __(
+							'Template Name',
+							'templates-patterns-collection'
+						) }
 						value={ title }
 						onChange={ setTitle }
 					/>
@@ -508,7 +533,7 @@ const Exporter = () => {
 						disabled={ isLoading }
 						onClick={ onSave }
 					>
-						{ __( 'Save' ) }
+						{ __( 'Save', 'templates-patterns-collection' ) }
 					</Button>
 				</Modal>
 			) }

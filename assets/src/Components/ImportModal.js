@@ -233,13 +233,10 @@ const ImportModal = ( {
 				),
 				icon: 'dashboard',
 				tooltip: createInterpolateElement(
-					__(
-						sprintf(
-							// translators: %s is Optimole plugin name.
-							'Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free.',
-							'Optimole'
-						),
-						'templates-patterns-collection'
+					sprintf(
+						// translators: %s is Optimole plugin name.
+						__('Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free.', 'templates-patterns-collection' ),
+						__( 'Optimole', 'templates-patterns-collection' )
 					),
 					{
 						a: (
@@ -250,7 +247,7 @@ const ImportModal = ( {
 									textDecoration: 'none',
 									display: 'inline-flex',
 									alignItems: 'center',
-								} }
+								} } rel="noreferrer"
 							/>
 						),
 						icon: (
@@ -350,7 +347,6 @@ const ImportModal = ( {
 									toLeft={ [
 										'performanceAddon',
 										'cleanup',
-										'hyveLite',
 									].includes( id ) }
 									rightOffset={ id === 'cleanup' ? -90 : 0 }
 								>
@@ -452,7 +448,7 @@ const ImportModal = ( {
 							/>
 						</CustomTooltip>
 						{ __(
-							'Additional plugins are required for this Starter Site in order to work properly. ',
+							'Additional plugins are required for this Starter Site in order to work properly.',
 							'templates-patterns-collection'
 						) }
 					</i>

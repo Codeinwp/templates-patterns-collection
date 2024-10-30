@@ -65,7 +65,8 @@ const placeholder = document.getElementById( 'tmpl-elementor-add-section' );
 
 if ( placeholder ) {
 	const text = placeholder.textContent;
-	const regex = /(<div class="[^"]*?elementor-add-section-drag-title[^"]*?">(.|\n)*?<\/div>)/gm;
+	const regex =
+		/(<div class="[^"]*?elementor-add-section-drag-title[^"]*?">(.|\n)*?<\/div>)/gm;
 	placeholder.textContent = text.replace(
 		regex,
 		// eslint-disable-next-line prettier/prettier

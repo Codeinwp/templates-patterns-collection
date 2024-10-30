@@ -15,7 +15,7 @@ import { importTemplate } from '../data/templates-cloud';
 const ImportModal = ( {
 	clientId,
 	autoLoad = true,
-    isFse = false,
+	isFse = false,
 	modalOpen,
 	setModalOpen,
 } ) => {
@@ -25,12 +25,8 @@ const ImportModal = ( {
 		previewData: select( 'tpc/block-editor' ).getPreview(),
 	} ) );
 
-	const {
-        removeBlock,
-        replaceBlocks,
-        insertBlocks,
-        resetBlocks,
-    } = useDispatch( 'core/block-editor' );
+	const { removeBlock, replaceBlocks, insertBlocks, resetBlocks } =
+		useDispatch( 'core/block-editor' );
 
 	const { togglePreview } = useDispatch( 'tpc/block-editor' );
 
@@ -44,9 +40,8 @@ const ImportModal = ( {
 
 	const { editPost } = useDispatch( 'core/editor' );
 
-	const { updateLibrary, updateTemplates } = useDispatch(
-		'tpc/block-editor'
-	);
+	const { updateLibrary, updateTemplates } =
+		useDispatch( 'tpc/block-editor' );
 
 	const [ importing, setImporting ] = useState( false );
 
@@ -180,7 +175,10 @@ const ImportModal = ( {
 			}
 
 			createErrorNotice(
-				__( 'Something went wrong while importing. Please try again.' ),
+				__(
+					'Something went wrong while importing. Please try again.',
+					'templates-patterns-collection'
+				),
 				{
 					type: 'snackbar',
 				}
@@ -242,8 +240,14 @@ const ImportModal = ( {
 							onClick={ importFromPreview }
 						>
 							{ importing
-								? __( 'Importing' ) + '...'
-								: __( 'Import' ) }
+								? __(
+										'Importing',
+										'templates-patterns-collection'
+								  ) + '...'
+								: __(
+										'Import',
+										'templates-patterns-collection'
+								  ) }
 						</Button>
 					}
 				/>

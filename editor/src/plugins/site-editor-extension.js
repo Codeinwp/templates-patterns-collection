@@ -37,9 +37,8 @@ const SiteEditorExporter = () => {
 	const [ title, setTitle ] = useState( '' );
 	const [ isLoading, setLoading ] = useState( false );
 	const [ templateData, setTemplateData ] = useState( {} );
-	const { createErrorNotice, createSuccessNotice } = useDispatch(
-		'core/notices'
-	);
+	const { createErrorNotice, createSuccessNotice } =
+		useDispatch( 'core/notices' );
 	const [ isPostSavingPrev, setIsPostSavingPrev ] = useState( false );
 	const [ modalOpen, setModalOpen ] = useState( false );
 
@@ -52,9 +51,8 @@ const SiteEditorExporter = () => {
 	 * @return {Object} Template data.
 	 */
 	const fetchTemplate = () => {
-		const { getCurrentTemplateTemplateParts } = wp.data.select(
-			'core/edit-site'
-		);
+		const { getCurrentTemplateTemplateParts } =
+			wp.data.select( 'core/edit-site' );
 
 		let templateContent = wp.blocks.serialize(
 			wp.data.select( 'core/editor' ).getBlocks()
@@ -128,8 +126,7 @@ const SiteEditorExporter = () => {
 	 */
 	const getRequestUrl = () => {
 		const { meta, ...filteredParams } = tiTpc.params;
-		console.warn( { filteredParams } );
-		console.warn( { templateData } );
+
 		if ( ! templateData?._ti_tpc_template_id ) {
 			return stringifyUrl( {
 				url: window.tiTpc.endpoint + 'templates',
@@ -240,7 +237,7 @@ const SiteEditorExporter = () => {
 	/**
 	 * Save settings.
 	 *
-	 * @param {string} id Setting ID.
+	 * @param {string} id   Setting ID.
 	 * @param {Object} data Data to save.
 	 */
 	const saveSettings = ( id, data ) => {
@@ -279,10 +276,8 @@ const SiteEditorExporter = () => {
 	 * Check if current post is saving.
 	 */
 	const isPostSaving = useSelect( ( select ) => {
-		const {
-			__experimentalGetDirtyEntityRecords,
-			isSavingEntityRecord,
-		} = select( coreStore );
+		const { __experimentalGetDirtyEntityRecords, isSavingEntityRecord } =
+			select( coreStore );
 
 		const dirtyEntityRecords = __experimentalGetDirtyEntityRecords();
 		return dirtyEntityRecords.some( ( record ) =>
@@ -327,12 +322,15 @@ const SiteEditorExporter = () => {
 				icon={ <Icon icon={ iconBlack } /> }
 				target="ti-tpc"
 			>
-				{ __( 'Templates Cloud' ) }
+				{ __( 'Templates Cloud', 'templates-patterns-collection' ) }
 			</PluginSidebarMoreMenuItem>
 
 			<PluginSidebar
 				name="ti-tpc"
-				title={ __( 'Templates Cloud' ) }
+				title={ __(
+					'Templates Cloud',
+					'templates-patterns-collection'
+				) }
 				className="ti-tpc-components-panel"
 			>
 				<PanelBody>

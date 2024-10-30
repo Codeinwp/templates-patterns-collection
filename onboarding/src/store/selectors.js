@@ -12,21 +12,7 @@ export default {
 	getPluginOptions: ( state ) => state.pluginOptions,
 	getUserStatus: ( state ) => {
 		const acceptedTiers = [
-			6,
-			17,
-			23,
-			5,
-			9,
-			14,
-			20,
-			1,
-			7,
-			12,
-			18,
-			3,
-			8,
-			13,
-			19,
+			6, 17, 23, 5, 9, 14, 20, 1, 7, 12, 18, 3, 8, 13, 19,
 		];
 
 		return (

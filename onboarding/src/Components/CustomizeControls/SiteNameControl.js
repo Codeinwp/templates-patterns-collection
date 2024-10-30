@@ -38,9 +38,8 @@ const SiteNameControl = ( { userCustomSettings, handleSiteNameChange } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getUserCustomSettings, getImportData } = select(
-			'ti-onboarding'
-		);
+		const { getUserCustomSettings, getImportData } =
+			select( 'ti-onboarding' );
 		return {
 			userCustomSettings: getUserCustomSettings(),
 			importData: getImportData(),
@@ -48,11 +47,8 @@ export default compose(
 	} ),
 	withDispatch(
 		( dispatch, { importData, userCustomSettings, importDataDefault } ) => {
-			const {
-				setUserCustomSettings,
-				setImportData,
-				setRefresh,
-			} = dispatch( 'ti-onboarding' );
+			const { setUserCustomSettings, setImportData, setRefresh } =
+				dispatch( 'ti-onboarding' );
 
 			return {
 				handleSiteNameChange: ( newSiteName ) => {

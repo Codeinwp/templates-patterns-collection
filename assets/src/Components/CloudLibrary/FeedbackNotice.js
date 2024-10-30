@@ -2,29 +2,29 @@ import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { Button, Flex, FlexItem, Modal, RadioControl, TextareaControl, Spinner, Icon } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
-import { changeOption, fetchOptions } from "./common";
+import { changeOption, fetchOptions } from './common';
 
 const { version, feedback } = window.tiobDash;
 
 const collectedInfo = [
     {
-        name: __( 'Plugin version',  'template-patterns-collection' ),
+        name: __( 'Plugin version',  'templates-patterns-collection' ),
         value: version
     },
     {
-        name: __( 'Feedback Response', 'otter-blocks' ),
-        value: __( 'Checked option from feedback', 'template-patterns-collection' )
+        name: __( 'Feedback Response', 'templates-patterns-collection' ),
+        value: __( 'Checked option from feedback', 'templates-patterns-collection' )
     },
     {
-        name: __( 'Feedback Details', 'otter-blocks' ),
-        value: __( 'Text from the above text area', 'template-patterns-collection' )
+        name: __( 'Feedback Details', 'templates-patterns-collection' ),
+        value: __( 'Text from the above text area', 'templates-patterns-collection' )
     }
 ];
 
 const feedbackStatusText = {
-    error: __( 'There was a problem submitting your feedback.', 'template-patterns-collection' ),
-    emptyFeedback: __( 'Please provide a feedback before submitting the form.', 'template-patterns-collection' ),
-    submitted: __( 'Thank you for helping us improve Templates Cloud!', 'template-patterns-collection' ),
+    error: __( 'There was a problem submitting your feedback.', 'templates-patterns-collection' ),
+    emptyFeedback: __( 'Please provide a feedback before submitting the form.', 'templates-patterns-collection' ),
+    submitted: __( 'Thank you for helping us improve Templates Cloud!', 'templates-patterns-collection' ),
 };
 const FeedbackNotice = ( { importTemplate } ) => {
     const [ isFeedbackOpen, setFeedbackOpen ] = useState( false );
@@ -40,21 +40,21 @@ const FeedbackNotice = ( { importTemplate } ) => {
     useEffect( () => {
         const info = document.querySelector( '.tiob_feedback_collect.info' );
         if ( info ) {
-            info.style.height = showInfo ? `255px` : '0';
+            info.style.height = showInfo ? '255px' : '0';
         }
 
     }, [ showInfo, isFeedbackOpen ]);
 
     const updateOptionState = () => {
         fetchOptions().then((r) => {
-            if ( r['tiob_premade_imported'] !== undefined ) {
-                setCountImported( r['tiob_premade_imported'] );
+            if ( r.tiob_premade_imported !== undefined ) {
+                setCountImported( r.tiob_premade_imported );
             }
-            if ( r['tiob_feedback_dismiss'] !== undefined ) {
-                setIsDismissed( r['tiob_feedback_dismiss'] );
+            if ( r.tiob_feedback_dismiss !== undefined ) {
+                setIsDismissed( r.tiob_feedback_dismiss );
             }
         });
-    }
+    };
 
     useEffect( () => {
         updateOptionState();
@@ -65,7 +65,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
 
     const dismissFeedback = () => {
         changeOption( 'tiob_feedback_dismiss', true );
-    }
+    };
 
     const submitFeedback = () => {
         if ( feedbackResponse === 'other' && 5 >= feedbackDetails.trim().length ) {
@@ -89,8 +89,8 @@ const FeedbackNotice = ( { importTemplate } ) => {
                 },
                 body: JSON.stringify({
                     slug: 'templates-patterns-collection',
-                    version: version,
-                    feedback: feedback,
+                    version,
+                    feedback,
                     data: {
                         'feedback-area': 'template-patterns-collection-page-templates',
                         'feedback-option': feedbackResponse
@@ -135,7 +135,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                             </FlexItem>
                         ) }
                         <FlexItem>
-                            <p>{ ( ['error', 'submitted'].includes( feedbackStatus ) ) ? feedbackStatusText[feedbackStatus] : __( 'Help us improve and let us know how are you using Templates Cloud.', 'template-patterns-collection' ) }</p>
+                            <p>{ ( ['error', 'submitted'].includes( feedbackStatus ) ) ? feedbackStatusText[feedbackStatus] : __( 'Help us improve and let us know how are you using Templates Cloud.', 'templates-patterns-collection' ) }</p>
                         </FlexItem>
                         <FlexItem>
                             { 'error' === feedbackStatus && (
@@ -144,7 +144,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                                     className="error"
                                     onClick={openModal}
                                 >
-                                    { __( 'Try again', 'template-patterns-collection' ) }
+                                    { __( 'Try again', 'templates-patterns-collection' ) }
                                 </Button>
                             ) }
                             { ! ['error', 'submitted'].includes( feedbackStatus ) && (
@@ -152,7 +152,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                                     isPrimary
                                     onClick={ openModal }
                                 >
-                                    { __( 'Share feedback', 'template-patterns-collection' ) }
+                                    { __( 'Share feedback', 'templates-patterns-collection' ) }
                                 </Button>
                             ) }
                         </FlexItem>
@@ -162,7 +162,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                                 icon="no-alt"
                                 iconSize={20}
                                 onClick={ () => {
-                                    setHide( true )
+                                    setHide( true );
                                     if ( feedbackStatus !== 'error' ) {
                                         dismissFeedback();
                                     }
@@ -175,16 +175,16 @@ const FeedbackNotice = ( { importTemplate } ) => {
             { isFeedbackOpen && (
                 <Modal
                     className="tiob_feedback_modal"
-                    title={ __( 'How are you using Templates Cloud?', 'template-patterns-collection' ) }
+                    title={ __( 'How are you using Templates Cloud?', 'templates-patterns-collection' ) }
                     onRequestClose={ closeModal }
                 >
                     <RadioControl
                         className="feedback_options"
                         selected={ feedbackResponse }
                         options={ [
-                            { label: __( 'To store my templates in the cloud', 'template-patterns-collection' ), value: 'store_in_cloud' },
-                            { label: __( 'To share templates with the clients', 'template-patterns-collection' ), value: 'share_with_clients' },
-                            { label: __( 'Other', 'template-patterns-collection' ), value: 'other' },
+                            { label: __( 'To store my templates in the cloud', 'templates-patterns-collection' ), value: 'store_in_cloud' },
+                            { label: __( 'To share templates with the clients', 'templates-patterns-collection' ), value: 'share_with_clients' },
+                            { label: __( 'Other', 'templates-patterns-collection' ), value: 'other' },
                         ] }
                         onChange={ ( value ) => setFeedbackResponse( value ) }
                     />
@@ -194,7 +194,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                                 'feedback_details': true,
                                 'invalid': 'emptyFeedback' === feedbackStatus,
                             }) }
-                            placeholder={ __( 'Tell us more ...', 'template-patterns-collection' ) }
+                            placeholder={ __( 'Tell us more …', 'templates-patterns-collection' ) }
                             value={ feedbackDetails }
                             help={ feedbackStatusText[feedbackStatus] || false }
                             rows={7}
@@ -209,7 +209,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                     ) }
                     <div className="tiob_feedback_collect info">
                         <div className="wrapper">
-                            <p>{ __( 'We value privacy, that\'s why no domain name, email address or IP addresses are collected after you submit the survey. Below is a detailed view of all data that Themeisle will receive if you fill in this survey.', 'template-patterns-collection' ) }</p>
+                            <p>{ __( 'We value privacy, that\'s why no domain name, email address or IP addresses are collected after you submit the survey. Below is a detailed view of all data that Themeisle will receive if you fill in this survey.', 'templates-patterns-collection' ) }</p>
                             { collectedInfo.map( ( row, index ) => {
                                 return (
                                     <div className="info-row" key={ index }>
@@ -232,7 +232,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                                 onClick={ submitFeedback }
                                 disabled={ 'loading' === feedbackStatus }
                             >
-                                { 'loading' === feedbackStatus ? <Spinner /> : __( 'Submit feedback', 'template-patterns-collection' ) }
+                                { 'loading' === feedbackStatus ? <Spinner /> : __( 'Submit feedback', 'templates-patterns-collection' ) }
                             </Button>
                         </FlexItem>
                         <FlexItem>
@@ -243,7 +243,7 @@ const FeedbackNotice = ( { importTemplate } ) => {
                                 isLink
                                 onClick={() => setShowInfo( ! showInfo )}
                             >
-                                { __( 'What info do we collect?', 'template-patterns-collection' ) }
+                                { __( 'What info do we collect?', 'templates-patterns-collection' ) }
                             </Button>
                         </FlexItem>
                     </Flex>

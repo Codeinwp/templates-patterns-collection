@@ -67,7 +67,10 @@ const Preview = ( { isFetching, importBlocks } ) => {
 
 				<div className="right">
 					<Button isSecondary onClick={ togglePreview }>
-						{ __( 'Close Preview' ) }
+						{ __(
+							'Close Preview',
+							'templates-patterns-collection'
+						) }
 					</Button>
 
 					<Button
@@ -76,7 +79,7 @@ const Preview = ( { isFetching, importBlocks } ) => {
 						disabled={ isFetching }
 						onClick={ importItem }
 					>
-						{ __( 'Import' ) }
+						{ __( 'Import', 'templates-patterns-collection' ) }
 					</Button>
 				</div>
 			</div>
