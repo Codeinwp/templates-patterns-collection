@@ -16,9 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: lts/hydrogen # 18.x
+          cache: "yarn"
       - name: Build
         run: |
           yarn install --frozen-lockfile

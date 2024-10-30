@@ -21,9 +21,10 @@ jobs:
       - name: Check out source files
         uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: lts/hydrogen # 18.x
+          cache: "yarn"
       - name: Install composer deps
         run: composer install --no-dev --prefer-dist --no-progress --no-suggest
       - name: Install yarn deps
