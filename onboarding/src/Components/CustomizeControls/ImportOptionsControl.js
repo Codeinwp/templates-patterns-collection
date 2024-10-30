@@ -260,13 +260,13 @@ const ImportOptionsControl = ( {
 								<h2>
 									{ __(
 										'Plugins',
-										'templates-pattern-collection'
+										'templates-patterns-collection'
 									) }
 								</h2>
 								<p>
 									{ __(
 										'The following plugins are required for this Starter Site in order to work properly:',
-										'templates-pattern-collection'
+										'templates-patterns-collection'
 									) }
 								</p>
 								<ul
