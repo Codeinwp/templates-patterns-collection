@@ -688,13 +688,13 @@ class Admin {
 		$neve_upgrade_link = 'https://themeisle.com/themes/neve/upgrade/';
 		$upgrade_url       = apply_filters(
 			'neve_upgrade_link_from_child_theme_filter',
-			tsdk_utmify( $neve_upgrade_link, 'freevspro' )
+			tsdk_translate_link( tsdk_utmify( $neve_upgrade_link, 'freevspro' ), 'query' )
 		);
-		$upgrade_url_tpc   = tsdk_utmify( 'https://themeisle.com/plugins/templates-cloud', 'tcupgrade' );
+		$upgrade_url_tpc   = tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/plugins/templates-cloud', 'tcupgrade' ), 'query' );
 		if ( defined( 'NEVE_VERSION' ) ) {
 			$upgrade_url_tpc = apply_filters(
 				'neve_upgrade_link_from_child_theme_filter',
-				tsdk_utmify( $neve_upgrade_link, 'templatecloud' )
+				tsdk_translate_link( tsdk_utmify( $neve_upgrade_link, 'templatecloud' ), 'query' )
 			);
 		}
 
@@ -741,10 +741,10 @@ class Admin {
 				'dismissed' => get_option( self::FEEDBACK_DISMISSED_OPT, false ),
 			),
 			'onboardingUpsell'    => array(
-				'dashboard'    => tsdk_utmify( 'https://store.themeisle.com/', 'onboarding_upsell' ),
-				'contact'      => tsdk_utmify( 'https://themeisle.com/contact/', 'onboarding_upsell' ),
-				'upgrade'      => tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding_upsell' ),
-				'upgradeToast' => tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding_toast' ),
+				'dashboard'    => tsdk_translate_link( tsdk_utmify( 'https://store.themeisle.com/', 'onboarding_upsell' ), 'query' ),
+				'contact'      => tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/contact/', 'onboarding_upsell' ), 'query' ),
+				'upgrade'      => tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding_upsell' ), 'query' ),
+				'upgradeToast' => tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding_toast' ), 'query' ),
 			),
 			'onboardingAllowed'   => $this->should_load_onboarding(),
 			'onboardingRedirect'  => admin_url( 'admin.php?page=neve-onboarding' ),
@@ -753,7 +753,7 @@ class Admin {
 				array(
 					'label'       => __( 'Support', 'templates-patterns-collection' ),
 					'is_external' => true,
-					'url'         => tsdk_utmify( 'https://themeisle.com/contact/', 'settings_page' ),
+					'url'         => tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/contact/', 'settings_page' ), 'query' ),
 				),
 				array(
 					'label'  => __( 'Feature request', 'templates-patterns-collection' ),
