@@ -86,7 +86,7 @@ const ListItem = ( {
 	const deleteItem = async () => {
 		if (
 			! window.confirm(
-				__( 'Are you sure you want to delete this template?' )
+				__( 'Are you sure you want to delete this template?', 'templates-patterns-collection' )
 			)
 		) {
 			return false;
@@ -134,7 +134,7 @@ const ListItem = ( {
 								disabled={ false !== isLoading }
 								onClick={ handlePreview }
 							>
-								{ __( 'Preview' ) }
+								{ __( 'Preview', 'templates-patterns-collection' ) }
 							</Button>
 						) }
 						{ ! upsell && (
@@ -144,7 +144,7 @@ const ListItem = ( {
 								disabled={ false !== isLoading }
 								onClick={ onImport }
 							>
-								{ __( 'Import' ) }
+								{ __( 'Import', 'templates-patterns-collection' ) }
 							</Button>
 						) }
 
@@ -152,7 +152,7 @@ const ListItem = ( {
 							<div className="preview-controls">
 								{ ! item.link && (
 									<Button
-										label={ __( 'Edit' ) }
+										label={ __( 'Edit', 'templates-patterns-collection' ) }
 										icon={
 											'updating' === isLoading
 												? update
@@ -187,7 +187,7 @@ const ListItem = ( {
 								/>*/ }
 
 								<Button
-									label={ __( 'Delete' ) }
+									label={ __( 'Delete', 'templates-patterns-collection' ) }
 									icon={
 										'deleteing' === isLoading
 											? update
@@ -213,7 +213,7 @@ const ListItem = ( {
 							/>
 							<Button
 								type="submit"
-								label={ __( 'Update' ) }
+								label={ __( 'Update', 'templates-patterns-collection' ) }
 								icon={
 									'updating' === isLoading ? update : check
 								}
@@ -242,7 +242,7 @@ const ListItem = ( {
 				<Icon icon={ page } />
 				{ isEditing ? (
 					<TextControl
-						label={ __( 'Template Name' ) }
+						label={ __( 'Template Name', 'templates-patterns-collection' ) }
 						hideLabelFromVision
 						value={ itemName }
 						onChange={ setItemName }
@@ -262,19 +262,19 @@ const ListItem = ( {
 				<div className="controls">
 					{ item.link ? (
 						<Tooltip
-							text={ __( 'This template is synced to a page.' ) }
+							text={ __( 'This template is synced to a page.', 'templates-patterns-collection' ) }
 						>
 							<Button
-								label={ __( 'Edit' ) }
+								label={ __( 'Edit', 'templates-patterns-collection' ) }
 								icon={ edit }
 								disabled={ true }
 							>
-								{ __( 'Edit' ) }
+								{ __( 'Edit', 'templates-patterns-collection' ) }
 							</Button>
 						</Tooltip>
 					) : (
 						<Button
-							label={ isEditing ? __( 'Update' ) : __( 'Edit' ) }
+							label={ isEditing ? __( 'Update', 'templates-patterns-collection' ) : __( 'Edit', 'templates-patterns-collection' ) }
 							icon={
 								isEditing
 									? 'updating' === isLoading
@@ -296,7 +296,7 @@ const ListItem = ( {
 								setEditing( ! isEditing );
 							} }
 						>
-							{ isEditing ? __( 'Update' ) : __( 'Edit' ) }
+							{ isEditing ? __( 'Update', 'templates-patterns-collection' ) : __( 'Edit', 'templates-patterns-collection' ) }
 						</Button>
 					) }
 
@@ -311,7 +311,7 @@ const ListItem = ( {
 					/>
 					*/ }
 					<Button
-						label={ __( 'Delete' ) }
+						label={ __( 'Delete', 'templates-patterns-collection' ) }
 						icon={ 'deleteing' === isLoading ? update : trash }
 						disabled={ false !== isLoading }
 						className={ classnames( {
@@ -320,8 +320,8 @@ const ListItem = ( {
 						onClick={ deleteItem }
 					>
 						{ 'deleting' === isLoading
-							? __( 'Deleting' ) + '...'
-							: __( 'Delete' ) }
+							? __( 'Deleting', 'templates-patterns-collection' ) + '...'
+							: __( 'Delete', 'templates-patterns-collection' ) }
 					</Button>
 				</div>
 			) }
@@ -333,7 +333,7 @@ const ListItem = ( {
 						disabled={ false !== isLoading }
 						onClick={ handlePreview }
 					>
-						{ __( 'Preview' ) }
+						{ __( 'Preview', 'templates-patterns-collection' ) }
 					</Button>
 				) }
 
@@ -343,7 +343,7 @@ const ListItem = ( {
 					onClick={ onImport }
 					disabled={ false !== isLoading }
 				>
-					{ __( 'Import' ) }
+					{ __( 'Import', 'templates-patterns-collection' ) }
 				</Button>
 			</div>
 		</div>

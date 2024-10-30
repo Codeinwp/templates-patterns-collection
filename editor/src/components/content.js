@@ -37,7 +37,8 @@ const Content = ( {
 			) }
 			{ currentTab === 'patterns' &&
 				__(
-					'We are still working on this. Please check back later. Thank you!'
+					'We are still working on this. Please check back later. Thank you!',
+					'templates-patterns-collection'
 				) }
 		</div>
 	);

@@ -139,8 +139,8 @@ const InstallModal = ( {
 						>
 							{ installing &&
 								( installing === 'installing'
-									? __( 'Installing' )
-									: __( 'Activating' ) ) }
+									? __( 'Installing', 'templates-patterns-collection' )
+									: __( 'Activating', 'templates-patterns-collection' ) ) }
 
 							{ ! installing &&
 								( action === 'install'
