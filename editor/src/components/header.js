@@ -14,12 +14,12 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 	const { setFetching, updateCurrentTab } = useDispatch( 'tpc/block-editor' );
 
 	const TABS = {
-		templates: __( 'Page Templates' ),
+		templates: __( 'Page Templates', 'templates-patterns-collection' ),
 		// patterns: __( 'Patterns' ),
 	};
 
 	if ( parseInt( tiTpc.tier ) === 3 ) {
-		TABS.library = __( 'My Library' );
+		TABS.library = __( 'My Library', 'templates-patterns-collection' );
 	}
 
 	const isFetching = useSelect( ( select ) =>
@@ -81,7 +81,10 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 				{ 'library' === currentTab && ! isPreview && (
 					<ButtonGroup>
 						<Button
-							label={ __( 'Re-sync Library' ) }
+							label={ __(
+								'Re-sync Library',
+								'templates-patterns-collection'
+							) }
 							icon={ update }
 							disabled={ isFetching }
 							className={ classnames( 'is-sync', {
@@ -93,7 +96,10 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 				) }
 
 				<Button
-					label={ __( 'Close Modal' ) }
+					label={ __(
+						'Close Modal',
+						'templates-patterns-collection'
+					) }
 					icon={ closeSmall }
 					onClick={ closeModal }
 				/>

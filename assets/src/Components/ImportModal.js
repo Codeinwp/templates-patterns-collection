@@ -233,13 +233,10 @@ const ImportModal = ( {
 				),
 				icon: 'dashboard',
 				tooltip: createInterpolateElement(
-					__(
-						sprintf(
-							// translators: %s is Optimole plugin name.
-							__('Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free.', 'templates-patterns-collection' ),
-							'Optimole'
-						),
-						'templates-patterns-collection'
+					sprintf(
+						// translators: %s is Optimole plugin name.
+						__('Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free.', 'templates-patterns-collection' ),
+						__( 'Optimole', 'templates-patterns-collection' )
 					),
 					{
 						a: (

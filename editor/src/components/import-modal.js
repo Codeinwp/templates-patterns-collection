@@ -175,7 +175,10 @@ const ImportModal = ( {
 			}
 
 			createErrorNotice(
-				__( 'Something went wrong while importing. Please try again.' ),
+				__(
+					'Something went wrong while importing. Please try again.',
+					'templates-patterns-collection'
+				),
 				{
 					type: 'snackbar',
 				}
@@ -237,8 +240,14 @@ const ImportModal = ( {
 							onClick={ importFromPreview }
 						>
 							{ importing
-								? __( 'Importing' ) + '...'
-								: __( 'Import' ) }
+								? __(
+										'Importing',
+										'templates-patterns-collection'
+								  ) + '...'
+								: __(
+										'Import',
+										'templates-patterns-collection'
+								  ) }
 						</Button>
 					}
 				/>
