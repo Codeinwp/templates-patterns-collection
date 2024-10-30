@@ -347,7 +347,6 @@ const ImportModal = ( {
 									toLeft={ [
 										'performanceAddon',
 										'cleanup',
-										'hyveLite',
 									].includes( id ) }
 									rightOffset={ id === 'cleanup' ? -90 : 0 }
 								>
