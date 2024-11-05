@@ -43,8 +43,6 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 - Add more translatable strings for improved localization
 - Update internal dependencies
-- Add more translatable strings for improved localization
-- Update internal dependencies
 
 
 
