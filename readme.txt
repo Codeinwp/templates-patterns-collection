@@ -39,9 +39,11 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 == Changelog ==
 
-##### [Version 1.2.12](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.11...v1.2.12) (2024-11-05)
+##### [Version 1.2.13](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.12...v1.2.13) (2024-11-12)
 
-- Add more translatable strings for improved localization
-- Update internal dependencies
+- Updated dependencies
+
+
+
 
 [See changelog for all versions](https://github.com/Codeinwp/templates-patterns-collection/blob/master/CHANGELOG.md).
