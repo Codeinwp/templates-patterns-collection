@@ -94,9 +94,11 @@ class Main {
 	 *
 	 */
 	private function init() {
-		$this->setup_editor();
-		$this->setup_beaver();
-		$this->setup_elementor();
+		if ( Admin::has_legacy_template_cloud() ) {
+			$this->setup_editor();
+			$this->setup_beaver();
+			$this->setup_elementor();
+		}
 		$this->setup_sites_listing();
 		add_filter( 'themeisle_sdk_hide_dashboard_widget', '__return_true' );
 		add_filter(
