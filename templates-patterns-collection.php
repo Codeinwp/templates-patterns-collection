@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Templates Patterns Collection
+ * Plugin Name:       Starter Sites & Templates by Neve
  * Description:       This plugin is an add-on to Neve WordPress theme which offers access to Templates and Block Patterns library service to be used with the theme.
  * Version:           1.2.12
  * Author:            ThemeIsle
