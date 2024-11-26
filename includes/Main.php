@@ -123,6 +123,10 @@ class Main {
 	 * @return void
 	 */
 	private function setup_editor() {
+		if ( License::get_license_tier() !== 3 ) {
+			return;
+		}
+
 		$this->editor = new Editor();
 		$this->editor->init();
 	}
@@ -133,6 +137,10 @@ class Main {
 	 * @return void
 	 */
 	private function setup_beaver() {
+		if ( License::get_license_tier() !== 3 ) {
+			return;
+		}
+
 		if ( ! class_exists( 'FLBuilder' ) ) {
 			return;
 		}
@@ -147,6 +155,10 @@ class Main {
 	 * @return void
 	 */
 	private function setup_elementor() {
+		if ( License::get_license_tier() !== 3 ) {
+			return;
+		}
+
 		$this->elementor = new Elementor();
 		$this->elementor->init();
 	}
