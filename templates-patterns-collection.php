@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name:       Starter Sites & Templates by Neve
- * Description:       This plugin is an add-on to Neve WordPress theme which offers access to Templates and Block Patterns library service to be used with the theme.
- * Version:           1.2.12
- * Author:            ThemeIsle
+ * Description:       This plugin gives you access to 100+ templates and ready-to-use starter sites. Neve theme is used for all the designs.
+ * Version:           1.2.13
+ * Author:            Themeisle
  * Author URI:        https://themeisle.com
  * License:           GPLv3
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -54,7 +54,7 @@ function ti_tpc_load_textdomain() {
 	load_plugin_textdomain( 'templates-patterns-collection', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
-define( 'TIOB_VERSION', '1.2.12' );
+define( 'TIOB_VERSION', '1.2.13' );
 define( 'TIOB_URL', plugin_dir_url( __FILE__ ) );
 define( 'TIOB_PATH', dirname( __FILE__ ) . '/' );
 define( 'TIOB_BASENAME', plugin_basename( __FILE__ ) );
