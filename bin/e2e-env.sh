@@ -40,6 +40,9 @@ init_environment(){
 
     # Disable Otter Onboarding
     docker compose -f $DOCKER_FILE run --rm -u root cli wp --allow-root config set ENABLE_OTTER_PRO_DEV true --raw
+
+    # Use env before PRF
+    docker compose -f $DOCKER_FILE run --rm -u root cli wp --allow-root option update tiob_tc_removed 'no'
 }
 
 docker compose -f $DOCKER_FILE run --rm -u root wordpress mkdir -p /var/www/html/wp-content/uploads
