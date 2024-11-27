@@ -24,8 +24,9 @@ class Admin {
 	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
 	const FEEDBACK_DISMISSED_OPT       = 'tiob_feedback_dismiss';
 
-	const TC_REMOVED_KEY      = 'tiob_tc_removed';
-	const VISITED_LIBRARY_OPT = 'tiob_library_visited';
+	const TC_REMOVED_KEY          = 'tiob_tc_removed';
+	const TC_NEW_NOTICE_DISMISSED = 'tiob_new_tc_notice_dismissed';
+	const VISITED_LIBRARY_OPT     = 'tiob_library_visited';
 
 	/**
 	 * Admin page slug
@@ -86,6 +87,8 @@ class Admin {
 
 		add_action( 'wp_ajax_tpc_get_logs', array( $this, 'external_get_logs' ) );
 
+		add_action( 'wp_ajax_dismiss_new_tc_notice', array( $this, 'dismiss_new_tc_notice' ) );
+
 		$this->register_feedback_settings();
 
 		$this->register_prevent_clone_hooks();
@@ -133,6 +136,31 @@ class Admin {
 	public static function has_legacy_template_cloud() {
 		return get_option( self::TC_REMOVED_KEY, 'no' ) === 'no';
 	}
+
+	public function dismiss_new_tc_notice() {
+		$response = array(
+			'success' => false,
+			'code'    => 'ti__ob_not_allowed',
+			'message' => 'Not allowed!',
+		);
+
+		if ( ! isset( $_REQUEST['nonce'] ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'dismiss_new_tc_notice' ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		unset( $response['code'] );
+		unset( $response['message'] );
+
+		update_option( self::TC_NEW_NOTICE_DISMISSED, 'yes' );
+		$this->ensure_ajax_response( $response );
+	}
+
 
 	/**
 	 * Register hooks to prevent meta cloning for the templates.
@@ -857,6 +885,11 @@ class Admin {
 				),
 			),
 			'isFSETheme'          => self::is_fse_theme(),
+			'newTCNotice'         => array(
+				'show'    => get_option( self::TC_NEW_NOTICE_DISMISSED, 'no' ) !== 'yes' && self::has_legacy_template_cloud(),
+				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'nonce'   => wp_create_nonce( 'dismiss_new_tc_notice' ),
+			),
 		);
 	}
 
