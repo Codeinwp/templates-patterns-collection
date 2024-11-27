@@ -255,7 +255,7 @@ class Manager {
 			foreach ( $state[ $namespace ] as $name => $form ) {
 				$get    = 'get' . ucfirst( $form['layout'] ) . ucfirst( $form['type'] ) . 'FormByName';
 				$method = 'delete' . ucfirst( $form['layout'] ) . ucfirst( $form['type'] ) . 'Form';
-				$id	    = null;
+				$id     = null;
 
 				if ( method_exists( 'MM_WPFS_Database', $get ) ) {
 					$item = $db->$get( $name );
