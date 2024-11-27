@@ -579,14 +579,6 @@ class Admin {
 			return false;
 		}
 
-		$page_templates_data = array(
-			'page_title' => __( 'Page Templates', 'templates-patterns-collection' ),
-			'menu_title' => $this->get_prefix_for_menu_item() . __( 'Page Templates', 'templates-patterns-collection' ),
-			'capability' => 'activate_plugins',
-			'menu_slug'  => ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '#pageTemplates',
-			'callback'   => '',
-		);
-
 		$library_data  = array(
 			'parent_slug' => $plugin_page,
 			'page_title'  => __( 'My Library', 'templates-patterns-collection' ),
@@ -615,7 +607,6 @@ class Admin {
 			return false;
 		}
 		$this->register_starter_sites_page();
-		$this->add_theme_page_for_tiob( $page_templates_data, 3 );
 
 		if ( $this->should_load_onboarding() ) {
 			$this->register_onboarding_page();
