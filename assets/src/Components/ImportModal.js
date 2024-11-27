@@ -583,6 +583,7 @@ const ImportModal = ( {
 			source: 'remote',
 			frontPage: importData.front_page,
 			shopPages: importData.shop_pages,
+			paymentForms: importData.payment_forms,
 			demoSlug: importData.slug,
 			editor,
 		} )

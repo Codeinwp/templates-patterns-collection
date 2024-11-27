@@ -14,20 +14,21 @@ namespace TIOB\Importers\Cleanup;
  */
 class Active_State {
 
-	const STATE_NAME      = 'neve_last_imports';
-	const HOUR_IN_SECONDS = 3600;
-	const PLUGINS_NSP     = 'plugins';
-	const CATEGORY_NSP    = 'category';
-	const TAGS_NSP        = 'tags';
-	const TERMS_NSP       = 'terms';
-	const POSTS_NSP       = 'posts';
-	const COMMENTS_NSP    = 'comments';
-	const ATTACHMENT_NSP  = 'attachment';
-	const FRONT_PAGE_NSP  = 'front_page_options';
-	const SHOP_PAGE_NSP   = 'shop_page_options';
-	const THEME_MODS_NSP  = 'theme_mods';
-	const MENUS_NSP       = 'menus';
-	const WIDGETS_NSP     = 'widgets';
+	const STATE_NAME       = 'neve_last_imports';
+	const HOUR_IN_SECONDS  = 3600;
+	const PLUGINS_NSP      = 'plugins';
+	const CATEGORY_NSP     = 'category';
+	const TAGS_NSP         = 'tags';
+	const TERMS_NSP        = 'terms';
+	const POSTS_NSP        = 'posts';
+	const COMMENTS_NSP     = 'comments';
+	const ATTACHMENT_NSP   = 'attachment';
+	const FRONT_PAGE_NSP   = 'front_page_options';
+	const SHOP_PAGE_NSP    = 'shop_page_options';
+	const PAYMENT_FORM_NSP = 'payment_form_options';
+	const THEME_MODS_NSP   = 'theme_mods';
+	const MENUS_NSP        = 'menus';
+	const WIDGETS_NSP      = 'widgets';
 	/**
 	 * @var array $state
 	 */
@@ -64,6 +65,7 @@ class Active_State {
 				self::WIDGETS_NSP,
 				self::FRONT_PAGE_NSP,
 				self::SHOP_PAGE_NSP,
+				self::PAYMENT_FORM_NSP,
 			),
 			true
 		);
