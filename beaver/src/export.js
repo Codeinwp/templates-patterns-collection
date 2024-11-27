@@ -48,8 +48,6 @@ window.tiTpc.tpcExport = tpcExport;
 
 if ( contextMenu ) {
 	const text = contextMenu.textContent;
-
-	console.log('REPLACING');
 	contextMenu.textContent = text.replace(
 		// eslint-disable-next-line prettier/prettier
 		'<li><a class="fl-block-row-reset" href="javascript:void(0);">Reset Row Width</a></li>',
