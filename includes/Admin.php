@@ -64,7 +64,8 @@ class Admin {
 	 */
 	public function init() {
 		License::get_instance();
-		add_action( 'admin_init', array( $this, 'maybe_remove_tc' ) );
+
+		$this->maybe_remove_tc();
 
 		add_filter( 'query_vars', array( $this, 'add_onboarding_query_var' ) );
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
