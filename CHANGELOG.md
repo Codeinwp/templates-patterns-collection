@@ -1,3 +1,10 @@
+##### [Version 1.2.14](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.13...v1.2.14) (2024-11-28)
+
+- remove legacy Page Templates functionality
+- remove Template Cloud functionality for new users & users who weren't using the feature
+- we have launched a dedicated Templates Cloud plugin that offers advanced permission controls and additional features. which you can try from your Themeisle account
+- if you already have templates saved in the cloud, you can still use them in this plugin if you already have a license key set up
+
 ##### [Version 1.2.13](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.12...v1.2.13) (2024-11-12)
 
 - Updated dependencies

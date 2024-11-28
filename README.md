@@ -1,4 +1,4 @@
-# Cloud Templates & Patterns collection #
+# Starter Sites & Templates by Neve #
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** neve, templates, patterns, blocks, starter, sites, demo, content, import  
 **Requires at least:** 5.5  
@@ -8,7 +8,7 @@
 **License:** GPLv3  
 **License URI:** https://www.gnu.org/licenses/gpl-3.0.en.html  
 
-A cloud based service with 100+ templates and starter sites for Neve theme.
+This plugin gives you access to 100+ templates and ready-to-use starter sites. Neve theme is used for all the designs.
 
 ## Description ##
 
@@ -39,9 +39,12 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 ## Changelog ##
 
-##### [Version 1.2.13](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.12...v1.2.13) (2024-11-12)
+##### [Version 1.2.14](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.13...v1.2.14) (2024-11-28)
 
-- Updated dependencies
+- remove legacy Page Templates functionality
+- remove Template Cloud functionality for new users & users who weren't using the feature
+- we have launched a dedicated Templates Cloud plugin that offers advanced permission controls and additional features. which you can try from your Themeisle account
+- if you already have templates saved in the cloud, you can still use them in this plugin if you already have a license key set up
 
 
 
