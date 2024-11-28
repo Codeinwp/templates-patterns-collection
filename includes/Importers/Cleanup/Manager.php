@@ -288,7 +288,7 @@ class Manager {
 		$this->cleanup_terms( $state );
 		$this->cleanup_options( Active_State::FRONT_PAGE_NSP, $state );
 		$this->cleanup_options( Active_State::SHOP_PAGE_NSP, $state );
-		$this->cleanup_forms( ACTIVE_STATE::PAYMENT_FORM_NSP, $state );
+		$this->cleanup_forms( Active_State::PAYMENT_FORM_NSP, $state );
 		$this->cleanup_posts( $state );
 		$this->cleanup_attachments( $state );
 		$this->cleanup_widgets( $state );
