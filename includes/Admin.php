@@ -24,7 +24,9 @@ class Admin {
 	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
 	const FEEDBACK_DISMISSED_OPT       = 'tiob_feedback_dismiss';
 
-	const VISITED_LIBRARY_OPT = 'tiob_library_visited';
+	const TC_REMOVED_KEY          = 'tiob_tc_removed';
+	const TC_NEW_NOTICE_DISMISSED = 'tiob_new_tc_notice_dismissed';
+	const VISITED_LIBRARY_OPT     = 'tiob_library_visited';
 
 	/**
 	 * Admin page slug
@@ -63,6 +65,9 @@ class Admin {
 	 */
 	public function init() {
 		License::get_instance();
+
+		$this->maybe_remove_tc();
+
 		add_filter( 'query_vars', array( $this, 'add_onboarding_query_var' ) );
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
@@ -82,12 +87,80 @@ class Admin {
 
 		add_action( 'wp_ajax_tpc_get_logs', array( $this, 'external_get_logs' ) );
 
+		add_action( 'wp_ajax_dismiss_new_tc_notice', array( $this, 'dismiss_new_tc_notice' ) );
+
 		$this->register_feedback_settings();
 
 		$this->register_prevent_clone_hooks();
 
 		$this->get_font_parings();
 	}
+
+	/**
+	 * Removes template cloud for users that:
+	 * - didn't have a license key yet;
+	 * - have 0 templates saved;
+	 *
+	 * @return void
+	 */
+	public function maybe_remove_tc() {
+		$status = get_option( self::TC_REMOVED_KEY );
+
+		if ( $status !== false ) {
+			return;
+		}
+
+		if ( ! License::has_active_license() ) {
+			update_option( self::TC_REMOVED_KEY, 'yes' );
+
+			return;
+		}
+
+		$license = License::get_instance();
+
+		if ( ! $license->has_any_templates() ) {
+			update_option( self::TC_REMOVED_KEY, 'yes' );
+
+			return;
+		}
+
+		update_option( self::TC_REMOVED_KEY, 'no' );
+	}
+
+
+	/**
+	 * Check if the legacy template cloud is still available.
+	 *
+	 * @return bool
+	 */
+	public static function has_legacy_template_cloud() {
+		return get_option( self::TC_REMOVED_KEY, 'no' ) === 'no';
+	}
+
+	public function dismiss_new_tc_notice() {
+		$response = array(
+			'success' => false,
+			'code'    => 'ti__ob_not_allowed',
+			'message' => 'Not allowed!',
+		);
+
+		if ( ! isset( $_REQUEST['nonce'] ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'dismiss_new_tc_notice' ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		unset( $response['code'] );
+		unset( $response['message'] );
+
+		update_option( self::TC_NEW_NOTICE_DISMISSED, 'yes' );
+		$this->ensure_ajax_response( $response );
+	}
+
 
 	/**
 	 * Register hooks to prevent meta cloning for the templates.
@@ -425,6 +498,86 @@ class Admin {
 	 * @return bool|void
 	 */
 	public function register() {
+		$has_neve = defined( 'NEVE_VERSION' );
+
+		// Legacy users that had the plugin and had templates.
+		if ( self::has_legacy_template_cloud() ) {
+			$this->register_legacy_template_cloud_pages();
+
+			return;
+		}
+
+		if ( ! $has_neve ) {
+			$this->register_starter_sites_page( true );
+
+			return;
+		}
+
+		$this->register_starter_sites_page();
+
+		if ( $this->should_load_onboarding() ) {
+			$this->register_onboarding_page();
+		}
+	}
+
+	private function register_starter_sites_page( $in_appearance = false ) {
+		// WL disables starter sites.
+		if ( $this->is_starter_sites_disabled() ) {
+			return;
+		}
+
+		$starter_site_data = array(
+			'page_title' => __( 'Starter Sites', 'templates-patterns-collection' ),
+			'menu_title' => $this->get_prefix_for_menu_item() . __( 'Starter Sites', 'templates-patterns-collection' ),
+			'capability' => 'activate_plugins',
+			'menu_slug'  => $this->page_slug,
+			'callback'   => array(
+				$this,
+				'render_starter_sites',
+			),
+		);
+
+		if ( $in_appearance ) {
+			$starter_site_data['page_title'] = __( 'Starter Templates', 'templates-patterns-collection' );
+			$starter_site_data['menu_title'] = __( 'Starter Templates', 'templates-patterns-collection' );
+
+			add_theme_page(
+				$starter_site_data['page_title'],
+				$starter_site_data['menu_title'],
+				$starter_site_data['capability'],
+				$starter_site_data['menu_slug'],
+				$starter_site_data['callback']
+			);
+		}
+
+		$this->add_theme_page_for_tiob( $starter_site_data, 2 );
+	}
+
+	/**
+	 * Registers the onboarding page. Used for Neve onboarding, but hidden in the admin.
+	 *
+	 * @return void
+	 */
+	private function register_onboarding_page() {
+		$onboarding_data = array(
+			'page_title' => __( 'Onboarding', 'templates-patterns-collection' ),
+			'menu_title' => $this->get_prefix_for_menu_item() . __( 'Onboarding', 'templates-patterns-collection' ),
+			'capability' => 'install_plugins',
+			'menu_slug'  => 'neve-onboarding',
+			'callback'   => array(
+				$this,
+				'render_onboarding',
+			),
+		);
+		$this->add_theme_page_for_tiob( $onboarding_data, 4 );
+	}
+
+	/**
+	 * Legacy template cloud pages.
+	 *
+	 * @return false|void
+	 */
+	public function register_legacy_template_cloud_pages() {
 		$icon        = 'data:image/svg+xml;base64,PHN2ZwogICAgICAgIHdpZHRoPSIxMDAiCiAgICAgICAgaGVpZ2h0PSIxMDAiCiAgICAgICAgdmlld0JveD0iMCAwIDEwMCAxMDAiCiAgICAgICAgZmlsbD0iI2YwZjBmMSIKICAgICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCj4KICAgIDxwYXRoCiAgICAgICAgICAgIGQ9Ik05NS4wMjY0IDEwMEg0Ljk3MzU2QzIuMjI3OTcgMTAwIDAgOTcuNzcyIDAgOTUuMDI2NFY0Ljk3MzU2QzAgMi4yMjc5NyAyLjIyNzk3IDAgNC45NzM1NiAwSDk1LjAyNjRDOTcuNzcyIDAgMTAwIDIuMjI3OTcgMTAwIDQuOTczNTZWOTUuMDI2NEMxMDAgOTcuNzcyIDk3Ljc3MiAxMDAgOTUuMDI2NCAxMDBaIE04Mi42OTQxIDg2Ljc0NDhWMzAuODIwNVYxOC40NjUzSDcwLjM1MDJIMTQuNDE0NkwyNi43NTg0IDMwLjgyMDVINzAuMzUwMlY3NC40MDFMODIuNjk0MSA4Ni43NDQ4WiBNNDIuMjQxNiA1OC45MjkxTDQyLjI1MjggNzEuMTgzTDUzLjIzNTIgODIuMTY1M0w1My4xOTAyIDQ3Ljk4MDZMMTguOTk0MSA0Ny45MzU1TDI5Ljk3NjUgNTguOTA2Nkw0Mi4yNDE2IDU4LjkyOTFaIgogICAgICAgICAgICBmaWxsPSIjZjBmMGYxIgogICAgLz4KPC9zdmc+Cg==';
 		$priority    = 61;  // The position of the menu item, 60 is the position of the Appearance menu.
 		$plugin_page = 'tiob-plugin';
@@ -454,35 +607,6 @@ class Admin {
 			return false;
 		}
 
-		$style = 'display:inline-block;';
-
-		if ( ! is_rtl() ) {
-			$style .= 'transform:scaleX(-1);margin-right:5px;';
-		} else {
-			$style .= 'margin-left:5px;';
-		}
-
-		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="' . esc_attr( $style ) . '">&crarr;</span>' : '';
-
-		$starter_site_data = array(
-			'page_title' => __( 'Starter Sites', 'templates-patterns-collection' ),
-			'menu_title' => $prefix . __( 'Starter Sites', 'templates-patterns-collection' ),
-			'capability' => 'activate_plugins',
-			'menu_slug'  => $this->page_slug,
-			'callback'   => array(
-				$this,
-				'render_starter_sites',
-			),
-		);
-
-		$page_templates_data = array(
-			'page_title' => __( 'Page Templates', 'templates-patterns-collection' ),
-			'menu_title' => $prefix . __( 'Page Templates', 'templates-patterns-collection' ),
-			'capability' => 'activate_plugins',
-			'menu_slug'  => ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '#pageTemplates',
-			'callback'   => '',
-		);
-
 		$library_data  = array(
 			'parent_slug' => $plugin_page,
 			'page_title'  => __( 'My Library', 'templates-patterns-collection' ),
@@ -510,21 +634,10 @@ class Admin {
 			$this->add_subpage_for_tiob( $settings_data );
 			return false;
 		}
-		$this->add_theme_page_for_tiob( $starter_site_data, 2 );
-		$this->add_theme_page_for_tiob( $page_templates_data, 3 );
+		$this->register_starter_sites_page();
 
 		if ( $this->should_load_onboarding() ) {
-			$onboarding_data = array(
-				'page_title' => __( 'Onboarding', 'templates-patterns-collection' ),
-				'menu_title' => $prefix . __( 'Onboarding', 'templates-patterns-collection' ),
-				'capability' => 'install_plugins',
-				'menu_slug'  => 'neve-onboarding',
-				'callback'   => array(
-					$this,
-					'render_onboarding',
-				),
-			);
-			$this->add_theme_page_for_tiob( $onboarding_data, 4 );
+			$this->register_onboarding_page();
 		}
 
 		if ( $this->is_library_disabled() ) {
@@ -772,6 +885,11 @@ class Admin {
 				),
 			),
 			'isFSETheme'          => self::is_fse_theme(),
+			'newTCNotice'         => array(
+				'show'    => get_option( self::TC_NEW_NOTICE_DISMISSED, 'no' ) !== 'yes' && self::has_legacy_template_cloud(),
+				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'nonce'   => wp_create_nonce( 'dismiss_new_tc_notice' ),
+			),
 		);
 	}
 
@@ -1321,5 +1439,19 @@ class Admin {
 		}
 
 		wp_die( __( 'No logs found', 'templates-patterns-collection' ) );
+	}
+
+	private function get_prefix_for_menu_item() {
+		$style = 'display:inline-block;';
+
+		if ( ! is_rtl() ) {
+			$style .= 'transform:scaleX(-1);margin-right:5px;';
+		} else {
+			$style .= 'margin-left:5px;';
+		}
+
+		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="' . esc_attr( $style ) . '">&crarr;</span>' : '';
+
+		return $prefix;
 	}
 }

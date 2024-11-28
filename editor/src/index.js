@@ -34,9 +34,7 @@ if ( ! tiTpc.isSiteEditor ) {
 	} );
 }
 
-if ( parseInt( tiTpc.tier ) === 3 ) {
-	registerPlugin( 'ti-tpc', {
-		render: tiTpc.isSiteEditor ? SiteEditorExporter : Exporter,
-		icon,
-	} );
-}
+registerPlugin( 'ti-tpc', {
+	render: tiTpc.isSiteEditor ? SiteEditorExporter : Exporter,
+	icon,
+} );

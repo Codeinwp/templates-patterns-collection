@@ -211,6 +211,50 @@ final class License {
 	}
 
 	/**
+	 * Checks if the user had any templates previously.
+	 *
+	 * @return bool
+	 */
+	public function has_any_templates() {
+		if ( ! self::has_active_license() ) {
+			return false;
+		}
+
+		$license = self::get_license_data();
+
+		if ( empty( $license->key ) ) {
+			return false;
+		}
+
+		$url = sprintf(
+			'%stemplates/?license_id=%s&site_url=%s&per_page=1&orderby=date&order=DESC',
+			self::API_URL,
+			$license->key,
+			rawurlencode( home_url() )
+		);
+
+		$response = $this->safe_get( $url );
+
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+
+		$code = wp_remote_retrieve_response_code( $response );
+
+		if ( $code !== 200 ) {
+			return false;
+		}
+
+		$template_data = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		if ( ! is_array( $template_data ) ) {
+			return false;
+		}
+
+		return ! empty( $template_data );
+	}
+
+	/**
 	 * Throw error on object clone
 	 *
 	 * @return void

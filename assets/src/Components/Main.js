@@ -9,7 +9,8 @@ import ImportModal from './ImportModal';
 import DemoSiteTemplatesImport from './CloudLibrary/DemoSiteTemplatesImport';
 import Header from './Header';
 import OnboardingContent from './OnboardingContent';
-import Settings from "./Settings/Settings";
+import Settings from './Settings/Settings';
+import NewTCNotice from './NewTCNotice';
 
 const Onboarding = ( {
 	getSites,
@@ -28,6 +29,9 @@ const Onboarding = ( {
 				<Header />
 				<div className="ob-body">
 					<div className="content-container">
+
+						{['library', 'settings'].includes(currentTab) && <NewTCNotice/>}
+
 						{ migration && <Migration data={ migration } /> }
 
 						{ 'starterSites' === currentTab &&

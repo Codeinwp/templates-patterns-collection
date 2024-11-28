@@ -1,0 +1,27 @@
+.tiob-new-tc-notice {
+  padding: 10px 20px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  display: flex;
+  margin-top: 20px;
+  width: 100%;
+  gap: 20px;
+  box-sizing: border-box;
+  align-items: center;
+  border-left: 5px solid var(--wp-admin-theme-color, #3858e9);
+
+  p {
+    margin: 0 0 10px;
+    font-size: 14px;
+  }
+
+  .description {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .dismiss {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+}

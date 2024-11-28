@@ -14,13 +14,10 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 	const { setFetching, updateCurrentTab } = useDispatch( 'tpc/block-editor' );
 
 	const TABS = {
-		templates: __( 'Page Templates', 'templates-patterns-collection' ),
-		// patterns: __( 'Patterns' ),
+		library : __( 'My Library', 'templates-patterns-collection' )
+		// Removed since PRF.
+		// templates: __( 'Page Templates', 'templates-patterns-collection' ),
 	};
-
-	if ( parseInt( tiTpc.tier ) === 3 ) {
-		TABS.library = __( 'My Library', 'templates-patterns-collection' );
-	}
 
 	const isFetching = useSelect( ( select ) =>
 		select( 'tpc/block-editor' ).isFetching()

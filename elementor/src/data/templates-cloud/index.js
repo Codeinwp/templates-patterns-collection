@@ -65,10 +65,6 @@ export const fetchTemplates = async ( additionalParams = {} ) => {
 };
 
 export const fetchLibrary = async ( additionalParams = {} ) => {
-	if ( parseInt( window.tiTpc.tier ) !== 3 ) {
-		return;
-	}
-
 	const { meta, ...filteredParams } = tiTpc.params;
 	const { isScroll, ...filteredAdditionalParams } = additionalParams;
 	const params = {
