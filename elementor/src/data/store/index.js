@@ -3,7 +3,7 @@ import { registerStore } from '@wordpress/data';
 const DEFAULT_STATE = {
 	isFetching: true,
 	isPreview: false,
-	tab: parseInt( window.tiTpc.tier ) === 3 ? 'library' : 'templates',
+	tab: 'library',
 	templates: [],
 	library: {
 		items: [],

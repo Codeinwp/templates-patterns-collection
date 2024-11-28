@@ -12,12 +12,10 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 	const { setFetching, updateCurrentTab } = useDispatch( 'tpc/beaver' );
 
 	const TABS = {
-		templates: window.tiTpc.library.tabs.templates,
+		library: window.tiTpc.library.tabs.library,
+		// Removed during PRF.
+		// templates: window.tiTpc.library.tabs.templates,
 	};
-
-	if ( parseInt( window.tiTpc.tier ) === 3 ) {
-		TABS.library = window.tiTpc.library.tabs.library;
-	}
 
 	const isFetching = useSelect( ( select ) =>
 		select( 'tpc/beaver' ).isFetching()
@@ -85,10 +83,7 @@ const Header = ( { closeModal, getOrder, getSearchQuery } ) => {
 							/>
 						) }
 
-						{ window.tiTpc.postTypes.includes(
-							window.tiTpc.postType
-						) &&
-							parseInt( window.tiTpc.tier ) === 3 && (
+						{ window.tiTpc.postTypes.includes(window.tiTpc.postType) && (
 								<Button
 									label={ window.tiTpc.library.actions.save }
 									icon={ cloudUpload }
