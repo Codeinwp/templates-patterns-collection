@@ -1,4 +1,4 @@
-=== Cloud Templates & Patterns collection ===
+=== Starter Sites & Templates by Neve ===
 Contributors: themeisle
 Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
 Requires at least: 5.5
@@ -8,7 +8,7 @@ Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-A cloud based service with 100+ templates and starter sites for Neve theme.
+This plugin gives you access to 100+ templates and ready-to-use starter sites. Neve theme is used for all the designs.
 
 == Description ==
 
