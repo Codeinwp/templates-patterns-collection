@@ -240,6 +240,44 @@ class Manager {
 		}
 	}
 
+	/**
+	 * Handles form cleanup.
+	 * @param array $state The cleanup state.
+	 */
+	private function cleanup_forms( $namespace, $state ) {
+		if ( ! class_exists( 'MM_WPFS_Database' ) ) {
+			return;
+		}
+
+		$db = new \MM_WPFS_Database();
+
+		if ( isset( $state[ $namespace ] ) ) {
+			foreach ( $state[ $namespace ] as $name => $form ) {
+				$get    = 'get' . ucfirst( $form['layout'] ) . ucfirst( $form['type'] ) . 'FormByName';
+				$method = 'delete' . ucfirst( $form['layout'] ) . ucfirst( $form['type'] ) . 'Form';
+				$id     = null;
+
+				if ( method_exists( 'MM_WPFS_Database', $get ) ) {
+					$item = $db->$get( $name );
+					foreach ( $item as $key => $value ) {
+						if ( strpos( $key, 'FormID' ) !== false ) {
+							$id = $value;
+							break;
+						}
+					}
+				}
+
+				if ( empty( $id ) ) {
+					continue;
+				}
+
+				if ( method_exists( 'MM_WPFS_Database', $method ) ) {
+					$db->$method( $id );
+				}
+			}
+		}
+	}
+
 	final public function do_cleanup() {
 		$active_state = new Active_State();
 		$state        = $active_state->get();
@@ -250,6 +288,7 @@ class Manager {
 		$this->cleanup_terms( $state );
 		$this->cleanup_options( Active_State::FRONT_PAGE_NSP, $state );
 		$this->cleanup_options( Active_State::SHOP_PAGE_NSP, $state );
+		$this->cleanup_forms( Active_State::PAYMENT_FORM_NSP, $state );
 		$this->cleanup_posts( $state );
 		$this->cleanup_attachments( $state );
 		$this->cleanup_widgets( $state );

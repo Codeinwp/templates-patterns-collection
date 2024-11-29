@@ -156,6 +156,12 @@ class Content_Importer {
 		}
 		do_action( 'themeisle_ob_after_shop_pages_setup' );
 
+		// Set payment forms.
+		if ( isset( $body['paymentForms'] ) ) {
+			$this->setup_payment_forms( $body['paymentForms'] );
+		}
+		do_action( 'themeisle_ob_after_payment_forms_setup' );
+
 		if ( empty( $frontpage_id ) ) {
 			$this->logger->log( 'No front page ID.' );
 		}
@@ -263,6 +269,62 @@ class Content_Importer {
 		}
 		do_action( 'themeisle_cl_add_property_state', Active_State::SHOP_PAGE_NSP, $shop_page_options );
 		$this->logger->log( 'Shop pages set up.', 'success' );
+	}
+
+	public function setup_payment_forms( $forms ) {
+		$this->logger->log( 'Setting up payment forms.', 'progress' );
+		if ( ! class_exists( 'MM_WPFS_Database' ) ) {
+			$this->logger->log( 'No WP Full Stripe.', 'success' );
+			return;
+		}
+
+		if ( ! is_array( $forms ) ) {
+			$this->logger->log( 'No Payment Forms.', 'success' );
+			return;
+		}
+
+		$db = new \MM_WPFS_Database();
+
+		$payment_form_options = array();
+		foreach ( $forms as $key => $form ) {
+			if ( ! in_array( $form['type'], array( 'payment', 'subscription', 'donation' ) ) || ! in_array( $form['layout'], array( 'inline', 'checkout' ) ) ) {
+				continue;
+			}
+
+			$check  = 'get' . ucfirst( $form['layout'] ) . ucfirst( $form['type'] ) . 'FormByName';
+			$insert = 'insert' . ucfirst( $form['layout'] ) . ucfirst( $form['type'] ) . 'Form';
+
+			if ( method_exists( $db, $check ) ) {
+				$existing_form = $db->$check( $form['name'] );
+				if ( $existing_form ) {
+					$this->logger->log( "Form {$form['name']} already exists.", 'success' );
+					continue;
+				}
+			}
+
+			if ( method_exists( $db, $insert ) ) {
+				$form['data'] = array_filter(
+					$form['data'],
+					function ( $key ) {
+						return strpos( $key, 'FormID' ) === false;
+					},
+					ARRAY_FILTER_USE_KEY
+				);
+
+				$db->$insert( $form['data'] );
+
+				$payment_form_options[ $form['data']['name'] ] = array(
+					'layout' => $form['layout'],
+					'type'   => $form['type'],
+				);
+			} else {
+				$this->logger->log( "Method {$insert} does not exist.", 'error' );
+			}
+		}
+
+		do_action( 'themeisle_cl_add_property_state', Active_State::PAYMENT_FORM_NSP, $payment_form_options );
+
+		$this->logger->log( 'Payment forms set up.', 'success' );
 	}
 
 	/**

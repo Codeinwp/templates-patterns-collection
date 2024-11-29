@@ -53,6 +53,7 @@ class Plugin_Importer {
 		'recipe-card-blocks-by-wpzoom'     => 'wpzoom-recipe-card.php',
 		'restrict-content'                 => 'restrictcontent.php',
 		'pods'                             => 'init.php',
+		'wp-full-stripe-free'              => 'wp-full-stripe.php',
 	);
 
 	public function __construct() {
