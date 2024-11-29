@@ -39,12 +39,9 @@ Yes, you can. You can either chose to import one template or the entire starter 
 
 ## Changelog ##
 
-##### [Version 1.2.14](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.13...v1.2.14) (2024-11-28)
+##### [Version 1.2.15](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.14...v1.2.15) (2024-11-29)
 
-- remove legacy Page Templates functionality
-- remove Template Cloud functionality for new users & users who weren't using the feature
-- we have launched a dedicated Templates Cloud plugin that offers advanced permission controls and additional features. which you can try from your Themeisle account
-- if you already have templates saved in the cloud, you can still use them in this plugin if you already have a license key set up
+- Starter Sites Improvements
 
 
 
