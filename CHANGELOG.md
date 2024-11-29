@@ -1,3 +1,7 @@
+##### [Version 1.2.15](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.14...v1.2.15) (2024-11-29)
+
+- Starter Sites Improvements
+
 ##### [Version 1.2.14](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.13...v1.2.14) (2024-11-28)
 
 - remove legacy Page Templates functionality
