@@ -52,14 +52,6 @@ const ImportStepper = ( { currentStep, progress, willDo } ) => {
 			status: progress.performanceAddon,
 			willDo: willDo.performanceAddon,
 		},
-		hyveLite: {
-			label: __(
-				'Installing Hyve Lite Plugin',
-				'templates-patterns-collection'
-			),
-			status: progress.hyveLite,
-			willDo: willDo.hyveLite,
-		},
 	};
 
 	return (

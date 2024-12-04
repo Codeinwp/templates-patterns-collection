@@ -53,7 +53,6 @@ const ImportModal = ( {
 		widgets: true,
 		cleanup: false,
 		performanceAddon: true,
-		hyveLite: true,
 		theme_install: themeData !== false,
 	} );
 	const site = tiobDash.onboarding.homeUrl || '';
@@ -62,7 +61,6 @@ const ImportModal = ( {
 	const [ performanceAddonProgress, setPerformanceAddonProgress ] = useState(
 		false
 	);
-	const [ hyveLiteProgress, setHyveLiteProgress ] = useState( false );
 	const [ cleanupProgress, setCleanupProgress ] = useState( false );
 	const [ pluginsProgress, setPluginsProgress ] = useState( false );
 	const [ contentProgress, setContentProgress ] = useState( false );
@@ -248,44 +246,6 @@ const ImportModal = ( {
 									display: 'inline-flex',
 									alignItems: 'center',
 								} } rel="noreferrer"
-							/>
-						),
-						icon: (
-							<Icon
-								size={ 10 }
-								icon="external"
-								style={ { marginLeft: 0 } }
-							/>
-						),
-						span: <div />,
-					}
-				),
-			},
-			hyveLite: {
-				title: __( 'AI Chatbot', 'templates-patterns-collection' ),
-				icon: 'admin-comments',
-				tooltip: createInterpolateElement(
-					sprintf(
-						// translators: %s is Hyve plugin name.
-						__(
-							'Hyve is an AI-powered chatbot that transforms your WordPress content into engaging conversations. %sHyve%s',
-							'templates-patterns-collection'
-						),
-						'<a><span>',
-						'</span><icon/></a>'
-					),
-					{
-						a: (
-							// eslint-disable-next-line jsx-a11y/anchor-has-content
-							<a
-								href="https://wordpress.org/plugins/hyve-lite/"
-								target={ '_blank' }
-								rel="external noreferrer noopener"
-								style={ {
-									textDecoration: 'none',
-									display: 'inline-flex',
-									alignItems: 'center',
-								} }
 							/>
 						),
 						icon: (
@@ -546,8 +506,7 @@ const ImportModal = ( {
 		// console.clear();
 		if (
 			! pluginOptions &&
-			! general.performanceAddon &&
-			! general.hyveLite
+			! general.performanceAddon
 		) {
 			console.log( '[S] Plugins.' );
 			runImportContent();
@@ -656,7 +615,7 @@ const ImportModal = ( {
 	function runPerformanceAddonInstall() {
 		if ( ! general.performanceAddon ) {
 			console.log( '[S] Performance Addon.' );
-			runHyveLiteInstall();
+			importDone();
 			return false;
 		}
 		setCurrentStep( 'performanceAddon' );
@@ -670,34 +629,10 @@ const ImportModal = ( {
 				}
 				console.log( '[D] Performance Addon.' );
 				setPerformanceAddonProgress( 'done' );
-				runHyveLiteInstall();
-			} )
-			.catch( ( incomingError ) =>
-				handleError( incomingError, 'performanceAddon' )
-			);
-	}
-
-	function runHyveLiteInstall() {
-		if ( ! general.hyveLite ) {
-			console.log( '[S] Hyve Lite.' );
-			importDone();
-			return false;
-		}
-		setCurrentStep( 'hyveLite' );
-		console.log( '[P] Hyve Lite.' );
-
-		installPlugins( { 'hyve-lite': true } )
-			.then( ( response ) => {
-				if ( ! response.success ) {
-					handleError( response, 'hyveLite' );
-					return false;
-				}
-				console.log( '[D] Hyve Lite.' );
-				setHyveLiteProgress( 'done' );
 				importDone();
 			} )
 			.catch( ( incomingError ) =>
-				handleError( incomingError, 'hyveLite' )
+				handleError( incomingError, 'performanceAddon' )
 			);
 	}
 
@@ -749,10 +684,6 @@ const ImportModal = ( {
 				'Something went wrong while installing the performance addon.',
 				'templates-patterns-collection'
 			),
-			hyveLite: __(
-				'Something went wrong while installing the Hyve Lite plugin.',
-				'templates-patterns-collection'
-			),
 		};
 
 		switch ( step ) {
@@ -773,9 +704,6 @@ const ImportModal = ( {
 				break;
 			case 'performanceAddon':
 				setPerformanceAddonProgress( 'error' );
-				break;
-			case 'hyveLite':
-				setHyveLiteProgress( 'error' );
 				break;
 		}
 		setError(
@@ -959,7 +887,6 @@ const ImportModal = ( {
 											customizer: customizerProgress,
 											widgets: widgetsProgress,
 											performanceAddon: performanceAddonProgress,
-											hyveLite: hyveLiteProgress,
 										} }
 										currentStep={ currentStep }
 										willDo={ general }
