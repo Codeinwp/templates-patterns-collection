@@ -1,3 +1,7 @@
+##### [Version 1.2.16](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.15...v1.2.16) (2024-12-04)
+
+- Codebase changes.
+
 ##### [Version 1.2.15](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.14...v1.2.15) (2024-11-29)
 
 - Starter Sites Improvements
