@@ -30,9 +30,9 @@ Yes, you can choose to import either one template or the entire starter site.
 
 == Changelog ==
 
-##### [Version 1.2.16](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.15...v1.2.16) (2024-12-04)
+##### [Version 1.2.17](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.16...v1.2.17) (2024-12-16)
 
-- Codebase changes.
+- fix translation loading for javascript files
 
 
 
