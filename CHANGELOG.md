@@ -1,3 +1,7 @@
+##### [Version 1.2.17](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.16...v1.2.17) (2024-12-16)
+
+- fix translation loading for javascript files
+
 ##### [Version 1.2.16](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.15...v1.2.16) (2024-12-04)
 
 - Codebase changes.
