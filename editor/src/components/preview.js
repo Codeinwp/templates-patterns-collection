@@ -62,7 +62,7 @@ const Preview = ( { isFetching, importBlocks } ) => {
 		<div className="tpc-modal-content">
 			<div className="preview-header">
 				<div className="left">
-					{ item.template_name || __( 'Template' ) }
+					{ item.template_name || __( 'Template','templates-patterns-collection' ) }
 				</div>
 
 				<div className="right">

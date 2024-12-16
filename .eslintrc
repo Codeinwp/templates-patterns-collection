@@ -33,7 +33,10 @@
         "no-nested-ternary": 0,
         "prettier/prettier": "off",
         "no-shadow": "warn",
-        "camelcase": "warn"
+        "camelcase": "warn",
+        "@wordpress/i18n-text-domain": ["error", {
+			"allowedTextDomain": ["templates-patterns-collection"]
+		}]
     },
 	"ignorePatterns": ["**/vendor/**"]
 }

@@ -27,7 +27,7 @@ const Filters = ( {
 	return (
 		<div className="filters">
 			<div className="display-sorting">
-				<div className="sorting-label">{ __( 'Sort by' ) }</div>
+				<div className="sorting-label">{ __( 'Sort by','templates-patterns-collection' ) }</div>
 
 				<div className="sorting-filter">
 					{ Object.keys( sortByOptions ).map( ( i ) => (

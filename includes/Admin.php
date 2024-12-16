@@ -751,6 +751,8 @@ class Admin {
 			wp_localize_script( 'tiobObd', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $this->get_localization() ) );
 			wp_enqueue_script( 'tiobObd' );
 
+			wp_set_script_translations( 'tiobObd', 'templates-patterns-collection' );
+
 			if ( ! empty( $this->google_fonts ) ) {
 				$font_chunks = array_chunk( $this->google_fonts, absint( count( $this->google_fonts ) / 5 ) );
 				foreach ( $font_chunks as $index => $fonts_chunk ) {
@@ -787,6 +789,8 @@ class Admin {
 		}
 		wp_localize_script( 'tiob', 'tiobDash', apply_filters( 'neve_dashboard_page_data', $tiob_dash ) );
 		wp_enqueue_script( 'tiob' );
+
+		wp_set_script_translations( 'tiob', 'templates-patterns-collection' );
 	}
 
 	/**

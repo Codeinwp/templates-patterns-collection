@@ -158,7 +158,8 @@ const ListItem = ( {
 												<div className="popover-content">
 													<TextControl
 														label={ __(
-															'Template Name'
+															'Template Name',
+															'templates-patterns-collection'
 														) }
 														value={ itemName }
 														onChange={ setItemName }
@@ -272,7 +273,7 @@ const ListItem = ( {
 				<div className="row-controls">
 					{ item.link ? (
 						<Tooltip
-							text={ __( 'This template is synced to a page.' ) }
+							text={ __( 'This template is synced to a page.', 'templates-patterns-collection' ) }
 						>
 							<Button
 								label={ __(
