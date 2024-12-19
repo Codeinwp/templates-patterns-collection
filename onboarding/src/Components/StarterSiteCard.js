@@ -4,6 +4,7 @@ import { withDispatch, withSelect } from '@wordpress/data';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { track } from '../utils/rest';
+import classNames from 'classnames';
 
 const StarterSiteCard = ( {
 	data,
@@ -11,6 +12,8 @@ const StarterSiteCard = ( {
 	handleNextStep,
 	trackingId,
 	editor,
+	isSelected,
+	toggleSelectedSite
 } ) => {
 	const { upsell, screenshot, title, category, query } = data;
 
@@ -36,7 +39,9 @@ const StarterSiteCard = ( {
 
 	return (
 		<div className="ss-card-wrap">
-			<div className="ss-card">
+			<div
+				className="ss-card"
+			>
 				{ upsell && (
 					<span className="ss-badge">
 						<span>
@@ -45,7 +50,25 @@ const StarterSiteCard = ( {
 					</span>
 				) }
 
-				<div className="ss-actions">
+				<div
+					className={
+						classNames('ss-actions', {
+							'card-selected': isSelected
+						})
+					}
+					role="button"
+					tabIndex={0}
+					onClick={(e) => {
+						e.preventDefault();
+						toggleSelectedSite();
+					}}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter' || e.key === ' ') {
+							e.preventDefault();
+							toggleSelectedSite();
+						}
+					}}
+				>
 					<Button
 						isPrimary
 						className="ob-button"
