@@ -50,7 +50,7 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 			return items.filter( ( item ) => ! item.upsell );
 		}
 
-		if ( 'all' !== cat ) {
+		if ( cat && 'all' !== cat ) {
 			return items.filter( ( item ) => item.keywords.includes( cat ) );
 		}
 
