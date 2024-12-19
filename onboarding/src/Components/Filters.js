@@ -6,6 +6,7 @@ import { ONBOARDING_CAT } from '../utils/common';
 const Filters = () => {
 	const categories = {
 		all: __( 'All', 'templates-patterns-collection' ),
+		free: __( 'Free', 'templates-patterns-collection' ),
 		...ONBOARDING_CAT,
 	};
 

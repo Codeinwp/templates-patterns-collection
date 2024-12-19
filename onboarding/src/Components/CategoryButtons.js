@@ -2,6 +2,7 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import classnames from 'classnames';
 import { track } from '../utils/rest';
+import { useMemo } from '@wordpress/element';
 
 const CategoryButtons = ( { categories, style } ) => {
 	const data = useSelect( ( select ) => ( {
@@ -12,6 +13,13 @@ const CategoryButtons = ( { categories, style } ) => {
 	} ) );
 
 	const { setOnboardingStep, setCategory } = useDispatch( 'ti-onboarding' );
+
+	// Show "All" and "Free" categories after user selection.
+	const availableCategories = useMemo(() => {
+		return Object.keys(categories).filter((key) => 
+			data.category || (key !== 'all' && key !== 'free')
+		);
+	}, [categories, data.category]);
 
 	const onClick = ( newCategory ) => {
 		setCategory( newCategory );
@@ -38,20 +46,20 @@ const CategoryButtons = ( { categories, style } ) => {
 
 	return (
 		<div className="ob-cat-wrap" style={ style }>
-			{ Object.keys( categories ).map( ( key, index ) => {
+			{ availableCategories.map( ( catSlug ) => {
 				const classes = classnames( {
 					cat: true,
-					[ key ]: true,
-					active: key === data.category,
+					[ catSlug ]: true,
+					active: catSlug === data.category,
 				} );
 
 				return (
 					<button
 						className={ classes }
-						key={ index }
-						onClick={ () => onClick( key ) }
+						key={ catSlug }
+						onClick={ () => onClick( catSlug ) }
 					>
-						{ categories[ key ] }
+						{ categories[ catSlug ] }
 					</button>
 				);
 			} ) }

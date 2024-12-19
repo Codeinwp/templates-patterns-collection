@@ -19,7 +19,7 @@ const initialLicense = licenseTIOB || {
 const initialState = {
 	sites: onboarding.sites || {},
 	editor: selectedEditor,
-	category: 'all',
+	category: '',
 	currentSite: null,
 	fetching: false,
 	searchQuery: '',

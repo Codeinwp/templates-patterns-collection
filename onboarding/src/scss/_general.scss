@@ -201,7 +201,7 @@ input.components-text-control__input[type="email"],
 @mixin ob-general--laptop() {
   .ob-sites {
     &.is-grid {
-      grid-template-columns: repeat( auto-fit, minmax(346px, 1fr) );
+      grid-template-columns: repeat( auto-fit, 400px);
     }
   }
 }

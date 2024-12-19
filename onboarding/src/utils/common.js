@@ -5,10 +5,11 @@ const trailingSlashIt = ( str ) => untrailingSlashIt( str ) + '/';
 
 const ONBOARDING_CAT = {
 	business: __( 'Business', 'templates-patterns-collection' ),
-	personal: __( 'Personal', 'templates-patterns-collection' ),
-	blog: __( 'Blogging', 'templates-patterns-collection' ),
-	portfolio: __( 'Portfolio', 'templates-patterns-collection' ),
-	woocommerce: __( 'E-Shop', 'templates-patterns-collection' ),
+	education: __( 'Education', 'templates-patterns-collection' ),
+	woocommerce: __( 'eCommerce', 'templates-patterns-collection' ),
+	news: __( 'News', 'templates-patterns-collection' ),
+	nonprofit: __( 'Non-Profit', 'templates-patterns-collection' ),
+	health: __( 'Health', 'templates-patterns-collection' ),
 };
 
 const EDITOR_MAP = {

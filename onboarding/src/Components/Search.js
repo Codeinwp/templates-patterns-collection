@@ -78,7 +78,6 @@ export default compose(
 			deleteQuery: () => setSearchQuery( '' ),
 			handleSubmit: ( e ) => {
 				e.preventDefault();
-				setCategory( 'all' );
 				if ( step === 1 ) {
 					setOnboardingStep( 2 );
 					const data = {
