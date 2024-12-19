@@ -7,6 +7,7 @@ import Fuse from 'fuse.js/dist/fuse.min';
 
 const Sites = ( { getSites, editor, category, searchQuery } ) => {
 	const [ maxShown, setMaxShown ] = useState( 9 );
+	const [ selectedStarterSite, setSelectedSite ] = useState('');
 	const { sites = {} } = getSites;
 
 	const getFilteredSites = () => {
@@ -60,13 +61,21 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 	const getBuilders = () => Object.keys( sites );
 
 	const allData = getFilteredSites();
-
 	return (
 		<>
 			{ allData.length ? (
 				<div className="ob-sites is-grid">
 					{ allData.slice( 0, maxShown ).map( ( site, index ) => {
-						return <StarterSiteCard key={ index } data={ site } />;
+						return (
+							<StarterSiteCard
+								key={ index }
+								data={ site }
+								isSelected={ selectedStarterSite === site?.slug }
+								toggleSelectedSite={() => {
+									setSelectedSite( site.slug === selectedStarterSite ? '' : site.slug );
+								}}
+							/>
+						);
 					} ) }
 
 					<VizSensor
