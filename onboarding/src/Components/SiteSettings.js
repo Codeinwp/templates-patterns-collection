@@ -138,7 +138,7 @@ export const SiteSettings = ( {
 			console.error( error );
 		} );
 	};
-
+	
 	return (
 		<div
 			className={ classnames(
@@ -149,23 +149,24 @@ export const SiteSettings = ( {
 			{ ! fetching ? (
 				<>
 					<div className="ob-site-settings-container">
+						<div className="ob-settings-header">
+							<div className="ob-settings-info">
+								<p>{ __( 'Selected Template', 'templates-patterns-collection' ) }</p>
+								<h3>{ siteData.title }</h3>
+							</div>
+							<div className="ob-settings-actions">
+								<Button
+									className="ob-link"
+									variant="link"
+									onClick={ () => {
+										setOnboardingStep( 2 );
+									} }
+								>
+									<span className="dashicons dashicons-no-alt" />
+								</Button>	
+							</div>
+						</div>
 						<div className="ob-settings-description">
-							<Button
-								className="ob-back"
-								type="link"
-								onClick={ () => {
-									if ( step === 4 ) {
-										setOnboardingStep( 3 );
-										return;
-									}
-									setOnboardingStep( 2 );
-								} }
-							>
-								{ __(
-									'Go back',
-									'templates-patterns-collection'
-								) }
-							</Button>
 							<h2>{ heading }</h2>
 							<p>{ description }</p>
 						</div>
@@ -285,7 +286,24 @@ export const SiteSettings = ( {
 									<p>{ firstUpsell }</p>
 									<p>{ secondUpsell }</p>
 								</div>
-							) ) }
+							) ) 
+						}
+						<Button
+							className="ob-link"
+							variant="link"
+							onClick={ () => {
+								if ( step === 4 ) {
+									setOnboardingStep( 3 );
+									return;
+								}
+								setOnboardingStep( 2 );
+							} }
+						>
+							{ __(
+								'Go back',
+								'templates-patterns-collection'
+							) }
+						</Button>
 					</div>
 				</>
 			) : (
