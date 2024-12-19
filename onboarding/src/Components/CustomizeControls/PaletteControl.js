@@ -36,7 +36,7 @@ const PaletteControl = ( { importData, siteStyle, handlePaletteClick } ) => {
 	return (
 		allPalettes && (
 			<div className="ob-ctrl">
-				<div className="ob-ctrl-head">
+				<div className="ob-ctrl-head small-gap">
 					<h3>
 						{ __(
 							'Color Palette',

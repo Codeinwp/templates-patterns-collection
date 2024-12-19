@@ -174,6 +174,11 @@ export const SiteSettings = ( {
 							<div className="ob-settings-top">
 								{ step === 3 && (
 									<>
+										<LogoControl
+											importDataDefault={
+												importDataDefault
+											}
+										/>
 										<PaletteControl
 											siteStyle={ siteStyle }
 											setSiteStyle={ setSiteStyle }
@@ -189,11 +194,6 @@ export const SiteSettings = ( {
 									( canImport ? (
 										<>
 											<SiteNameControl
-												importDataDefault={
-													importDataDefault
-												}
-											/>
-											<LogoControl
 												importDataDefault={
 													importDataDefault
 												}

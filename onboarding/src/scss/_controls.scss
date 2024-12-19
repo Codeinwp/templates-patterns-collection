@@ -3,6 +3,11 @@
   align-items: center;
   justify-content: space-between;
   margin: 0 0 24px 0;
+
+  h3 {
+    font-size: 18px;
+  }
+
   &.small-gap {
     margin: 0 0 9px 0;
   }
@@ -58,17 +63,14 @@
 .ob-font-pair {
   background-color: transparent;
   border-radius: $button-radius;
-  padding: 16px 15.5px;
   margin: 3px 0;
-  font-size: 24px;
-  line-height: 29px;
+  font-size: 18px;
   text-transform: capitalize;
   letter-spacing: normal;
   font-weight: 700;
   box-shadow: 0 0 0 2px rgba(0,0,0,.1);
   color: $main-text;
   width: 80px;
-  height: 60px;
   justify-content: center;
 }
 
