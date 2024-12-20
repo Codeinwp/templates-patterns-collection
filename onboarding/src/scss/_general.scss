@@ -139,6 +139,7 @@ input.components-text-control__input[type="email"],
   }
 }
 
+.components-modal__content:has( .ob-modal-confirm-title ) .components-button,
 .components-button.ob-button {
   display: flex;
   height: 48px;
@@ -212,4 +213,8 @@ input.components-text-control__input[type="email"],
       grid-template-columns: 1fr 1fr;
     }
   }
+}
+
+.components-modal__content:has( .ob-modal-confirm-title ) .components-button.is-tertiary {
+  color: black;
 }
