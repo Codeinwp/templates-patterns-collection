@@ -2,7 +2,8 @@
 import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
-import { Button } from '@wordpress/components';
+// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+import { Button, __experimentalConfirmDialog as ConfirmDialog } from '@wordpress/components';
 import { createInterpolateElement, useState } from '@wordpress/element';
 import PaletteControl from './CustomizeControls/PaletteControl';
 import TypographyControl from './CustomizeControls/TypographyControl';
@@ -31,6 +32,9 @@ export const SiteSettings = ( {
 	const [ settingsChanged, setSettingsChanged ] = useState( false );
 	const dashboardLink = tiobDash.onboardingUpsell?.dashboard;
 	const contactLink = tiobDash.onboardingUpsell?.contact;
+
+	const [ openConfirmationModal, setOpenConfirmationModal ] = useState( false );
+	const [ skipSuggestions, setSkipSuggestions ] = useState( false );
 
 	let heading =
 		step === 3
@@ -138,7 +142,7 @@ export const SiteSettings = ( {
 			console.error( error );
 		} );
 	};
-
+	
 	return (
 		<div
 			className={ classnames(
@@ -149,23 +153,24 @@ export const SiteSettings = ( {
 			{ ! fetching ? (
 				<>
 					<div className="ob-site-settings-container">
+						<div className="ob-settings-header">
+							<div className="ob-settings-info">
+								<p>{ __( 'Selected Template', 'templates-patterns-collection' ) }</p>
+								<h3>{ siteData.title }</h3>
+							</div>
+							<div className="ob-settings-actions">
+								<Button
+									className="ob-link"
+									variant="link"
+									onClick={ () => {
+										setOnboardingStep( 2 );
+									} }
+								>
+									<span className="dashicons dashicons-no-alt" />
+								</Button>	
+							</div>
+						</div>
 						<div className="ob-settings-description">
-							<Button
-								className="ob-back"
-								type="link"
-								onClick={ () => {
-									if ( step === 4 ) {
-										setOnboardingStep( 3 );
-										return;
-									}
-									setOnboardingStep( 2 );
-								} }
-							>
-								{ __(
-									'Go back',
-									'templates-patterns-collection'
-								) }
-							</Button>
 							<h2>{ heading }</h2>
 							<p>{ description }</p>
 						</div>
@@ -173,6 +178,11 @@ export const SiteSettings = ( {
 							<div className="ob-settings-top">
 								{ step === 3 && (
 									<>
+										<LogoControl
+											importDataDefault={
+												importDataDefault
+											}
+										/>
 										<PaletteControl
 											siteStyle={ siteStyle }
 											setSiteStyle={ setSiteStyle }
@@ -188,11 +198,6 @@ export const SiteSettings = ( {
 									( canImport ? (
 										<>
 											<SiteNameControl
-												importDataDefault={
-													importDataDefault
-												}
-											/>
-											<LogoControl
 												importDataDefault={
 													importDataDefault
 												}
@@ -245,8 +250,10 @@ export const SiteSettings = ( {
 									<Button
 										isPrimary
 										className="ob-button full"
-										onClick={ () =>
-											identityChoicesSubmit()
+										onClick={ () =>{
+												setSkipSuggestions( false );
+												setOpenConfirmationModal( true );
+											}
 										}
 										disabled={
 											fetching ||
@@ -263,9 +270,11 @@ export const SiteSettings = ( {
 									<Button
 										isLink
 										className="ob-link"
-										onClick={ () =>
-											identityChoicesSubmit( true )
+										onClick={ () =>{
+											setSkipSuggestions( true );
+											setOpenConfirmationModal( true );
 										}
+									}
 										disabled={ fetching }
 									>
 										{ __(
@@ -273,6 +282,20 @@ export const SiteSettings = ( {
 											'templates-patterns-collection'
 										) }
 									</Button>
+									<ConfirmDialog
+										isOpen={openConfirmationModal}
+										onConfirm={() => {
+											identityChoicesSubmit( skipSuggestions );
+										}}
+										onCancel={() => {
+											setOpenConfirmationModal(false);
+										}}
+										confirmButtonText={__('Start Import', 'templates-patterns-collection')}
+										cancelButtonText={__('Cancel', 'templates-patterns-collection')}
+									>
+										<h2 className="ob-modal-confirm-title">{ __( 'Start Import?', 'templates-patterns-collection' ) }</h2>
+										<p>{ __( 'This will override theme settings and add content to your current site.', 'templates-patterns-collection' ) }</p>
+									</ConfirmDialog>
 								</>
 							) : (
 								<div className="ob-pro-info">
@@ -285,7 +308,24 @@ export const SiteSettings = ( {
 									<p>{ firstUpsell }</p>
 									<p>{ secondUpsell }</p>
 								</div>
-							) ) }
+							) ) 
+						}
+						<Button
+							className="ob-link"
+							variant="link"
+							onClick={ () => {
+								if ( step === 4 ) {
+									setOnboardingStep( 3 );
+									return;
+								}
+								setOnboardingStep( 2 );
+							} }
+						>
+							{ __(
+								'Go back',
+								'templates-patterns-collection'
+							) }
+						</Button>
 					</div>
 				</>
 			) : (
