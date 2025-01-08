@@ -7,7 +7,6 @@ import Fuse from 'fuse.js/dist/fuse.min';
 
 const Sites = ( { getSites, editor, category, searchQuery } ) => {
 	const [ maxShown, setMaxShown ] = useState( 9 );
-	const [ selectedStarterSite, setSelectedSite ] = useState('');
 	const { sites = {} } = getSites;
 
 	const getFilteredSites = () => {
@@ -70,10 +69,6 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 							<StarterSiteCard
 								key={ index }
 								data={ site }
-								isSelected={ selectedStarterSite === site?.slug }
-								toggleSelectedSite={() => {
-									setSelectedSite( site.slug === selectedStarterSite ? '' : site.slug );
-								}}
 							/>
 						);
 					} ) }

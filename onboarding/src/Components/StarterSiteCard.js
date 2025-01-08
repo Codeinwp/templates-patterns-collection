@@ -1,19 +1,15 @@
 /* global tiobDash */
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
-import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { track } from '../utils/rest';
-import classNames from 'classnames';
 
 const StarterSiteCard = ( {
 	data,
 	setSite,
 	handleNextStep,
 	trackingId,
-	editor,
-	isSelected,
-	toggleSelectedSite
+	editor
 } ) => {
 	const { upsell, screenshot, title, category, query } = data;
 
@@ -41,6 +37,18 @@ const StarterSiteCard = ( {
 		<div className="ss-card-wrap">
 			<div
 				className="ss-card"
+				role="button"
+				tabIndex={0}
+				onClick={(e) => {
+					e.preventDefault();
+					launchPreview();
+				}}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						launchPreview();
+					}
+				}}
 			>
 				{ upsell && (
 					<span className="ss-badge">
@@ -49,34 +57,6 @@ const StarterSiteCard = ( {
 						</span>
 					</span>
 				) }
-
-				<div
-					className={
-						classNames('ss-actions', {
-							'card-selected': isSelected
-						})
-					}
-					role="button"
-					tabIndex={0}
-					onClick={(e) => {
-						e.preventDefault();
-						toggleSelectedSite();
-					}}
-					onKeyDown={(e) => {
-						if (e.key === 'Enter' || e.key === ' ') {
-							e.preventDefault();
-							toggleSelectedSite();
-						}
-					}}
-				>
-					<Button
-						isPrimary
-						className="ob-button"
-						onClick={ launchPreview }
-					>
-						{ __( 'Select', 'templates-patterns-collection' ) }
-					</Button>
-				</div>
 
 				{ screenshot && (
 					<div
