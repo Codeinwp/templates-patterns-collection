@@ -72,7 +72,6 @@ class Admin {
 		add_action( 'after_switch_theme', array( $this, 'get_previous_theme' ) );
 		add_filter( 'neve_dashboard_page_data', array( $this, 'localize_sites_library' ) );
 		add_action( 'admin_menu', array( $this, 'register' ) );
-		add_filter( 'submenu_file', array( $this, 'hide_onboarding' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
 		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
@@ -514,10 +513,6 @@ class Admin {
 		}
 
 		$this->register_starter_sites_page();
-
-		if ( $this->should_load_onboarding() ) {
-			$this->register_onboarding_page();
-		}
 	}
 
 	private function register_starter_sites_page( $in_appearance = false ) {
@@ -528,12 +523,12 @@ class Admin {
 
 		$starter_site_data = array(
 			'page_title' => __( 'Starter Sites', 'templates-patterns-collection' ),
-			'menu_title' => $this->get_prefix_for_menu_item() . __( 'Starter Sites', 'templates-patterns-collection' ),
-			'capability' => 'activate_plugins',
-			'menu_slug'  => $this->page_slug,
+			'menu_title' => $this->get_prefix_for_menu_item() . __( 'Onboarding', 'templates-patterns-collection' ),
+			'capability' => 'install_plugins',
+			'menu_slug'  => 'neve-onboarding',
 			'callback'   => array(
 				$this,
-				'render_starter_sites',
+				'render_onboarding',
 			),
 		);
 
@@ -551,25 +546,6 @@ class Admin {
 		}
 
 		$this->add_theme_page_for_tiob( $starter_site_data, 2 );
-	}
-
-	/**
-	 * Registers the onboarding page. Used for Neve onboarding, but hidden in the admin.
-	 *
-	 * @return void
-	 */
-	private function register_onboarding_page() {
-		$onboarding_data = array(
-			'page_title' => __( 'Onboarding', 'templates-patterns-collection' ),
-			'menu_title' => $this->get_prefix_for_menu_item() . __( 'Onboarding', 'templates-patterns-collection' ),
-			'capability' => 'install_plugins',
-			'menu_slug'  => 'neve-onboarding',
-			'callback'   => array(
-				$this,
-				'render_onboarding',
-			),
-		);
-		$this->add_theme_page_for_tiob( $onboarding_data, 4 );
 	}
 
 	/**
@@ -635,10 +611,6 @@ class Admin {
 			return false;
 		}
 		$this->register_starter_sites_page();
-
-		if ( $this->should_load_onboarding() ) {
-			$this->register_onboarding_page();
-		}
 
 		if ( $this->is_library_disabled() ) {
 			return false;
