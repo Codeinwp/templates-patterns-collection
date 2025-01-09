@@ -13,6 +13,7 @@ import ImportOptionsControl from './CustomizeControls/ImportOptionsControl';
 import ImportMock from './ImportMock';
 import classnames from 'classnames';
 import { track } from '../utils/rest';
+import FeaturesControl from './CustomizeControls/FeaturesControl';
 
 export const SiteSettings = ( {
 	general,
@@ -202,6 +203,7 @@ export const SiteSettings = ( {
 													importDataDefault
 												}
 											/>
+											<FeaturesControl />
 										</>
 									) : (
 										<Button

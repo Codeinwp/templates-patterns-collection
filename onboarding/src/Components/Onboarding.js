@@ -13,7 +13,7 @@ const Onboarding = ( { step, themeData } ) => {
 		customizer: true,
 		widgets: true,
 		cleanup: false,
-		performanceAddon: true,
+		performanceAddon: false,
 		theme_install: themeData !== false,
 	} );
 	const [ importing, setImporting ] = useState( false );
