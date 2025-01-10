@@ -1,13 +1,18 @@
 import { useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
+const MAX_FEATURE_LIST_LENGTH = 6;
+
 const decodeHtmlEntities = (str) => {
     const textArea = document.createElement('textarea');
     textArea.innerHTML = str;
     return textArea.value;
 };
 
-const featureCollection = [
+/**
+ * Product display.
+ */
+const featuredPluginCollection = [
     { 
         id: 'pageBuilder',
         pluginSlug: 'otter-blocks',
@@ -46,8 +51,62 @@ const featureCollection = [
     },
 ];
 
+/**
+ * Third-party product display. Appears only if they are a part of the required plugins for template site.
+ */
+const thirdPartyFeaturedPluginCollection = [
+    {
+        id: 'woocommerce',
+        pluginSlug: 'woocommerce',
+        label: __('WooCommerce', 'templates-patterns-collection'),
+        description: __('Build any commerce solution you can imagine.', 'templates-patterns-collection')
+    },
+    {
+        id: 'easy-digital-downloads',
+        pluginSlug: 'easy-digital-downloads',
+        label: __('Easy Digital Downloads', 'templates-patterns-collection'),
+        description: __('Sell digital products with ease and manage your online store efficiently.', 'templates-patterns-collection')
+    },
+    {
+        id: 'edd-blocks',
+        pluginSlug: 'edd-blocks',
+        label: __('EDD Blocks', 'templates-patterns-collection'),
+        description: __('Easily display Easy Digital Downloads products in Gutenberg Editor.', 'templates-patterns-collection')
+    },
+    {
+        id: 'recipe-card-blocks-by-wpzoom',
+        pluginSlug: 'recipe-card-blocks-by-wpzoom',
+        label: __('Recipe Card Blocks', 'templates-patterns-collection'),
+        description: __('Easily create and share mouthwatering recipes.', 'templates-patterns-collection')
+    },
+    {
+        id: 'ameliabooking',
+        pluginSlug: 'ameliabooking',
+        label: __('Amelia', 'templates-patterns-collection'),
+        description: __('Booking system for appointments and event booking.', 'templates-patterns-collection')
+    },
+    {
+        id: 'estatik',
+        pluginSlug: 'estatik',
+        label: __('Estatik', 'templates-patterns-collection'),
+        description: __('Full-featured WordPress real estate plugin.', 'templates-patterns-collection')
+    },
+    {
+        id: 'wp-job-openings',
+        pluginSlug: 'wp-job-openings',
+        label: __('WP Job Openings', 'templates-patterns-collection'),
+        description: __('Plugin for setting up a job listing page for your WordPress website.', 'templates-patterns-collection')
+    },
+    {
+        id: 'pods',
+        pluginSlug: 'pods',
+        label: __('Pods', 'templates-patterns-collection'),
+        description: __('A framework for creating, managing, and deploying customized content types and fields for any project.', 'templates-patterns-collection')
+    }
+];
+
 const FeaturesList = ({ requiredPlugins, onToggle }) => {
-    const [featureList, setFeatureList] = useState( featureCollection );
+    const [featureList, setFeatureList] = useState( featuredPluginCollection );
 
     const [selectedFeatures, setSelectedFeatures] = useState({
         pageBuilder: false,
@@ -72,7 +131,7 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
             newStatus || (
                 // Do not disable the plugin installation if another feature that requires it is active.
                 false === newStatus &&
-                featureCollection.filter( i => pluginSlug === i.pluginSlug && feature !== i.id ).map(({ id }) => selectedFeatures[id]).every(i => false === i )
+                featuredPluginCollection.filter( i => pluginSlug === i.pluginSlug && feature !== i.id ).map(({ id }) => selectedFeatures[id]).every(i => false === i )
             )
         ) {
             onToggle(pluginSlug, newStatus);
@@ -85,9 +144,11 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
     
     useEffect(() => {
         const requiredPluginSlugs = Object.keys(requiredPlugins ?? {});
+
+        const allProductDisplay = [...featuredPluginCollection, ...thirdPartyFeaturedPluginCollection];
         
         const missingRequiredPlugins = Object.entries(requiredPlugins ?? {})
-        .filter(([slug]) => featureCollection.every(({ pluginSlug }) => slug !== pluginSlug))
+        .filter(([slug]) => allProductDisplay.every(({ pluginSlug }) => slug !== pluginSlug))
         .map(([slug, label]) => {
             const decodedLabel = decodeHtmlEntities(label);
             return {
@@ -98,11 +159,26 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
             };
         });
         
+        const requiredProducts = allProductDisplay.filter(({ pluginSlug }) => 
+            requiredPluginSlugs.includes(pluginSlug)
+        );
+
         const orderedFeatures = [
-            ...missingRequiredPlugins,
-            ...featureCollection.filter(feature => requiredPluginSlugs.includes(feature.pluginSlug)),
-            ...featureCollection.filter(feature => !requiredPluginSlugs.includes(feature.pluginSlug))
-        ].slice(0, 6);
+            ...requiredProducts,
+            ...missingRequiredPlugins
+        ];
+
+        if (orderedFeatures.length < MAX_FEATURE_LIST_LENGTH) {
+            const additionalFeatures = featuredPluginCollection.filter(
+                ({ pluginSlug }) => !orderedFeatures.some(f => f.pluginSlug === pluginSlug)
+            );
+
+            const remainingSlots = Math.max(0, MAX_FEATURE_LIST_LENGTH - orderedFeatures.length);
+            if (remainingSlots > 0 && additionalFeatures.length > 0) {
+                orderedFeatures.push(...additionalFeatures.slice(0, remainingSlots));
+            }
+        }
+
         setFeatureList(orderedFeatures);
         setLockedPluginSlugs(requiredPluginSlugs);
     }, [requiredPlugins]);
@@ -130,7 +206,7 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
                                 aria-checked={checked}
                                 disabled={isLocked}
                             >
-                                <div className="ob-feature-header">
+                                <div className="ob-feature-header" data-plugin={feature.pluginSlug}>
                                     <h4 className="ob-feature-title">{feature.label}</h4>
                                     <input
                                         type="checkbox"
