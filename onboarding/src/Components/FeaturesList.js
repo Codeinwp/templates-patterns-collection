@@ -17,37 +17,43 @@ const featuredPluginCollection = [
         id: 'pageBuilder',
         pluginSlug: 'otter-blocks',
         label: __('Site Builder', 'templates-patterns-collection'),
-        description: __('Design pages visually with a drag-and-drop builder', 'templates-patterns-collection')
+        description: __('Design pages visually with a drag-and-drop builder.', 'templates-patterns-collection')
     },
     { 
         id: 'contactForm',
         pluginSlug: 'otter-blocks',
         label: __('Contact Form', 'templates-patterns-collection'),
-        description: __('Create custom contact forms easily', 'templates-patterns-collection')
+        description: __('Create custom contact forms easily.', 'templates-patterns-collection')
     },
     {
         id: 'imageOpt',
         pluginSlug: 'optimole-wp',
         label: __('Image Optimization', 'templates-patterns-collection'),
-        description: __('Automatically optimize images for better performance', 'templates-patterns-collection')
+        description: __('Automatically optimize images for better performance.', 'templates-patterns-collection')
     },
     {
         id: 'caching',
         pluginSlug: 'wp-cloudflare-page-cache',
         label: __('Caching', 'templates-patterns-collection'),
-        description: __('Improve website speed with caching technology', 'templates-patterns-collection')
+        description: __('Improve website speed with caching technology.', 'templates-patterns-collection')
     },
     { 
         id: 'eCommerce',
         pluginSlug: 'wp-full-stripe-free',
         label: __('eCommerce', 'templates-patterns-collection'),
-        description: __('Set up an online store and accept payments', 'templates-patterns-collection'),
+        description: __('Accept online payments with Stripe.', 'templates-patterns-collection'),
     },
     {
         id: 'chatbot',
         pluginSlug: 'hyve-lite',
         label: __('AI ChatBot', 'templates-patterns-collection'),
-        description: __('Add intelligent chat functionality to your site', 'templates-patterns-collection')
+        description: __('Add intelligent chat functionality to your site.', 'templates-patterns-collection')
+    },
+    {
+        id: 'visualizer',
+        pluginSlug: 'visualizer',
+        label: __('Tables and Chart', 'templates-patterns-collection'),
+        description: __('A powerful and easy to use plugin for responsive charts & tables.', 'templates-patterns-collection')
     },
 ];
 
@@ -102,6 +108,12 @@ const thirdPartyFeaturedPluginCollection = [
         pluginSlug: 'pods',
         label: __('Pods', 'templates-patterns-collection'),
         description: __('A framework for creating, managing, and deploying customized content types and fields for any project.', 'templates-patterns-collection')
+    },
+    {
+        id: 'restrict-content',
+        pluginSlug: 'restrict-content',
+        label: __('Membership Plugin', 'templates-patterns-collection'),
+        description: __('Membership plugin that allows you to monetize content access.', 'templates-patterns-collection')
     }
 ];
 
@@ -194,7 +206,7 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
                             <button
                                 key={feature.id}
                                 className={`ob-feature-card ${
-                                    selectedFeatures[feature.id] ? 'selected' : ''
+                                    checked ? 'selected' : ''
                                 } ${isLocked ? 'ob-disabled' : ''}`}
                                 onClick={() => toggleFeature(feature.id, feature.pluginSlug)}
                                 onKeyPress={(e) => {

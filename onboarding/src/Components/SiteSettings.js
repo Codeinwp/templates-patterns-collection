@@ -37,16 +37,16 @@ export const SiteSettings = ( {
 
 	let heading =
 		step === 3
-			? __( 'Customise design', 'templates-patterns-collection' )
-			: __( 'Site details', 'templates-patterns-collection' );
+			? __( 'Customize design', 'templates-patterns-collection' )
+			: __( 'Select features', 'templates-patterns-collection' );
 
 	let description = __(
-		'Optionally add your business name and logo. You can change these later.',
+		'Enhance your website with powerful plugins to fulfil your needs.',
 		'templates-patterns-collection'
 	);
 	if ( step === 3 ) {
 		description = __(
-			'Customise the design of your site, such as color and typography.',
+			'Customize the design of your site, such as color and typography.',
 			'templates-patterns-collection'
 		);
 	}
@@ -196,11 +196,6 @@ export const SiteSettings = ( {
 								{ step === 4 &&
 									( canImport ? (
 										<>
-											<SiteNameControl
-												importDataDefault={
-													importDataDefault
-												}
-											/>
 											<FeaturesControl />
 										</>
 									) : (
@@ -248,30 +243,10 @@ export const SiteSettings = ( {
 												setOpenConfirmationModal( true );
 											}
 										}
-										disabled={
-											fetching ||
-											( ! siteName &&
-												! siteLogo &&
-												! settingsChanged )
-										}
-									>
-										{ __(
-											'Import Website',
-											'templates-patterns-collection'
-										) }
-									</Button>
-									<Button
-										isLink
-										className="ob-link"
-										onClick={ () =>{
-											setSkipSuggestions( true );
-											setOpenConfirmationModal( true );
-										}
-									}
 										disabled={ fetching }
 									>
 										{ __(
-											'Skip and import website',
+											'Import Website',
 											'templates-patterns-collection'
 										) }
 									</Button>

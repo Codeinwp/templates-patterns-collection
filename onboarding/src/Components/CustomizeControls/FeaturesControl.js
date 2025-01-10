@@ -6,11 +6,6 @@ import FeaturesList from '../FeaturesList';
 const FeaturesControl = ( { importData, togglePluginInstall } ) => {
 	return (
 		<div className="ob-ctrl">
-			<div className="ob-ctrl-head small-gap">
-				<h3>
-					{ __( 'Select features', 'templates-patterns-collection' ) }
-				</h3>
-			</div>
 			<div className="ob-ctrl-wrap input">
 				<FeaturesList requiredPlugins={importData?.mandatory_plugins ?? {}} onToggle={togglePluginInstall} />
 			</div>
