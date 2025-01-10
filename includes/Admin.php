@@ -397,7 +397,15 @@ class Admin {
 		}
 
 		delete_option( 'tpc_maybe_run_onboarding' );
-		wp_safe_redirect( admin_url( 'admin.php?page=neve-onboarding' ) );
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page' => 'neve-onboarding',
+					'show' => 'welcome',
+				),
+				admin_url( 'admin.php' )
+			)
+		);
 		exit();
 	}
 
@@ -620,18 +628,6 @@ class Admin {
 	}
 
 	/**
-	 * Hide the onboarding item from Neve menu.
-	 *
-	 * @param $submenu_file string The submenu file.
-	 *
-	 * @return string
-	 */
-	public function hide_onboarding( $submenu_file ) {
-		remove_submenu_page( 'neve-welcome', 'neve-onboarding' );
-		return $submenu_file;
-	}
-
-	/**
 	 * Map license plan from Neve if available.
 	 *
 	 * @return int
@@ -710,7 +706,7 @@ class Admin {
 			return;
 		}
 
-		if ( $this->should_load_onboarding() && strpos( $screen->id, '_page_neve-onboarding' ) ) {
+		if ( strpos( $screen->id, '_page_neve-onboarding' ) ) {
 
 			wp_enqueue_media();
 
