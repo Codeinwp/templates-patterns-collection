@@ -9,7 +9,6 @@ import PaletteControl from './CustomizeControls/PaletteControl';
 import TypographyControl from './CustomizeControls/TypographyControl';
 import SiteNameControl from './CustomizeControls/SiteNameControl';
 import LogoControl from './CustomizeControls/LogoControl';
-import ImportOptionsControl from './CustomizeControls/ImportOptionsControl';
 import ImportMock from './ImportMock';
 import classnames from 'classnames';
 import { track } from '../utils/rest';
@@ -17,7 +16,6 @@ import FeaturesControl from './CustomizeControls/FeaturesControl';
 
 export const SiteSettings = ( {
 	general,
-	setGeneral,
 	fetching,
 	siteData,
 	siteStyle,
@@ -242,13 +240,6 @@ export const SiteSettings = ( {
 						{ step === 4 &&
 							( canImport ? (
 								<>
-									<ImportOptionsControl
-										general={ general }
-										setGeneral={ setGeneral }
-										setSettingsChanged={
-											setSettingsChanged
-										}
-									/>
 									<Button
 										isPrimary
 										className="ob-button full"
