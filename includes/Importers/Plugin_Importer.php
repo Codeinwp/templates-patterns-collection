@@ -54,6 +54,7 @@ class Plugin_Importer {
 		'restrict-content'                 => 'restrictcontent.php',
 		'pods'                             => 'init.php',
 		'wp-full-stripe-free'              => 'wp-full-stripe.php',
+		'wp-cloudflare-page-cache'         => 'wp-cloudflare-super-page-cache.php',
 	);
 
 	public function __construct() {
