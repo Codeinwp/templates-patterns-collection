@@ -10,7 +10,7 @@ const decodeHtmlEntities = (str) => {
 };
 
 /**
- * Product display.
+ * Plugins to promote.
  */
 const featuredPluginCollection = [
     { 
@@ -47,20 +47,20 @@ const featuredPluginCollection = [
         id: 'chatbot',
         pluginSlug: 'hyve-lite',
         label: __('AI ChatBot', 'templates-patterns-collection'),
-        description: __('Add intelligent chat functionality to your site.', 'templates-patterns-collection')
-    },
+        description: __('Add intelligent chat functionality to your site.', 'templates-patterns-collection'),
+    }
+];
+
+/**
+ * Appears only if they are a part of the required plugins for template site.
+ */
+const pluginCollection = [
     {
         id: 'visualizer',
         pluginSlug: 'visualizer',
         label: __('Tables and Chart', 'templates-patterns-collection'),
         description: __('A powerful and easy to use plugin for responsive charts & tables.', 'templates-patterns-collection')
     },
-];
-
-/**
- * Third-party product display. Appears only if they are a part of the required plugins for template site.
- */
-const thirdPartyFeaturedPluginCollection = [
     {
         id: 'woocommerce',
         pluginSlug: 'woocommerce',
@@ -157,7 +157,11 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
     useEffect(() => {
         const requiredPluginSlugs = Object.keys(requiredPlugins ?? {});
 
-        const allProductDisplay = [...featuredPluginCollection, ...thirdPartyFeaturedPluginCollection];
+        const compatibleFeaturedPlugins = featuredPluginCollection.filter(feature => 
+            window.tiobDash?.onboardingPluginCompatibility?.[feature.pluginSlug] !== false
+        );
+
+        const allProductDisplay = [...compatibleFeaturedPlugins, ...pluginCollection];
         
         const missingRequiredPlugins = Object.entries(requiredPlugins ?? {})
         .filter(([slug]) => allProductDisplay.every(({ pluginSlug }) => slug !== pluginSlug))
@@ -181,7 +185,7 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
         ];
 
         if (orderedFeatures.length < MAX_FEATURE_LIST_LENGTH) {
-            const additionalFeatures = featuredPluginCollection.filter(
+            const additionalFeatures = compatibleFeaturedPlugins.filter(
                 ({ pluginSlug }) => !orderedFeatures.some(f => f.pluginSlug === pluginSlug)
             );
 
