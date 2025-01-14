@@ -1,7 +1,6 @@
 /* global tiobDash */
 import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
-import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { track } from '../utils/rest';
 
@@ -10,7 +9,7 @@ const StarterSiteCard = ( {
 	setSite,
 	handleNextStep,
 	trackingId,
-	editor,
+	editor
 } ) => {
 	const { upsell, screenshot, title, category, query } = data;
 
@@ -36,7 +35,21 @@ const StarterSiteCard = ( {
 
 	return (
 		<div className="ss-card-wrap">
-			<div className="ss-card">
+			<div
+				className="ss-card"
+				role="button"
+				tabIndex={0}
+				onClick={(e) => {
+					e.preventDefault();
+					launchPreview();
+				}}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						launchPreview();
+					}
+				}}
+			>
 				{ upsell && (
 					<span className="ss-badge">
 						<span>
@@ -44,16 +57,6 @@ const StarterSiteCard = ( {
 						</span>
 					</span>
 				) }
-
-				<div className="ss-actions">
-					<Button
-						isPrimary
-						className="ob-button"
-						onClick={ launchPreview }
-					>
-						{ __( 'Select', 'templates-patterns-collection' ) }
-					</Button>
-				</div>
 
 				{ screenshot && (
 					<div

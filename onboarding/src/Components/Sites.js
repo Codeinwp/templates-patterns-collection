@@ -60,13 +60,17 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 	const getBuilders = () => Object.keys( sites );
 
 	const allData = getFilteredSites();
-
 	return (
 		<>
 			{ allData.length ? (
 				<div className="ob-sites is-grid">
 					{ allData.slice( 0, maxShown ).map( ( site, index ) => {
-						return <StarterSiteCard key={ index } data={ site } />;
+						return (
+							<StarterSiteCard
+								key={ index }
+								data={ site }
+							/>
+						);
 					} ) }
 
 					<VizSensor
