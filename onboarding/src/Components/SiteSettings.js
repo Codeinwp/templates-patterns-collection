@@ -2,20 +2,20 @@
 import { __ } from '@wordpress/i18n';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
-import { Button } from '@wordpress/components';
+// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+import { Button, __experimentalConfirmDialog as ConfirmDialog } from '@wordpress/components';
 import { createInterpolateElement, useState } from '@wordpress/element';
 import PaletteControl from './CustomizeControls/PaletteControl';
 import TypographyControl from './CustomizeControls/TypographyControl';
 import SiteNameControl from './CustomizeControls/SiteNameControl';
 import LogoControl from './CustomizeControls/LogoControl';
-import ImportOptionsControl from './CustomizeControls/ImportOptionsControl';
 import ImportMock from './ImportMock';
 import classnames from 'classnames';
 import { track } from '../utils/rest';
+import FeaturesControl from './CustomizeControls/FeaturesControl';
 
 export const SiteSettings = ( {
 	general,
-	setGeneral,
 	fetching,
 	siteData,
 	siteStyle,
@@ -32,18 +32,21 @@ export const SiteSettings = ( {
 	const dashboardLink = tiobDash.onboardingUpsell?.dashboard;
 	const contactLink = tiobDash.onboardingUpsell?.contact;
 
+	const [ openConfirmationModal, setOpenConfirmationModal ] = useState( false );
+	const [ skipSuggestions, setSkipSuggestions ] = useState( false );
+
 	let heading =
 		step === 3
-			? __( 'Customise design', 'templates-patterns-collection' )
-			: __( 'Site details', 'templates-patterns-collection' );
+			? __( 'Customize design', 'templates-patterns-collection' )
+			: __( 'Select features', 'templates-patterns-collection' );
 
 	let description = __(
-		'Optionally add your business name and logo. You can change these later.',
+		'Enhance your website with powerful plugins to fulfil your needs.',
 		'templates-patterns-collection'
 	);
 	if ( step === 3 ) {
 		description = __(
-			'Customise the design of your site, such as color and typography.',
+			'Customize the design of your site, such as color and typography.',
 			'templates-patterns-collection'
 		);
 	}
@@ -138,7 +141,7 @@ export const SiteSettings = ( {
 			console.error( error );
 		} );
 	};
-
+	
 	return (
 		<div
 			className={ classnames(
@@ -149,23 +152,24 @@ export const SiteSettings = ( {
 			{ ! fetching ? (
 				<>
 					<div className="ob-site-settings-container">
+						<div className="ob-settings-header">
+							<div className="ob-settings-info">
+								<p>{ __( 'Selected Template', 'templates-patterns-collection' ) }</p>
+								<h3>{ siteData.title }</h3>
+							</div>
+							<div className="ob-settings-actions">
+								<Button
+									className="ob-link"
+									variant="link"
+									onClick={ () => {
+										setOnboardingStep( 2 );
+									} }
+								>
+									<span className="dashicons dashicons-no-alt" />
+								</Button>	
+							</div>
+						</div>
 						<div className="ob-settings-description">
-							<Button
-								className="ob-back"
-								type="link"
-								onClick={ () => {
-									if ( step === 4 ) {
-										setOnboardingStep( 3 );
-										return;
-									}
-									setOnboardingStep( 2 );
-								} }
-							>
-								{ __(
-									'Go back',
-									'templates-patterns-collection'
-								) }
-							</Button>
 							<h2>{ heading }</h2>
 							<p>{ description }</p>
 						</div>
@@ -173,6 +177,11 @@ export const SiteSettings = ( {
 							<div className="ob-settings-top">
 								{ step === 3 && (
 									<>
+										<LogoControl
+											importDataDefault={
+												importDataDefault
+											}
+										/>
 										<PaletteControl
 											siteStyle={ siteStyle }
 											setSiteStyle={ setSiteStyle }
@@ -187,16 +196,7 @@ export const SiteSettings = ( {
 								{ step === 4 &&
 									( canImport ? (
 										<>
-											<SiteNameControl
-												importDataDefault={
-													importDataDefault
-												}
-											/>
-											<LogoControl
-												importDataDefault={
-													importDataDefault
-												}
-											/>
+											<FeaturesControl />
 										</>
 									) : (
 										<Button
@@ -235,44 +235,35 @@ export const SiteSettings = ( {
 						{ step === 4 &&
 							( canImport ? (
 								<>
-									<ImportOptionsControl
-										general={ general }
-										setGeneral={ setGeneral }
-										setSettingsChanged={
-											setSettingsChanged
-										}
-									/>
 									<Button
 										isPrimary
 										className="ob-button full"
-										onClick={ () =>
-											identityChoicesSubmit()
+										onClick={ () =>{
+												setSkipSuggestions( false );
+												setOpenConfirmationModal( true );
+											}
 										}
-										disabled={
-											fetching ||
-											( ! siteName &&
-												! siteLogo &&
-												! settingsChanged )
-										}
+										disabled={ fetching }
 									>
 										{ __(
 											'Import Website',
 											'templates-patterns-collection'
 										) }
 									</Button>
-									<Button
-										isLink
-										className="ob-link"
-										onClick={ () =>
-											identityChoicesSubmit( true )
-										}
-										disabled={ fetching }
+									<ConfirmDialog
+										isOpen={openConfirmationModal}
+										onConfirm={() => {
+											identityChoicesSubmit( skipSuggestions );
+										}}
+										onCancel={() => {
+											setOpenConfirmationModal(false);
+										}}
+										confirmButtonText={__('Start Import', 'templates-patterns-collection')}
+										cancelButtonText={__('Cancel', 'templates-patterns-collection')}
 									>
-										{ __(
-											'Skip and import website',
-											'templates-patterns-collection'
-										) }
-									</Button>
+										<h2 className="ob-modal-confirm-title">{ __( 'Start Import?', 'templates-patterns-collection' ) }</h2>
+										<p>{ __( 'This will override theme settings and add content to your current site.', 'templates-patterns-collection' ) }</p>
+									</ConfirmDialog>
 								</>
 							) : (
 								<div className="ob-pro-info">
@@ -285,7 +276,24 @@ export const SiteSettings = ( {
 									<p>{ firstUpsell }</p>
 									<p>{ secondUpsell }</p>
 								</div>
-							) ) }
+							) ) 
+						}
+						<Button
+							className="ob-link"
+							variant="link"
+							onClick={ () => {
+								if ( step === 4 ) {
+									setOnboardingStep( 3 );
+									return;
+								}
+								setOnboardingStep( 2 );
+							} }
+						>
+							{ __(
+								'Go back',
+								'templates-patterns-collection'
+							) }
+						</Button>
 					</div>
 				</>
 			) : (

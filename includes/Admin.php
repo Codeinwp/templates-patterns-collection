@@ -816,57 +816,57 @@ class Admin {
 		}
 
 		return array(
-			'version'             => TIOB_VERSION,
-			'nonce'               => wp_create_nonce( 'wp_rest' ),
-			'assets'              => TIOB_URL . 'assets/',
-			'upgradeURL'          => $upgrade_url,
-			'upgradeURLTpc'       => $upgrade_url_tpc,
-			'siteUrl'             => trailingslashit( get_site_url() ),
-			'strings'             => array(
+			'version'                       => TIOB_VERSION,
+			'nonce'                         => wp_create_nonce( 'wp_rest' ),
+			'assets'                        => TIOB_URL . 'assets/',
+			'upgradeURL'                    => $upgrade_url,
+			'upgradeURLTpc'                 => $upgrade_url_tpc,
+			'siteUrl'                       => trailingslashit( get_site_url() ),
+			'strings'                       => array(
 				/* translators: %s - Theme name */
 				'starterSitesTabDescription' => __( 'Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else.', 'templates-patterns-collection' ),
 			),
-			'cleanupAllowed'      => ( ! empty( get_transient( Active_State::STATE_NAME ) ) ) ? 'yes' : 'no',
-			'onboarding'          => array(),
-			'hasFileSystem'       => WP_Filesystem(),
-			'themesURL'           => admin_url( 'themes.php' ),
-			'themeAction'         => $this->get_theme_action(),
-			'brandedTheme'        => $this->get_whitelabel_name(),
-			'hideStarterSites'    => $this->is_starter_sites_disabled(),
-			'hideMyLibrary'       => $this->is_library_disabled(),
-			'fontParings'         => $this->font_pairs_neve,
-			'endpoint'            => ( defined( 'TPC_TEMPLATES_CLOUD_ENDPOINT' ) ) ? TPC_TEMPLATES_CLOUD_ENDPOINT : self::get_templates_cloud_endpoint(),
-			'params'              => array(
+			'cleanupAllowed'                => ( ! empty( get_transient( Active_State::STATE_NAME ) ) ) ? 'yes' : 'no',
+			'onboarding'                    => array(),
+			'hasFileSystem'                 => WP_Filesystem(),
+			'themesURL'                     => admin_url( 'themes.php' ),
+			'themeAction'                   => $this->get_theme_action(),
+			'brandedTheme'                  => $this->get_whitelabel_name(),
+			'hideStarterSites'              => $this->is_starter_sites_disabled(),
+			'hideMyLibrary'                 => $this->is_library_disabled(),
+			'fontParings'                   => $this->font_pairs_neve,
+			'endpoint'                      => ( defined( 'TPC_TEMPLATES_CLOUD_ENDPOINT' ) ) ? TPC_TEMPLATES_CLOUD_ENDPOINT : self::get_templates_cloud_endpoint(),
+			'params'                        => array(
 				'site_url'   => get_site_url(),
 				'license_id' => License::get_license_data()->key,
 			),
-			'upsellNotifications' => $this->get_upsell_notifications(),
-			'isValidLicense'      => $this->has_valid_addons(),
-			'licenseTIOB'         => License::get_license_data(),
-			'emailSubscribe'      => array(
+			'upsellNotifications'           => $this->get_upsell_notifications(),
+			'isValidLicense'                => $this->has_valid_addons(),
+			'licenseTIOB'                   => License::get_license_data(),
+			'emailSubscribe'                => array(
 				'ajaxURL'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'      => wp_create_nonce( 'skip_subscribe_nonce' ),
 				'skipStatus' => $this->get_skip_subscribe_status() ? 'yes' : 'no',
 				'email'      => ( ! empty( $user->user_email ) ) ? $user->user_email : '',
 			),
-			'onboardingDone'      => array(
+			'onboardingDone'                => array(
 				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'   => wp_create_nonce( 'onboarding_done_nonce' ),
 			),
-			'feedback'            => array(
+			'feedback'                      => array(
 				'count'     => get_option( self::IMPORTED_TEMPLATES_COUNT_OPT, 0 ),
 				'dismissed' => get_option( self::FEEDBACK_DISMISSED_OPT, false ),
 			),
-			'onboardingUpsell'    => array(
+			'onboardingUpsell'              => array(
 				'dashboard'    => tsdk_translate_link( tsdk_utmify( 'https://store.themeisle.com/', 'onboarding_upsell' ), 'query' ),
 				'contact'      => tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/contact/', 'onboarding_upsell' ), 'query' ),
 				'upgrade'      => tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding_upsell' ), 'query' ),
 				'upgradeToast' => tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'onboarding_toast' ), 'query' ),
 			),
-			'onboardingAllowed'   => $this->should_load_onboarding(),
-			'onboardingRedirect'  => admin_url( 'admin.php?page=neve-onboarding' ),
-			'tiobSettings'        => admin_url( 'admin.php?page=tiob-plugin#settings' ),
-			'links'               => array(
+			'onboardingAllowed'             => $this->should_load_onboarding(),
+			'onboardingRedirect'            => admin_url( 'admin.php?page=neve-onboarding' ),
+			'tiobSettings'                  => admin_url( 'admin.php?page=tiob-plugin#settings' ),
+			'links'                         => array(
 				array(
 					'label'       => __( 'Support', 'templates-patterns-collection' ),
 					'is_external' => true,
@@ -888,11 +888,14 @@ class Admin {
 					'is_button' => true,
 				),
 			),
-			'isFSETheme'          => self::is_fse_theme(),
-			'newTCNotice'         => array(
+			'isFSETheme'                    => self::is_fse_theme(),
+			'newTCNotice'                   => array(
 				'show'    => get_option( self::TC_NEW_NOTICE_DISMISSED, 'no' ) !== 'yes' && self::has_legacy_template_cloud(),
 				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'   => wp_create_nonce( 'dismiss_new_tc_notice' ),
+			),
+			'onboardingPluginCompatibility' => array(
+				'hyve-lite' => is_php_version_compatible( '8.1' ),
 			),
 		);
 	}
