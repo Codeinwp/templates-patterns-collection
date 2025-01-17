@@ -5,6 +5,8 @@ import StarterSiteCard from './StarterSiteCard';
 import VizSensor from 'react-visibility-sensor';
 import Fuse from 'fuse.js/dist/fuse.min';
 
+const MINIMUM_SITES_LISTING = 10;
+
 const Sites = ( { getSites, editor, category, searchQuery } ) => {
 	const [ maxShown, setMaxShown ] = useState( 9 );
 	const { sites = {} } = getSites;
@@ -14,10 +16,42 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 		if ( Object.keys( allSites ).length === 0 ) {
 			return [];
 		}
-		let builderSites = allSites[ editor ];
-		builderSites = filterBySearch( builderSites );
-		builderSites = filterByCategory( builderSites, category );
 
+		/** @type {Array} */
+		let builderSites = allSites[ editor ];
+		const sitesBySearch = filterBySearch( builderSites );
+		builderSites = filterByCategory( sitesBySearch, category );
+
+		if ( MINIMUM_SITES_LISTING > builderSites.length ) {
+			// Populate with sites related to search.
+			for (const site of sitesBySearch) {
+				if (builderSites.length >= MINIMUM_SITES_LISTING) {
+					break;
+				}
+				if (builderSites.find(existing => existing.slug === site.slug)) {
+					continue;
+				}
+				if (site?.upsell && 'free' === category) {
+					continue;
+				}
+				builderSites.push(site);
+			}
+			
+			// Get the top recommendation if we still do not meed the minimum.
+			for (const site of allSites[editor]) {
+				if (builderSites.length >= MINIMUM_SITES_LISTING) {
+					break;
+				}
+				if (builderSites.find(existing => existing.slug === site.slug)) {
+					continue;
+				}
+				if (site?.upsell && 'free' === category) {
+					continue;
+				}
+				builderSites.push(site);
+			}
+		}
+		
 		return builderSites;
 	};
 
@@ -50,7 +84,7 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 			return items.filter( ( item ) => ! item.upsell );
 		}
 
-		if ( 'all' !== cat ) {
+		if ( cat && 'all' !== cat ) {
 			return items.filter( ( item ) => item.keywords.includes( cat ) );
 		}
 
