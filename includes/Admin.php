@@ -673,19 +673,6 @@ class Admin {
 	}
 
 	/**
-	 * Check if current subscription is agency
-	 * or if we have a valid license for the standalone product.
-	 *
-	 * @return bool
-	 */
-	private function is_agency_plan() {
-		$plan = $this->neve_license_plan();
-		$plan = License::get_license_tier( $plan );
-
-		return $plan === 3;
-	}
-
-	/**
 	 * Render method for the starter sites page.
 	 */
 	public function render_starter_sites() {
@@ -1182,32 +1169,6 @@ class Admin {
 		}
 
 		$array['onboarding'] = $api;
-
-		// Do not display the notification if starter sites are disabled
-		if ( $this->is_starter_sites_disabled() ) {
-			return $array;
-		}
-
-		// Previously the library was visited check was stored in a transient. To ensure the notification is not displayed anymore once the user has visited the library
-		// the transient was moved to an option and here we check that if the transient is set and we also update the option.
-		$visited_transient = (bool) get_transient( self::VISITED_LIBRARY_OPT );
-		$page_was_visited  = get_option( self::VISITED_LIBRARY_OPT, false );
-		if ( $visited_transient && $page_was_visited === false ) {
-			update_option( self::VISITED_LIBRARY_OPT, 'yes' );
-			$page_was_visited = 'yes';
-		}
-		if ( $this->is_agency_plan() && $page_was_visited !== 'yes' ) {
-
-			$array['notifications']['template-cloud'] = array(
-				'text' => __( 'Great news!  Now you can export your own custom designs to the cloud and then reuse them on other sites.', 'templates-patterns-collection' ),
-				'cta'  => sprintf(
-					// translators: %s: Templates Cloud
-					__( 'Open %s', 'templates-patterns-collection' ),
-					'Templates Cloud'
-				),
-				'url'  => ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ? 'admin.php' : 'themes.php' ) . '?page=' . $this->page_slug . '&dismiss_notice=yes#library',
-			);
-		}
 
 		return $array;
 	}
