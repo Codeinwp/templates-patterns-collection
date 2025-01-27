@@ -17,37 +17,37 @@ const featuredPluginCollection = [
         id: 'pageBuilder',
         pluginSlug: 'otter-blocks',
         label: __('Site Builder', 'templates-patterns-collection'),
-        description: __('Design pages visually with a drag-and-drop builder.', 'templates-patterns-collection')
+        description: __('Build beautiful pages with a simple drag-and-drop page builder.', 'templates-patterns-collection')
     },
     { 
         id: 'contactForm',
         pluginSlug: 'otter-blocks',
         label: __('Contact Form', 'templates-patterns-collection'),
-        description: __('Create custom contact forms easily.', 'templates-patterns-collection')
+        description: __('Create forms to capture leads and feedback.', 'templates-patterns-collection')
     },
     {
         id: 'imageOpt',
         pluginSlug: 'optimole-wp',
         label: __('Image Optimization', 'templates-patterns-collection'),
-        description: __('Automatically optimize images for better performance.', 'templates-patterns-collection')
+        description: __('Make your site faster with automatic image optimization.', 'templates-patterns-collection')
     },
     {
         id: 'caching',
         pluginSlug: 'wp-cloudflare-page-cache',
         label: __('Caching', 'templates-patterns-collection'),
-        description: __('Improve website speed with caching technology.', 'templates-patterns-collection')
+        description: __('Supercharge your site’s speed with powerful caching.', 'templates-patterns-collection')
     },
     { 
         id: 'eCommerce',
         pluginSlug: 'wp-full-stripe-free',
         label: __('eCommerce', 'templates-patterns-collection'),
-        description: __('Accept online payments with Stripe.', 'templates-patterns-collection'),
+        description: __('Set up your store and start accepting payments via Stripe.', 'templates-patterns-collection'),
     },
     {
         id: 'chatbot',
         pluginSlug: 'hyve-lite',
         label: __('AI ChatBot', 'templates-patterns-collection'),
-        description: __('Add intelligent chat functionality to your site.', 'templates-patterns-collection'),
+        description: __('Keep visitors engaged with an intelligent AI chatbot.', 'templates-patterns-collection'),
     }
 ];
 
