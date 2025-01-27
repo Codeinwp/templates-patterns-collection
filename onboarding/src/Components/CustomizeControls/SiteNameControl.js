@@ -20,7 +20,7 @@ const SiteNameControl = ( { userCustomSettings, handleSiteNameChange } ) => {
 		<div className="ob-ctrl">
 			<div className="ob-ctrl-head small-gap">
 				<h3>
-					{ __( 'Bussiness Name', 'templates-patterns-collection' ) }
+					{ __( 'Business Name', 'templates-patterns-collection' ) }
 				</h3>
 			</div>
 			<div className="ob-ctrl-wrap input">
@@ -38,11 +38,12 @@ const SiteNameControl = ( { userCustomSettings, handleSiteNameChange } ) => {
 
 export default compose(
 	withSelect( ( select ) => {
-		const { getUserCustomSettings, getImportData } =
+		const { getUserCustomSettings, getImportData, getPluginOptions } =
 			select( 'ti-onboarding' );
 		return {
 			userCustomSettings: getUserCustomSettings(),
 			importData: getImportData(),
+			pluginOptions: getPluginOptions(),
 		};
 	} ),
 	withDispatch(
@@ -69,7 +70,7 @@ export default compose(
 					};
 					setImportData( newImportData );
 					setRefresh( true );
-				},
+				}
 			};
 		}
 	)

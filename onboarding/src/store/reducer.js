@@ -19,12 +19,12 @@ const initialLicense = licenseTIOB || {
 const initialState = {
 	sites: onboarding.sites || {},
 	editor: selectedEditor,
-	category: 'all',
+	category: '',
 	currentSite: null,
 	fetching: false,
 	searchQuery: '',
 	license: initialLicense,
-	onboardingStep: 1,
+	onboardingStep: window.location.search.includes('show=welcome') ? 1 : 2,
 	userCustomSettings: {
 		siteName: null,
 		siteLogo: null,
@@ -35,6 +35,7 @@ const initialState = {
 	trackingId: '',
 	refresh: false,
 };
+
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
 		case 'SET_CATEGORY':

@@ -73,46 +73,6 @@ const ImportOptionsControl = ( {
 				'templates-patterns-collection'
 			),
 		},
-		performanceAddon: {
-			title: __(
-				'Performance features',
-				'templates-patterns-collection'
-			),
-			icon: 'dashboard',
-			tooltip: createInterpolateElement(
-				sprintf(
-					// translators: %s is Optimole plugin name.
-					__(
-						'Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free.',
-						'templates-patterns-collection'
-					),
-					'Optimole'
-				),
-				{
-					a: (
-						// eslint-disable-next-line jsx-a11y/anchor-has-content
-						<a
-							href="https://wordpress.org/plugins/optimole-wp/"
-							target={ '_blank' }
-							rel="external noreferrer noopener"
-							style={ {
-								textDecoration: 'none',
-								display: 'inline-flex',
-								alignItems: 'center',
-							} }
-						/>
-					),
-					icon: (
-						<Icon
-							size={ 10 }
-							icon="external"
-							style={ { marginLeft: 0 } }
-						/>
-					),
-					span: <div />,
-				}
-			),
-		},
 	};
 
 	if ( cleanupAllowed === 'yes' ) {
