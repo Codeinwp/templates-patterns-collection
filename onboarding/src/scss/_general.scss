@@ -69,10 +69,25 @@ iframe {
   display: flex;
   flex: 1;
   overflow: auto;
-  padding: 10px;
 
-  max-width: 1400px;
-  margin: 0 auto;
+  &.narrow {
+    justify-content: center;
+    max-width: 559px;
+    margin: 0 auto;
+    overflow: initial;
+  }
+  &.wide {
+    padding: 10px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  &.row {
+    flex-direction: row;
+  }
+  &.center {
+    text-align: center;
+    align-items: center;
+  }
 }
 
 .ob-no-results{
