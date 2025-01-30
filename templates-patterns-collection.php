@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Starter Sites & Templates by Neve
  * Description:       This plugin gives you access to 100+ templates and ready-to-use starter sites. Neve theme is used for all the designs.
- * Version:           1.2.17
+ * Version:           1.2.18
  * Author:            Themeisle
  * Author URI:        https://themeisle.com
  * License:           GPLv3
@@ -54,7 +54,7 @@ function ti_tpc_load_textdomain() {
 	load_plugin_textdomain( 'templates-patterns-collection', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
-define( 'TIOB_VERSION', '1.2.17' );
+define( 'TIOB_VERSION', '1.2.18' );
 define( 'TIOB_URL', plugin_dir_url( __FILE__ ) );
 define( 'TIOB_PATH', dirname( __FILE__ ) . '/' );
 define( 'TIOB_BASENAME', plugin_basename( __FILE__ ) );
