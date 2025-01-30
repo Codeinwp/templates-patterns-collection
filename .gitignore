@@ -9,3 +9,4 @@ languages/*.pot
 **/.DS_Store
 .phpunit.result.cache
 .vscode
+/e2e-tests/artifacts

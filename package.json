@@ -41,7 +41,8 @@
     "readme": "grunt wp_readme_to_markdown:main",
     "lint:onboarding": "wp-scripts lint-js ./onboarding/src/**/*.js",
     "lint": "wp-scripts lint-js ./onboarding ./editor ./elementor ./beaver",
-    "format": "wp-scripts format ./onboarding ./editor ./elementor ./beaver"
+    "format": "wp-scripts format ./onboarding ./editor ./elementor ./beaver",
+    "ci:e2e": "rm -rf node_modules && cd ./e2e-tests && npm ci && npm run wp-env start && npx playwright install chromium && npm run test:playwright"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",
