@@ -25,7 +25,7 @@ const TypographyControl = ( { siteStyle, handleFontClick, importData } ) => {
 
 	return (
 		<div className="ob-ctrl">
-			<div className="ob-ctrl-head">
+			<div className="ob-ctrl-head small-gap">
 				<h3>{ __( 'Typography', 'templates-patterns-collection' ) }</h3>
 				<Button
 					icon={ SVG.redo }
