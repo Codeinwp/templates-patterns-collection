@@ -66,8 +66,10 @@ iframe {
 
 .ob-container-inner {
   max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
+  margin: 0 auto; 
+  width: 100%;    
+  padding: 25px;
+  box-sizing: border-box;
 }
 
 .ob-container {
