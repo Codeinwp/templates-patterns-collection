@@ -39,6 +39,14 @@ module.exports = function (grunt) {
 					},
 					src: [ 'templates-patterns-collection.php' ]
 				},
+				readmetxt: {
+					options: {
+						prefix: 'Stable tag:\\s*'
+					},
+					src: [
+						'readme.txt'
+					]
+				},
 			},
 			wp_readme_to_markdown: {
 				plugin: {
