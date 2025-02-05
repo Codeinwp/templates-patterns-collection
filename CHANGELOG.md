@@ -1,3 +1,8 @@
+##### [Version 1.2.19](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.18...v1.2.19) (2025-02-05)
+
+- Fix language pack loading
+- Fix onboarding layout overflow and responsiveness
+
 ##### [Version 1.2.18](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.17...v1.2.18) (2025-01-30)
 
 - New Onboarding experience
