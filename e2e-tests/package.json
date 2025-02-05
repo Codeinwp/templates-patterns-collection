@@ -1,7 +1,7 @@
 {
   "name": "e2e-tests",
   "version": "1.0.0",
-  "description": "Cypress e2e-tests",
+  "description": "Playwright e2e-tests",
   "author": "ThemeIsle <friends@themeisle.com>",
   "license": "MIT",
   "keywords": [
@@ -16,33 +16,16 @@
     "url": "https://github.com/Codeinwp/neve/issues"
   },
   "devDependencies": {
-    "@percy/cypress": "^2.3.4",
-    "@testing-library/cypress": "^7.0.6",
-    "@typescript-eslint/eslint-plugin": "^4.19.0",
-    "@typescript-eslint/parser": "^4.19.0",
-    "@wordpress/scripts": "^14.0.1",
-    "cypress": "13.2.0",
-    "cypress-file-upload": "^5.0.3",
-    "cypress-html-validate": "^2.0.2",
-    "cypress-localstorage-commands": "^1.4.1",
-    "cypress-nv-commands": "^1.0.20",
-    "cypress-real-events": "^1.5.1",
-    "cypress-storybook": "^0.5.1",
-    "eslint": "^7.22.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-chai-friendly": "^0.6.0",
-    "eslint-plugin-cypress": "^2.11.2",
-    "eslint-plugin-prettier": "^3.4.0",
-    "html-validate": "^5.2.0",
-    "prettier": "^2.2.1",
-    "scroll-to-bottomjs": "^1.1.0",
-    "typescript": "^4.2.3",
-    "wait-on": "^5.3.0"
+    "@playwright/test": "^1.50.0",
+    "@wordpress/e2e-test-utils-playwright": "^1.16.0",
+    "@wordpress/env": "^10.16.0",
+    "@wordpress/scripts": "^30.9.0"
   },
   "scripts": {
-    "lint:cypress": "wp-scripts lint-js cypress",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
-    "visual:test": "percy exec -- cypress run --config baseUrl=https://qa-neve.themeisle.com,video=false --spec 'cypress/integration/visual-regression/**/*.spec.js' --headless"
+    "wp-env": "wp-env",
+    "test:playwright": "wp-scripts test-playwright",
+    "test:playwright:help": "wp-scripts test-playwright --help",
+    "test:playwright:debug": "wp-scripts test-playwright --debug",
+    "test:playwright:ui": "wp-scripts test-playwright --ui"
   }
 }

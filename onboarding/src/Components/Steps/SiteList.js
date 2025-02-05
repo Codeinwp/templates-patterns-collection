@@ -44,10 +44,11 @@ const SiteList = ( { showToast, setShowToast, setFetching } ) => {
 	}, [] );
 
 	return (
-		<div className="ob-container wide">
-			<div className="ob-title-wrap">
-				<h1>
-					{ __( 'Choose a design', 'templates-patterns-collection' ) }
+		<div className="ob-container">
+			<div className="ob-container-inner">
+				<div className="ob-title-wrap">
+					<h1>
+						{ __( 'Choose a design', 'templates-patterns-collection' ) }
 				</h1>
 				<EditorSelector />
 			</div>
@@ -61,6 +62,7 @@ const SiteList = ( { showToast, setShowToast, setFetching } ) => {
 					message={ toastMessage }
 				/>
 			) }
+			</div>
 		</div>
 	);
 };

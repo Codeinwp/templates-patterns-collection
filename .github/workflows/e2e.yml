@@ -26,17 +26,16 @@ jobs:
           composer install --no-dev --prefer-dist --no-progress --no-suggest
           yarn run build
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-      - name: Install testing env
-        run: bash ./bin/e2e-env.sh
-      - name: Run Cypress tests
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
-        uses: cypress-io/github-action@v6
+          node-version: 18
+          cache: "npm"
+      - name: Run E2E
+        run: npm run ci:e2e
+      - name: Upload artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          working-directory: ./e2e-tests
-          env: host=localhost,port=8080
-          browser: chrome
+          name: e2e-artifacts
+          path: ./artifacts
+          retention-days: 1
