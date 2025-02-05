@@ -4,7 +4,7 @@ Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
 Requires at least: 5.5
 Tested up to: 6.7
 Requires PHP: 5.6
-Stable tag: trunk
+Stable tag: 1.2.19
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -30,10 +30,10 @@ Yes, you can choose to import either one template or the entire starter site.
 
 == Changelog ==
 
-##### [Version 1.2.18](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.17...v1.2.18) (2025-01-30)
+##### [Version 1.2.19](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.18...v1.2.19) (2025-02-05)
 
-- New Onboarding experience
-- Remove legacy notice for the Neve theme
+- Fix language pack loading
+- Fix onboarding layout overflow and responsiveness
 
 
 
