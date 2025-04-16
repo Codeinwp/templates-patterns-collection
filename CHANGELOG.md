@@ -1,3 +1,7 @@
+##### [Version 1.2.20](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.19...v1.2.20) (2025-04-16)
+
+- Updated dependencies
+
 ##### [Version 1.2.19](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.18...v1.2.19) (2025-02-05)
 
 - Fix language pack loading
