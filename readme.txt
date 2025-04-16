@@ -2,7 +2,7 @@
 Contributors: themeisle
 Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
 Requires at least: 5.5
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 5.6
 Stable tag: 1.2.19
 License: GPLv3
