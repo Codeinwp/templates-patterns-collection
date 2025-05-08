@@ -351,7 +351,7 @@ class Content_Importer {
 			return;
 		}
 
-		if ( $data['settings'] ) {
+		if ( isset( $data['settings'] ) ) {
 			foreach ( $data['settings'] as $key => $value ) {
 				masteriyo_set_setting( $key, $value );
 			}
