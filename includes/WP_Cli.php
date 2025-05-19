@@ -147,7 +147,7 @@ class WP_Cli {
 		$sites     = $this->get_all_sites();
 		$site_slug = $args[0];
 		if ( ! array_key_exists( $site_slug, $sites ) ) {
-			\WP_CLI::warning( "No site to import with the slug ${site_slug}." );
+			\WP_CLI::warning( "No site to import with the slug {$site_slug}." );
 
 			return;
 		}
@@ -257,7 +257,7 @@ class WP_Cli {
 	 */
 	private function import_xml_file( $path, $json, $editor ) {
 		if ( ! file_exists( $path ) || ! is_readable( $path ) ) {
-			\WP_CLI::warning( "Cannot import XML file. Either the file is not readable or it does not exist (${path})" );
+			\WP_CLI::warning( "Cannot import XML file. Either the file is not readable or it does not exist ({$path})" );
 		}
 		$this->content_importer->import_file( $path, $json, $editor );
 		$this->content_importer->maybe_bust_elementor_cache();
