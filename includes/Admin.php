@@ -75,7 +75,7 @@ class Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
 		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
-		add_filter( 'themeisle_sdk_blackfriday_data', array( $this, 'add_black_friday_data' ), 20 );
+		add_filter( 'themeisle_sdk_blackfriday_data', array( $this, 'add_black_friday_data' ) );
 
 		$this->setup_white_label();
 
