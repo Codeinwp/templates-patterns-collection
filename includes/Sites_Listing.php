@@ -230,6 +230,6 @@ class Sites_Listing {
 			8 => 2,
 			9 => 3,
 		);
-		return ! isset( $category_mapping[ $category ] ) || $category_mapping[ $category ] < 2;
+		return apply_filters( 'product_neve_license_status', false ) !== 'valid' || ! isset( $category_mapping[ $category ] ) || $category_mapping[ $category ] < 2;
 	}
 }
