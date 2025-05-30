@@ -1,3 +1,7 @@
+##### [Version 1.2.22](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.21...v1.2.22) (2025-05-30)
+
+- Updated dependencies
+
 ##### [Version 1.2.21](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.20...v1.2.21) (2025-05-22)
 
 - Updated dependencies
