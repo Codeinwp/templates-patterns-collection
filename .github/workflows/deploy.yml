@@ -12,7 +12,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: lts/hydrogen # 18.x
+          node-version: 18
           cache: "yarn"
       - name: Build
         run: |

@@ -160,6 +160,7 @@ const Import = ( {
 			frontPage: importData.front_page,
 			shopPages: importData.shop_pages,
 			paymentForms: importData.payment_forms,
+			masteriyoData: importData.masteriyo_data,
 			demoSlug: importData.slug,
 			editor,
 		} )

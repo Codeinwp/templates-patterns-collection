@@ -114,6 +114,12 @@ const pluginCollection = [
         pluginSlug: 'restrict-content',
         label: __('Membership Plugin', 'templates-patterns-collection'),
         description: __('Membership plugin that allows you to monetize content access.', 'templates-patterns-collection')
+    },
+    {
+        id: 'learning-management-system',
+        pluginSlug: 'learning-management-system',
+        label: __('Masteriyo', 'templates-patterns-collection'),
+        description: __('Create and sell online courses with ease.', 'templates-patterns-collection')
     }
 ];
 
