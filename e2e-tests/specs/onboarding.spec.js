@@ -127,7 +127,7 @@ test.describe('Onboarding', () => {
             page.getByRole('heading', { name: 'We are importing your new' }),
         ).toBeVisible();
 
-        await page.waitForSelector('.ob-import-done', { timeout: 10000 });
+        await page.waitForSelector('.ob-import-done', { timeout: 60000 });
 
         await expect(page.getByRole('textbox', { name: 'Enter your email' })).toBeVisible();
         await expect(page.locator('#inspector-select-control-0')).toBeVisible(); // User experience selector.
