@@ -55,6 +55,7 @@ class Plugin_Importer {
 		'pods'                             => 'init.php',
 		'wp-full-stripe-free'              => 'wp-full-stripe.php',
 		'wp-cloudflare-page-cache'         => 'wp-cloudflare-super-page-cache.php',
+		'learning-management-system'       => 'lms.php',
 	);
 
 	public function __construct() {
@@ -174,6 +175,7 @@ class Plugin_Importer {
 		delete_transient( '_wc_activation_redirect' );
 		delete_transient( 'wpforms_activation_redirect' );
 		update_option( 'themeisle_blocks_settings_redirect', false );
+		update_option( 'masteriyo_first_time_activation_flag', true );
 	}
 
 	/**
@@ -363,6 +365,11 @@ class Plugin_Importer {
 			add_filter( 'woocommerce_create_pages', array( $this, 'woocommerce_activation_pages' ) );
 		}
 
+		if ( $slug === 'learning-management-system' ) {
+			// hook into this filter to remove pages on activation of masteriyo
+			add_filter( 'masteriyo_create_pages', array( $this, 'masteriyo_activation_pages' ) );
+		}
+
 		if ( $slug === 'estatik' ) {
 			update_option( 'es_is_demo_executed', 1 );
 		}
@@ -377,6 +384,24 @@ class Plugin_Importer {
 	 */
 	public function woocommerce_activation_pages( $pages ) {
 		$filtered_pages = array( 'shop', 'cart', 'checkout', 'myaccount' );
+		foreach ( $filtered_pages as $filter ) {
+			if ( isset( $pages[ $filter ] ) ) {
+				unset( $pages[ $filter ] );
+			}
+		}
+
+		return $pages;
+	}
+
+	/**
+	 * Filter pages from masteriyo activation.
+	 *
+	 * @param array $pages List of pages to be created on activation.
+	 *
+	 * @return array
+	 */
+	public function masteriyo_activation_pages( $pages ) {
+		$filtered_pages = array( 'courses', 'checkout', 'account', 'learn', 'instructor-registration', 'instructors-list' );
 		foreach ( $filtered_pages as $filter ) {
 			if ( isset( $pages[ $filter ] ) ) {
 				unset( $pages[ $filter ] );

@@ -162,6 +162,12 @@ class Content_Importer {
 		}
 		do_action( 'themeisle_ob_after_payment_forms_setup' );
 
+		// Set Masteriyo data.
+		if ( isset( $body['masteriyoData'] ) ) {
+			$this->setup_masteriyo( $body['masteriyoData'] );
+		}
+		do_action( 'themeisle_ob_after_masteriyo_setup' );
+
 		if ( empty( $frontpage_id ) ) {
 			$this->logger->log( 'No front page ID.' );
 		}
@@ -325,6 +331,33 @@ class Content_Importer {
 		do_action( 'themeisle_cl_add_property_state', Active_State::PAYMENT_FORM_NSP, $payment_form_options );
 
 		$this->logger->log( 'Payment forms set up.', 'success' );
+	}
+
+	/**
+	 * Set up Masteriyo data.
+	 *
+	 * @param array $data the masteriyo data.
+	 */
+	public function setup_masteriyo( $data ) {
+		if ( empty( $data ) || ! is_array( $data ) ) {
+			$this->logger->log( 'No Masteriyo data.', 'success' );
+			return;
+		}
+
+		$this->logger->log( 'Setting up Masteriyo data.', 'progress' );
+
+		if ( ! function_exists( 'masteriyo_set_setting' ) ) {
+			$this->logger->log( 'Masteriyo not installed.', 'success' );
+			return;
+		}
+
+		if ( isset( $data['settings'] ) ) {
+			foreach ( $data['settings'] as $key => $value ) {
+				masteriyo_set_setting( $key, $value );
+			}
+		}
+
+		$this->logger->log( 'Masteriyo data set up.', 'success' );
 	}
 
 	/**
