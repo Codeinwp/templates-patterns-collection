@@ -1,3 +1,7 @@
+##### [Version 1.2.24](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.23...v1.2.24) (2025-09-05)
+
+- Updated dependencies
+
 ##### [Version 1.2.23](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.22...v1.2.23) (2025-06-05)
 
 - Integration for Masteriyo plugin

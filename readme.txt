@@ -4,7 +4,7 @@ Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
 Requires at least: 5.5
 Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 1.2.23
+Stable tag: 1.2.24
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -30,9 +30,9 @@ Yes, you can choose to import either one template or the entire starter site.
 
 == Changelog ==
 
-##### [Version 1.2.23](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.22...v1.2.23) (2025-06-05)
+##### [Version 1.2.24](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.23...v1.2.24) (2025-09-05)
 
-- Integration for Masteriyo plugin
+- Updated dependencies
 
 
 
