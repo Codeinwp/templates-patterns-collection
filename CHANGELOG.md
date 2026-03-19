@@ -1,3 +1,7 @@
+##### [Version 1.2.25](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.24...v1.2.25) (2026-03-19)
+
+- Fixed issue with Marketing starter site import
+
 ##### [Version 1.2.24](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.23...v1.2.24) (2025-09-05)
 
 - Updated dependencies
