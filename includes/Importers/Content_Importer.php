@@ -317,6 +317,11 @@ class Content_Importer {
 					ARRAY_FILTER_USE_KEY
 				);
 
+				// Remove fee recovery currency if exists, as it was removed from the per form setting in latest version.
+				if ( isset( $form['data']['feeRecoveryCurrency'] ) ) {
+					unset( $form['data']['feeRecoveryCurrency'] );
+				}
+
 				$db->$insert( $form['data'] );
 
 				$payment_form_options[ $form['data']['name'] ] = array(
