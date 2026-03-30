@@ -592,12 +592,12 @@ class WP_Import extends WP_Importer {
 						}
 						if ( in_array(
 							$key,
-								array(
-									'tve_custom_css',
-									'tve_content_before_more',
-									'tve_updated_post',
-								)
-							) ) {
+							array(
+								'tve_custom_css',
+								'tve_content_before_more',
+								'tve_updated_post',
+							)
+						) ) {
 							$value = $this->replace_image_urls( $value );
 						}
 						update_post_meta( $post_id, $key, $value );

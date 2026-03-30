@@ -295,10 +295,10 @@ class Slug_Mapping {
 		return preg_replace_callback(
 			'#https?:\\\\/\\\\/[^\s"\'<>()]+#i',
 			function ( $matches ) {
-				$escaped_url  = $matches[0];
-				$decoded_url  = str_replace( '\\/', '/', $escaped_url );
-				$rewritten    = self::rewrite_url( $decoded_url );
-				$rewritten    = str_replace( '/', '\\/', $rewritten );
+				$escaped_url = $matches[0];
+				$decoded_url = str_replace( '\\/', '/', $escaped_url );
+				$rewritten   = self::rewrite_url( $decoded_url );
+				$rewritten   = str_replace( '/', '\\/', $rewritten );
 
 				return $rewritten;
 			},
