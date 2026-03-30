@@ -9,6 +9,7 @@
 
 
 namespace TIOB\Importers\Helpers;
+
 /**
  * Class Importer_Alterator
  */
@@ -116,11 +117,31 @@ class Importer_Alterator {
 	 * @return array
 	 */
 	public function drop_slug_and_prefix_pages( $posts ) {
+		$slug_map       = array();
+		$reserved_slugs = array();
+
 		foreach ( $posts as $index => $post ) {
 			if ( $post['post_type'] !== 'page' ) {
 				continue;
 			}
-			$posts[ $index ]['post_name'] = $this->cleanup_page_slug( $post['post_name'], $this->site_json_data['demoSlug'] );
+
+			$old_slug = $post['post_name'];
+			$new_slug = $this->cleanup_page_slug(
+				$old_slug,
+				$this->site_json_data['demoSlug'],
+				true,
+				$reserved_slugs
+			);
+
+			$posts[ $index ]['post_name'] = $new_slug;
+			$reserved_slugs[]             = $new_slug;
+			if ( ! isset( $slug_map[ $old_slug ] ) ) {
+				$slug_map[ $old_slug ] = $new_slug;
+			}
+		}
+
+		if ( ! empty( $slug_map ) ) {
+			Slug_Mapping::set_slug_map( $slug_map );
 		}
 
 		return $posts;
@@ -135,7 +156,8 @@ class Importer_Alterator {
 	 * @return array
 	 */
 	public function change_nav_menu_item_link( $args, $import_source_url ) {
-		$args['menu-item-url'] = str_replace( $import_source_url, get_home_url(), $args['menu-item-url'] );
+		Slug_Mapping::register_source_url( $import_source_url );
+		$args['menu-item-url'] = Slug_Mapping::rewrite_url( $args['menu-item-url'] );
 
 		return $args;
 	}
@@ -151,8 +173,9 @@ class Importer_Alterator {
 	 * @return string
 	 */
 	public function replace_links( $content, $old_base_url ) {
-		$content = str_replace( $old_base_url, get_home_url(), $content );
+		Slug_Mapping::register_source_url( $old_base_url );
 		$content = $this->replace_image_urls( $content );
+		$content = Slug_Mapping::rewrite_value( $content );
 		return $content;
 	}
 

@@ -11,6 +11,7 @@ use TIOB\Admin;
 use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Helper;
 use TIOB\Importers\Helpers\Importer_Alterator;
+use TIOB\Importers\Helpers\Slug_Mapping;
 use TIOB\Logger;
 use TIOB\Importers\WP\WP_Import;
 use WP_Error;
@@ -221,7 +222,7 @@ class Content_Importer {
 		update_option( 'show_on_front', 'page' );
 
 		if ( isset( $args['front_page'] ) && $args['front_page'] !== null ) {
-			$front_page_obj = get_page_by_path( $this->cleanup_page_slug( $args['front_page'], $demo_slug ) );
+			$front_page_obj = $this->get_imported_page_by_slug( $args['front_page'], $demo_slug );
 			if ( isset( $front_page_obj->ID ) ) {
 				$front_page_options['page_on_front'] = get_option( 'page_on_front' );
 				update_option( 'page_on_front', $front_page_obj->ID );
@@ -229,7 +230,7 @@ class Content_Importer {
 		}
 
 		if ( isset( $args['blog_page'] ) && $args['blog_page'] !== null ) {
-			$blog_page_obj = get_page_by_path( $this->cleanup_page_slug( $args['blog_page'], $demo_slug ) );
+			$blog_page_obj = $this->get_imported_page_by_slug( $args['blog_page'], $demo_slug );
 			if ( isset( $blog_page_obj->ID ) ) {
 				$front_page_options['page_for_posts'] = get_option( 'page_for_posts' );
 				update_option( 'page_for_posts', $blog_page_obj->ID );
@@ -266,7 +267,7 @@ class Content_Importer {
 		$shop_page_options = array();
 		foreach ( $pages as $option_id => $slug ) {
 			if ( ! empty( $slug ) ) {
-				$page_object = get_page_by_path( $this->cleanup_page_slug( $slug, $demo_slug ) );
+				$page_object = $this->get_imported_page_by_slug( $slug, $demo_slug );
 				if ( isset( $page_object->ID ) ) {
 					$shop_page_options[ $option_id ] = get_option( $option_id );
 					update_option( $option_id, $page_object->ID );
@@ -414,6 +415,8 @@ class Content_Importer {
 	 * @return WP_Error|true
 	 */
 	public function import_file( $file_path, $req_body = array(), $builder = '' ) {
+		Slug_Mapping::clear();
+
 		if ( empty( $file_path ) || ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
 			return new WP_Error( 'ti__ob_content_err_1', 'No content file' );
 		}
@@ -422,6 +425,36 @@ class Content_Importer {
 		$importer  = new WP_Import( $builder );
 
 		return $importer->import( $file_path );
+	}
+
+	/**
+	 * Get imported page object by old slug.
+	 *
+	 * @param string $slug old page slug.
+	 * @param string $demo_slug demo slug.
+	 *
+	 * @return \WP_Post|null
+	 */
+	private function get_imported_page_by_slug( $slug, $demo_slug ) {
+		$mapped_slug = Slug_Mapping::resolve_slug( $slug );
+		$page        = get_page_by_path( $mapped_slug );
+		if ( $page instanceof \WP_Post ) {
+			return $page;
+		}
+
+		$normalized_slug = $this->normalize_page_slug( $slug, $demo_slug );
+		$page            = get_page_by_path( $normalized_slug );
+		if ( $page instanceof \WP_Post ) {
+			return $page;
+		}
+
+		$legacy_hashed_slug = $this->cleanup_page_slug( $slug, $demo_slug );
+		$page               = get_page_by_path( $legacy_hashed_slug );
+		if ( $page instanceof \WP_Post ) {
+			return $page;
+		}
+
+		return null;
 	}
 
 	/**
