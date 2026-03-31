@@ -1,7 +1,7 @@
 {
   "name": "templates-patterns-collection",
   "version": "1.2.25",
-  "description": "ThemeIsle Templates and Patterns Collection",
+  "description": "ThemeIsle Templates and Patterns Collection plugin.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Codeinwp/templates-patterns-collection.git"
