@@ -590,6 +590,10 @@ class WP_Import extends WP_Importer {
 						} else {
 							$value = Slug_Mapping::rewrite_value( $value );
 						}
+						if( $key === '_atomic_wind_css' ) {
+							$meta_handler = new Atomic_Wind_Meta_Handler( $value );
+							$meta_handler->filter_meta();
+						}
 						if ( in_array(
 							$key,
 							array(
