@@ -4,7 +4,7 @@ Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
 Requires at least: 5.5
 Tested up to: 6.9
 Requires PHP: 5.6
-Stable tag: 1.2.25
+Stable tag: 1.2.26
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -30,9 +30,10 @@ Yes, you can choose to import either one template or the entire starter site.
 
 == Changelog ==
 
-##### [Version 1.2.25](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.24...v1.2.25) (2026-03-19)
+##### [Version 1.2.26](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.25...v1.2.26) (2026-03-31)
 
-- Fixed issue with Marketing starter site import
+ * Added the  helper and integrated its usage throughout the importers to register source URLs, rewrite links, and maintain a mapping from old to new slugs for pages, widgets, theme mods, and meta values. This ensures all references are consistently updated during import. 
+* Added a new  class to preserve and correctly handle Atomic Wind CSS meta values  during import
 
 
 
