@@ -12,6 +12,7 @@
 namespace TIOB\Importers;
 
 use TIOB\Importers\Cleanup\Active_State;
+use TIOB\Importers\Helpers\Slug_Mapping;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -29,7 +30,19 @@ class Widgets_Importer {
 	 * @return WP_REST_Response
 	 */
 	public function import_widgets( WP_REST_Request $request ) {
-		$widgets = $request->get_json_params();
+		$params  = $request->get_json_params();
+		$widgets = $params;
+
+		if ( isset( $params['source_url'], $params['widgets'] ) && is_array( $params['widgets'] ) ) {
+			$widgets = $params['widgets'];
+		}
+
+		if ( isset( $params['source_url'] ) && is_string( $params['source_url'] ) ) {
+			Slug_Mapping::register_source_url( $params['source_url'] );
+			if ( is_array( $widgets ) && isset( $widgets['source_url'] ) ) {
+				unset( $widgets['source_url'] );
+			}
+		}
 
 		if ( empty( $widgets ) || ! is_array( $widgets ) ) {
 			return new WP_REST_Response(
@@ -121,6 +134,7 @@ class Widgets_Importer {
 
 				// Convert multidimensional objects to multidimensional arrays
 				$widget = json_decode( wp_json_encode( $widget ), true );
+				$widget = Slug_Mapping::rewrite_value( $widget );
 
 				// Does widget with identical settings already exist in same sidebar?
 				if ( ! $fail && isset( $widget_instances[ $id_base ] ) ) {
@@ -284,4 +298,3 @@ class Widgets_Importer {
 		update_option( 'sidebars_widgets', $clean_widgets );
 	}
 }
-

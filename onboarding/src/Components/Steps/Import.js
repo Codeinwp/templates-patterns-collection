@@ -213,7 +213,10 @@ const Import = ( {
 		}
 		setCurrentStep( 'widgets' );
 		console.log( '[P] Widgets.' );
-		importWidgets( importData.widgets )
+		importWidgets( {
+			widgets: importData.widgets,
+			source_url: importData.url,
+		} )
 			.then( ( response ) => {
 				if ( ! response.success ) {
 					handleError( response, 'widgets' );

@@ -6,6 +6,7 @@
  */
 
 use TIOB\Importers\Widgets_Importer;
+use TIOB\Importers\Helpers\Slug_Mapping;
 use TIOB\Main;
 use TIOB\Rest_Server;
 
@@ -145,6 +146,9 @@ class Onboarding_Rest_Test extends WP_UnitTestCase {
 		$this->assertInstanceOf( 'WP_REST_Response', $response );
 		$this->assertEquals( 200, $response->get_status() );
 		$this->assertTrue( $response->get_data()[ 'success' ] );
+		$slug_map = Slug_Mapping::get_slug_map();
+		$this->assertSame( 'neve-charity--home', $slug_map[ 'neve-charity-demo-home' ] );
+		$this->assertSame( 'neve-charity--blog', $slug_map[ 'neve-charity-demo-blog' ] );
 
 		//Test that front page has been set up.
 		$this->assertEquals( 'page', get_option( 'show_on_front' ) );

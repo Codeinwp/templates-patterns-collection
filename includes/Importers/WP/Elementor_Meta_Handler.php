@@ -10,6 +10,7 @@
 namespace TIOB\Importers\WP;
 
 use TIOB\Importers\Helpers\Helper;
+use TIOB\Importers\Helpers\Slug_Mapping;
 
 /**
  * Class Elementor_Meta_Handler
@@ -49,6 +50,7 @@ class Elementor_Meta_Handler {
 	public function __construct( $unfiltered_value, $site_url ) {
 		$this->value      = $unfiltered_value;
 		$this->import_url = $site_url;
+		Slug_Mapping::register_source_url( $site_url );
 	}
 
 	/**
@@ -89,25 +91,14 @@ class Elementor_Meta_Handler {
 			return;
 		}
 
-		$site_url  = get_site_url();
-		$url_parts = parse_url( $site_url );
-
 		array_walk_recursive(
 			$decoded_meta,
-			function ( &$value, $key ) use ( $site_url, $url_parts ) {
+			function ( &$value ) {
 				if ( filter_var( $value, FILTER_VALIDATE_URL ) === false ) {
 					return;
 				}
 
-				$url = parse_url( $value );
-
-				if ( ! isset( $url['host'] ) || ! isset( $url_parts['host'] ) ) {
-					return;
-				}
-
-				if ( $url['host'] !== $url_parts['host'] ) {
-					$value = str_replace( $this->import_url, $site_url, $value );
-				}
+				$value = Slug_Mapping::rewrite_value( $value );
 			}
 		);
 

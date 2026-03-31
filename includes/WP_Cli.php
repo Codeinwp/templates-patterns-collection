@@ -12,6 +12,7 @@ namespace TIOB;
 
 use TIOB\Importers\Content_Importer;
 use TIOB\Importers\Helpers\Helper;
+use TIOB\Importers\Helpers\Slug_Mapping;
 use TIOB\Importers\Plugin_Importer;
 use TIOB\Importers\Theme_Mods_Importer;
 use TIOB\Importers\Widgets_Importer;
@@ -153,6 +154,9 @@ class WP_Cli {
 		}
 
 		$site = $sites[ $site_slug ];
+		if ( isset( $site['url'] ) ) {
+			Slug_Mapping::register_source_url( $site['url'] );
+		}
 
 		$json_array = $this->get_starter_site_json( $site );
 		$this->import_plugins_for_starter_site( $json_array );
@@ -209,6 +213,7 @@ class WP_Cli {
 				$json['theme_mods'],
 				function ( &$item ) {
 					$item = $this->replace_image_urls( $item );
+					$item = Slug_Mapping::rewrite_value( $item );
 				}
 			);
 
@@ -230,6 +235,7 @@ class WP_Cli {
 
 		if ( isset( $json['wp_options'] ) && ! empty( $json['wp_options'] ) ) {
 			foreach ( $json['wp_options'] as $key => $value ) {
+				$value = Slug_Mapping::rewrite_value( $value );
 				if ( $value === 'true' ) {
 					$value = true;
 				}
@@ -412,4 +418,3 @@ class WP_Cli {
 
 $ti_ob_cli = new WP_Cli();
 $ti_ob_cli->load_commands();
-

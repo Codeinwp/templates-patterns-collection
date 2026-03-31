@@ -8,6 +8,7 @@
  */
 namespace TIOB\Importers\Cleanup;
 
+use TIOB\Importers\Helpers\Slug_Mapping;
 use TIOB\Importers\Plugin_Importer;
 
 /**
@@ -293,6 +294,7 @@ class Manager {
 		$this->cleanup_attachments( $state );
 		$this->cleanup_widgets( $state );
 		$this->cleanup_plugins( $state );
+		Slug_Mapping::clear();
 
 		return delete_transient( Active_State::STATE_NAME );
 	}
