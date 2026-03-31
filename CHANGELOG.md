@@ -1,3 +1,8 @@
+##### [Version 1.2.26](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.25...v1.2.26) (2026-03-31)
+
+ * Added the `Slug_Mapping` helper and integrated its usage throughout the importers to register source URLs, rewrite links, and maintain a mapping from old to new slugs for pages, widgets, theme mods, and meta values. This ensures all references are consistently updated during import. 
+* Added a new `Atomic_Wind_Meta_Handler` class to preserve and correctly handle Atomic Wind CSS meta values  during import
+
 ##### [Version 1.2.25](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.24...v1.2.25) (2026-03-19)
 
 - Fixed issue with Marketing starter site import
