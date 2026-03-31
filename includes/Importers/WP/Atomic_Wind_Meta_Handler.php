@@ -30,7 +30,7 @@ class Atomic_Wind_Meta_Handler {
 	 * @param string $site_url the site url.
 	 */
 	public function __construct( $unfiltered_value ) {
-		$this->value      = $unfiltered_value;
+		$this->value = $unfiltered_value;
 	}
 
 	/**
