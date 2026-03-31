@@ -6,6 +6,7 @@
  */
 
 use TIOB\Importers\Widgets_Importer;
+use TIOB\Importers\Helpers\Slug_Mapping;
 use TIOB\Main;
 use TIOB\Rest_Server;
 
@@ -173,6 +174,9 @@ class Digital_Rest_Test extends WP_UnitTestCase {
 		$this->assertInstanceOf( 'WP_REST_Response', $response );
 		$this->assertEquals( 200, $response->get_status() );
 		$this->assertTrue( $response->get_data()['success'] );
+		$slug_map = Slug_Mapping::get_slug_map();
+		$this->assertArrayHasKey( 'home', $slug_map );
+		$this->assertSame( 'home', $slug_map['home'] );
 
 		//Test that there are NO placeholders left unprocessed
 		$placeholders_list = array( 'replace_cat' ); // add more if other placeholders are added
@@ -222,7 +226,10 @@ class Digital_Rest_Test extends WP_UnitTestCase {
 		$request->set_method( 'POST' );
 		$request->set_body(
 			json_encode(
-				$this->json['widgets']
+				array(
+					'widgets'    => $this->json['widgets'],
+					'source_url' => 'https://demosites.io/digital-store-gb',
+				)
 			)
 		);
 
@@ -252,6 +259,17 @@ class Digital_Rest_Test extends WP_UnitTestCase {
 					array_push( $accepted_titles, $widget['title'] );
 				}
 			}
+		}
+
+		$featured_widget = array_filter(
+			$widget_instances,
+			function ( $instance ) {
+				return isset( $instance['title'] ) && $instance['title'] === 'Featured product';
+			}
+		);
+		if ( ! empty( $featured_widget ) ) {
+			$featured_widget = array_shift( $featured_widget );
+			$this->assertSame( trailingslashit( get_home_url() ) . 'shop/', $featured_widget['link_url'] );
 		}
 
 		foreach ( $widget_instances as $widget_instance ) {

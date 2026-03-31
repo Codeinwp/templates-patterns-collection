@@ -9,6 +9,7 @@ namespace TIOB\Importers;
 
 use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Helper;
+use TIOB\Importers\Helpers\Slug_Mapping;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -86,6 +87,7 @@ class Theme_Mods_Importer {
 			);
 		}
 		$this->source_url = $data['source_url'];
+		Slug_Mapping::register_source_url( $this->source_url );
 		$this->theme_mods = apply_filters( 'ti_tpc_theme_mods_pre_import', $data['theme_mods'] );
 		array_walk( $this->theme_mods, array( $this, 'change_theme_mods_root_url' ) );
 
@@ -114,6 +116,7 @@ class Theme_Mods_Importer {
 
 		$this->options = isset( $data['wp_options'] ) ? $data['wp_options'] : array();
 		foreach ( $this->options as $key => $value ) {
+			$value = Slug_Mapping::rewrite_value( $value );
 			if ( is_array( $value ) ) {
 				array_walk_recursive(
 					$value,
@@ -191,6 +194,7 @@ class Theme_Mods_Importer {
 	private function change_theme_mods_root_url( &$item ) {
 		do_action( 'themeisle_ob_before_change_theme_mods_root_url' );
 		$item = $this->replace_image_urls( $item );
+		$item = Slug_Mapping::rewrite_value( $item );
 		do_action( 'themeisle_ob_after_change_theme_mods_root_url' );
 	}
 

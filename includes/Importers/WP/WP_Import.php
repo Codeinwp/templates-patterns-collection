@@ -7,6 +7,7 @@ namespace TIOB\Importers\WP;
 
 use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Helper;
+use TIOB\Importers\Helpers\Slug_Mapping;
 use TIOB\Logger;
 use WP_Error;
 use WP_Importer;
@@ -125,6 +126,8 @@ class WP_Import extends WP_Importer {
 		$this->tags          = $import_data['tags'];
 		$this->base_url      = esc_url( $import_data['base_url'] );
 		$this->base_blog_url = esc_url( $import_data['base_blog_url'] );
+		Slug_Mapping::register_source_url( $this->base_url );
+		Slug_Mapping::register_source_url( $this->base_blog_url );
 		wp_defer_term_counting( true );
 		wp_defer_comment_counting( true );
 		do_action( 'import_start' );
@@ -584,6 +587,12 @@ class WP_Import extends WP_Importer {
 							$meta_handler = new Elementor_Meta_Handler( $value, $this->base_blog_url );
 							$meta_handler->filter_meta();
 							$this->logger->log( 'Filtered elementor meta.', 'success' );
+						} else {
+							$value = Slug_Mapping::rewrite_value( $value );
+						}
+						if ( $key === '_atomic_wind_css' ) {
+							$meta_handler = new Atomic_Wind_Meta_Handler( $value );
+							$meta_handler->filter_meta();
 						}
 						if ( in_array(
 							$key,

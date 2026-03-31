@@ -101,21 +101,108 @@ trait Helper {
 	 *
 	 * @param string $slug      page slug.
 	 * @param string $demo_slug demo slug.
+	 * @param bool   $check_collisions should check if slug collisions exist before hashing.
+	 * @param array  $reserved_slugs additional reserved slugs from current import run.
 	 *
 	 * @return string
 	 */
-	public function cleanup_page_slug( $slug, $demo_slug ) {
+	public function cleanup_page_slug( $slug, $demo_slug, $check_collisions = false, $reserved_slugs = array() ) {
 		$unhashed = array( 'shop', 'my-account', 'checkout', 'cart', 'blog', 'news', 'lifter-courses', 'courses', 'dashboard', 'my-courses', 'memberships' );
-		$slug     = str_replace( $demo_slug, '', $slug );
-		$slug     = str_replace( 'demo', '', $slug );
-		$slug     = ltrim( $slug, '-' );
+		$slug     = $this->normalize_page_slug( $slug, $demo_slug );
+
+		if ( $slug === '' ) {
+			$slug = sanitize_title( $demo_slug );
+		}
 
 		if ( in_array( $slug, $unhashed, true ) ) {
 			return $slug;
 		}
 
 		$hash = substr( md5( $demo_slug ), 0, 5 );
-		$slug = $hash . '-' . $slug;
+		if ( ! $check_collisions ) {
+			return $hash . '-' . $slug;
+		}
+
+		if ( ! $this->is_page_slug_taken( $slug, $reserved_slugs ) ) {
+			return $slug;
+		}
+
+		$hashed_slug = $hash . '-' . $slug;
+
+		if ( ! $this->is_page_slug_taken( $hashed_slug, $reserved_slugs ) ) {
+			return $hashed_slug;
+		}
+
+		return $this->generate_unique_page_slug( $hashed_slug, $reserved_slugs );
+	}
+
+	/**
+	 * Normalize page slug before collision checks.
+	 *
+	 * @param string $slug      page slug.
+	 * @param string $demo_slug demo slug.
+	 *
+	 * @return string
+	 */
+	public function normalize_page_slug( $slug, $demo_slug ) {
+		$slug = str_replace( $demo_slug, '', $slug );
+		$slug = str_replace( 'demo', '', $slug );
+		$slug = ltrim( $slug, '-' );
+
+		return $slug;
+	}
+
+	/**
+	 * Check if page slug is already taken.
+	 *
+	 * @param string $slug           slug to check.
+	 * @param array  $reserved_slugs additional reserved slugs from current import.
+	 *
+	 * @return bool
+	 */
+	private function is_page_slug_taken( $slug, $reserved_slugs = array() ) {
+		if ( ! empty( $reserved_slugs ) && in_array( $slug, $reserved_slugs, true ) ) {
+			return true;
+		}
+
+		if ( $slug === '' ) {
+			return false;
+		}
+
+		return get_page_by_path( $slug, OBJECT, 'page' ) !== null;
+	}
+
+	/**
+	 * Generate unique page slug.
+	 *
+	 * @param string $base_slug      base slug.
+	 * @param array  $reserved_slugs additional reserved slugs from current import.
+	 *
+	 * @return string
+	 */
+	private function generate_unique_page_slug( $base_slug, $reserved_slugs = array() ) {
+		if ( function_exists( 'wp_unique_post_slug' ) ) {
+			$unique_slug = wp_unique_post_slug( $base_slug, 0, 'publish', 'page', 0 );
+			if ( ! in_array( $unique_slug, $reserved_slugs, true ) ) {
+				return $unique_slug;
+			}
+
+			$suffix = 2;
+			while ( in_array( $unique_slug, $reserved_slugs, true ) ) {
+				$unique_slug = wp_unique_post_slug( $base_slug . '-' . $suffix, 0, 'publish', 'page', 0 );
+				$suffix++;
+			}
+
+			return $unique_slug;
+		}
+
+		$suffix = 2;
+		$slug   = $base_slug;
+
+		while ( $this->is_page_slug_taken( $slug, $reserved_slugs ) ) {
+			$slug = $base_slug . '-' . $suffix;
+			$suffix++;
+		}
 
 		return $slug;
 	}
