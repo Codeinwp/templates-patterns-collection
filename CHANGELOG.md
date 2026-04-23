@@ -1,3 +1,8 @@
+##### [Version 1.2.27](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.26...v1.2.27) (2026-04-23)
+
+- Menus and widgets are now matched more reliably, reducing the chance of things breaking or linking incorrectly. 
+- Updated dependencies
+
 ##### [Version 1.2.26](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.25...v1.2.26) (2026-03-31)
 
  * Added the `Slug_Mapping` helper and integrated its usage throughout the importers to register source URLs, rewrite links, and maintain a mapping from old to new slugs for pages, widgets, theme mods, and meta values. This ensures all references are consistently updated during import. 
