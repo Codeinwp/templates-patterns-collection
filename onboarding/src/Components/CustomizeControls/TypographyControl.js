@@ -5,23 +5,41 @@ import classnames from 'classnames';
 import SVG from '../../utils/svg';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
-import { useState } from '@wordpress/element';
 
-const TypographyControl = ( { siteStyle, handleFontClick, importData } ) => {
-	const themeMods = importData?.theme_mods;
+const FALLBACK_FONT = 'Arial, Helvetica, sans-serif';
 
-	const [ defaultBodyFont ] = useState(
-		themeMods?.neve_body_font_family || 'Arial, Helvetica, sans-serif'
-	);
-
-	const [ defaultHeadingsFont ] = useState(
-		themeMods?.neve_headings_font_family || 'Arial, Helvetica, sans-serif'
-	);
-
-	const { font } = siteStyle;
-	if ( ! tiobDash || ! tiobDash.fontParings ) {
-		return;
+const getFontPairs = ( importData ) => {
+	if ( importData && importData.font_pairs && Object.keys( importData.font_pairs ).length ) {
+		return importData.font_pairs;
 	}
+	if ( tiobDash && tiobDash.fontParings ) {
+		return tiobDash.fontParings;
+	}
+	return null;
+};
+
+const getDefaultFonts = ( importDataDefault ) => {
+	const themeMods = importDataDefault?.theme_mods;
+	return {
+		body: themeMods?.neve_body_font_family || FALLBACK_FONT,
+		heading: themeMods?.neve_headings_font_family || FALLBACK_FONT,
+	};
+};
+
+const TypographyControl = ( {
+	siteStyle,
+	handleFontClick,
+	importData,
+	importDataDefault,
+} ) => {
+	const fontPairs = getFontPairs( importData );
+	if ( ! fontPairs ) {
+		return null;
+	}
+
+	const { body: defaultBodyFont, heading: defaultHeadingsFont } =
+		getDefaultFonts( importDataDefault );
+	const { font } = siteStyle;
 
 	return (
 		<div className="ob-ctrl">
@@ -45,9 +63,8 @@ const TypographyControl = ( { siteStyle, handleFontClick, importData } ) => {
 					{ __( 'Default', 'templates-patterns-collection' ) }
 				</Button>
 
-				{ Object.keys( tiobDash.fontParings ).map( ( slug ) => {
-					const { headingFont, bodyFont } =
-						tiobDash.fontParings[ slug ];
+				{ Object.keys( fontPairs ).map( ( slug ) => {
+					const { headingFont, bodyFont } = fontPairs[ slug ];
 					const headingStyle = {
 						fontFamily: headingFont.font,
 					};
@@ -82,15 +99,12 @@ export default compose(
 	withDispatch(
 		(
 			dispatch,
-			{
-				importData,
-				siteStyle,
-				setSiteStyle,
-				defaultBodyFont,
-				defaultHeadingsFont,
-			}
+			{ importData, importDataDefault, siteStyle, setSiteStyle }
 		) => {
 			const { setImportData, setRefresh } = dispatch( 'ti-onboarding' );
+			const fontPairs = getFontPairs( importData );
+			const { body: defaultBodyFont, heading: defaultHeadingsFont } =
+				getDefaultFonts( importDataDefault );
 
 			return {
 				handleFontClick: ( fontKey ) => {
@@ -100,13 +114,15 @@ export default compose(
 					};
 					setSiteStyle( newStyle );
 
-					const { bodyFont, headingFont } =
-						fontKey !== 'default'
-							? tiobDash.fontParings[ fontKey ]
+					const pair =
+						fontKey !== 'default' && fontPairs && fontPairs[ fontKey ]
+							? fontPairs[ fontKey ]
 							: {
 									bodyFont: { font: defaultBodyFont },
 									headingFont: { font: defaultHeadingsFont },
 							  };
+
+					const { bodyFont, headingFont } = pair;
 
 					const newImportData = {
 						...importData,
