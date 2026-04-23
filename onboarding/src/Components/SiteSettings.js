@@ -189,6 +189,9 @@ export const SiteSettings = ( {
 										<TypographyControl
 											siteStyle={ siteStyle }
 											setSiteStyle={ setSiteStyle }
+											importDataDefault={
+												importDataDefault
+											}
 										/>
 									</>
 								) }
