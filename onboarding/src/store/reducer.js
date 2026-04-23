@@ -16,15 +16,32 @@ const initialLicense = licenseTIOB || {
 	tier: 0,
 };
 
+const params = new URLSearchParams( window.location.search );
+const defaultSiteSlug = params.get( 'site' );
+
+const findSiteBySlug = ( slug ) => {
+	const builders = onboarding?.sites?.sites || {};
+	for ( const builder of Object.keys( builders ) ) {
+		if ( builders[ builder ]?.[ slug ] ) {
+			return builders[ builder ][ slug ];
+		}
+	}
+	return null;
+};
+
+const defaultSite = defaultSiteSlug ? findSiteBySlug( defaultSiteSlug ) : null;
+
 const initialState = {
 	sites: onboarding.sites || {},
 	editor: selectedEditor,
 	category: '',
-	currentSite: null,
+	currentSite: defaultSite,
 	fetching: false,
 	searchQuery: '',
 	license: initialLicense,
-	onboardingStep: window.location.search.includes('show=welcome') ? 1 : 2,
+	onboardingStep: defaultSite
+		? 3
+		: ( window.location.search.includes('show=welcome') ? 1 : 2 ),
 	userCustomSettings: {
 		siteName: null,
 		siteLogo: null,

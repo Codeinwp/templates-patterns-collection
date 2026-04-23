@@ -136,6 +136,14 @@ class Widgets_Importer {
 				$widget = json_decode( wp_json_encode( $widget ), true );
 				$widget = Slug_Mapping::rewrite_value( $widget );
 
+				// [dde-patch v1] pre-import widget filter + nav_menu slug resolver.
+				// Resolve ID-by-reference fields (menus, etc.) using slug hints carried
+				// in the widget instance, then let third parties hook in before persist.
+				$widget = $this->resolve_known_references( $widget, $id_base );
+				// Filters a widget instance right before it is persisted. Receives
+				// ($widget, $id_base, $widget_instance_id, $sidebar_id).
+				$widget = apply_filters( 'ti_tpc_widget_pre_import', $widget, $id_base, $widget_instance_id, $sidebar_id );
+
 				// Does widget with identical settings already exist in same sidebar?
 				if ( ! $fail && isset( $widget_instances[ $id_base ] ) ) {
 
@@ -264,6 +272,41 @@ class Widgets_Importer {
 
 		return $available_widgets;
 
+	}
+
+	/**
+	 * Resolve known ID-by-reference fields on a widget instance using
+	 * slug hints carried in the exported payload.
+	 *
+	 * Currently handles:
+	 * - `nav_menu` widget: reads `_ti_nav_menu_slug`, looks up the menu on
+	 *   the target site, rewrites `nav_menu` to the fresh term_id, and
+	 *   strips the hint so it never persists into `widget_nav_menu`.
+	 *
+	 * Behaviour on failure is intentionally non-fatal - if the slug does
+	 * not resolve (menu import failed) we leave the stale id in place so
+	 * the frontend renders an empty menu widget just like before this
+	 * patch, rather than throwing and aborting the whole import.
+	 *
+	 * @param array  $widget  Widget instance.
+	 * @param string $id_base Widget id_base (e.g. `nav_menu`).
+	 *
+	 * @return array
+	 */
+	private function resolve_known_references( $widget, $id_base ) {
+		if ( ! is_array( $widget ) ) {
+			return $widget;
+		}
+
+		if ( 'nav_menu' === $id_base && ! empty( $widget['_ti_nav_menu_slug'] ) ) {
+			$menu = wp_get_nav_menu_object( $widget['_ti_nav_menu_slug'] );
+			if ( $menu && ! is_wp_error( $menu ) ) {
+				$widget['nav_menu'] = (int) $menu->term_id;
+			}
+			unset( $widget['_ti_nav_menu_slug'] );
+		}
+
+		return $widget;
 	}
 
 	/**

@@ -398,15 +398,16 @@ class Admin {
 		}
 
 		delete_option( 'tpc_maybe_run_onboarding' );
-		wp_safe_redirect(
-			add_query_arg(
-				array(
-					'page' => 'neve-onboarding',
-					'show' => 'welcome',
-				),
-				admin_url( 'admin.php' )
-			)
-		);
+
+		$query_args = array( 'page' => 'neve-onboarding' );
+
+		if ( defined( 'TI_ONBOARDING_DEFAULT_SITE' ) && TI_ONBOARDING_DEFAULT_SITE ) {
+			$query_args['site'] = sanitize_key( TI_ONBOARDING_DEFAULT_SITE );
+		} else {
+			$query_args['show'] = 'welcome';
+		}
+
+		wp_safe_redirect( add_query_arg( $query_args, admin_url( 'admin.php' ) ) );
 		exit();
 	}
 
