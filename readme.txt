@@ -1,6 +1,6 @@
 === Starter Sites & Templates by Neve ===
 Contributors: themeisle
-Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
+Tags: starter sites, templates, block patterns, neve, gutenberg
 Requires at least: 5.5
 Tested up to: 6.9
 Requires PHP: 5.6
@@ -8,7 +8,7 @@ Stable tag: 1.2.27
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-This plugin gives you access to 100+ templates and ready-to-use starter sites. Neve theme is used for all the designs.
+Access 100+ Gutenberg templates and ready-to-use starter sites for WordPress. All designs work with the Neve theme. One-click import, fully responsive.
 
 == Description ==
 
