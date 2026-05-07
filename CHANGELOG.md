@@ -1,3 +1,8 @@
+##### [Version 1.2.28](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.27...v1.2.28) (2026-05-07)
+
+- Source font pairings from the website on demo import
+- Update dependencies
+
 ##### [Version 1.2.27](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.26...v1.2.27) (2026-04-23)
 
 - Menus and widgets are now matched more reliably, reducing the chance of things breaking or linking incorrectly. 
