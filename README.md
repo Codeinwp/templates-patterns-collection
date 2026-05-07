@@ -1,14 +1,14 @@
 # Starter Sites & Templates by Neve #
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
-**Tags:** neve, templates, patterns, blocks, starter, sites, demo, content, import  
+**Tags:** starter sites, templates, block patterns, neve, gutenberg  
 **Requires at least:** 5.5  
 **Tested up to:** 6.9  
 **Requires PHP:** 5.6  
-**Stable tag:** 1.2.27  
+**Stable tag:** 1.2.28  
 **License:** GPLv3  
 **License URI:** https://www.gnu.org/licenses/gpl-3.0.en.html  
 
-This plugin gives you access to 100+ templates and ready-to-use starter sites. Neve theme is used for all the designs.
+Access 100+ Gutenberg templates and ready-to-use starter sites for WordPress. All designs work with the Neve theme. One-click import, fully responsive.
 
 ## Description ##
 
@@ -30,10 +30,10 @@ Yes, you can choose to import either one template or the entire starter site.
 
 ## Changelog ##
 
-##### [Version 1.2.27](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.26...v1.2.27) (2026-04-23)
+##### [Version 1.2.28](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.27...v1.2.28) (2026-05-07)
 
-- Menus and widgets are now matched more reliably, reducing the chance of things breaking or linking incorrectly. 
-- Updated dependencies
+- Source font pairings from the website on demo import
+- Update dependencies
 
 
 
