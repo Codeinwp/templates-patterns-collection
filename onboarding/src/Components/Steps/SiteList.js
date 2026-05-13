@@ -6,6 +6,7 @@ import Toast from '../Toast';
 import Filters from '../Filters';
 import Sites from '../Sites';
 import EditorSelector from '../EditorSelector';
+import OnboardingPromoNotice from '../OnboardingPromoNotice';
 import SVG from '../../utils/svg';
 
 const SiteList = ( { showToast, setShowToast, setFetching } ) => {
@@ -53,6 +54,7 @@ const SiteList = ( { showToast, setShowToast, setFetching } ) => {
 				<EditorSelector />
 			</div>
 			<Filters />
+			<OnboardingPromoNotice />
 			<Sites />
 			{ ! tiobDash.isValidLicense && (
 				<Toast
