@@ -8,17 +8,12 @@ const OnboardingPromoNotice = () => {
 	const showProMessage = Boolean( tiobDash.onboardingShowProNoticeText );
 
 	const emailBody = sprintf(
-		/* translators: Email template for requesting a custom starter site */
+		/* translators: %s: double line break in the starter site request email template */
 		__(
-			'Hi Neve team,\n\n' +
-				"I'm looking for a starter site for the following project:\n\n" +
-				'Project type: (e.g. Restaurant, Law Firm, SaaS)\n\n' +
-				'Key pages needed: (e.g. Home, About, Services, Contact)\n\n' +
-				'Style preference: (e.g. Minimal, Bold, Corporate)\n\n' +
-				'Any references: (optional)\n\n' +
-				'Thanks',
+			'Hi Neve team,%1$sI\'m looking for a starter site for the following project:%1$sProject type: (e.g. Restaurant, Law Firm, SaaS)%1$sKey pages needed: (e.g. Home, About, Services, Contact)%1$sStyle preference: (e.g. Minimal, Bold, Corporate)%1$sAny references: (optional)%1$sThanks',
 			'templates-patterns-collection'
-		)
+		),
+		'\n\n'
 	);
 
 	const requestSiteLink =
@@ -32,7 +27,7 @@ const OnboardingPromoNotice = () => {
 	const noticeMessage = showProMessage
 		? createInterpolateElement(
 				__(
-					"Fresh designs built for every niche. Can't find what you're looking for? As a Pro user, <requestSiteLink>request a site</requestSiteLink> and we'll build it for you.",
+					'Fresh designs built for every niche. Can\'t find what you\'re looking for? As a Pro user, <requestSiteLink>request a site</requestSiteLink> and we\'ll build it for you.',
 					'templates-patterns-collection'
 				),
 				{
@@ -40,7 +35,12 @@ const OnboardingPromoNotice = () => {
 						<a
 							href={ requestSiteLink }
 							className="ob-onboarding-promo-link"
-						/>
+						>
+							{ __(
+								'request a site',
+								'templates-patterns-collection'
+							) }
+						</a>
 					),
 				}
 		  )
