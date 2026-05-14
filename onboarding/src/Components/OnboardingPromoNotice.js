@@ -32,15 +32,11 @@ const OnboardingPromoNotice = () => {
 				),
 				{
 					requestSiteLink: (
+						/* eslint-disable-next-line jsx-a11y/anchor-has-content */
 						<a
 							href={ requestSiteLink }
 							className="ob-onboarding-promo-link"
-						>
-							{ __(
-								'request a site',
-								'templates-patterns-collection'
-							) }
-						</a>
+						/>
 					),
 				}
 		  )
