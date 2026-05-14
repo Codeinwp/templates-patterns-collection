@@ -185,6 +185,7 @@ class Admin {
 			return;
 		}
 
+		$response['success'] = true;
 		unset( $response['code'] );
 		unset( $response['message'] );
 
@@ -222,7 +223,9 @@ class Admin {
 		}
 
 		if ( in_array( $neve_plan, array( 1, 2, 3 ), true ) ) {
-			return in_array( $neve_plan, array( 2, 3 ), true );
+			// Normalize Neve plan category to TPC tier using License::NEVE_CATEGORY_MAPPING
+			$normalized_neve_tier = isset( License::NEVE_CATEGORY_MAPPING[ $neve_plan ] ) ? License::NEVE_CATEGORY_MAPPING[ $neve_plan ] : -1;
+			return in_array( $normalized_neve_tier, array( 2, 3 ), true );
 		}
 
 		if ( in_array( $raw_tier, array( 1, 2, 7, 12, 18 ), true ) ) {
@@ -886,7 +889,6 @@ class Admin {
 			'onboardingDone'                => array(
 				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'   => wp_create_nonce( 'onboarding_done_nonce' ),
-				'adminUrl' => admin_url(),
 			),
 			'feedback'                      => array(
 				'count'     => get_option( self::IMPORTED_TEMPLATES_COUNT_OPT, 0 ),
