@@ -69,7 +69,7 @@ test.describe('Onboarding', () => {
 
         const request = await dismissRequest;
         expect(request.postData()).toContain('action=dismiss_onboarding_promo_notice');
-        await expect(await dismissResponse).toBeOK();
+        await expect(dismissResponse).toBeOK();
 
         await expect(promoNotice).toBeHidden();
         await page.reload();
