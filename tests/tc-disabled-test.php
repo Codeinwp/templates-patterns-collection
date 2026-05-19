@@ -17,13 +17,17 @@ class TC_Disabled_Test extends \WP_UnitTestCase {
 	private $license;
 	private $neve_pro_license_option;
 
+	public static function set_up_before_class(): void {
+		parent::set_up_before_class();
+		if ( ! defined( 'NEVE_PRO_BASEFILE' ) ) {
+			define( 'NEVE_PRO_BASEFILE', trailingslashit( sys_get_temp_dir() ) . 'neve-pro-addon/neve-pro-addon.php' );
+		}
+	}
+
 	public function set_up(): void {
 		parent::set_up();
 		$this->admin = new Admin();
 		$this->license = License::get_instance();
-		if ( ! defined( 'NEVE_PRO_BASEFILE' ) ) {
-			define( 'NEVE_PRO_BASEFILE', trailingslashit( sys_get_temp_dir() ) . 'neve-pro-addon/neve-pro-addon.php' );
-		}
 		$this->neve_pro_license_option = 'neve_pro_addon_license_data';
 	}
 
