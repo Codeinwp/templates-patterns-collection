@@ -219,7 +219,7 @@ class Admin {
 		$license_key  = isset( $license_data->key ) ? strtolower( trim( (string) $license_data->key ) ) : '';
 		$license_tier = License::get_license_tier( 0 );
 		$raw_tier     = isset( $license_data->tier ) ? absint( $license_data->tier ) : 0;
-		$neve_plan    = apply_filters( 'product_neve_license_plan', -1 );
+		$neve_plan    = $this->neve_license_plan();
 
 		if ( $license_key === '' || $license_key === 'free' ) {
 			return false;
@@ -229,11 +229,8 @@ class Admin {
 			return false;
 		}
 
-		// Check Neve plan only if it's a valid category (not -1 default)
-		if ( -1 !== $neve_plan && in_array( $neve_plan, array( 1, 2, 3, 4, 5, 6, 7, 8, 9 ), true ) ) {
-			// Normalize Neve plan category to TPC tier using License::NEVE_CATEGORY_MAPPING
-			$normalized_neve_tier = isset( License::NEVE_CATEGORY_MAPPING[ $neve_plan ] ) ? License::NEVE_CATEGORY_MAPPING[ $neve_plan ] : -1;
-			return in_array( $normalized_neve_tier, array( 2, 3 ), true );
+		if ( -1 !== $neve_plan ) {
+			return in_array( $neve_plan, array( 2, 3 ), true );
 		}
 
 		if ( in_array( $raw_tier, array( 1, 2, 7, 12, 18 ), true ) ) {
