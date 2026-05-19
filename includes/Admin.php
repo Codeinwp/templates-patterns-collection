@@ -230,6 +230,7 @@ class Admin {
 		}
 
 		if ( -1 !== $neve_plan ) {
+			// Business and Agency plans map to TPC tiers 2 and 3.
 			return in_array( $neve_plan, array( 2, 3 ), true );
 		}
 

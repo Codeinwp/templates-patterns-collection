@@ -116,11 +116,11 @@ class TC_Disabled_Test extends \WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_free_license_does_not_show_business_agency_onboarding_promo_text() {
+	public function test_free_license_excludes_business_agency_onboarding_promo_text() {
 		$this->set_active_license_data(
 			array(
 				'key'  => 'free',
-				'tier' => 4,
+				'tier' => 0,
 			)
 		);
 		$this->set_active_neve_pro_addon();
