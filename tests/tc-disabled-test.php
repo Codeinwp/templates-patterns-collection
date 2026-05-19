@@ -293,6 +293,7 @@ class TC_Disabled_Test extends \WP_UnitTestCase {
 	 * @param string $method_name Method name.
 	 *
 	 * @return mixed
+	 * @throws ReflectionException When the method does not exist.
 	 */
 	private function invoke_admin_private_method( $method_name ) {
 		$method = new ReflectionMethod( $this->admin, $method_name );

@@ -68,8 +68,9 @@ test.describe('Onboarding', () => {
         await promoNotice.getByRole('button', { name: 'Dismiss notice' }).click();
 
         const request = await dismissRequest;
+        const response = await dismissResponse;
         expect(request.postData()).toContain('action=dismiss_onboarding_promo_notice');
-        await expect(dismissResponse).toBeOK();
+        expect(response.ok()).toBeTruthy();
 
         await expect(promoNotice).toBeHidden();
         await page.reload();
