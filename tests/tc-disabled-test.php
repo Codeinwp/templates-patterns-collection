@@ -22,7 +22,7 @@ class TC_Disabled_Test extends \WP_UnitTestCase {
 		$this->admin = new Admin();
 		$this->license = License::get_instance();
 		if ( ! defined( 'NEVE_PRO_BASEFILE' ) ) {
-			define( 'NEVE_PRO_BASEFILE', '/tmp/neve-pro-addon/neve-pro-addon.php' );
+			define( 'NEVE_PRO_BASEFILE', trailingslashit( sys_get_temp_dir() ) . 'neve-pro-addon/neve-pro-addon.php' );
 		}
 		$this->neve_pro_license_option = 'neve_pro_addon_license_data';
 	}
@@ -116,7 +116,7 @@ class TC_Disabled_Test extends \WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_free_license_uses_default_onboarding_promo_text() {
+	public function test_free_license_does_not_show_business_agency_onboarding_promo_text() {
 		$this->set_active_license_data(
 			array(
 				'key'  => 'free',
@@ -133,7 +133,7 @@ class TC_Disabled_Test extends \WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_personal_license_uses_default_onboarding_promo_text() {
+	public function test_personal_license_does_not_show_business_agency_onboarding_promo_text() {
 		$this->set_active_license_data(
 			array(
 				'key'  => 'personal-license',
@@ -184,7 +184,7 @@ class TC_Disabled_Test extends \WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_neve_personal_category_uses_default_onboarding_promo_text() {
+	public function test_neve_personal_category_does_not_show_business_agency_onboarding_promo_text() {
 		$this->set_active_license_data(
 			array(
 				'key'  => 'business-license',
