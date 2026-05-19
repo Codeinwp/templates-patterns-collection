@@ -2,7 +2,7 @@
 Contributors: themeisle
 Tags: starter sites, templates, block patterns, neve, gutenberg
 Requires at least: 5.5
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 5.6
 Stable tag: 1.2.28
 License: GPLv3
