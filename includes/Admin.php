@@ -230,7 +230,7 @@ class Admin {
 		}
 
 		if ( -1 !== $neve_plan ) {
-			// The normalized Neve plan uses TPC tiers, where Business and Agency are 2 and 3.
+			// The normalized Neve plan uses mapped TPC tiers, where Business and Agency are 2 and 3.
 			return in_array( $neve_plan, array( 2, 3 ), true );
 		}
 
