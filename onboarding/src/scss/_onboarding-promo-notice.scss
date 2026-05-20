@@ -1,0 +1,105 @@
+.ob-onboarding-promo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: $primary;
+  border-radius: 16px;
+  padding: 18px 24px;
+  margin: 32px 0;
+}
+
+.ob-onboarding-promo-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: $inverted-text;
+  border-radius: 10px;
+  padding: 8px 14px;
+  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+.ob-onboarding-promo-content {
+  flex: 1;
+
+  h3 {
+    margin: 0 0 6px;
+    color: $inverted-text;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 400;
+  }
+
+  .ob-onboarding-promo-link {
+    color: $inverted-text;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+}
+
+.ob-onboarding-promo-close {
+  border: 0;
+  background: rgba(255, 255, 255, 0.2);
+  color: $inverted-text;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+@media (max-width: #{$laptop}) {
+  .ob-onboarding-promo {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .ob-onboarding-promo-badge {
+    font-size: 12px;
+    line-height: 18px;
+    padding: 6px 10px;
+  }
+
+  .ob-onboarding-promo-content {
+    h3 {
+      font-size: 18px;
+      line-height: 28px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 22px;
+    }
+  }
+
+  .ob-onboarding-promo-close {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: #{$tablet}) {
+  .ob-onboarding-promo {
+    flex-wrap: wrap;
+  }
+
+  .ob-onboarding-promo-close {
+    margin-left: auto;
+  }
+}

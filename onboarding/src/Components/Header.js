@@ -17,7 +17,10 @@ const Header = ( { handleLogoClick, importing, step, trackingId } ) => {
 			step_id: step,
 			step_status: 'exit',
 		};
-		const site = tiobDash.onboarding.homeUrl || '';
+		const adminUrl =
+			tiobDash.onboarding?.adminUrl ||
+			tiobDash.adminUrl ||
+			( tiobDash.onboarding.homeUrl || '' ) + '/wp-admin/';
 
 		const trackingPromise = track( trackingId, data );
 
@@ -36,7 +39,7 @@ const Header = ( { handleLogoClick, importing, step, trackingId } ) => {
 				console.error( error );
 			} )
 			.finally( () => {
-				window.location.href = site + '/wp-admin';
+				window.location.href = adminUrl;
 			} );
 	};
 

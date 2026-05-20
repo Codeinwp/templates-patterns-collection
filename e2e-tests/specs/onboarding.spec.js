@@ -44,6 +44,39 @@ test.describe('Onboarding', () => {
         await expect(firstListedSiteCard.locator('.ss-title')).not.toBeEmpty();
     });
 
+    test('Onboarding promo notice can be dismissed and stays hidden after reload', async ({ page, admin }) => {
+        await admin.visitAdminPage(ONBOARDING_URL);
+
+        const promoNotice = page.locator('.ob-onboarding-promo');
+        await expect(promoNotice).toBeVisible();
+
+        const dismissRequest = page.waitForRequest((request) => {
+            return (
+                request.url().includes('admin-ajax.php') &&
+                request.method() === 'POST' &&
+                request.postData()?.includes('action=dismiss_onboarding_promo_notice')
+            );
+        });
+        const dismissResponse = page.waitForResponse((response) => {
+            return (
+                response.url().includes('admin-ajax.php') &&
+                response.request().method() === 'POST' &&
+                response.request().postData()?.includes('action=dismiss_onboarding_promo_notice')
+            );
+        });
+
+        await promoNotice.getByRole('button', { name: 'Dismiss notice' }).click();
+
+        const request = await dismissRequest;
+        const response = await dismissResponse;
+        expect(request.postData()).toContain('action=dismiss_onboarding_promo_notice');
+        expect(response.ok()).toBeTruthy();
+
+        await expect(promoNotice).toBeHidden();
+        await page.reload();
+        await expect(promoNotice).toBeHidden();
+    });
+
     test('Site Import Customization Rendering', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
 
