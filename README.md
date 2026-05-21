@@ -2,9 +2,9 @@
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** starter sites, templates, block patterns, neve, gutenberg  
 **Requires at least:** 5.5  
-**Tested up to:** 6.9  
+**Tested up to:** 7.0  
 **Requires PHP:** 5.6  
-**Stable tag:** 1.2.28  
+**Stable tag:** 1.2.29  
 **License:** GPLv3  
 **License URI:** https://www.gnu.org/licenses/gpl-3.0.en.html  
 
@@ -30,10 +30,11 @@ Yes, you can choose to import either one template or the entire starter site.
 
 ## Changelog ##
 
-##### [Version 1.2.28](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.27...v1.2.28) (2026-05-07)
+##### [Version 1.2.29](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.28...v1.2.29) (2026-05-21)
 
-- Source font pairings from the website on demo import
-- Update dependencies
+- Updated dependencies
+- Enhanced the onboarding experience.
+- Added 100+ new starter sites.
 
 
 
