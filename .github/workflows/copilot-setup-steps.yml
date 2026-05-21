@@ -44,4 +44,5 @@ jobs:
           cd e2e-tests
           npm install --frozen-lockfile
       - name: Start the wp-env environment
+        working-directory: e2e-tests
         run: npm run wp-env start
