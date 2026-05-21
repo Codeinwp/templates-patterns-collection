@@ -1,3 +1,9 @@
+##### [Version 1.2.29](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.28...v1.2.29) (2026-05-21)
+
+- Updated dependencies
+- Enhanced the onboarding experience.
+- Added 100+ new starter sites.
+
 ##### [Version 1.2.28](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.27...v1.2.28) (2026-05-07)
 
 - Source font pairings from the website on demo import

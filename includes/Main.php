@@ -18,7 +18,7 @@ class Main {
 	 *
 	 * @var string Version string.
 	 */
-	const VERSION = '1.2.28';
+	const VERSION = '1.2.29';
 	/**
 	 * Sites Library API URL.
 	 *
