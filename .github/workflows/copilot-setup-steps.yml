@@ -1,0 +1,47 @@
+name: "Copilot Setup Steps"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    # You can define any steps you want, and they will run before the agent starts.
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: "npm"
+      - name: Install NPM deps
+        run: |
+          yarn install --frozen-lockfile
+      - name: Install Playwright
+        run: |
+          npm install -g playwright-cli
+          npx playwright install --with-deps chromium
+      - name: Setup PHP with tools
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          extensions: xdebug, intl, mbstring, curl, gd
+          tools: php-cs-fixer, phpunit, wp-cli, phpcs, mago, phpstan
+      - name: Install composer deps
+        run: composer install --no-progress
+      - name: Run the build
+        run: yarn run build
+      - name: Install NPM in ./e2e-tests
+        run: |
+          cd e2e-tests
+          npm install --frozen-lockfile
+      - name: Start the wp-env environment
+        run: npm run wp-env start

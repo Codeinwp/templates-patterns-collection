@@ -50,26 +50,28 @@ test.describe('Onboarding', () => {
         const promoNotice = page.locator('.ob-onboarding-promo');
         await expect(promoNotice).toBeVisible();
 
-        const dismissRequest = page.waitForRequest((request) => {
-            return (
-                request.url().includes('admin-ajax.php') &&
-                request.method() === 'POST' &&
-                request.postData()?.includes('action=dismiss_onboarding_promo_notice')
+        // The client sends the dismiss action via FormData, which fetch encodes as
+        // multipart/form-data. Inspect the raw body bytes so the predicate works
+        // regardless of whether the encoding is multipart or url-encoded.
+        const isDismissCall = (request) =>
+            request.url().includes('admin-ajax.php') &&
+            request.method() === 'POST' &&
+            (request.postDataBuffer()?.toString('utf8') ?? '').includes(
+                'dismiss_onboarding_promo_notice'
             );
-        });
-        const dismissResponse = page.waitForResponse((response) => {
-            return (
-                response.url().includes('admin-ajax.php') &&
-                response.request().method() === 'POST' &&
-                response.request().postData()?.includes('action=dismiss_onboarding_promo_notice')
-            );
-        });
+
+        const dismissRequest = page.waitForRequest(isDismissCall);
+        const dismissResponse = page.waitForResponse((response) =>
+            isDismissCall(response.request())
+        );
 
         await promoNotice.getByRole('button', { name: 'Dismiss notice' }).click();
 
         const request = await dismissRequest;
         const response = await dismissResponse;
-        expect(request.postData()).toContain('action=dismiss_onboarding_promo_notice');
+        expect(request.postDataBuffer()?.toString('utf8')).toContain(
+            'dismiss_onboarding_promo_notice'
+        );
         expect(response.ok()).toBeTruthy();
 
         await expect(promoNotice).toBeHidden();
