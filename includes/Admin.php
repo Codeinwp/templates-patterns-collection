@@ -24,9 +24,10 @@ class Admin {
 	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
 	const FEEDBACK_DISMISSED_OPT       = 'tiob_feedback_dismiss';
 
-	const TC_REMOVED_KEY          = 'tiob_tc_removed';
-	const TC_NEW_NOTICE_DISMISSED = 'tiob_new_tc_notice_dismissed';
-	const VISITED_LIBRARY_OPT     = 'tiob_library_visited';
+	const TC_REMOVED_KEY                    = 'tiob_tc_removed';
+	const TC_NEW_NOTICE_DISMISSED           = 'tiob_new_tc_notice_dismissed';
+	const ONBOARDING_PROMO_NOTICE_DISMISSED = 'tiob_onboarding_promo_notice_dismissed';
+	const VISITED_LIBRARY_OPT               = 'tiob_library_visited';
 
 	/**
 	 * Admin page slug
@@ -88,6 +89,7 @@ class Admin {
 		add_action( 'wp_ajax_tpc_get_logs', array( $this, 'external_get_logs' ) );
 
 		add_action( 'wp_ajax_dismiss_new_tc_notice', array( $this, 'dismiss_new_tc_notice' ) );
+		add_action( 'wp_ajax_dismiss_onboarding_promo_notice', array( $this, 'dismiss_onboarding_promo_notice' ) );
 
 		$this->register_feedback_settings();
 
@@ -159,6 +161,84 @@ class Admin {
 
 		update_option( self::TC_NEW_NOTICE_DISMISSED, 'yes' );
 		$this->ensure_ajax_response( $response );
+	}
+
+	/**
+	 * Dismiss onboarding promo notice.
+	 *
+	 * @return void
+	 */
+	public function dismiss_onboarding_promo_notice() {
+		$response = array(
+			'success' => false,
+			'code'    => 'ti__ob_not_allowed',
+			'message' => 'Not allowed!',
+		);
+
+		if ( ! isset( $_REQUEST['nonce'] ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		$nonce = sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) );
+
+		if ( ! wp_verify_nonce( $nonce, 'dismiss_onboarding_promo_notice' ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			$this->ensure_ajax_response( $response );
+			return;
+		}
+
+		$response['success'] = true;
+		unset( $response['code'] );
+		unset( $response['message'] );
+
+		update_option( self::ONBOARDING_PROMO_NOTICE_DISMISSED, 'yes' );
+		$this->ensure_ajax_response( $response );
+	}
+
+	/**
+	 * Decide if the onboarding promo notice should be shown.
+	 *
+	 * @return bool
+	 */
+	private function should_show_onboarding_promo_notice() {
+		return get_option( self::ONBOARDING_PROMO_NOTICE_DISMISSED, 'no' ) !== 'yes';
+	}
+
+	/**
+	 * Decide if the business/agency variant of the onboarding promo text should be shown.
+	 *
+	 * @return bool
+	 */
+	private function should_show_business_agency_promo_text() {
+		$license_data = License::get_license_data();
+		$license_key  = isset( $license_data->key ) ? strtolower( trim( (string) $license_data->key ) ) : '';
+		$license_tier = License::get_license_tier( 0 );
+		$raw_tier     = isset( $license_data->tier ) ? absint( $license_data->tier ) : 0;
+		$neve_plan    = $this->neve_license_plan();
+
+		if ( $license_key === '' || $license_key === 'free' ) {
+			return false;
+		}
+
+		if ( ! License::has_active_license() || ! $this->has_valid_addons() ) {
+			return false;
+		}
+
+		if ( -1 !== $neve_plan ) {
+			// The normalized Neve plan uses mapped TPC tiers, where Business and Agency are 2 and 3.
+			return in_array( $neve_plan, array( 2, 3 ), true );
+		}
+
+		if ( in_array( $raw_tier, array( 1, 2, 7, 12, 18 ), true ) ) {
+			return false;
+		}
+
+		return in_array( $license_tier, array( 2, 3 ), true );
 	}
 
 
@@ -789,6 +869,7 @@ class Admin {
 			),
 			'cleanupAllowed'                => ( ! empty( get_transient( Active_State::STATE_NAME ) ) ) ? 'yes' : 'no',
 			'onboarding'                    => array(),
+			'adminUrl'                      => admin_url(),
 			'hasFileSystem'                 => WP_Filesystem(),
 			'themesURL'                     => admin_url( 'themes.php' ),
 			'themeAction'                   => $this->get_theme_action(),
@@ -804,6 +885,7 @@ class Admin {
 			'upsellNotifications'           => $this->get_upsell_notifications(),
 			'isValidLicense'                => $this->has_valid_addons(),
 			'licenseTIOB'                   => License::get_license_data(),
+			'onboardingShowProNoticeText'   => $this->should_show_business_agency_promo_text(),
 			'emailSubscribe'                => array(
 				'ajaxURL'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'      => wp_create_nonce( 'skip_subscribe_nonce' ),
@@ -854,6 +936,11 @@ class Admin {
 				'show'    => get_option( self::TC_NEW_NOTICE_DISMISSED, 'no' ) !== 'yes' && self::has_legacy_template_cloud(),
 				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'   => wp_create_nonce( 'dismiss_new_tc_notice' ),
+			),
+			'onboardingPromoNotice'         => array(
+				'show'    => $this->should_show_onboarding_promo_notice(),
+				'ajaxURL' => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'nonce'   => wp_create_nonce( 'dismiss_onboarding_promo_notice' ),
 			),
 			'onboardingPluginCompatibility' => array(
 				'hyve-lite' => is_php_version_compatible( '8.1' ),

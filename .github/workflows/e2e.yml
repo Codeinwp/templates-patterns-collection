@@ -14,11 +14,11 @@ jobs:
     name: E2E Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 20
           cache: "yarn"
       - name: Build
         run: |
@@ -26,15 +26,15 @@ jobs:
           composer install --no-dev --prefer-dist --no-progress --no-suggest
           yarn run build
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 22
           cache: "npm"
       - name: Run E2E
         run: npm run ci:e2e
       - name: Upload artifacts on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: e2e-artifacts
           path: ./artifacts
