@@ -182,7 +182,7 @@ class Starter_Ranking {
 		// stays within budget rather than start-time + budget.
 		$deadline = time() + ( null !== $budget ? (int) $budget : self::REQUEST_BUDGET );
 		$start    = self::base_url() . '/api/workflows/' . self::SLUG . '/start';
-		$body  = array(
+		$body     = array(
 			'site_url' => home_url(),
 			'builder'  => $builder,
 		);
