@@ -46,7 +46,7 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 			);
 		}
 
-		// Search: the genuine matches (instant Fuse + LLM fill) come first; then the
+		// Search: the genuine matches (LLM semantic ranking) come first; then the
 		// REST of the (category-respecting) catalog below a "browse more" divider —
 		// no silent padding with look-alike filler, and the rest always fills the grid.
 		// `matchCount` tells the render where to drop the divider.
@@ -218,10 +218,11 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 	};
 	
 	/**
-	 * Filters an array of items based on a search query using Fuse.js for fuzzy searching.
+	 * Filters items by the active search query — the LLM semantic ranking (searchOrder),
+	 * in the model's relevance order. No client-side fuzzy pass.
 	 *
-	 * @param {Site[]} items Array of objects containing title, slug, and keywords properties to search through
-	 * @return {Site[]} Filtered array of items that match the search query, or the original array if no query
+	 * @param {Site[]} items The sites to filter.
+	 * @return {Site[]} The LLM-matched sites (empty until the LLM responds), or the input when no query.
 	 */
 	const filterBySearch = ( items ) => {
 		if ( ! searchQuery ) {
@@ -259,7 +260,7 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 
 	const getBuilders = () => Object.keys( sites );
 
-	// Memoize the full pipeline (Fuse search + slug Maps + sorts) so it doesn't
+	// Memoize the full pipeline (search + slug Maps + sorts) so it doesn't
 	// rebuild on every render — notably `maxShown` changes while scrolling, which
 	// only drive the .slice() below, not the filtering/ranking.
 	const { list: allData, matchCount } = useMemo(
