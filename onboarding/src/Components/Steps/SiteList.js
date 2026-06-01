@@ -14,7 +14,6 @@ import EditorSelector from '../EditorSelector';
 import OnboardingPromoNotice from '../OnboardingPromoNotice';
 import SVG from '../../utils/svg';
 import { get, track } from '../../utils/rest';
-import { countStrongMatches, matchesCategory } from '../../utils/search';
 
 const { onboarding } = tiobDash;
 
@@ -27,12 +26,10 @@ const SiteList = ( {
 	setShowToast,
 	editor,
 	searchQuery,
-	category,
 	trackingId,
 	setTrackingId,
 	setRankedOrder,
 	setSearchOrder,
-	sitesData,
 } ) => {
 	const [ personalizing, setPersonalizing ] = useState( false );
 	const [ searching, setSearching ] = useState( false );
@@ -138,9 +135,9 @@ const SiteList = ( {
 		};
 	}, [ editor ] );
 
-	// LLM semantic search (debounced) for natural-language / intent queries,
-	// layered over the instant client-side Fuse search. Fail-open: errors or
-	// short queries leave only the Fuse results.
+	// LLM-first semantic search (debounced): the server-side ranking IS the match
+	// set for a >= 3-char query — there is no client-side Fuse pass. Fail-open:
+	// errors / short queries leave it empty (the grid shows the browse order).
 	useEffect( () => {
 		if ( ! editor || ! onboarding || ! onboarding.root ) {
 			return undefined;
@@ -163,18 +160,6 @@ const SiteList = ( {
 		};
 		const timer = setTimeout( () => {
 			if ( ! active ) {
-				return;
-			}
-			// Fuse-first: only call the (slower, paid) LLM to "personalize the rest"
-			// when Fuse doesn't already cover the query with >= 9 strongly-relevant
-			// (is-a) matches IN THE ACTIVE CATEGORY — matching what the user sees.
-			const builderItems = Object.values(
-				( sitesData && sitesData.sites && sitesData.sites[ editor ] ) ||
-					{}
-			).filter( ( site ) => matchesCategory( site, category ) );
-			if ( countStrongMatches( builderItems, q ) >= 9 ) {
-				// Fuse already covers it — clear any lingering loader and skip the LLM.
-				setSearching( false );
 				return;
 			}
 			setSearching( true );
@@ -203,7 +188,7 @@ const SiteList = ( {
 			clearTimeout( timer );
 			clearTimeout( safety );
 		};
-	}, [ searchQuery, editor, category ] );
+	}, [ searchQuery, editor ] );
 
 	return (
 		<div className="ob-container">
@@ -262,9 +247,7 @@ export default compose(
 	withSelect( ( select ) => ( {
 		editor: select( 'ti-onboarding' ).getCurrentEditor(),
 		searchQuery: select( 'ti-onboarding' ).getSearchQuery(),
-		category: select( 'ti-onboarding' ).getCurrentCategory(),
 		trackingId: select( 'ti-onboarding' ).getTrackingId(),
-		sitesData: select( 'ti-onboarding' ).getSites(),
 	} ) ),
 	withDispatch( ( dispatch ) => {
 		const { setTrackingId, setRankedOrder, setSearchOrder } =

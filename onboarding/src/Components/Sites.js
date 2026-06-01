@@ -3,7 +3,7 @@ import { withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import StarterSiteCard from './StarterSiteCard';
 import VizSensor from 'react-visibility-sensor';
-import { searchCatalog, matchesCategory } from '../utils/search';
+import { matchesCategory } from '../utils/search';
 
 /**
  * @typedef {Object} Site
@@ -228,30 +228,12 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 			return items;
 		}
 
-		const llmPicks =
-			Array.isArray( searchOrder ) && searchOrder.length
-				? pickBySlugs( items, searchOrder ).picked
-				: [];
-
-		// Hybrid: instant Fuse (lexical) matches first; then APPEND the LLM's
-		// semantic-only finds that Fuse missed — the "personalize the rest" fill.
-		const fuzzy = sortByKeywords(
-			searchQuery,
-			searchCatalog( items, searchQuery )
-		);
-		if ( llmPicks.length ) {
-			const inFuzzy = {};
-			fuzzy.forEach( ( site ) => {
-				if ( site && site.slug ) {
-					inFuzzy[ site.slug ] = true;
-				}
-			} );
-			const llmFill = llmPicks.filter(
-				( site ) => site && site.slug && ! inFuzzy[ site.slug ]
-			);
-			return [ ...fuzzy, ...llmFill ];
-		}
-		return fuzzy;
+		// LLM-first: matches are the server-side semantic ranking (/starter_search),
+		// in the model's relevance order. Empty until the LLM responds (the grid shows
+		// the "searching" loader meanwhile); fail-open leaves it empty on error.
+		return Array.isArray( searchOrder ) && searchOrder.length
+			? pickBySlugs( items, searchOrder ).picked
+			: [];
 	};
 
 	/**
