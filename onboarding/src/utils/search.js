@@ -1,19 +1,13 @@
 import Fuse from 'fuse.js/dist/fuse.min';
 
-// TEST TOGGLE — when false, free-text search SKIPS the instant client-side Fuse
-// pass and relies on the LLM (/starter_search) alone (viable now that ranking is
-// ~1s). Set back to true to restore the Fuse-first instant hybrid.
-export const SEARCH_USE_FUSE = false;
-
 /**
  * Client-side fuzzy search keys.
  *
- * The enriched vocabulary (niches, site type, features, sections, description
- * terms) is folded into each site's `keywords` array upstream (by the catalog
- * sync / local tag-inject), so search just reads a few fields. `title`,
- * `category` and `slug` carry the site's identity and are weighted ABOVE
- * `keywords`, so a site that genuinely IS a shop/blog (the word is in its
- * title/slug/category) ranks above one that merely mentions it in keywords.
+ * The AI-enriched is-a vocabulary (niches + site type) is folded into each site's
+ * `keywords` (the catalog's keywords column), so search reads `title / category /
+ * slug / keywords`. `title`, `category` and `slug` carry the site's identity and
+ * are weighted ABOVE `keywords`, so a site that genuinely IS a shop/blog (the word
+ * is in its title/slug/category) ranks above one that merely mentions it in keywords.
  */
 const SEARCH_KEYS = [
 	{ name: 'title', weight: 0.5 },

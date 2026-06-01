@@ -14,7 +14,7 @@ import EditorSelector from '../EditorSelector';
 import OnboardingPromoNotice from '../OnboardingPromoNotice';
 import SVG from '../../utils/svg';
 import { get, track } from '../../utils/rest';
-import { countStrongMatches, matchesCategory, SEARCH_USE_FUSE } from '../../utils/search';
+import { countStrongMatches, matchesCategory } from '../../utils/search';
 
 const { onboarding } = tiobDash;
 
@@ -172,7 +172,7 @@ const SiteList = ( {
 				( sitesData && sitesData.sites && sitesData.sites[ editor ] ) ||
 					{}
 			).filter( ( site ) => matchesCategory( site, category ) );
-			if ( SEARCH_USE_FUSE && countStrongMatches( builderItems, q ) >= 9 ) {
+			if ( countStrongMatches( builderItems, q ) >= 9 ) {
 				// Fuse already covers it — clear any lingering loader and skip the LLM.
 				setSearching( false );
 				return;

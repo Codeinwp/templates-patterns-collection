@@ -3,7 +3,7 @@ import { withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import StarterSiteCard from './StarterSiteCard';
 import VizSensor from 'react-visibility-sensor';
-import { searchCatalog, matchesCategory, SEARCH_USE_FUSE } from '../utils/search';
+import { searchCatalog, matchesCategory } from '../utils/search';
 
 /**
  * @typedef {Object} Site
@@ -233,13 +233,7 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 				? pickBySlugs( items, searchOrder ).picked
 				: [];
 
-		// Pure-LLM search (SEARCH_USE_FUSE = false): the LLM's ranked picks ARE the
-		// matches — no instant client-side Fuse pass.
-		if ( ! SEARCH_USE_FUSE ) {
-			return llmPicks;
-		}
-
-		// Hybrid: Fuse (instant lexical) matches first; then APPEND the LLM's
+		// Hybrid: instant Fuse (lexical) matches first; then APPEND the LLM's
 		// semantic-only finds that Fuse missed — the "personalize the rest" fill.
 		const fuzzy = sortByKeywords(
 			searchQuery,
