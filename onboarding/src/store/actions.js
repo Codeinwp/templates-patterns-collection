@@ -71,4 +71,22 @@ export default {
 			payload: { refresh },
 		};
 	},
+	setRankedOrder( editor, order ) {
+		return {
+			type: 'SET_RANKED_ORDER',
+			payload: { editor, order },
+		};
+	},
+	setSearchOrder( order ) {
+		return {
+			type: 'SET_SEARCH_ORDER',
+			payload: { order },
+		};
+	},
+	setSortBy( sortBy ) {
+		return {
+			type: 'SET_SORT_BY',
+			payload: { sortBy },
+		};
+	},
 };

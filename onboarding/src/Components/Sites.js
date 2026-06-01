@@ -1,9 +1,9 @@
-import { useState } from '@wordpress/element';
+import { useState, useMemo, useEffect, Fragment } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import StarterSiteCard from './StarterSiteCard';
 import VizSensor from 'react-visibility-sensor';
-import Fuse from 'fuse.js/dist/fuse.min';
+import { searchCatalog, matchesCategory, SEARCH_USE_FUSE } from '../utils/search';
 
 /**
  * @typedef {Object} Site
@@ -17,54 +17,72 @@ import Fuse from 'fuse.js/dist/fuse.min';
  */
 
 
-const MINIMUM_SITES_LISTING = 10;
-
-const Sites = ( { getSites, editor, category, searchQuery } ) => {
+const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOrder, sortBy } ) => {
 	const [ maxShown, setMaxShown ] = useState( 9 );
 	const { sites = {} } = getSites;
+
+	// Reset the lazy-load window when the result set changes, so a larger cap from a
+	// previous list doesn't carry into a new search / category / sort / editor.
+	useEffect( () => {
+		setMaxShown( 9 );
+	}, [ editor, category, searchQuery, sortBy ] );
 
 	const getFilteredSites = () => {
 		const allSites = getAllSites();
 		if ( Object.keys( allSites ).length === 0 ) {
-			return [];
+			return { list: [], matchCount: 0 };
 		}
 
 		/** @type {Site[]} */
-		let builderSites = allSites[ editor ];
-		const sitesBySearch = filterBySearch( builderSites );
-		builderSites = filterByCategory( sitesBySearch, category );
-
-		if ( MINIMUM_SITES_LISTING > builderSites.length ) {
-			// Populate with sites related to search.
-			for (const site of sitesBySearch) {
-				if (builderSites.length >= MINIMUM_SITES_LISTING) {
-					break;
-				}
-				if (builderSites.find(existing => existing.slug === site.slug)) {
-					continue;
-				}
-				if (site?.upsell && 'free' === category) {
-					continue;
-				}
-				builderSites.push(site);
-			}
-			
-			// Get the top recommendation if we still do not meed the minimum.
-			for (const site of allSites[editor]) {
-				if (builderSites.length >= MINIMUM_SITES_LISTING) {
-					break;
-				}
-				if (builderSites.find(existing => existing.slug === site.slug)) {
-					continue;
-				}
-				if (site?.upsell && 'free' === category) {
-					continue;
-				}
-				builderSites.push(site);
-			}
+		const fullBucket = allSites[ editor ] || [];
+		// Personalize with the AI-inferred order in the default "Recommended" sort
+		// (or while searching — relevance wins). Explicit Popular/New opts out and is
+		// applied below via applySort.
+		let ranked = fullBucket;
+		if ( searchQuery || ! sortBy || sortBy === 'recommended' ) {
+			ranked = applyRanking(
+				fullBucket,
+				rankedOrder && rankedOrder[ editor ]
+			);
 		}
-		
-		return builderSites;
+
+		// Search: the genuine matches (instant Fuse + LLM fill) come first; then the
+		// REST of the (category-respecting) catalog below a "browse more" divider —
+		// no silent padding with look-alike filler, and the rest always fills the grid.
+		// `matchCount` tells the render where to drop the divider.
+		if ( searchQuery ) {
+			const matches = filterByCategory( filterBySearch( ranked ), category );
+			const inMatches = {};
+			matches.forEach( ( site ) => {
+				if ( site && site.slug ) {
+					inMatches[ site.slug ] = true;
+				}
+			} );
+			const rest = filterByCategory( ranked, category ).filter(
+				( site ) => site && site.slug && ! inMatches[ site.slug ]
+			);
+			// Pad the matches up to a full grid row (multiple of 3) using the top of
+			// the rest, so the divider lands on a clean row boundary instead of leaving
+			// a half-empty row. The list stays matches+rest — we just push the divider
+			// down by the pad count (those pad items are the most-relevant non-matches).
+			const remainder = matches.length % 3;
+			const pad =
+				remainder === 0 ? 0 : Math.min( 3 - remainder, rest.length );
+			return {
+				list: [ ...matches, ...rest ],
+				matchCount: matches.length + pad,
+			};
+		}
+
+		// Browse: the personalized (or explicitly Popular/New sorted) catalog for the
+		// active category. No min-fill — 'all' shows the whole catalog; a specific
+		// category shows its members (a thin category honestly shows fewer cards
+		// rather than padding with unrelated sites).
+		let builderSites = filterByCategory( ranked, category );
+		if ( sortBy === 'popular' || sortBy === 'new' ) {
+			builderSites = applySort( builderSites, sortBy, fullBucket );
+		}
+		return { list: builderSites, matchCount: 0 };
 	};
 	
 	const getAllSites = () => {
@@ -73,10 +91,91 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 
 		builders.forEach( ( builder ) => {
 			const sitesData = sites && sites[ builder ] ? sites[ builder ] : {};
-			finalData[ builder ] = [ ...Object.values( sitesData ) ];
+			// Guarantee a `slug` field on every entry from the catalog key. PHP
+			// already injects one (Admin.php get_sites_data), so this is defensive —
+			// it keeps slug-based ranking/search/dedup correct regardless of source,
+			// and is output-equivalent to Object.values when the field is present.
+			finalData[ builder ] = Object.entries( sitesData ).map(
+				( [ slug, site ] ) => ( { ...site, slug } )
+			);
 		} );
 
 		return finalData;
+	};
+
+	/**
+	 * Pick the sites whose slug appears in `slugs`, in that order, deduped.
+	 *
+	 * @param {Site[]}   siteList The sites to pick from.
+	 * @param {string[]} slugs    Ordered slugs.
+	 * @return {{ picked: Site[], placed: Object }} Matched sites + a set of their slugs.
+	 */
+	const pickBySlugs = ( siteList, slugs ) => {
+		const bySlug = {};
+		siteList.forEach( ( site ) => {
+			if ( site && site.slug ) {
+				bySlug[ site.slug ] = site;
+			}
+		} );
+		const picked = [];
+		const placed = {};
+		( slugs || [] ).forEach( ( slug ) => {
+			if ( bySlug[ slug ] && ! placed[ slug ] ) {
+				picked.push( bySlug[ slug ] );
+				placed[ slug ] = true;
+			}
+		} );
+		return { picked, placed };
+	};
+
+	/**
+	 * Reorder sites by the AI-inferred order (matching slugs first, in that order;
+	 * the rest keep their original position). No order → unchanged.
+	 *
+	 * @param {Site[]}   sitesToRank The sites to reorder.
+	 * @param {string[]} order       Ordered slugs from the AI proxy.
+	 * @return {Site[]} Reordered sites.
+	 */
+	const applyRanking = ( sitesToRank, order ) => {
+		if ( ! Array.isArray( order ) || order.length === 0 ) {
+			return sitesToRank;
+		}
+		const { picked, placed } = pickBySlugs( sitesToRank, order );
+		sitesToRank.forEach( ( site ) => {
+			if ( site && ( ! site.slug || ! placed[ site.slug ] ) ) {
+				picked.push( site );
+			}
+		} );
+		return picked;
+	};
+
+	/**
+	 * Apply an explicit sort to the grid, overriding personalization.
+	 *  - 'popular': the curated catalog (Google Sheet) order — NOT the AI order.
+	 *  - 'new':     new sites first, then curated order (ties broken by row position).
+	 * `fullList` is the unfiltered builder bucket, so the curated row index reflects
+	 * the true sheet position even after filtering. Sorts a copy (no mutation).
+	 *
+	 * @param {Site[]} list     The (possibly filtered) sites to order.
+	 * @param {string} mode     'popular' or 'new'.
+	 * @param {Site[]} fullList The full builder bucket, in curated sheet order.
+	 * @return {Site[]} The sorted sites.
+	 */
+	const applySort = ( list, mode, fullList ) => {
+		const rowIndex = new Map(
+			fullList.map( ( site, i ) => [ site.slug, i ] )
+		);
+		// Unknown slugs sort to the tail (0 is the legitimate top/most-popular row).
+		const byRow = ( a, b ) =>
+			( rowIndex.get( a.slug ) ?? Number.MAX_SAFE_INTEGER ) -
+			( rowIndex.get( b.slug ) ?? Number.MAX_SAFE_INTEGER );
+		if ( mode === 'new' ) {
+			return [ ...list ].sort(
+				( a, b ) =>
+					( b.isNew ? 1 : 0 ) - ( a.isNew ? 1 : 0 ) || byRow( a, b )
+			);
+		}
+		return [ ...list ].sort( byRow );
 	};
 
 	/**
@@ -90,8 +189,16 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 	const sortByKeywords = (keyword, sitesToSort) => {
 		const _keyword = keyword?.toLowerCase();
 		return sitesToSort.sort((a, b) => {
-			if (!Array.isArray(a?.keywords) || !Array.isArray(b?.keywords)) {
+			const aHasKw = Array.isArray( a?.keywords );
+			const bHasKw = Array.isArray( b?.keywords );
+			if ( ! aHasKw && ! bHasKw ) {
 				return 0;
+			}
+			if ( ! aHasKw ) {
+				return 1; // keyword-less sinks to the tail (keeps the comparator transitive)
+			}
+			if ( ! bHasKw ) {
+				return -1;
 			}
 
 			const aHasKeyword = a.keywords.includes(_keyword);
@@ -120,31 +227,37 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 		if ( ! searchQuery ) {
 			return items;
 		}
-		
-		const fuse = new Fuse(items, {
-			includeScore: true,
-			keys: [
-				{
-					name: 'title',
-					weight: 0.5
-				},
-				{
-					name: 'slug',
-					weight: 0.1
-				},
-				{
-					name: 'keywords',
-					weight: 0.4,
+
+		const llmPicks =
+			Array.isArray( searchOrder ) && searchOrder.length
+				? pickBySlugs( items, searchOrder ).picked
+				: [];
+
+		// Pure-LLM search (SEARCH_USE_FUSE = false): the LLM's ranked picks ARE the
+		// matches — no instant client-side Fuse pass.
+		if ( ! SEARCH_USE_FUSE ) {
+			return llmPicks;
+		}
+
+		// Hybrid: Fuse (instant lexical) matches first; then APPEND the LLM's
+		// semantic-only finds that Fuse missed — the "personalize the rest" fill.
+		const fuzzy = sortByKeywords(
+			searchQuery,
+			searchCatalog( items, searchQuery )
+		);
+		if ( llmPicks.length ) {
+			const inFuzzy = {};
+			fuzzy.forEach( ( site ) => {
+				if ( site && site.slug ) {
+					inFuzzy[ site.slug ] = true;
 				}
-			],
-			threshold: 0.4
-		});
-
-		const fuzzyResults = fuse.search(searchQuery)
-			.map(result => result.item)
-			.filter(Boolean);
-
-		return sortByKeywords( searchQuery, fuzzyResults );
+			} );
+			const llmFill = llmPicks.filter(
+				( site ) => site && site.slug && ! inFuzzy[ site.slug ]
+			);
+			return [ ...fuzzy, ...llmFill ];
+		}
+		return fuzzy;
 	};
 
 	/**
@@ -155,18 +268,14 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 	 */
 	const filterByCategory = ( items, cat ) => {
 		if ( 'free' === cat ) {
-			return items.filter( ( item ) => ! item.upsell );
+			return items.filter( ( item ) => matchesCategory( item, cat ) );
 		}
 
 		if ( cat && 'all' !== cat ) {
-			const filteredByCat = items.filter( ( item ) => {
-				if (!Array.isArray(item?.keywords)) {
-					return false;
-				}
-				const keywordIndex = item.keywords.findIndex(k => k === cat);
-				return keywordIndex !== -1;
-			});
-			return sortByKeywords( cat, filteredByCat ); 
+			const filteredByCat = items.filter( ( item ) =>
+				matchesCategory( item, cat )
+			);
+			return sortByKeywords( cat, filteredByCat );
 		}
 
 		return items;
@@ -174,26 +283,42 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 
 	const getBuilders = () => Object.keys( sites );
 
-	const allData = getFilteredSites();
+	// Memoize the full pipeline (Fuse search + slug Maps + sorts) so it doesn't
+	// rebuild on every render — notably `maxShown` changes while scrolling, which
+	// only drive the .slice() below, not the filtering/ranking.
+	const { list: allData, matchCount } = useMemo(
+		() => getFilteredSites(),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[ sites, editor, category, searchQuery, sortBy, rankedOrder, searchOrder ]
+	);
 	return (
 		<>
 			{ allData.length ? (
 				<div className="ob-sites is-grid">
-					{ allData.slice( 0, maxShown ).map( ( site, index ) => {
-						return (
-							<StarterSiteCard
-								key={ index }
-								data={ site }
-							/>
-						);
-					} ) }
+					{ allData.slice( 0, maxShown ).map( ( site, index ) => (
+						<Fragment key={ site.slug || index }>
+							{ searchQuery &&
+								matchCount > 0 &&
+								index === matchCount && (
+									<div className="ob-results-divider">
+										<span>
+											{ __(
+												'Not quite right? Browse more',
+												'templates-patterns-collection'
+											) }
+										</span>
+									</div>
+								) }
+							<StarterSiteCard data={ site } />
+						</Fragment>
+					) ) }
 
 					<VizSensor
 						onChange={ ( isVisible ) => {
 							if ( ! isVisible ) {
 								return false;
 							}
-							setMaxShown( maxShown + 9 );
+							setMaxShown( ( shown ) => shown + 9 );
 						} }
 					>
 						<span
@@ -225,12 +350,22 @@ const Sites = ( { getSites, editor, category, searchQuery } ) => {
 };
 
 export default withSelect( ( select ) => {
-	const { getCurrentEditor, getCurrentCategory, getSites, getSearchQuery } =
-		select( 'ti-onboarding' );
+	const {
+		getCurrentEditor,
+		getCurrentCategory,
+		getSites,
+		getSearchQuery,
+		getRankedOrder,
+		getSearchOrder,
+		getSortBy,
+	} = select( 'ti-onboarding' );
 	return {
 		editor: getCurrentEditor(),
 		category: getCurrentCategory(),
 		searchQuery: getSearchQuery(),
 		getSites: getSites(),
+		rankedOrder: getRankedOrder(),
+		searchOrder: getSearchOrder(),
+		sortBy: getSortBy(),
 	};
 } )( Sites );

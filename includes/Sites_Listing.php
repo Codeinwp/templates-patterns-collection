@@ -35,6 +35,8 @@ class Sites_Listing {
 	 * Initialize the Class.
 	 */
 	public function init() {
+		// Personalization is applied on the client (Sites.js applyRanking via the
+		// /starter_order fetch) — a single layer that also self-warms the cache.
 		$this->onboarding_config = array(
 			'remote'      => $this->get_sites(),
 			'upsell'      => array(),

@@ -34,14 +34,16 @@ const defaultSite = defaultSiteSlug ? findSiteBySlug( defaultSiteSlug ) : null;
 const initialState = {
 	sites: onboarding.sites || {},
 	editor: selectedEditor,
-	category: '',
+	// Land on "All" selected: the user now arrives directly on the grid (no Welcome
+	// step), and CategoryButtons only reveals the All/Free chips once a category is
+	// set, so an empty default would hide them and highlight nothing. ('all' and ''
+	// filter identically — matchesCategory treats both as "show everything".)
+	category: 'all',
 	currentSite: defaultSite,
 	fetching: false,
 	searchQuery: '',
 	license: initialLicense,
-	onboardingStep: defaultSite
-		? 3
-		: ( window.location.search.includes('show=welcome') ? 1 : 2 ),
+	onboardingStep: defaultSite ? 3 : 2,
 	userCustomSettings: {
 		siteName: null,
 		siteLogo: null,
@@ -51,6 +53,9 @@ const initialState = {
 	error: null,
 	trackingId: '',
 	refresh: false,
+	rankedOrder: {},
+	searchOrder: [],
+	sortBy: 'recommended',
 };
 
 export default ( state = initialState, action ) => {
@@ -72,6 +77,9 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				searchQuery: query,
+				// Clear the prior query's LLM boost synchronously so it can't rank
+				// the old query's matches into the new query's results for a frame.
+				searchOrder: [],
 			};
 		case 'SET_FOCUSED_SITE':
 			const { siteData } = action.payload;
@@ -115,6 +123,13 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				editor,
+				// "New first" only exists for Gutenberg; drop a stale 'new' sort when
+				// switching to a builder that doesn't offer it, so the Sort control,
+				// the store, and the grid order stay in agreement.
+				sortBy:
+					state.sortBy === 'new' && editor !== 'gutenberg'
+						? 'recommended'
+						: state.sortBy,
 			};
 		case 'SET_TRACKING_ID':
 			const { trackingId } = action.payload;
@@ -127,6 +142,27 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				refresh,
+			};
+		case 'SET_RANKED_ORDER':
+			const { editor: rankedEditor, order: rankedSlugs } = action.payload;
+			return {
+				...state,
+				rankedOrder: {
+					...state.rankedOrder,
+					[ rankedEditor ]: rankedSlugs,
+				},
+			};
+		case 'SET_SEARCH_ORDER':
+			const { order: searchSlugs } = action.payload;
+			return {
+				...state,
+				searchOrder: searchSlugs,
+			};
+		case 'SET_SORT_BY':
+			const { sortBy } = action.payload;
+			return {
+				...state,
+				sortBy,
 			};
 	}
 	return state;

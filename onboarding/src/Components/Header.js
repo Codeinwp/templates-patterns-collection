@@ -88,7 +88,9 @@ export default compose(
 		const { setOnboardingStep } = dispatch( 'ti-onboarding' );
 		return {
 			handleLogoClick: () => {
-				setOnboardingStep( 1 );
+				// Step 2 (the starter-site grid) is the landing screen now that the
+				// Welcome step is gone — step 1 no longer renders anything.
+				setOnboardingStep( 2 );
 			},
 		};
 	} )

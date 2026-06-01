@@ -138,6 +138,91 @@ class Rest_Server {
 				},
 			)
 		);
+
+		register_rest_route(
+			Main::API_ROOT,
+			'/starter_order',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_starter_order' ),
+				'args'                => array(
+					'builder' => array(
+						'type'     => 'string',
+						'required' => false,
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
+
+		register_rest_route(
+			Main::API_ROOT,
+			'/starter_search',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_starter_search' ),
+				'args'                => array(
+					'q'       => array(
+						'type'     => 'string',
+						'required' => true,
+					),
+					'builder' => array(
+						'type'     => 'string',
+						'required' => false,
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
+	}
+
+	/**
+	 * AI semantic search over the starter-site catalog. Returns matching slugs
+	 * (best first); empty `order` means no match (the client falls back to its
+	 * local fuzzy search). Called by the onboarding app's search box.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function get_starter_search( WP_REST_Request $request ) {
+		$builder = $request->get_param( 'builder' );
+		$builder = ( 'elementor' === $builder ) ? 'elementor' : 'gutenberg';
+		$query   = (string) $request->get_param( 'q' );
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'builder' => $builder,
+				'order'   => Starter_Ranking::search( $query, $builder ),
+			)
+		);
+	}
+
+	/**
+	 * Return the personalized starter-site order for a builder, inferred by the
+	 * AI proxy from this site's URL. Fail-open: an empty `order` means "keep the
+	 * current (sheet) order". Called by the onboarding app on load.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function get_starter_order( WP_REST_Request $request ) {
+		$builder = $request->get_param( 'builder' );
+		$builder = ( 'elementor' === $builder ) ? 'elementor' : 'gutenberg';
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'builder' => $builder,
+				'order'   => Starter_Ranking::get_order( $builder ),
+			)
+		);
 	}
 
 	public function run_cleanup() {

@@ -1,7 +1,6 @@
 import { Fragment, useState } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import Header from './Header';
-import Welcome from './Steps/Welcome';
 import SiteList from './Steps/SiteList';
 import CustomizeSite from './Steps/CustomizeSite';
 
@@ -23,7 +22,6 @@ const Onboarding = ( { step, themeData } ) => {
 	return (
 		<Fragment>
 			{ ! isPreviewStep && <Header importing={ importing } /> }
-			{ step === 1 && <Welcome /> }
 			{ step === 2 && (
 				<SiteList
 					showToast={ showToast }

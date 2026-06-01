@@ -1,7 +1,121 @@
-.ob-filters-container {
+.ob-filters {
+  margin: 36px 0 44px 0;
+}
+
+// Prominent search — its own row, wider + larger than the old inline field.
+.ob-search-row {
+  margin-bottom: 26px;
+
+  .ob-search-wrap {
+    max-width: 560px;
+
+    input.search-input {
+      width: 100%;
+      max-width: 560px;
+      font-size: 16px;
+      padding: 15px 18px 15px 50px;
+    }
+    .search-icon {
+      top: 16px;
+    }
+  }
+}
+
+// Category buttons (left) + sort control (right) on a single row.
+.ob-filters-bar {
   display: flex;
-  gap: 26px;
-  align-items: flex-start;
-  margin: 43px 0 48px 0;
+  align-items: center;
   flex-wrap: wrap;
+  gap: 16px;
+}
+
+// Short-query nudge: a quiet line under the search field.
+.ob-search-hint {
+  margin: 10px 0 0 4px;
+  font-size: 13px;
+  color: #757575;
+}
+
+// Sort control: a quiet pill at the right, not a heavy boxed <select>.
+.ob-sort-select {
+  margin-left: auto;
+  min-width: 150px;
+
+  .components-input-control__backdrop {
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+  .components-input-control__container {
+    background: $light-bg;
+    border-radius: 999px;
+  }
+  .components-select-control__input,
+  select {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: $main-text;
+    padding-left: 16px;
+  }
+}
+
+// Ranking/search loader — a small animated pill shown above the grid while the
+// AI order/search is in flight (auto-hidden when it lands or the budget elapses).
+.ob-ranking-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 22px 0;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e1e1e;
+  background: linear-gradient(90deg, #f3f0ff 0%, #eaf2ff 50%, #f3f0ff 100%);
+  background-size: 200% 100%;
+  animation: ob-loader-sheen 1.8s ease-in-out infinite;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+
+  &__dots {
+    display: inline-flex;
+    gap: 4px;
+
+    span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #6c5ce7;
+      animation: ob-loader-bounce 1s ease-in-out infinite;
+    }
+    span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+    span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+  }
+}
+
+@keyframes ob-loader-sheen {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes ob-loader-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
 }
