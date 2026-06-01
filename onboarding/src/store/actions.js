@@ -83,6 +83,12 @@ export default {
 			payload: { order },
 		};
 	},
+	setSearchFailed( failed ) {
+		return {
+			type: 'SET_SEARCH_FAILED',
+			payload: { failed },
+		};
+	},
 	setSortBy( sortBy ) {
 		return {
 			type: 'SET_SORT_BY',

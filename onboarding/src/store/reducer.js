@@ -55,6 +55,9 @@ const initialState = {
 	refresh: false,
 	rankedOrder: {},
 	searchOrder: [],
+	// True once the LLM search has failed/returned nothing for the current query, so
+	// the grid falls back to instant Fuse results instead of showing nothing.
+	searchFailed: false,
 	sortBy: 'recommended',
 };
 
@@ -80,6 +83,8 @@ export default ( state = initialState, action ) => {
 				// Clear the prior query's LLM boost synchronously so it can't rank
 				// the old query's matches into the new query's results for a frame.
 				searchOrder: [],
+				// New query → re-try the LLM before any Fuse fallback.
+				searchFailed: false,
 			};
 		case 'SET_FOCUSED_SITE':
 			const { siteData } = action.payload;
@@ -157,6 +162,12 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				searchOrder: searchSlugs,
+			};
+		case 'SET_SEARCH_FAILED':
+			const { failed } = action.payload;
+			return {
+				...state,
+				searchFailed: failed,
 			};
 		case 'SET_SORT_BY':
 			const { sortBy } = action.payload;

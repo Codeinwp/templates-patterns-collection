@@ -26,5 +26,6 @@ export default {
 	getRefresh: ( state ) => state.refresh,
 	getRankedOrder: ( state ) => state.rankedOrder,
 	getSearchOrder: ( state ) => state.searchOrder,
+	getSearchFailed: ( state ) => state.searchFailed,
 	getSortBy: ( state ) => state.sortBy,
 };

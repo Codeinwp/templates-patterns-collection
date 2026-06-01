@@ -30,6 +30,7 @@ const SiteList = ( {
 	setTrackingId,
 	setRankedOrder,
 	setSearchOrder,
+	setSearchFailed,
 } ) => {
 	const [ personalizing, setPersonalizing ] = useState( false );
 	const [ searching, setSearching ] = useState( false );
@@ -136,15 +137,18 @@ const SiteList = ( {
 	}, [ editor ] );
 
 	// LLM-first semantic search (debounced): the server-side ranking IS the match
-	// set for a >= 3-char query — there is no client-side Fuse pass. Fail-open:
-	// errors / short queries leave it empty (the grid shows the browse order).
+	// set for a >= 3-char query. Fail-open with a Fuse FALLBACK — if the search
+	// errors / 404s / hangs / returns nothing, `searchFailed` flips so the grid
+	// degrades to instant client-side Fuse matching instead of showing nothing.
 	useEffect( () => {
 		if ( ! editor || ! onboarding || ! onboarding.root ) {
 			return undefined;
 		}
-		// Clear any prior matches immediately so a stale boost never shows after an
-		// editor/query change (searchOrder is global); the fetch below repopulates it.
+		// Clear any prior matches + failure flag immediately so neither a stale boost
+		// nor a stale Fuse fallback shows after an editor/query change; the fetch
+		// below repopulates one of them.
 		setSearchOrder( [] );
+		setSearchFailed( false );
 		const q = ( searchQuery || '' ).trim();
 		if ( q.length < 3 ) {
 			setSearching( false );
@@ -158,13 +162,21 @@ const SiteList = ( {
 				setSearching( false );
 			}
 		};
+		// The LLM search couldn't deliver (error / 404 / hung / empty) → flip the
+		// fallback flag so Fuse takes over and search still returns results.
+		const fail = () => {
+			if ( active ) {
+				setSearchFailed( true );
+			}
+			done();
+		};
 		const timer = setTimeout( () => {
 			if ( ! active ) {
 				return;
 			}
 			setSearching( true );
-			// Safety net for a hung request (see the order effect).
-			safety = setTimeout( done, 9000 );
+			// A hung request (no response, no error) also falls back to Fuse.
+			safety = setTimeout( fail, 9000 );
 			get(
 				onboarding.root +
 					'/starter_search?builder=' +
@@ -173,12 +185,22 @@ const SiteList = ( {
 					encodeURIComponent( q )
 			)
 				.then( ( res ) => {
-					if ( active && res && Array.isArray( res.order ) ) {
-						setSearchOrder( res.order );
+					if ( ! active ) {
+						return;
 					}
-					done();
+					if (
+						res &&
+						Array.isArray( res.order ) &&
+						res.order.length
+					) {
+						setSearchOrder( res.order );
+						done();
+					} else {
+						// No usable matches from the LLM → Fuse fallback.
+						fail();
+					}
 				} )
-				.catch( done );
+				.catch( fail );
 		}, 600 );
 		// NB: cleanup does NOT clear `searching` — doing so would blink the pill off
 		// for 600ms on every keystroke while a search is in flight. The next fetch's
@@ -250,12 +272,17 @@ export default compose(
 		trackingId: select( 'ti-onboarding' ).getTrackingId(),
 	} ) ),
 	withDispatch( ( dispatch ) => {
-		const { setTrackingId, setRankedOrder, setSearchOrder } =
-			dispatch( 'ti-onboarding' );
+		const {
+			setTrackingId,
+			setRankedOrder,
+			setSearchOrder,
+			setSearchFailed,
+		} = dispatch( 'ti-onboarding' );
 		return {
 			setTrackingId,
 			setRankedOrder,
 			setSearchOrder,
+			setSearchFailed,
 		};
 	} )
 )( SiteList );

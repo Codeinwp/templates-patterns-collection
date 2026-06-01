@@ -3,7 +3,7 @@ import { withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import StarterSiteCard from './StarterSiteCard';
 import VizSensor from 'react-visibility-sensor';
-import { matchesCategory } from '../utils/search';
+import { matchesCategory, searchCatalog } from '../utils/search';
 
 /**
  * @typedef {Object} Site
@@ -17,7 +17,7 @@ import { matchesCategory } from '../utils/search';
  */
 
 
-const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOrder, sortBy } ) => {
+const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOrder, searchFailed, sortBy } ) => {
 	const [ maxShown, setMaxShown ] = useState( 9 );
 	const { sites = {} } = getSites;
 
@@ -218,23 +218,31 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 	};
 	
 	/**
-	 * Filters items by the active search query — the LLM semantic ranking (searchOrder),
-	 * in the model's relevance order. No client-side fuzzy pass.
+	 * Filters items by the active search query. LLM-first: the matches are the
+	 * server-side semantic ranking (searchOrder), in the model's relevance order.
+	 * If that search failed (error / 404 / hung / empty → `searchFailed`), fall back
+	 * to an instant client-side Fuse pass so search still returns results.
 	 *
 	 * @param {Site[]} items The sites to filter.
-	 * @return {Site[]} The LLM-matched sites (empty until the LLM responds), or the input when no query.
+	 * @return {Site[]} The matched sites (empty while the LLM is still in flight), or the input when no query.
 	 */
 	const filterBySearch = ( items ) => {
 		if ( ! searchQuery ) {
 			return items;
 		}
 
-		// LLM-first: matches are the server-side semantic ranking (/starter_search),
-		// in the model's relevance order. Empty until the LLM responds (the grid shows
-		// the "searching" loader meanwhile); fail-open leaves it empty on error.
-		return Array.isArray( searchOrder ) && searchOrder.length
-			? pickBySlugs( items, searchOrder ).picked
-			: [];
+		// LLM-first: the server-side semantic ranking, in the model's relevance order.
+		if ( Array.isArray( searchOrder ) && searchOrder.length ) {
+			return pickBySlugs( items, searchOrder ).picked;
+		}
+
+		// Fallback: the LLM search couldn't deliver → instant Fuse lexical matching so
+		// search never breaks. (Until it fails, stay empty — the loader is showing.)
+		if ( searchFailed ) {
+			return searchCatalog( items, searchQuery );
+		}
+
+		return [];
 	};
 
 	/**
@@ -266,7 +274,16 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 	const { list: allData, matchCount } = useMemo(
 		() => getFilteredSites(),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[ sites, editor, category, searchQuery, sortBy, rankedOrder, searchOrder ]
+		[
+			sites,
+			editor,
+			category,
+			searchQuery,
+			sortBy,
+			rankedOrder,
+			searchOrder,
+			searchFailed,
+		]
 	);
 	return (
 		<>
@@ -334,6 +351,7 @@ export default withSelect( ( select ) => {
 		getSearchQuery,
 		getRankedOrder,
 		getSearchOrder,
+		getSearchFailed,
 		getSortBy,
 	} = select( 'ti-onboarding' );
 	return {
@@ -343,6 +361,7 @@ export default withSelect( ( select ) => {
 		getSites: getSites(),
 		rankedOrder: getRankedOrder(),
 		searchOrder: getSearchOrder(),
+		searchFailed: getSearchFailed(),
 		sortBy: getSortBy(),
 	};
 } )( Sites );
