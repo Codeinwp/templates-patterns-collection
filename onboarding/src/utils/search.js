@@ -57,3 +57,43 @@ export const matchesCategory = ( site, cat ) => {
 	}
 	return true;
 };
+
+/**
+ * Color-family predicate. A site matches if it ships ANY of the selected families
+ * (`colors` is the per-site list of families it has, 1..N). Empty selection = no
+ * color filter, so everything matches. A site with no `colors` (a baked / single-
+ * screenshot demo) matches only the empty selection — it drops out once a color is
+ * picked, so we never show a wrong-color thumbnail.
+ *
+ * @param {Object}   site   The site.
+ * @param {string[]} colors The selected color-family keys (≤2).
+ * @return {boolean} Whether the site belongs to any selected family.
+ */
+export const matchesColor = ( site, colors ) => {
+	if ( ! Array.isArray( colors ) || colors.length === 0 ) {
+		return true;
+	}
+	return (
+		Array.isArray( site.colors ) &&
+		colors.some( ( c ) => site.colors.includes( c ) )
+	);
+};
+
+/**
+ * Resolve which screenshot a card should show for the active color selection: the
+ * variant for the FIRST selected family the site actually has, else its default
+ * `screenshot`. Keeps the card a pure presentational swap.
+ *
+ * @param {Object}   site   The site (with optional `screenshots_by_color`).
+ * @param {string[]} colors The selected color-family keys (≤2).
+ * @return {string} The screenshot URL to render.
+ */
+export const colorScreenshot = ( site, colors ) => {
+	if ( Array.isArray( colors ) && colors.length && site.screenshots_by_color ) {
+		const hit = colors.find( ( c ) => site.screenshots_by_color[ c ] );
+		if ( hit ) {
+			return site.screenshots_by_color[ hit ];
+		}
+	}
+	return site.screenshot;
+};

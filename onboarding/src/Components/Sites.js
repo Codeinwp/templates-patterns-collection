@@ -3,7 +3,7 @@ import { withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import StarterSiteCard from './StarterSiteCard';
 import VizSensor from 'react-visibility-sensor';
-import { matchesCategory, searchCatalog } from '../utils/search';
+import { matchesCategory, matchesColor, searchCatalog } from '../utils/search';
 
 /**
  * @typedef {Object} Site
@@ -17,15 +17,15 @@ import { matchesCategory, searchCatalog } from '../utils/search';
  */
 
 
-const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOrder, searchFailed, sortBy } ) => {
+const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOrder, searchFailed, sortBy, selectedColors } ) => {
 	const [ maxShown, setMaxShown ] = useState( 9 );
 	const { sites = {} } = getSites;
 
 	// Reset the lazy-load window when the result set changes, so a larger cap from a
-	// previous list doesn't carry into a new search / category / sort / editor.
+	// previous list doesn't carry into a new search / category / sort / editor / color.
 	useEffect( () => {
 		setMaxShown( 9 );
-	}, [ editor, category, searchQuery, sortBy ] );
+	}, [ editor, category, searchQuery, sortBy, selectedColors ] );
 
 	const getFilteredSites = () => {
 		const allSites = getAllSites();
@@ -51,14 +51,18 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 		// no silent padding with look-alike filler, and the rest always fills the grid.
 		// `matchCount` tells the render where to drop the divider.
 		if ( searchQuery ) {
-			const matches = filterByCategory( filterBySearch( ranked ), category );
+			const matches = filterByColor(
+				filterByCategory( filterBySearch( ranked ), category )
+			);
 			const inMatches = {};
 			matches.forEach( ( site ) => {
 				if ( site && site.slug ) {
 					inMatches[ site.slug ] = true;
 				}
 			} );
-			const rest = filterByCategory( ranked, category ).filter(
+			const rest = filterByColor(
+				filterByCategory( ranked, category )
+			).filter(
 				( site ) => site && site.slug && ! inMatches[ site.slug ]
 			);
 			// Pad the matches up to a full grid row (multiple of 3) using the top of
@@ -78,7 +82,7 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 		// active category. No min-fill — 'all' shows the whole catalog; a specific
 		// category shows its members (a thin category honestly shows fewer cards
 		// rather than padding with unrelated sites).
-		let builderSites = filterByCategory( ranked, category );
+		let builderSites = filterByColor( filterByCategory( ranked, category ) );
 		if ( sortBy === 'popular' || sortBy === 'new' ) {
 			builderSites = applySort( builderSites, sortBy, fullBucket );
 		}
@@ -266,6 +270,21 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 		return items;
 	};
 
+	/**
+	 * Narrows to sites that ship any of the selected color families. No selection →
+	 * unchanged. An exact-match facet (no fuzzy), so it composes after category/search
+	 * without touching ranking; the matching cards recolor in StarterSiteCard.
+	 *
+	 * @param {Site[]} items The sites to filter.
+	 * @return {Site[]} Sites in any selected color family (all when none selected).
+	 */
+	const filterByColor = ( items ) => {
+		if ( ! Array.isArray( selectedColors ) || selectedColors.length === 0 ) {
+			return items;
+		}
+		return items.filter( ( item ) => matchesColor( item, selectedColors ) );
+	};
+
 	const getBuilders = () => Object.keys( sites );
 
 	// Memoize the full pipeline (search + slug Maps + sorts) so it doesn't
@@ -280,6 +299,7 @@ const Sites = ( { getSites, editor, category, searchQuery, rankedOrder, searchOr
 			category,
 			searchQuery,
 			sortBy,
+			selectedColors,
 			rankedOrder,
 			searchOrder,
 			searchFailed,
@@ -353,6 +373,7 @@ export default withSelect( ( select ) => {
 		getSearchOrder,
 		getSearchFailed,
 		getSortBy,
+		getSelectedColors,
 	} = select( 'ti-onboarding' );
 	return {
 		editor: getCurrentEditor(),
@@ -363,5 +384,6 @@ export default withSelect( ( select ) => {
 		searchOrder: getSearchOrder(),
 		searchFailed: getSearchFailed(),
 		sortBy: getSortBy(),
+		selectedColors: getSelectedColors(),
 	};
 } )( Sites );

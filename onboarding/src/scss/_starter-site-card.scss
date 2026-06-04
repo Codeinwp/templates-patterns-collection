@@ -31,6 +31,148 @@
     background-repeat: no-repeat;
     background-position: top center;
     background-color: transparentize($dark-bg, .75);
+    transition: opacity .15s;
+  }
+
+  // Per-card palette dots (recolor-the-thumbnail in place).
+  .ss-dots {
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .ss-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .2), 0 1px 2px rgba(0, 0, 0, .35);
+    transition: transform .12s;
+
+    &:hover {
+      transform: scale(1.18);
+    }
+
+    &.is-active {
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0, 0, 0, .35);
+    }
+  }
+
+  .ss-dots__more {
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+  }
+
+  // Inner-page hover-peek: pips bottom-center + a page-name label top-left.
+  .ss-peek {
+    position: absolute;
+    left: 50%;
+    bottom: 8px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    z-index: 2;
+    padding: 4px 6px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+  }
+
+  &:hover .ss-peek,
+  &:focus-within .ss-peek {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .ss-pip {
+    width: 16px;
+    height: 5px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    transition: background 0.12s, width 0.12s;
+
+    &:hover,
+    &.is-active {
+      background: #fff;
+      width: 22px;
+    }
+  }
+
+  .ss-peek-label {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    z-index: 2;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 3px 8px;
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  // Count badge at rest (badge mode).
+  .ss-count-badge {
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .92);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    z-index: 2;
+    transition: opacity .15s;
+
+    .ss-cdot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12);
+    }
+
+    em {
+      font-size: 10px;
+      font-weight: 600;
+      font-style: normal;
+      color: $main-text;
+    }
+  }
+
+  // Color badge: count pill at rest; dots hidden until hover/focus, then the pill hides.
+  .ss-dots {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s;
+  }
+
+  &:hover .ss-dots,
+  &:focus-within .ss-dots {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &:hover .ss-count-badge,
+  &:focus-within .ss-count-badge {
+    opacity: 0;
+    pointer-events: none;
   }
 }
 

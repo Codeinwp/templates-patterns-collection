@@ -4,6 +4,7 @@ export default {
 	getSites: ( state ) => state.sites,
 	getCurrentEditor: ( state ) => state.editor,
 	getCurrentCategory: ( state ) => state.category,
+	getSelectedColors: ( state ) => state.selectedColors,
 	getFetching: ( state ) => state.fetching,
 	getSearchQuery: ( state ) => state.searchQuery,
 	getCurrentSite: ( state ) => state.currentSite,

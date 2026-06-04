@@ -5,6 +5,12 @@ export default {
 			payload: { category },
 		};
 	},
+	setColors( colors ) {
+		return {
+			type: 'SET_COLORS',
+			payload: { colors },
+		};
+	},
 	setOnboardingStep( step ) {
 		return {
 			type: 'SET_ONBOARDING_STEP',

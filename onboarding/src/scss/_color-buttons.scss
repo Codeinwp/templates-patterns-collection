@@ -1,0 +1,121 @@
+// Collapsed "Color" control in the filter bar — a single toggle that opens a popover.
+.ob-color-dd {
+  display: inline-flex;
+}
+
+.ob-color-toggle.components-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: $light-bg;
+  color: $main-text;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: darken($light-bg, 4%);
+    color: $main-text;
+  }
+
+  &.active {
+    background: $dark-bg;
+    color: $inverted-text;
+    border-color: $dark-bg;
+  }
+
+  .ob-color-toggle-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+    flex: 0 0 auto;
+
+    // Multi-color hint when nothing is selected ("pick a color").
+    &.rainbow {
+      background: conic-gradient(
+        #2f6fed,
+        #14b8a6,
+        #22a06b,
+        #eab308,
+        #e8833a,
+        #e11d48,
+        #7c3aed,
+        #2f6fed
+      );
+    }
+  }
+
+  .ob-color-caret {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+}
+
+// Popover content — a compact swatch grid (not a row of pills).
+.ob-color-pop .components-popover__content {
+  border-radius: 10px;
+}
+
+.ob-color-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 2px;
+  padding: 6px;
+
+  .ob-color-opt {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: $main-text;
+    cursor: pointer;
+    text-align: left;
+    transition: 0.15s;
+
+    .ob-color-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+      flex: 0 0 auto;
+    }
+
+    &:hover:not(.disabled) {
+      background: $light-bg;
+    }
+
+    &.active {
+      background: $dark-bg;
+      color: $inverted-text;
+      font-weight: 600;
+    }
+
+    &.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+
+  .ob-color-any {
+    grid-column: 1 / -1;
+    border: none;
+    border-top: 1px solid $border;
+    background: none;
+    color: $primary;
+    font-size: 13px;
+    padding: 8px 10px;
+    margin-top: 4px;
+    cursor: pointer;
+    text-align: left;
+  }
+}

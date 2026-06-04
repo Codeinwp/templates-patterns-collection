@@ -3,6 +3,7 @@ import { SelectControl } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
 import Search from './Search';
 import CategoryButtons from './CategoryButtons';
+import ColorButtons from './ColorButtons';
 import { ONBOARDING_CAT } from '../utils/common';
 
 const Filters = () => {
@@ -69,6 +70,7 @@ const Filters = () => {
 			</div>
 			<div className="ob-filters-bar">
 				<CategoryButtons categories={ categories } />
+				<ColorButtons />
 				<SelectControl
 					className="ob-sort-select"
 					label={ __( 'Sort', 'templates-patterns-collection' ) }

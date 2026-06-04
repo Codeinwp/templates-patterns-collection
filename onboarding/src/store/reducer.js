@@ -39,6 +39,9 @@ const initialState = {
 	// set, so an empty default would hide them and highlight nothing. ('all' and ''
 	// filter identically — matchesCategory treats both as "show everything".)
 	category: 'all',
+	// Color-family filter (recolor-the-thumbnails). Up to MAX_COLOR_SELECTION keys
+	// from ONBOARDING_COLORS; empty = no color filter (default screenshots + order).
+	selectedColors: [],
 	currentSite: defaultSite,
 	fetching: false,
 	searchQuery: '',
@@ -68,6 +71,12 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				category,
+			};
+		case 'SET_COLORS':
+			const { colors } = action.payload;
+			return {
+				...state,
+				selectedColors: colors,
 			};
 		case 'SET_ONBOARDING_STEP':
 			const { step } = action.payload;
