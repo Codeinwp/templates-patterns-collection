@@ -12,12 +12,12 @@ namespace TIOB;
  */
 class Starter_Ranking {
 
-	const DEFAULT_BASE    = 'https://ai.themeisle.com';
-	const SLUG            = 'neve-starter-ranking';
-	const VERSION         = 'v2';
-	const CACHE_TTL       = 7 * DAY_IN_SECONDS;
-	const REQUEST_BUDGET  = 6;
-	const SEARCH_BUDGET   = 8;
+	const DEFAULT_BASE   = 'https://ai.themeisle.com';
+	const SLUG           = 'neve-starter-ranking';
+	const VERSION        = 'v2';
+	const CACHE_TTL      = 7 * DAY_IN_SECONDS;
+	const REQUEST_BUDGET = 6;
+	const SEARCH_BUDGET  = 8;
 
 	private static function base_url() {
 		if ( defined( 'TPC_AI_PROXY_URL' ) && ! empty( TPC_AI_PROXY_URL ) ) {

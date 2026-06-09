@@ -6,6 +6,24 @@ import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 test.describe('Onboarding', () => {
     const ONBOARDING_URL = 'themes.php?page=neve-onboarding';
 
+    const waitForStarterData = ( page ) =>
+        page.waitForResponse(
+            ( response ) =>
+                response.url().includes('/wp-json/ti-demo-data/data') &&
+                response.status() === 200,
+            { timeout: 45000 }
+        );
+
+    const openFirstSiteAndWaitForData = async ( page ) => {
+        const starterDataResponse = waitForStarterData( page );
+        await page.locator('.ss-card-wrap').first().click();
+        await starterDataResponse;
+        await page.waitForSelector('.ob-site-settings.fetching', {
+            state: 'hidden',
+        });
+        await expect(page.locator('.ob-error-wrap')).toHaveCount(0);
+    };
+
     test('Sub-menu in Admin page', async ({ page, admin }) => {
         await admin.visitAdminPage('/');
 
@@ -81,10 +99,7 @@ test.describe('Onboarding', () => {
 
     test('Site Import Customization Rendering', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-
-        await page.locator('.ss-card-wrap').first().click();
-
-        await page.waitForSelector('.ob-site-settings.fetching', { state: 'hidden' });
+        await openFirstSiteAndWaitForData( page );
 
         // Customize design step.
         await expect(page.getByRole('button', { name: 'Select or upload image' })).toBeVisible();
@@ -124,8 +139,7 @@ test.describe('Onboarding', () => {
 
     test('Site Import Plugins Rendering', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-        await page.locator('.ss-card-wrap').first().click();
-        await page.waitForSelector('.ob-site-settings.fetching', { state: 'hidden' });
+        await openFirstSiteAndWaitForData( page );
         await page.getByRole('button', { name: 'Continue' }).click();
 
         expect(await page.locator('.ob-feature-card').count()).toBe(6);
@@ -149,8 +163,7 @@ test.describe('Onboarding', () => {
 
     test('Site Import Process', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-        await page.locator('.ss-card-wrap').first().click();
-        await page.waitForSelector('.ob-site-settings.fetching', { state: 'hidden' });
+        await openFirstSiteAndWaitForData( page );
         await page.getByRole('button', { name: 'Continue' }).click();
         const cachePlugin = page.getByRole('checkbox', { name: 'Caching Supercharge your site' });
         await cachePlugin.click();
@@ -165,8 +178,8 @@ test.describe('Onboarding', () => {
         await page.waitForSelector('.ob-import-done', { timeout: 60000 });
 
         await expect(page.getByRole('textbox', { name: 'Enter your email' })).toBeVisible();
-        await expect(page.locator('#inspector-select-control-0')).toBeVisible(); // User experience selector.
-        await expect(page.locator('#inspector-select-control-1')).toBeVisible(); // Reason the build selector.
+        await expect(page.locator('#inspector-select-control-1')).toBeVisible(); // User experience selector.
+        await expect(page.locator('#inspector-select-control-2')).toBeVisible(); // Reason the build selector.
 
         await expect(page.getByRole('button', { name: 'Submit and view site' })).toBeVisible();
         await expect(page.getByRole('button', { name: 'Skip and view site' })).toBeVisible();
@@ -179,8 +192,7 @@ test.describe('Onboarding', () => {
 
     test( 'Back Button navigation', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-        await page.locator('.ss-card-wrap').first().click();
-        await page.waitForSelector('.ob-site-settings.fetching', { state: 'hidden' });
+        await openFirstSiteAndWaitForData( page );
         await page.getByRole('button', { name: 'Continue' }).click();
 
         await page.getByRole('button', { name: 'Go back' }).click();
@@ -191,8 +203,7 @@ test.describe('Onboarding', () => {
 
     test( 'Exit from Site Import Steps', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-        await page.locator('.ss-card-wrap').first().click();
-        await page.waitForSelector('.ob-site-settings.fetching', { state: 'hidden' });
+        await openFirstSiteAndWaitForData( page );
         await page.getByRole('button', { name: 'Continue' }).click();
 
         await page.locator('button:has(span.dashicons-no-alt)' ).click();
