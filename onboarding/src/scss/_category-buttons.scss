@@ -1,23 +1,22 @@
 .ob-cat-wrap {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 10px;
   .cat{
     color: $main-text;
     background: $light-bg;
     border: none;
     border-radius: 999px;
-    padding: 8px 24px;
-    font-size: 20px;
-    font-weight: 700;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
-    line-height: 30px;
+    line-height: 20px;
     &.active, &:hover {
       background: $dark-bg;
       color: $inverted-text;
     }
   }
 }
-
 

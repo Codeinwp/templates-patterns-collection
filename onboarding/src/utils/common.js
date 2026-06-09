@@ -5,6 +5,8 @@ const trailingSlashIt = ( str ) => untrailingSlashIt( str ) + '/';
 
 const ONBOARDING_CAT = {
 	business: __( 'Business', 'templates-patterns-collection' ),
+	blog: __( 'Blog', 'templates-patterns-collection' ),
+	portfolio: __( 'Portfolio', 'templates-patterns-collection' ),
 	education: __( 'Education', 'templates-patterns-collection' ),
 	woocommerce: __( 'eCommerce', 'templates-patterns-collection' ),
 	news: __( 'News', 'templates-patterns-collection' ),

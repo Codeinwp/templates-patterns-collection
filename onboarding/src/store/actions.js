@@ -71,4 +71,34 @@ export default {
 			payload: { refresh },
 		};
 	},
+	setSortBy( sortBy ) {
+		return {
+			type: 'SET_SORT_BY',
+			payload: { sortBy },
+		};
+	},
+	setRankedOrder( editor, order ) {
+		return {
+			type: 'SET_RANKED_ORDER',
+			payload: { editor, order },
+		};
+	},
+	setSearchOrder( order ) {
+		return {
+			type: 'SET_SEARCH_ORDER',
+			payload: { order },
+		};
+	},
+	setSearchFailed( failed ) {
+		return {
+			type: 'SET_SEARCH_FAILED',
+			payload: { failed },
+		};
+	},
+	setSelectedColors( colors ) {
+		return {
+			type: 'SET_SELECTED_COLORS',
+			payload: { colors },
+		};
+	},
 };

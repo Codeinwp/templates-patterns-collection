@@ -24,4 +24,9 @@ export default {
 	getUserCustomSettings: ( state ) => state.userCustomSettings,
 	getTrackingId: ( state ) => state.trackingId,
 	getRefresh: ( state ) => state.refresh,
+	getSortBy: ( state ) => state.sortBy,
+	getRankedOrder: ( state ) => state.rankedOrder,
+	getSearchOrder: ( state ) => state.searchOrder,
+	getSearchFailed: ( state ) => state.searchFailed,
+	getSelectedColors: ( state ) => state.selectedColors,
 };
