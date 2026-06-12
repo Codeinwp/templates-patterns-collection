@@ -88,7 +88,7 @@ export default compose(
 		const { setOnboardingStep } = dispatch( 'ti-onboarding' );
 		return {
 			handleLogoClick: () => {
-				setOnboardingStep( 1 );
+				setOnboardingStep( 2 );
 			},
 		};
 	} )
