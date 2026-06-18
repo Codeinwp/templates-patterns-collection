@@ -4,7 +4,7 @@
 **Requires at least:** 5.5  
 **Tested up to:** 7.0  
 **Requires PHP:** 5.6  
-**Stable tag:** 1.2.29  
+**Stable tag:** 1.3.0  
 **License:** GPLv3  
 **License URI:** https://www.gnu.org/licenses/gpl-3.0.en.html  
 
@@ -30,11 +30,9 @@ Yes, you can choose to import either one template or the entire starter site.
 
 ## Changelog ##
 
-##### [Version 1.2.29](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.28...v1.2.29) (2026-05-21)
+#### [Version 1.3.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.29...v1.3.0) (2026-06-18)
 
-- Updated dependencies
-- Enhanced the onboarding experience.
-- Added 100+ new starter sites.
+- Starter Sites: redesigned, AI-powered experience - A faster, smarter way to find the right starting point, with sites shown right away, personalized ordering, improved natural-language search, and infinite scroll.
 
 
 
