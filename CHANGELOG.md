@@ -1,3 +1,7 @@
+#### [Version 1.3.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.29...v1.3.0) (2026-06-18)
+
+- Starter Sites: redesigned, AI-powered experience - A faster, smarter way to find the right starting point, with sites shown right away, personalized ordering, improved natural-language search, and infinite scroll.
+
 ##### [Version 1.2.29](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.28...v1.2.29) (2026-05-21)
 
 - Updated dependencies
