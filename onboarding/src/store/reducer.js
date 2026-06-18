@@ -34,14 +34,12 @@ const defaultSite = defaultSiteSlug ? findSiteBySlug( defaultSiteSlug ) : null;
 const initialState = {
 	sites: onboarding.sites || {},
 	editor: selectedEditor,
-	category: '',
+	category: 'all',
 	currentSite: defaultSite,
 	fetching: false,
 	searchQuery: '',
 	license: initialLicense,
-	onboardingStep: defaultSite
-		? 3
-		: ( window.location.search.includes('show=welcome') ? 1 : 2 ),
+	onboardingStep: defaultSite ? 3 : 2,
 	userCustomSettings: {
 		siteName: null,
 		siteLogo: null,
@@ -51,6 +49,11 @@ const initialState = {
 	error: null,
 	trackingId: '',
 	refresh: false,
+	sortBy: 'recommended',
+	rankedOrder: {},
+	searchOrder: [],
+	searchFailed: false,
+	selectedColors: [],
 };
 
 export default ( state = initialState, action ) => {
@@ -72,6 +75,8 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				searchQuery: query,
+				searchOrder: [],
+				searchFailed: false,
 			};
 		case 'SET_FOCUSED_SITE':
 			const { siteData } = action.payload;
@@ -115,6 +120,10 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				editor,
+				sortBy:
+					state.sortBy === 'new' && editor !== 'gutenberg'
+						? 'recommended'
+						: state.sortBy,
 			};
 		case 'SET_TRACKING_ID':
 			const { trackingId } = action.payload;
@@ -127,6 +136,39 @@ export default ( state = initialState, action ) => {
 			return {
 				...state,
 				refresh,
+			};
+		case 'SET_SORT_BY':
+			const { sortBy } = action.payload;
+			return {
+				...state,
+				sortBy,
+			};
+		case 'SET_RANKED_ORDER':
+			const { editor: rankedEditor, order: rankedOrder } = action.payload;
+			return {
+				...state,
+				rankedOrder: {
+					...state.rankedOrder,
+					[ rankedEditor ]: rankedOrder,
+				},
+			};
+		case 'SET_SEARCH_ORDER':
+			const { order: searchOrder } = action.payload;
+			return {
+				...state,
+				searchOrder,
+			};
+		case 'SET_SEARCH_FAILED':
+			const { failed } = action.payload;
+			return {
+				...state,
+				searchFailed: failed,
+			};
+		case 'SET_SELECTED_COLORS':
+			const { colors } = action.payload;
+			return {
+				...state,
+				selectedColors: Array.isArray( colors ) ? colors : [],
 			};
 	}
 	return state;

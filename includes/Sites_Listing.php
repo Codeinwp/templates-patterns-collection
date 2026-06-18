@@ -35,6 +35,7 @@ class Sites_Listing {
 	 * Initialize the Class.
 	 */
 	public function init() {
+		// Personalization is applied on the client via /starter_order.
 		$this->onboarding_config = array(
 			'remote'      => $this->get_sites(),
 			'upsell'      => array(),

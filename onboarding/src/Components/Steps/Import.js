@@ -139,7 +139,11 @@ const Import = ( {
 				}
 				console.log( '[D] Plugins.' );
 				setActionsDone( ( prevActionsDone ) => prevActionsDone + 1 );
-				runImportContent();
+				try {
+					runImportContent();
+				} catch ( incomingError ) {
+					handleError( incomingError, 'content' );
+				}
 			} )
 			.catch( ( incomingError ) =>
 				handleError( incomingError, 'plugins' )
@@ -152,6 +156,12 @@ const Import = ( {
 			runImportCustomizer();
 			return false;
 		}
+
+		if ( ! importData || ! importData.content_file ) {
+			handleError( { data: 'ti__ob_missing_import_data' }, 'content' );
+			return false;
+		}
+
 		setCurrentStep( 'content' );
 		console.log( '[P] Content.' );
 		importContent( {

@@ -13,6 +13,7 @@ const Search = ( {
 	step,
 	deleteQuery,
 	label,
+	placeholder,
 } ) => {
 	return (
 		<form onSubmit={ handleSubmit } className="ob-search-form">
@@ -23,6 +24,7 @@ const Search = ( {
 					id="ob-search-ss"
 					type="text"
 					value={ query }
+					placeholder={ placeholder }
 					onChange={ ( e ) => {
 						onSearch( e.target.value );
 					} }
