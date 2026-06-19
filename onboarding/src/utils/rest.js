@@ -5,8 +5,8 @@ export const send = ( route, data, simple = false ) => {
 	return requestData( route, simple, data );
 };
 
-export const get = ( route, simple = false, useNonce = true ) => {
-	return requestData( route, simple, {}, 'GET', useNonce );
+export const get = ( route, simple = false, useNonce = true, signal = null ) => {
+	return requestData( route, simple, {}, 'GET', useNonce, signal );
 };
 
 const requestData = async (
@@ -14,7 +14,8 @@ const requestData = async (
 	simple = false,
 	data = {},
 	method = 'POST',
-	useNonce = true
+	useNonce = true,
+	signal = null
 ) => {
 	const options = {
 		method,
@@ -35,6 +36,11 @@ const requestData = async (
 
 	if ( useNonce ) {
 		options.headers[ 'x-wp-nonce' ] = tiobDash.nonce;
+	}
+
+	// Optional AbortSignal so callers can cancel an in-flight request.
+	if ( signal ) {
+		options.signal = signal;
 	}
 
 	if ( 'POST' === method ) {

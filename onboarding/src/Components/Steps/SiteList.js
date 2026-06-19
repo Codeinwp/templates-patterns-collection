@@ -17,6 +17,11 @@ import { get, track } from '../../utils/rest';
 
 const { onboarding } = tiobDash;
 
+// Debounce the search so it stays off the network while typing: only fire after the
+// field is idle for SEARCH_DEBOUNCE_MS and the query is at least SEARCH_MIN_CHARS.
+const SEARCH_DEBOUNCE_MS = 700;
+const SEARCH_MIN_CHARS = 3;
+
 // Guards tracking-session init against firing twice while the first request is in flight.
 let trackingInitStarted = false;
 
@@ -89,7 +94,6 @@ const SiteList = ( {
 		}
 
 		let active = true;
-		let safety;
 		const reveal = setTimeout( () => {
 			if ( active ) {
 				setPersonalizing( true );
@@ -103,7 +107,7 @@ const SiteList = ( {
 			}
 		};
 
-		safety = setTimeout( done, 9000 );
+		const safety = setTimeout( done, 9000 );
 		get(
 			onboarding.root +
 				'/starter_order?builder=' +
@@ -134,13 +138,15 @@ const SiteList = ( {
 		setSearchFailed( false );
 
 		const q = ( searchQuery || '' ).trim();
-		if ( q.length < 3 ) {
+		if ( q.length < SEARCH_MIN_CHARS ) {
 			setSearching( false );
 			return undefined;
 		}
 
 		let active = true;
 		let safety;
+		// Lets cleanup abort a superseded in-flight request, not just ignore its result.
+		const controller = new AbortController();
 		const done = () => {
 			if ( active ) {
 				clearTimeout( safety );
@@ -166,7 +172,10 @@ const SiteList = ( {
 					'/starter_search?builder=' +
 					encodeURIComponent( editor ) +
 					'&q=' +
-					encodeURIComponent( q )
+					encodeURIComponent( q ),
+				false,
+				true,
+				controller.signal
 			)
 				.then( ( res ) => {
 					if ( ! active ) {
@@ -181,11 +190,18 @@ const SiteList = ( {
 
 					fail();
 				} )
-				.catch( fail );
-		}, 600 );
+				.catch( ( err ) => {
+					// Aborted = superseded, not a real failure → skip the fallback.
+					if ( err && err.name === 'AbortError' ) {
+						return;
+					}
+					fail();
+				} );
+		}, SEARCH_DEBOUNCE_MS );
 
 		return () => {
 			active = false;
+			controller.abort();
 			clearTimeout( timer );
 			clearTimeout( safety );
 		};
