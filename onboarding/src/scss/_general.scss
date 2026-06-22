@@ -135,6 +135,25 @@ iframe {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
+}
+
+.ob-title-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.ob-subtitle {
+  margin: 0;
+  color: $secondary-text;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
 }
 
 /**

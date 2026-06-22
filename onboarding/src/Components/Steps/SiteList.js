@@ -11,7 +11,6 @@ import Toast from '../Toast';
 import Filters from '../Filters';
 import Sites from '../Sites';
 import EditorSelector from '../EditorSelector';
-import OnboardingPromoNotice from '../OnboardingPromoNotice';
 import SVG from '../../utils/svg';
 import { get, track } from '../../utils/rest';
 
@@ -41,7 +40,7 @@ const SiteList = ( {
 
 	const toastMessage = createInterpolateElement(
 		__(
-			'Unlock Access to all premium templates with Neve Business plan. <a></a>.',
+			'Unlock every premium template with Neve Business. <a></a>',
 			'templates-patterns-collection'
 		),
 		{
@@ -51,7 +50,7 @@ const SiteList = ( {
 					target="_blank"
 					rel="external noreferrer noopener"
 				>
-					{ __( 'Get Started', 'templates-patterns-collection' ) }
+					{ __( 'Upgrade', 'templates-patterns-collection' ) }
 				</a>
 			),
 		}
@@ -211,13 +210,23 @@ const SiteList = ( {
 		<div className="ob-container">
 			<div className="ob-container-inner">
 				<div className="ob-title-wrap">
-					<h1>
-						{ __( 'Choose a design', 'templates-patterns-collection' ) }
-					</h1>
+					<div className="ob-title-text">
+						<h1>
+							{ __(
+								'Choose a design',
+								'templates-patterns-collection'
+							) }
+						</h1>
+						<p className="ob-subtitle">
+							{ __(
+								'Nearly 200 starter sites for every niche — fresh designs added regularly.',
+								'templates-patterns-collection'
+							) }
+						</p>
+					</div>
 					<EditorSelector />
 				</div>
 				<Filters />
-				<OnboardingPromoNotice />
 				{ ( personalizing || searching ) && (
 					<div
 						className="ob-ranking-loader"

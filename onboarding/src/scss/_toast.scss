@@ -1,21 +1,21 @@
 .ob-toast {
   position: fixed;
-  bottom: 49px;
+  bottom: 24px;
   right: 18px;
   opacity: 0;
   transform: translateY(20px); /* Start 20px below the final position */
   transition: opacity 0.5s ease, transform 0.5s ease; /* Add transition */
   display: inline-flex;
-  padding: 0 16px;
+  padding: 10px 14px;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   flex-shrink: 0;
+  max-width: 340px;
   border-radius: $button-radius;
   border: 1px solid $border;
   background: $light-bg;
-  box-shadow: 8px 8px 40px 0px rgba(0, 0, 0, 0.30);
-  height: 70px;
-  font-size: 16px;
+  box-shadow: 4px 4px 24px 0px rgba(0, 0, 0, 0.18);
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
 }
@@ -24,23 +24,39 @@
   display: flex;
   flex: 1;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   p {
+    margin: 0;
     color: $main-text;
-    font-size: 16px;
+    font-size: 13px;
+    line-height: 18px;
   }
   a {
     text-decoration: none;
     color: $primary;
     font-weight: 700;
+    white-space: nowrap;
+  }
+}
+
+.ob-toast-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+
+  svg {
+    width: 22px;
+    height: 22px;
   }
 }
 
 .ob-toast-close {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
+  line-height: 1;
+  color: $secondary-text;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 /* Add a class to control the appearance */
