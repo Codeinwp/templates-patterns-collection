@@ -27,11 +27,11 @@ const Sites = ( {
 	sortBy,
 	selectedColors,
 } ) => {
-	const [ maxShown, setMaxShown ] = useState( 9 );
+	const [ maxShown, setMaxShown ] = useState( 12 );
 	const { sites = {} } = getSites;
 
 	useEffect( () => {
-		setMaxShown( 9 );
+		setMaxShown( 12 );
 	}, [ editor, category, searchQuery, sortBy, selectedColors ] );
 
 	const getBuilders = () => Object.keys( sites );
@@ -218,9 +218,9 @@ const Sites = ( {
 			const rest = filterByColors( filterByCategory( ranked, category ) ).filter(
 				( site ) => site && site.slug && ! inMatches[ site.slug ]
 			);
-			const remainder = matches.length % 3;
+			const remainder = matches.length % 4;
 			const pad =
-				remainder === 0 ? 0 : Math.min( 3 - remainder, rest.length );
+				remainder === 0 ? 0 : Math.min( 4 - remainder, rest.length );
 
 			return {
 				list: [ ...matches, ...rest ],
@@ -280,7 +280,7 @@ const Sites = ( {
 								return false;
 							}
 
-							setMaxShown( ( shown ) => shown + 9 );
+							setMaxShown( ( shown ) => shown + 12 );
 						} }
 					>
 						<span
