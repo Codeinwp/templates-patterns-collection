@@ -40,7 +40,7 @@ const SiteList = ( {
 
 	const toastMessage = createInterpolateElement(
 		__(
-			'Unlock every premium template with Neve Business. <a></a>',
+			'Included with Neve Business. <a>See plans</a>',
 			'templates-patterns-collection'
 		),
 		{
@@ -48,10 +48,8 @@ const SiteList = ( {
 				<a
 					href={ tiobDash.onboardingUpsell.upgradeToast }
 					target="_blank"
-					rel="external noreferrer noopener"
-				>
-					{ __( 'Upgrade', 'templates-patterns-collection' ) }
-				</a>
+					rel="noopener noreferrer"
+				/>
 			),
 		}
 	);
@@ -218,9 +216,16 @@ const SiteList = ( {
 							) }
 						</h1>
 						<p className="ob-subtitle">
-							{ __(
-								'Nearly 200 starter sites for every niche — fresh designs added regularly.',
-								'templates-patterns-collection'
+							{ createInterpolateElement(
+								__(
+									'<count>Nearly 200 starter sites</count> across every niche, with dozens added recently.',
+									'templates-patterns-collection'
+								),
+								{
+									count: (
+										<span className="ob-subtitle__count" />
+									),
+								}
 							) }
 						</p>
 					</div>
@@ -257,6 +262,10 @@ const SiteList = ( {
 						setShowToast={ setShowToast }
 						svgIcon={ SVG.logo }
 						className={ showToast === true ? 'show' : '' }
+						heading={ __(
+							'Unlock every premium template',
+							'templates-patterns-collection'
+						) }
 						message={ toastMessage }
 					/>
 				) }

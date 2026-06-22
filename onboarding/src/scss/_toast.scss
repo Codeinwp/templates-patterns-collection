@@ -1,66 +1,118 @@
 .ob-toast {
   position: fixed;
   bottom: 24px;
-  right: 18px;
-  opacity: 0;
-  transform: translateY(20px); /* Start 20px below the final position */
-  transition: opacity 0.5s ease, transform 0.5s ease; /* Add transition */
-  display: inline-flex;
-  padding: 10px 14px;
-  align-items: center;
+  right: 24px;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
   gap: 10px;
-  flex-shrink: 0;
   max-width: 340px;
+  padding: 12px 14px;
   border-radius: $button-radius;
   border: 1px solid $border;
-  background: $light-bg;
-  box-shadow: 4px 4px 24px 0px rgba(0, 0, 0, 0.18);
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
+  background: #fff;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
 }
 
-.ob-toast-content {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  gap: 10px;
-  p {
-    margin: 0;
-    color: $main-text;
-    font-size: 13px;
-    line-height: 18px;
-  }
-  a {
-    text-decoration: none;
-    color: $primary;
-    font-weight: 700;
-    white-space: nowrap;
-  }
+.ob-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .ob-toast-icon {
-  display: inline-flex;
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  line-height: 0;
+  margin-top: 1px;
 
   svg {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+}
+
+.ob-toast-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ob-toast-heading {
+  margin: 0;
+  color: $main-text;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+}
+
+.ob-toast-message {
+  margin: 2px 0 0;
+  color: $secondary-text;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+
+  a {
+    color: $primary;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $primary;
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
   }
 }
 
 .ob-toast-close {
+  flex: 0 0 auto;
+  margin: -4px -4px 0 2px;
+  padding: 4px;
   background: none;
   border: none;
-  font-size: 18px;
   line-height: 1;
+  font-size: 16px;
   color: $secondary-text;
   cursor: pointer;
-  flex-shrink: 0;
+  border-radius: 4px;
+
+  &:hover {
+    color: $main-text;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 1px;
+  }
 }
 
-/* Add a class to control the appearance */
-.ob-toast.show {
-  opacity: 1; /* Show with full opacity */
-  transform: translateY(0); /* Move to the final position */
+@media (prefers-reduced-motion: reduce) {
+  .ob-toast {
+    transition: opacity 0.2s ease;
+    transform: none;
+  }
+
+  .ob-toast.show {
+    transform: none;
+  }
+}
+
+@media (max-width: #{$tablet}) {
+  .ob-toast {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: none;
+  }
 }

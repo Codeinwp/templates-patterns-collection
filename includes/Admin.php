@@ -24,9 +24,9 @@ class Admin {
 	const IMPORTED_TEMPLATES_COUNT_OPT = 'tiob_premade_imported';
 	const FEEDBACK_DISMISSED_OPT       = 'tiob_feedback_dismiss';
 
-	const TC_REMOVED_KEY                    = 'tiob_tc_removed';
-	const TC_NEW_NOTICE_DISMISSED           = 'tiob_new_tc_notice_dismissed';
-	const VISITED_LIBRARY_OPT               = 'tiob_library_visited';
+	const TC_REMOVED_KEY          = 'tiob_tc_removed';
+	const TC_NEW_NOTICE_DISMISSED = 'tiob_new_tc_notice_dismissed';
+	const VISITED_LIBRARY_OPT     = 'tiob_library_visited';
 
 	/**
 	 * Admin page slug
