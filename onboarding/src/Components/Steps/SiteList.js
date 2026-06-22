@@ -11,7 +11,6 @@ import Toast from '../Toast';
 import Filters from '../Filters';
 import Sites from '../Sites';
 import EditorSelector from '../EditorSelector';
-import OnboardingPromoNotice from '../OnboardingPromoNotice';
 import SVG from '../../utils/svg';
 import { get, track } from '../../utils/rest';
 
@@ -41,7 +40,7 @@ const SiteList = ( {
 
 	const toastMessage = createInterpolateElement(
 		__(
-			'Unlock Access to all premium templates with Neve Business plan. <a></a>.',
+			'Included with Neve Business. <a>See plans</a>',
 			'templates-patterns-collection'
 		),
 		{
@@ -49,10 +48,8 @@ const SiteList = ( {
 				<a
 					href={ tiobDash.onboardingUpsell.upgradeToast }
 					target="_blank"
-					rel="external noreferrer noopener"
-				>
-					{ __( 'Get Started', 'templates-patterns-collection' ) }
-				</a>
+					rel="noopener noreferrer"
+				/>
 			),
 		}
 	);
@@ -211,13 +208,30 @@ const SiteList = ( {
 		<div className="ob-container">
 			<div className="ob-container-inner">
 				<div className="ob-title-wrap">
-					<h1>
-						{ __( 'Choose a design', 'templates-patterns-collection' ) }
-					</h1>
+					<div className="ob-title-text">
+						<h1>
+							{ __(
+								'Choose a design',
+								'templates-patterns-collection'
+							) }
+						</h1>
+						<p className="ob-subtitle">
+							{ createInterpolateElement(
+								__(
+									'<count>Nearly 200 starter sites</count> across every niche, with dozens added recently.',
+									'templates-patterns-collection'
+								),
+								{
+									count: (
+										<span className="ob-subtitle__count" />
+									),
+								}
+							) }
+						</p>
+					</div>
 					<EditorSelector />
 				</div>
 				<Filters />
-				<OnboardingPromoNotice />
 				{ ( personalizing || searching ) && (
 					<div
 						className="ob-ranking-loader"
@@ -248,6 +262,10 @@ const SiteList = ( {
 						setShowToast={ setShowToast }
 						svgIcon={ SVG.logo }
 						className={ showToast === true ? 'show' : '' }
+						heading={ __(
+							'Unlock every premium template',
+							'templates-patterns-collection'
+						) }
 						message={ toastMessage }
 					/>
 				) }

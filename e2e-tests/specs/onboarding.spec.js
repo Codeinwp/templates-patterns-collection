@@ -48,9 +48,12 @@ test.describe('Onboarding', () => {
         expect(await page.locator('.ss-card .ss-badge').count()).toBeGreaterThan(0);
 
         // 'All' and 'Free' should show after you select a category.
+        // Match exactly: card page-shot buttons (e.g. "Gallery", "Ballet Blog",
+        // "All Courses") also contain "all" as a substring, so a non-exact name
+        // match resolves to multiple elements once the grid renders a full page.
         await page.locator('.ob-cat-wrap').first().click();
-        await expect(page.getByRole('button', { name: 'All' })).toBeVisible();
-        await expect(page.getByRole('button', { name: 'Free' })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'All', exact: true })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'Free', exact: true })).toBeVisible();
 
         // Check card structure.
         const firstListedSiteCard = page.locator('.ss-card-wrap').first();
@@ -60,41 +63,6 @@ test.describe('Onboarding', () => {
             .evaluate((el) => window.getComputedStyle(el).getPropertyValue('background-image'));
         expect(bgImage).not.toBe('none');
         await expect(firstListedSiteCard.locator('.ss-title')).not.toBeEmpty();
-    });
-
-    test('Onboarding promo notice can be dismissed and stays hidden after reload', async ({ page, admin }) => {
-        await admin.visitAdminPage(ONBOARDING_URL);
-
-        const promoNotice = page.locator('.ob-onboarding-promo');
-        await expect(promoNotice).toBeVisible();
-
-        // The client sends the dismiss action via FormData, which fetch encodes as
-        // multipart/form-data. Inspect the raw body bytes so the predicate works
-        // regardless of whether the encoding is multipart or url-encoded.
-        const isDismissCall = (request) =>
-            request.url().includes('admin-ajax.php') &&
-            request.method() === 'POST' &&
-            (request.postDataBuffer()?.toString('utf8') ?? '').includes(
-                'dismiss_onboarding_promo_notice'
-            );
-
-        const dismissRequest = page.waitForRequest(isDismissCall);
-        const dismissResponse = page.waitForResponse((response) =>
-            isDismissCall(response.request())
-        );
-
-        await promoNotice.getByRole('button', { name: 'Dismiss notice' }).click();
-
-        const request = await dismissRequest;
-        const response = await dismissResponse;
-        expect(request.postDataBuffer()?.toString('utf8')).toContain(
-            'dismiss_onboarding_promo_notice'
-        );
-        expect(response.ok()).toBeTruthy();
-
-        await expect(promoNotice).toBeHidden();
-        await page.reload();
-        await expect(promoNotice).toBeHidden();
     });
 
     test('Site Import Customization Rendering', async ({ page, admin }) => {

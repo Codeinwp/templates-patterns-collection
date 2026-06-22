@@ -89,8 +89,9 @@ class Starter_Ranking {
 		$deadline = time() + ( null !== $budget ? (int) $budget : self::REQUEST_BUDGET );
 		$start    = self::base_url() . '/api/workflows/' . self::SLUG . '/start';
 		$body     = array(
-			'site_url' => home_url(),
-			'builder'  => $builder,
+			'site_url'   => home_url(),
+			'site_title' => sanitize_text_field( get_bloginfo( 'name' ) ),
+			'builder'    => $builder,
 		);
 
 		if ( null !== $query && '' !== $query ) {

@@ -46,6 +46,12 @@
       transform: translateY(0);
       pointer-events: auto;
     }
+
+    .ss-color-summary {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
   }
 }
 
@@ -122,12 +128,17 @@
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(8px);
   box-shadow: 0 6px 18px rgba(12, 19, 31, 0.12);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  // Hidden at rest — revealed only when the card is hovered/focused (like the page-shots),
+  // so it adds no visual noise to the resting grid.
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.18s ease,
+    background 0.18s ease;
   z-index: 2;
   gap: 6px;
 
   &:hover {
-    transform: translateY(-1px);
     background: rgba(255, 255, 255, 0.99);
     box-shadow: 0 10px 22px rgba(12, 19, 31, 0.16);
   }
