@@ -135,6 +135,41 @@ iframe {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
+}
+
+.ob-title-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.ob-subtitle {
+  margin: 6px 0 0;
+  max-width: 56ch;
+  // ~#6E6D6D on white ≈ 4.6:1 → passes WCAG AA while staying clearly secondary to the near-black h1.
+  color: mix($main-text, $inverted-text, 56%);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+
+  // Subtle emphasis on the catalog claim — weight only, no brand color (would read promotional).
+  .ob-subtitle__count {
+    font-weight: 600;
+    color: $main-text;
+  }
+}
+
+@media (max-width: #{$tablet}) {
+  .ob-subtitle {
+    font-size: 13px;
+    line-height: 19px;
+  }
 }
 
 /**
