@@ -266,7 +266,7 @@ input.components-text-control__input[type="email"],
 
 @mixin ob-general--laptop() {
   .ob-sites.is-grid {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
