@@ -194,7 +194,7 @@ const StarterSiteCard = ( {
 								) ) }
 							</div>
 						) }
-						{ colorOptions.length > 0 && (
+						{ colorOptions.length > 1 && (
 							<div
 								className={
 									isColorExpanded
