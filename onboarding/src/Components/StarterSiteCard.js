@@ -47,7 +47,8 @@ const StarterSiteCard = ( {
 	setSite,
 	handleNextStep,
 	trackingId,
-	editor
+	editor,
+	selectedColors = []
 } ) => {
 	const {
 		upsell,
@@ -93,6 +94,32 @@ const StarterSiteCard = ( {
 			screenshot: screenshotMap[ color ] || screenshot,
 		} ) );
 	}, [ data?.colors, data?.screenshots_by_color, screenshot ] );
+	// First globally-selected color this card actually has, returned as the
+	// canonical RAW colorOptions slug so option.slug === activeColor still hits.
+	// selectedColors are normalized lowercase (Filters.js) while colorOptions
+	// slugs / screenshots_by_color keys are raw, so match case-insensitively.
+	const filterColor = useMemo( () => {
+		if (
+			! Array.isArray( selectedColors ) ||
+			! selectedColors.length ||
+			! colorOptions.length
+		) {
+			return '';
+		}
+
+		const normalizedToSlug = new Map(
+			colorOptions.map( ( option ) => [
+				String( option.slug || '' ).trim().toLowerCase(),
+				option.slug,
+			] )
+		);
+
+		const matched = selectedColors.find( ( color ) =>
+			normalizedToSlug.has( color )
+		);
+
+		return matched ? normalizedToSlug.get( matched ) : '';
+	}, [ selectedColors, colorOptions ] );
 	const previewColors = colorOptions.slice( 0, 2 );
 	const [ activePage, setActivePage ] = useState( pageShots[0]?.key || 'home' );
 	const [ activeColor, setActiveColor ] = useState( colorOptions[0]?.slug || '' );
@@ -102,9 +129,12 @@ const StarterSiteCard = ( {
 		setActivePage( pageShots[0]?.key || 'home' );
 	}, [ pageShots ] );
 
+	// Seed the displayed color from the global filter when this card matches a
+	// selected color; otherwise fall back to the first palette. Re-runs only on
+	// filter/colorOptions changes, so manual swatch clicks survive until then.
 	useEffect( () => {
-		setActiveColor( colorOptions[0]?.slug || '' );
-	}, [ colorOptions ] );
+		setActiveColor( filterColor || colorOptions[0]?.slug || '' );
+	}, [ colorOptions, filterColor ] );
 
 	const activePageShot =
 		pageShots.find( ( shot ) => shot.key === activePage ) || pageShots[0] || null;
@@ -290,12 +320,14 @@ export default compose(
 			getCurrentEditor,
 			getCurrentCategory,
 			getSearchQuery,
+			getSelectedColors,
 		} = select( 'ti-onboarding' );
 		return {
 			trackingId: getTrackingId(),
 			editor: getCurrentEditor(),
 			category: getCurrentCategory(),
 			query: getSearchQuery(),
+			selectedColors: getSelectedColors() || [],
 		};
 	} ),
 	withDispatch( ( dispatch, { data } ) => {
