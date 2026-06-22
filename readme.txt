@@ -28,6 +28,13 @@ You can check the full collection on [demosites.io](https://demosites.io/)
 = Can I import just one page from one starter site? =
 Yes, you can choose to import either one template or the entire starter site.
 
+== External services ==
+
+The Starter Sites & Templates library is powered by a cloud service run by ThemeIsle. This section explains what data is sent to it and when. By using these features you agree to ThemeIsle's [Terms](https://themeisle.com/terms/) and [Privacy Policy](https://themeisle.com/privacy-policy/). No account is required to browse the free starter-sites collection.
+
+= ThemeIsle starter-sites service (api.themeisle.com) =
+The plugin contacts ThemeIsle's service to fetch the starter-sites and templates catalog, to order it by relevance to your site (and to run searches), and to validate your license. For relevance ordering and search it sends your site address (home URL), your site title, the page builder you use, and — when you search — your search text; if you have a ThemeIsle license, it also sends your license key. These requests are made when you browse or search the library, and apply to local and staging sites too. Service provided by ThemeIsle — [Terms](https://themeisle.com/terms/), [Privacy Policy](https://themeisle.com/privacy-policy/).
+
 == Changelog ==
 
 #### [Version 1.3.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.29...v1.3.0) (2026-06-18)
