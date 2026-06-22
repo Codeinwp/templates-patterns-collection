@@ -48,9 +48,12 @@ test.describe('Onboarding', () => {
         expect(await page.locator('.ss-card .ss-badge').count()).toBeGreaterThan(0);
 
         // 'All' and 'Free' should show after you select a category.
+        // Match exactly: card page-shot buttons (e.g. "Gallery", "Ballet Blog",
+        // "All Courses") also contain "all" as a substring, so a non-exact name
+        // match resolves to multiple elements once the grid renders a full page.
         await page.locator('.ob-cat-wrap').first().click();
-        await expect(page.getByRole('button', { name: 'All' })).toBeVisible();
-        await expect(page.getByRole('button', { name: 'Free' })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'All', exact: true })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'Free', exact: true })).toBeVisible();
 
         // Check card structure.
         const firstListedSiteCard = page.locator('.ss-card-wrap').first();
