@@ -1,0 +1,50 @@
+name: "Agent Task"
+description: "Structured task for coding agents"
+labels: ["agent"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal / Acceptance Criteria
+      description: "What does 'done' look like? Be specific."
+      placeholder: "Example: Update the onboarding flow to handle the new template import response and cover it with an E2E spec."
+    validations:
+      required: true
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints / Do Not Touch
+      description: "List files/areas to avoid or any guardrails."
+      placeholder: "Example: Do not edit build outputs directly; do not change vendor/ or node_modules/."
+    validations:
+      required: false
+
+  - type: textarea
+    id: relevant_files
+    attributes:
+      label: Relevant Files (if known)
+      description: "Optional: point the agent to likely files."
+      placeholder: "Example: onboarding/src/, includes/, e2e-tests/specs/, AGENTS.md"
+    validations:
+      required: false
+
+  - type: textarea
+    id: tests
+    attributes:
+      label: Tests to Run
+      description: "Default is PHP lint/PHPStan/PHPUnit unless explicitly scoped out. Add the JS/E2E steps when those areas are touched."
+      value: |
+        Default:
+        - composer run lint
+        - composer run phpstan
+        - phpunit
+
+        When JS files are touched:
+        - yarn run lint
+        - yarn run build
+
+        When UI/E2E flows are touched:
+        - npm run ci:e2e
+    validations:
+      required: true
