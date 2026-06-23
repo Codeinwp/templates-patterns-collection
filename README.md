@@ -4,7 +4,7 @@
 **Requires at least:** 5.5  
 **Tested up to:** 7.0  
 **Requires PHP:** 5.6  
-**Stable tag:** 1.3.0  
+**Stable tag:** 1.4.0  
 **License:** GPLv3  
 **License URI:** https://www.gnu.org/licenses/gpl-3.0.en.html  
 
@@ -28,11 +28,33 @@ You can check the full collection on [demosites.io](https://demosites.io/)
 ### Can I import just one page from one starter site? ###
 Yes, you can choose to import either one template or the entire starter site.
 
+## External services ##
+
+The Starter Sites & Templates library is powered by a cloud service run by ThemeIsle. This section explains what data is sent to it and when. By using these features you agree to ThemeIsle's [Terms](https://themeisle.com/terms/) and [Privacy Policy](https://themeisle.com/privacy-policy/). No account is required to browse the free starter-sites collection.
+
+### ThemeIsle starter-sites service (api.themeisle.com) ###
+The plugin contacts ThemeIsle's service to fetch the starter-sites and templates catalog, to order it by relevance to your site (and to run searches), and to validate your license. For relevance ordering and search it sends your site address (home URL), your site title, the page builder you use, and — when you search — your search text; if you have a ThemeIsle license, it also sends your license key. These requests are made when you browse or search the library, and apply to local and staging sites too. Service provided by ThemeIsle — [Terms](https://themeisle.com/terms/), [Privacy Policy](https://themeisle.com/privacy-policy/).
+
 ## Changelog ##
 
-#### [Version 1.3.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.29...v1.3.0) (2026-06-18)
+#### [Version 1.4.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.3.0...v1.4.0) (2026-06-23)
 
-- Starter Sites: redesigned, AI-powered experience - A faster, smarter way to find the right starting point, with sites shown right away, personalized ordering, improved natural-language search, and infinite scroll.
+> Things are getting better every day. 🚀
+- Improve Starter Sites Onboarding Layout and Discovery
+- Add a Four-Column Starter Sites Grid on Larger Screens
+- Refine Onboarding Banners and Upgrade Messaging
+- Improve Starter Site Color Variant Preview and Filtering
+- Use Site Title to Improve Starter Site Ranking and Search
+- Improve Starter Sites Onboarding Layout and Discovery
+- Add a Four-Column Starter Sites Grid on Larger Screens
+- Refine Onboarding Banners and Upgrade Messaging
+- Improve Starter Site Color Variant Preview and Filtering
+- Use Site Title to Improve Starter Site Ranking and Search
+- Starter sites now show 4 per row on laptop and desktop, so you can see more designs at a glance.
+- Tidier library: the promotional banner is replaced with a subtle subtitle, and the upgrade prompt is smaller with clearer wording.
+- Color variants: select a color to preview every matching starter site in that palette; sites with a single palette no longer show an empty color control.
+- Smarter results: your site title is now used to better order and search the starter-sites library.
+- Performance improvements for Starter Site wizard.
 
 
 
