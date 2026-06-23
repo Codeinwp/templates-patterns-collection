@@ -4,10 +4,20 @@ plugins:
   - - "@semantic-release/commit-analyzer"
     - preset: simple-preset
       releaseRules: conventional-changelog-simple-preset/release-rules
+      # Override the preset's `revertPattern: false`, which makes
+      # conventional-commits-parser emit an empty `revert: {}` on some commit
+      # bodies. conventional-commits-filter then treats that empty object as a
+      # match against every commit (lodash isMatch(commit, {}) === true) and
+      # drops the entire commit set, so no release is ever cut. `null` restores
+      # normal revert detection.
+      parserOpts:
+        revertPattern: null
   - - "@semantic-release/changelog"
     - changelogFile: CHANGELOG.md
   - - "@semantic-release/release-notes-generator"
     - preset: simple-preset
+      parserOpts:
+        revertPattern: null
   - - "@semantic-release/exec"
     - prepareCmd: 'export nextReleaseNotes="${nextRelease.notes}" && node bin/update-changelog.js'
   - - "@semantic-release/exec"
