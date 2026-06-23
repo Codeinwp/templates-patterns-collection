@@ -65,8 +65,13 @@ composer run phpstan
 ## Testing
 
 ```bash
-# PHP
-./vendor/bin/phpunit
+# PHP. Prerequisites: MySQL, the WordPress test suite, and the PHPUnit Polyfills.
+# Neither PHPUnit nor the Polyfills are composer deps here: GitHub-hosted runners
+# ship PHPUnit preinstalled globally, and setup-php adds the Polyfills
+# (tools: phpunit-polyfills); copilot-setup-steps.yml installs both. Tests target the
+# CI PHP version (7.4); newer local PHP (8.x) can abort mid-run. Install the suite once:
+bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1
+phpunit                       # phpunit is NOT a composer dep here; use the global one (CI/copilot-setup provide it)
 
 # E2E
 yarn run ci:e2e
