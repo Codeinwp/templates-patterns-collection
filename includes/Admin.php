@@ -161,38 +161,6 @@ class Admin {
 		$this->ensure_ajax_response( $response );
 	}
 
-	/**
-	 * Decide if the business/agency variant of the onboarding promo text should be shown.
-	 *
-	 * @return bool
-	 */
-	private function should_show_business_agency_promo_text() {
-		$license_data = License::get_license_data();
-		$license_key  = isset( $license_data->key ) ? strtolower( trim( (string) $license_data->key ) ) : '';
-		$license_tier = License::get_license_tier( 0 );
-		$raw_tier     = isset( $license_data->tier ) ? absint( $license_data->tier ) : 0;
-		$neve_plan    = $this->neve_license_plan();
-
-		if ( $license_key === '' || $license_key === 'free' ) {
-			return false;
-		}
-
-		if ( ! License::has_active_license() || ! $this->has_valid_addons() ) {
-			return false;
-		}
-
-		if ( -1 !== $neve_plan ) {
-			// The normalized Neve plan uses mapped TPC tiers, where Business and Agency are 2 and 3.
-			return in_array( $neve_plan, array( 2, 3 ), true );
-		}
-
-		if ( in_array( $raw_tier, array( 1, 2, 7, 12, 18 ), true ) ) {
-			return false;
-		}
-
-		return in_array( $license_tier, array( 2, 3 ), true );
-	}
-
 
 	/**
 	 * Register hooks to prevent meta cloning for the templates.
@@ -837,7 +805,6 @@ class Admin {
 			'upsellNotifications'           => $this->get_upsell_notifications(),
 			'isValidLicense'                => $this->has_valid_addons(),
 			'licenseTIOB'                   => License::get_license_data(),
-			'onboardingShowProNoticeText'   => $this->should_show_business_agency_promo_text(),
 			'emailSubscribe'                => array(
 				'ajaxURL'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'      => wp_create_nonce( 'skip_subscribe_nonce' ),
