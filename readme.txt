@@ -39,12 +39,6 @@ The plugin contacts ThemeIsle's service to fetch the starter-sites and templates
 
 #### [Version 1.4.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.3.0...v1.4.0) (2026-06-23)
 
-> Things are getting better every day. 🚀
-- Improve Starter Sites Onboarding Layout and Discovery
-- Add a Four-Column Starter Sites Grid on Larger Screens
-- Refine Onboarding Banners and Upgrade Messaging
-- Improve Starter Site Color Variant Preview and Filtering
-- Use Site Title to Improve Starter Site Ranking and Search
 - Improve Starter Sites Onboarding Layout and Discovery
 - Add a Four-Column Starter Sites Grid on Larger Screens
 - Refine Onboarding Banners and Upgrade Messaging
