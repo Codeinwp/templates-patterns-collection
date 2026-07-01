@@ -4,12 +4,7 @@ import { withDispatch, withSelect } from '@wordpress/data';
 import { useEffect, useMemo, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { track } from '../utils/rest';
-
-const decodeHtmlEntities = ( str ) => {
-	const txt = document.createElement( 'textarea' );
-	txt.innerHTML = str;
-	return txt.value;
-};
+import { decodeHtmlEntities } from '../utils/common';
 
 const hashColor = ( value = '' ) => {
 	let hash = 0;
