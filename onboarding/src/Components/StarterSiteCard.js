@@ -5,6 +5,12 @@ import { useEffect, useMemo, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { track } from '../utils/rest';
 
+const decodeHtmlEntities = ( str ) => {
+	const txt = document.createElement( 'textarea' );
+	txt.innerHTML = str;
+	return txt.value;
+};
+
 const hashColor = ( value = '' ) => {
 	let hash = 0;
 	for ( let index = 0; index < value.length; index++ ) {
@@ -77,7 +83,7 @@ const StarterSiteCard = ( {
 			.filter( ( shot ) => shot && shot.screenshot )
 			.map( ( shot ) => ( {
 				key: shot.key || shot.label || 'page',
-				label: shot.label || shot.key || __( 'Page', 'templates-patterns-collection' ),
+				label: decodeHtmlEntities( shot.label || shot.key || __( 'Page', 'templates-patterns-collection' ) ),
 				screenshot: shot.screenshot,
 			} ) );
 	}, [ data?.page_shots, screenshot ] );
