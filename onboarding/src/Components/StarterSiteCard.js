@@ -4,6 +4,7 @@ import { withDispatch, withSelect } from '@wordpress/data';
 import { useEffect, useMemo, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { track } from '../utils/rest';
+import { decodeHtmlEntities } from '../utils/common';
 
 const hashColor = ( value = '' ) => {
 	let hash = 0;
@@ -77,7 +78,7 @@ const StarterSiteCard = ( {
 			.filter( ( shot ) => shot && shot.screenshot )
 			.map( ( shot ) => ( {
 				key: shot.key || shot.label || 'page',
-				label: shot.label || shot.key || __( 'Page', 'templates-patterns-collection' ),
+				label: decodeHtmlEntities( shot.label || shot.key || __( 'Page', 'templates-patterns-collection' ) ),
 				screenshot: shot.screenshot,
 			} ) );
 	}, [ data?.page_shots, screenshot ] );

@@ -1,13 +1,8 @@
 import { useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { decodeHtmlEntities } from '../utils/common';
 
 const MAX_FEATURE_LIST_LENGTH = 6;
-
-const decodeHtmlEntities = (str) => {
-    const textArea = document.createElement('textarea');
-    textArea.innerHTML = str;
-    return textArea.value;
-};
 
 /**
  * Plugins to promote.
