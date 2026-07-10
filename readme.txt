@@ -4,7 +4,7 @@ Tags: starter sites, templates, block patterns, neve, gutenberg
 Requires at least: 5.5
 Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -37,18 +37,10 @@ The plugin contacts ThemeIsle's service to fetch the starter-sites and templates
 
 == Changelog ==
 
-#### [Version 1.4.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.3.0...v1.4.0) (2026-06-23)
+##### [Version 1.4.1](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.0...v1.4.1) (2026-07-10)
 
-- Improve Starter Sites Onboarding Layout and Discovery
-- Add a Four-Column Starter Sites Grid on Larger Screens
-- Refine Onboarding Banners and Upgrade Messaging
-- Improve Starter Site Color Variant Preview and Filtering
-- Use Site Title to Improve Starter Site Ranking and Search
-- Starter sites now show 4 per row on laptop and desktop, so you can see more designs at a glance.
-- Tidier library: the promotional banner is replaced with a subtle subtitle, and the upgrade prompt is smaller with clearer wording.
-- Color variants: select a color to preview every matching starter site in that palette; sites with a single palette no longer show an empty color control.
-- Smarter results: your site title is now used to better order and search the starter-sites library.
-- Performance improvements for Starter Site wizard.
+- Improve caching in site listing
+- Fix decoding of HTML entities in site listing
 
 
 

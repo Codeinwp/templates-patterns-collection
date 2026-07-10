@@ -1,3 +1,8 @@
+##### [Version 1.4.1](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.0...v1.4.1) (2026-07-10)
+
+- Improve caching in site listing
+- Fix decoding of HTML entities in site listing
+
 #### [Version 1.4.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.3.0...v1.4.0) (2026-06-23)
 
 > Things are getting better every day. 🚀
