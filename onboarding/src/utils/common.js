@@ -51,6 +51,12 @@ const textToFileURL = ( text ) => {
 	return URL.createObjectURL( blob );
 };
 
+const decodeHtmlEntities = ( str ) => {
+	const txt = document.createElement( 'textarea' );
+	txt.innerHTML = str;
+	return txt.value;
+};
+
 export {
 	trailingSlashIt,
 	untrailingSlashIt,
@@ -58,4 +64,5 @@ export {
 	EDITOR_MAP,
 	ONBOARDING_CAT,
 	textToFileURL,
+	decodeHtmlEntities,
 };
