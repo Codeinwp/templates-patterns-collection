@@ -144,11 +144,26 @@ export async function mockOnboardingRoutes( page ) {
 	);
 }
 
+// Block markup returned by the mocked template-import endpoint; specs assert
+// this text lands in the editor canvas.
+export const TEMPLATE_CONTENT_TEXT = 'TPC E2E imported content';
+export const TEMPLATE_CONTENT = `<!-- wp:paragraph --><p>${ TEMPLATE_CONTENT_TEXT }</p><!-- /wp:paragraph -->`;
+
 export async function mockTemplatesCloudRoutes( page, templates = MOCK_TEMPLATES ) {
 	await page.route( '**/api.themeisle.com/templates-cloud/**', ( route ) => {
+		const url = new URL( route.request().url() );
+
+		// GET templates/{id}/import returns the template's block content.
+		if ( url.pathname.endsWith( '/import' ) ) {
+			return fulfillJson( route, {
+				__file: 'wp_export',
+				content: TEMPLATE_CONTENT,
+			} );
+		}
+
 		// The library infinite-scrolls to the next page; only page 0 has items,
 		// so rendered counts stay deterministic.
-		const requestedPage = new URL( route.request().url() ).searchParams.get( 'page' );
+		const requestedPage = url.searchParams.get( 'page' );
 		const body = requestedPage && requestedPage !== '0' ? [] : templates;
 		return fulfillJson( route, body, { 'x-wp-totalpages': '1' } );
 	} );

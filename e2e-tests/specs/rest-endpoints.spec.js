@@ -87,6 +87,34 @@ test.describe('ti-sites-lib REST endpoints', () => {
         expect(res.success).toBe(true);
     });
 
+    test('import_single_templates creates a published page from a template', async ({ requestUtils }) => {
+        const res = await requestUtils.rest({
+            path: `${API}/import_single_templates`,
+            method: 'POST',
+            data: [
+                {
+                    template_id: 'tpc-e2e-import',
+                    template_name: 'E2E Imported Page',
+                    template_type: 'gutenberg',
+                    content:
+                        '<!-- wp:paragraph --><p>Imported by e2e</p><!-- /wp:paragraph -->',
+                },
+            ],
+        });
+
+        expect(res.success).toBe(true);
+        expect(res.pages).toHaveLength(1);
+        expect(res.pages[0].title).toBe('E2E Imported Page');
+
+        // The page really exists on the site.
+        const pages = await requestUtils.rest({
+            path: '/wp/v2/pages',
+            method: 'GET',
+            params: { search: 'E2E Imported Page' },
+        });
+        expect(pages.length).toBeGreaterThan(0);
+    });
+
     test('cleanup runs successfully', async ({ requestUtils }) => {
         const res = await requestUtils.rest({
             path: `${API}/cleanup`,
