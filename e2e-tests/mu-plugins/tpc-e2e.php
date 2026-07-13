@@ -50,6 +50,34 @@ add_action(
 				},
 			)
 		);
+
+		register_rest_route(
+			'tpc-e2e/v1',
+			'/api-mode',
+			array(
+				'methods'             => 'POST',
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+				'args'                => array(
+					'mode' => array(
+						'type' => 'string',
+						'enum' => array( '', 'down', 'invalid' ),
+					),
+				),
+				'callback'            => function ( $request ) {
+					update_option( 'tpc_e2e_api_mode', $request->get_param( 'mode' ) );
+					// Drop cached remote data (stored license, starter-ranking
+					// order) so the next request reflects the new mode.
+					delete_option( 'templates_patterns_collection_license_data' );
+					delete_transient( 'templates_patterns_collection_license_check' );
+					foreach ( array( 'gutenberg', 'elementor' ) as $builder ) {
+						delete_transient( 'tpc_starter_order_v2_' . $builder );
+					}
+					return rest_ensure_response( array( 'success' => true ) );
+				},
+			)
+		);
 	}
 );
 
@@ -77,6 +105,29 @@ add_filter(
 	function ( $preempt, $args, $url ) {
 		if ( false !== $preempt ) {
 			return $preempt;
+		}
+
+		$is_themeisle_api = false !== strpos( $url, 'api.themeisle.com' ) || false !== strpos( $url, 'ai.themeisle.com' );
+
+		// Scenario modes (Otter pattern), set per spec via tpc-e2e/v1/api-mode:
+		// 'down'    => ThemeIsle APIs unreachable.
+		// 'invalid' => license check rejects the key (a code/message body is
+		//              what License::check_license treats as invalid).
+		$mode = get_option( 'tpc_e2e_api_mode', '' );
+
+		if ( 'down' === $mode && $is_themeisle_api ) {
+			return new WP_Error( 'http_request_failed', 'TPC E2E: API unreachable.' );
+		}
+
+		if ( 'invalid' === $mode && false !== strpos( $url, 'api.themeisle.com/templates-cloud/' ) ) {
+			return tpc_e2e_response(
+				wp_json_encode(
+					array(
+						'code'    => 'invalid_license',
+						'message' => 'TPC E2E: invalid license.',
+					)
+				)
+			);
 		}
 
 		// Starter sites feed (Sites_Listing::API).

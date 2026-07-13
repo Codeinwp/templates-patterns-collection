@@ -37,7 +37,10 @@ The suite runs offline and deterministic — no live ThemeIsle APIs are hit. Two
     -   demo attachment downloads → a 1×1 GIF
 -   **Browser-side (Playwright)**: `config/mocks.js` provides `page.route` installers for the cross-origin `ti-demo-data` fetch, the Templates Cloud templates list, and tracking calls.
 
-The mu-plugin also exposes a `tpc-e2e/v1/legacy-tc` REST route: the Templates Cloud dashboard (`admin.php?page=tiob-plugin`) and the block-editor integration only load for "legacy TC" installs (`tiob_tc_removed` option), while the onboarding surface behaves differently in that mode — specs toggle it per suite.
+The mu-plugin also exposes a `tpc-e2e/v1` REST namespace for per-spec state:
+
+-   `POST /legacy-tc { enabled }` — the Templates Cloud dashboard (`admin.php?page=tiob-plugin`) and the block-editor integration only load for "legacy TC" installs (`tiob_tc_removed` option), while the onboarding surface behaves differently in that mode; specs toggle it per suite.
+-   `POST /api-mode { mode: '' | 'down' | 'invalid' }` — failure scenarios for the ThemeIsle APIs (unreachable / invalid license), used by `specs/error-states.spec.js`. Switching modes flushes the cached license and starter-ranking order.
 
 Only the wordpress.org plugin/theme installs triggered by the import flow (Neve theme, caching plugin, the fixture's mandatory plugin) still use the network, as the install path is itself under test.
 
