@@ -105,6 +105,17 @@ How the suite works — read this before adding specs:
 
 Known gaps (deferred, see `e2e-tests/README.md`): Elementor/Beaver template libraries, the dashboard starter-sites grid (needs the Neve theme installed), the Zelle migration flow, and the editor header "Templates Cloud" button (its portal target `.edit-post-header__center` no longer exists in current WordPress).
 
+### Testing practices (TDD)
+
+When adding or changing tests in this repo, follow these rules:
+
+- **Red before green.** Write one failing test first, then only enough code to pass it. One seam, one test, one minimal implementation per cycle — don't write all tests up front and then all implementation (bulk-written tests verify imagined behavior and go stale).
+- **Test at seams (public interfaces), never internals.** Here the seams are: admin pages and the editor canvas (via Playwright locators), the `ti-sites-lib/v1` REST endpoints (via `requestUtils.rest()`), and PHP class public methods (PHPUnit). A good test survives an internal refactor; if it breaks when behavior didn't change, it's coupled to implementation.
+- **Prefer role/text locators** (`getByRole`, `getByText`) over CSS classes; use classes only where the UI offers no accessible handle (existing `.ss-card-wrap`-style locators are the ceiling, not the target).
+- **No tautological assertions.** The expected value must come from an independent source (a literal, the fixture *input*, the spec) — never recomputed the same way the code or mock computes it. Example in this repo: `starter_order` asserts literal slugs, not `Object.keys(fixture)`.
+- **Mock only at system boundaries** — external HTTP (ThemeIsle APIs), never the plugin's own classes/modules or internal collaborators. Don't assert on call counts or internal wiring; assert observable behavior (content in the canvas, a page created, an option's effect in the UI).
+- **One logical assertion per test**, name tests as WHAT-statements ("importing a template inserts its blocks into the post"), not HOW.
+
 ## Architecture
 
 ### Bootstrap & Runtime
