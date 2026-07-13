@@ -7,7 +7,6 @@ import { test, expect } from '@wordpress/e2e-test-utils-playwright';
  * Internal dependencies
  */
 import baseDemoData from '../../tests/fixtures/data.json';
-import { SITES } from '../config/mocks';
 
 const API = '/ti-sites-lib/v1';
 const SOURCE_URL = 'https://demo.themeisle.com/neve-charity/';
@@ -36,7 +35,14 @@ test.describe('ti-sites-lib REST endpoints', () => {
 
         expect(res.success).toBe(true);
         expect(res.builder).toBe('gutenberg');
-        expect(res.order).toEqual(Object.keys(SITES.gutenberg));
+        // Independent literals (the mu-plugin derives its response from the
+        // same fixture, so deriving the expectation from it too would be
+        // tautological). Must match mu-plugins/fixtures/sites.json.
+        expect(res.order).toEqual([
+            'neve-charity',
+            'neve-web-agency',
+            'neve-restaurant',
+        ]);
     });
 
     test('starter_search returns an order for a query', async ({ requestUtils }) => {
