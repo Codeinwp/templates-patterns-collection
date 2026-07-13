@@ -3,15 +3,27 @@
  */
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 
+/**
+ * Internal dependencies
+ */
+import { SITES, FONT_PAIRS, mockOnboardingRoutes } from '../config/mocks';
+
 test.describe('Onboarding', () => {
     const ONBOARDING_URL = 'themes.php?page=neve-onboarding';
+
+    // Default editor is Gutenberg, so only those sites are listed.
+    const GUTENBERG_SITES = Object.values(SITES.gutenberg);
+    const PRO_SITES_COUNT = GUTENBERG_SITES.filter((site) => site.upsell).length;
+
+    test.beforeEach(async ({ page }) => {
+        await mockOnboardingRoutes(page);
+    });
 
     const waitForStarterData = ( page ) =>
         page.waitForResponse(
             ( response ) =>
                 response.url().includes('/wp-json/ti-demo-data/data') &&
-                response.status() === 200,
-            { timeout: 45000 }
+                response.status() === 200
         );
 
     const openFirstSiteAndWaitForData = async ( page ) => {
@@ -43,9 +55,9 @@ test.describe('Onboarding', () => {
         await expect(page.getByRole('button', { name: 'Exit to dashboard' })).toBeVisible();
         expect(await page.locator('.ob-cat-wrap button').count()).toBeGreaterThan(0);
 
-        // Check if we have Starter Sites listed. And some of the are PRO.
-        expect(await page.locator('.ss-card-wrap').count()).toBeGreaterThan(0);
-        expect(await page.locator('.ss-card .ss-badge').count()).toBeGreaterThan(0);
+        // Check if we have Starter Sites listed. And some of them are PRO.
+        expect(await page.locator('.ss-card-wrap').count()).toBe(GUTENBERG_SITES.length);
+        expect(await page.locator('.ss-card .ss-badge').count()).toBe(PRO_SITES_COUNT);
 
         // 'All' and 'Free' should show after you select a category.
         // Match exactly: card page-shot buttons (e.g. "Gallery", "Ballet Blog",
@@ -54,6 +66,10 @@ test.describe('Onboarding', () => {
         await page.locator('.ob-cat-wrap').first().click();
         await expect(page.getByRole('button', { name: 'All', exact: true })).toBeVisible();
         await expect(page.getByRole('button', { name: 'Free', exact: true })).toBeVisible();
+
+        // Back to the full list — the clicked category may have no fixture sites.
+        await page.getByRole('button', { name: 'All', exact: true }).click();
+        await expect(page.locator('.ss-card-wrap')).toHaveCount(GUTENBERG_SITES.length);
 
         // Check card structure.
         const firstListedSiteCard = page.locator('.ss-card-wrap').first();
@@ -76,7 +92,10 @@ test.describe('Onboarding', () => {
         expect(await page.locator('.ob-palette').count()).toBeGreaterThan(0); // Check if we have some color pallet available.
 
         await expect(page.getByRole('heading', { name: 'Typography' })).toBeVisible();
-        expect(await page.locator('.ob-ctrl-wrap.font button').count()).toBe(7); // Check if we have some font family options available.
+        // Font pairs from the mocked demo data, plus the "Default" button.
+        expect(await page.locator('.ob-ctrl-wrap.font button').count()).toBe(
+            Object.keys(FONT_PAIRS).length + 1
+        );
 
         // Check if the first option is selected, select another option, reset and check again
         const firstPalletColorOption = page.locator('.ob-palette').first();
