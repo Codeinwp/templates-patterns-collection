@@ -38,11 +38,7 @@ test.describe('ti-sites-lib REST endpoints', () => {
         // Independent literals (the mu-plugin derives its response from the
         // same fixture, so deriving the expectation from it too would be
         // tautological). Must match mu-plugins/fixtures/sites.json.
-        expect(res.order).toEqual([
-            'neve-charity',
-            'neve-web-agency',
-            'neve-restaurant',
-        ]);
+        expect(res.order).toEqual(['neve-charity', 'neve-web-agency', 'neve-restaurant']);
     });
 
     test('starter_search returns an order for a query', async ({ requestUtils }) => {
@@ -93,7 +89,9 @@ test.describe('ti-sites-lib REST endpoints', () => {
         expect(res.success).toBe(true);
     });
 
-    test('import_single_templates creates a published page from a template', async ({ requestUtils }) => {
+    test('import_single_templates creates a published page from a template', async ({
+        requestUtils,
+    }) => {
         const res = await requestUtils.rest({
             path: `${API}/import_single_templates`,
             method: 'POST',
@@ -102,8 +100,7 @@ test.describe('ti-sites-lib REST endpoints', () => {
                     template_id: 'tpc-e2e-import',
                     template_name: 'E2E Imported Page',
                     template_type: 'gutenberg',
-                    content:
-                        '<!-- wp:paragraph --><p>Imported by e2e</p><!-- /wp:paragraph -->',
+                    content: '<!-- wp:paragraph --><p>Imported by e2e</p><!-- /wp:paragraph -->',
                 },
             ],
         });

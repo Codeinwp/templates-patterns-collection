@@ -30,10 +30,7 @@ test.describe('API error states', () => {
         await setLegacyTc(requestUtils, false);
     });
 
-    test('onboarding shows an error when the demo data fetch fails', async ({
-        page,
-        admin,
-    }) => {
+    test('onboarding shows an error when the demo data fetch fails', async ({ page, admin }) => {
         await mockOnboardingRoutes(page);
         // Later-registered routes win: override the demo-data mock with a 500.
         await page.route('**/wp-json/ti-demo-data/data*', (route) =>
@@ -41,7 +38,7 @@ test.describe('API error states', () => {
                 status: 500,
                 contentType: 'application/json',
                 body: JSON.stringify({ message: 'Internal Server Error' }),
-            })
+            }),
         );
 
         await admin.visitAdminPage('themes.php?page=neve-onboarding');
@@ -74,9 +71,7 @@ test.describe('API error states', () => {
         await admin.visitAdminPage('admin.php?page=tiob-plugin#settings');
 
         await expect(page.getByText('License Key')).toBeVisible();
-        await expect(
-            page.getByRole('button', { name: 'Activate' })
-        ).toBeVisible();
+        await expect(page.getByRole('button', { name: 'Activate' })).toBeVisible();
     });
 
     test('starter_order degrades gracefully when the ranking API is down', async ({

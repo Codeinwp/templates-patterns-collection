@@ -41,7 +41,7 @@ test.describe('Templates Cloud dashboard', () => {
             await expect(page.getByText(template.template_name)).toBeVisible();
         }
         await expect(page.getByRole('button', { name: 'Import' })).toHaveCount(
-            MOCK_TEMPLATES.length
+            MOCK_TEMPLATES.length,
         );
     });
 
@@ -49,15 +49,13 @@ test.describe('Templates Cloud dashboard', () => {
     test('Settings tab renders general and feedback panels', async ({ page, admin }) => {
         await admin.visitAdminPage(`${DASHBOARD_URL}#settings`);
 
-        await expect(
-            page.getByRole('heading', { name: 'Useful links' })
-        ).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Useful links' })).toBeVisible();
 
         await page.getByRole('button', { name: 'Feedback' }).click();
         await expect(
             page.getByRole('heading', {
                 name: "What's one thing you need in Templates Cloud?",
-            })
+            }),
         ).toBeVisible();
     });
 });

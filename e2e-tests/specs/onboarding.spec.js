@@ -19,15 +19,14 @@ test.describe('Onboarding', () => {
         await mockOnboardingRoutes(page);
     });
 
-    const waitForStarterData = ( page ) =>
+    const waitForStarterData = (page) =>
         page.waitForResponse(
-            ( response ) =>
-                response.url().includes('/wp-json/ti-demo-data/data') &&
-                response.status() === 200
+            (response) =>
+                response.url().includes('/wp-json/ti-demo-data/data') && response.status() === 200,
         );
 
-    const openFirstSiteAndWaitForData = async ( page ) => {
-        const starterDataResponse = waitForStarterData( page );
+    const openFirstSiteAndWaitForData = async (page) => {
+        const starterDataResponse = waitForStarterData(page);
         await page.locator('.ss-card-wrap').first().click();
         await starterDataResponse;
         await page.waitForSelector('.ob-site-settings.fetching', {
@@ -83,7 +82,7 @@ test.describe('Onboarding', () => {
 
     test('Site Import Customization Rendering', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-        await openFirstSiteAndWaitForData( page );
+        await openFirstSiteAndWaitForData(page);
 
         // Customize design step.
         await expect(page.getByRole('button', { name: 'Select or upload image' })).toBeVisible();
@@ -94,7 +93,7 @@ test.describe('Onboarding', () => {
         await expect(page.getByRole('heading', { name: 'Typography' })).toBeVisible();
         // Font pairs from the mocked demo data, plus the "Default" button.
         expect(await page.locator('.ob-ctrl-wrap.font button').count()).toBe(
-            Object.keys(FONT_PAIRS).length + 1
+            Object.keys(FONT_PAIRS).length + 1,
         );
 
         // Check if the first option is selected, select another option, reset and check again
@@ -126,7 +125,7 @@ test.describe('Onboarding', () => {
 
     test('Site Import Plugins Rendering', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-        await openFirstSiteAndWaitForData( page );
+        await openFirstSiteAndWaitForData(page);
         await page.getByRole('button', { name: 'Continue' }).click();
 
         expect(await page.locator('.ob-feature-card').count()).toBe(6);
@@ -150,7 +149,7 @@ test.describe('Onboarding', () => {
 
     test('Site Import Process', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-        await openFirstSiteAndWaitForData( page );
+        await openFirstSiteAndWaitForData(page);
         await page.getByRole('button', { name: 'Continue' }).click();
         const cachePlugin = page.getByRole('checkbox', { name: 'Caching Supercharge your site' });
         await cachePlugin.click();
@@ -177,23 +176,23 @@ test.describe('Onboarding', () => {
         expect(page.url()).not.toContain(ONBOARDING_URL);
     });
 
-    test( 'Back Button navigation', async ({ page, admin }) => {
+    test('Back Button navigation', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-        await openFirstSiteAndWaitForData( page );
+        await openFirstSiteAndWaitForData(page);
         await page.getByRole('button', { name: 'Continue' }).click();
 
         await page.getByRole('button', { name: 'Go back' }).click();
         await page.getByRole('button', { name: 'Go back' }).click();
 
-        await expect( page.getByRole('heading', { name: 'Choose a design' }) ).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Choose a design' })).toBeVisible();
     });
 
-    test( 'Exit from Site Import Steps', async ({ page, admin }) => {
+    test('Exit from Site Import Steps', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
-        await openFirstSiteAndWaitForData( page );
+        await openFirstSiteAndWaitForData(page);
         await page.getByRole('button', { name: 'Continue' }).click();
 
-        await page.locator('button:has(span.dashicons-no-alt)' ).click();
-        await expect( page.getByRole('heading', { name: 'Choose a design' }) ).toBeVisible();
+        await page.locator('button:has(span.dashicons-no-alt)').click();
+        await expect(page.getByRole('heading', { name: 'Choose a design' })).toBeVisible();
     });
 });

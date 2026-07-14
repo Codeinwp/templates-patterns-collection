@@ -6,11 +6,7 @@ import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 /**
  * Internal dependencies
  */
-import {
-    MOCK_TEMPLATES,
-    TEMPLATE_CONTENT_TEXT,
-    mockTemplatesCloudRoutes,
-} from '../config/mocks';
+import { MOCK_TEMPLATES, TEMPLATE_CONTENT_TEXT, mockTemplatesCloudRoutes } from '../config/mocks';
 
 // The plugin also portals a "Templates Cloud" button into
 // `.edit-post-header__center`, but that element no longer exists in current
@@ -51,12 +47,8 @@ test.describe('Templates Cloud in the block editor', () => {
 
         const modal = page.locator('.tpc-template-cloud-modal');
         await expect(modal).toBeVisible();
-        await expect(modal.locator('.table-grid')).toHaveCount(
-            MOCK_TEMPLATES.length
-        );
-        await expect(
-            modal.getByText(MOCK_TEMPLATES[0].template_name)
-        ).toBeVisible();
+        await expect(modal.locator('.table-grid')).toHaveCount(MOCK_TEMPLATES.length);
+        await expect(modal.getByText(MOCK_TEMPLATES[0].template_name)).toBeVisible();
     });
 
     test('importing a template inserts its blocks into the post', async ({
@@ -68,14 +60,8 @@ test.describe('Templates Cloud in the block editor', () => {
         await editor.insertBlock({ name: 'ti-tpc/templates-cloud' });
 
         const modal = page.locator('.tpc-template-cloud-modal');
-        await modal
-            .locator('.table-grid')
-            .first()
-            .getByRole('button', { name: 'Import' })
-            .click();
+        await modal.locator('.table-grid').first().getByRole('button', { name: 'Import' }).click();
 
-        await expect(
-            editor.canvas.getByText(TEMPLATE_CONTENT_TEXT)
-        ).toBeVisible();
+        await expect(editor.canvas.getByText(TEMPLATE_CONTENT_TEXT)).toBeVisible();
     });
 });
