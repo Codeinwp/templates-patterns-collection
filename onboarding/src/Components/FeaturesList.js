@@ -12,37 +12,31 @@ const featuredPluginCollection = [
         id: 'pageBuilder',
         pluginSlug: 'otter-blocks',
         label: __('Site Builder', 'templates-patterns-collection'),
-        description: __('Build beautiful pages with a simple drag-and-drop page builder.', 'templates-patterns-collection')
-    },
-    { 
-        id: 'contactForm',
-        pluginSlug: 'otter-blocks',
-        label: __('Contact Form', 'templates-patterns-collection'),
-        description: __('Create forms to capture leads and feedback.', 'templates-patterns-collection')
+        description: __('Build pages and forms with Otter.', 'templates-patterns-collection')
     },
     {
         id: 'imageOpt',
         pluginSlug: 'optimole-wp',
         label: __('Image Optimization', 'templates-patterns-collection'),
-        description: __('Make your site faster with automatic image optimization.', 'templates-patterns-collection')
+        description: __('Auto-compress images for faster pages.', 'templates-patterns-collection')
     },
     {
         id: 'caching',
         pluginSlug: 'wp-cloudflare-page-cache',
         label: __('Caching', 'templates-patterns-collection'),
-        description: __('Supercharge your site’s speed with powerful caching.', 'templates-patterns-collection')
+        description: __('Speed up your site with smart caching.', 'templates-patterns-collection')
     },
     { 
         id: 'eCommerce',
         pluginSlug: 'wp-full-stripe-free',
         label: __('eCommerce', 'templates-patterns-collection'),
-        description: __('Set up your store and start accepting payments via Stripe.', 'templates-patterns-collection'),
+        description: __('Sell online and accept Stripe payments.', 'templates-patterns-collection'),
     },
     {
         id: 'chatbot',
         pluginSlug: 'hyve-lite',
         label: __('AI ChatBot', 'templates-patterns-collection'),
-        description: __('Keep visitors engaged with an intelligent AI chatbot.', 'templates-patterns-collection'),
+        description: __('Engage visitors with an AI chatbot.', 'templates-patterns-collection'),
     }
 ];
 
@@ -54,7 +48,7 @@ const pluginCollection = [
         id: 'visualizer',
         pluginSlug: 'visualizer',
         label: __('Tables and Chart', 'templates-patterns-collection'),
-        description: __('A powerful and easy to use plugin for responsive charts & tables.', 'templates-patterns-collection')
+        description: __('Responsive charts and tables.', 'templates-patterns-collection')
     },
     {
         id: 'woocommerce',
@@ -102,13 +96,13 @@ const pluginCollection = [
         id: 'pods',
         pluginSlug: 'pods',
         label: __('Pods', 'templates-patterns-collection'),
-        description: __('A framework for creating, managing, and deploying customized content types and fields for any project.', 'templates-patterns-collection')
+        description: __('Custom content types and fields made easy.', 'templates-patterns-collection')
     },
     {
         id: 'restrict-content',
         pluginSlug: 'restrict-content',
         label: __('Membership Plugin', 'templates-patterns-collection'),
-        description: __('Membership plugin that allows you to monetize content access.', 'templates-patterns-collection')
+        description: __('Monetize members-only content.', 'templates-patterns-collection')
     },
     {
         id: 'learning-management-system',
@@ -123,7 +117,6 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
 
     const [selectedFeatures, setSelectedFeatures] = useState({
         pageBuilder: false,
-        contactForm: false,
         eCommerce: false,
         donations: false,
         automation: false,
