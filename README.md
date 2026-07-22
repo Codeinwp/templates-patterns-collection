@@ -4,7 +4,7 @@
 **Requires at least:** 5.5  
 **Tested up to:** 7.0  
 **Requires PHP:** 5.6  
-**Stable tag:** 1.4.1  
+**Stable tag:** 1.4.2  
 **License:** GPLv3  
 **License URI:** https://www.gnu.org/licenses/gpl-3.0.en.html  
 
@@ -37,10 +37,9 @@ The plugin contacts ThemeIsle's service to fetch the starter-sites and templates
 
 ## Changelog ##
 
-##### [Version 1.4.1](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.0...v1.4.1) (2026-07-10)
+##### [Version 1.4.2](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.1...v1.4.2) (2026-07-22)
 
-- Improve caching in site listing
-- Fix decoding of HTML entities in site listing
+- Fixed a fatal error that could occur during site import when the import file was missing or empty; a clear error message is now shown instead.
 
 
 

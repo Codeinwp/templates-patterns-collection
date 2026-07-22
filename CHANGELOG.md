@@ -1,3 +1,7 @@
+##### [Version 1.4.2](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.1...v1.4.2) (2026-07-22)
+
+- Fixed a fatal error that could occur during site import when the import file was missing or empty; a clear error message is now shown instead.
+
 ##### [Version 1.4.1](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.0...v1.4.1) (2026-07-10)
 
 - Improve caching in site listing
