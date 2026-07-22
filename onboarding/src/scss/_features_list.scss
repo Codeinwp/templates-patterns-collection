@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    overflow-x: hidden;
 
     .ob-features-grid {
         display: flex;
@@ -10,7 +9,6 @@
         gap: 10px;
         width: 100%;
         min-width: 0;
-        overflow-x: hidden;
     }
 
     .ob-feature-card {
@@ -107,7 +105,7 @@
         .ob-feature-description {
             font-size: 14px;
             line-height: 1.35;
-            color: #7d8895;
+            color: #666666;
             margin-top: 4px;
             text-align: left;
             overflow-wrap: anywhere;
