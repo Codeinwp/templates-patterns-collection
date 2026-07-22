@@ -15,6 +15,16 @@ class WXR_Parser_SimpleXML {
 	public function parse( $file ) {
 		global $wp_filesystem;
 		WP_Filesystem();
+
+		if ( ! $wp_filesystem->exists( $file ) ) {
+			return new WP_Error( 'SimpleXML_parse_error', 'The specified WXR file does not exist' );
+		}
+
+		$contents = $wp_filesystem->get_contents( $file );
+		if ( empty( $contents ) ) {
+			return new WP_Error( 'SimpleXML_parse_error', 'There was an error when reading this WXR file' );
+		}
+
 		$authors         = $posts = $categories = $tags = $terms = array();
 		$internal_errors = libxml_use_internal_errors( true );
 		$dom             = new \DOMDocument;
@@ -22,7 +32,8 @@ class WXR_Parser_SimpleXML {
 		if ( \PHP_VERSION_ID < 80000 && function_exists( 'libxml_disable_entity_loader' ) ) {
 			$old_value = libxml_disable_entity_loader( true );
 		}
-		$success = $dom->loadXML( $wp_filesystem->get_contents( $file ) );
+
+		$success = $dom->loadXML( $contents );
 		if ( ! is_null( $old_value ) ) {
 			libxml_disable_entity_loader( $old_value );
 		}
