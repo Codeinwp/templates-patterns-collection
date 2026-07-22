@@ -99,7 +99,6 @@ class Main {
 			$this->setup_beaver();
 			$this->setup_elementor();
 		}
-		$this->setup_sites_listing();
 		add_filter( 'themeisle_sdk_hide_dashboard_widget', '__return_true' );
 		add_filter(
 			'templates_patterns_collection_feedback_review_message',
@@ -112,6 +111,7 @@ class Main {
 		if ( ! $this->should_load() ) {
 			return;
 		}
+		$this->setup_sites_listing();
 		$this->setup_admin();
 		$this->setup_api();
 		$this->setup_active_state();
