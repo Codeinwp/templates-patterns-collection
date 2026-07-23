@@ -1,4 +1,10 @@
 {
     "plugins": [ ".." ],
-    "phpVersion": "8.1"
+    "phpVersion": "8.1",
+    "config": {
+        "TPC_E2E": true
+    },
+    "mappings": {
+        "wp-content/mu-plugins": "./mu-plugins"
+    }
 }

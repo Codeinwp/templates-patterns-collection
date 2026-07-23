@@ -7,8 +7,6 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
   cancel-in-progress: true
-env:
-  CYPRESS_LICENSE_KEY: ${{ secrets.CYPRESS_LICENSE_KEY }}
 jobs:
   e2e:
     name: E2E Test
@@ -37,5 +35,5 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: e2e-artifacts
-          path: ./artifacts
+          path: ./e2e-tests/artifacts
           retention-days: 1

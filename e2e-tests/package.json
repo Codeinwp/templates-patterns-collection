@@ -1,19 +1,19 @@
 {
   "name": "e2e-tests",
   "version": "1.0.0",
-  "description": "Playwright e2e-tests",
+  "description": "Playwright e2e tests for templates-patterns-collection",
   "author": "ThemeIsle <friends@themeisle.com>",
   "license": "MIT",
   "keywords": [
-    "wordpress-theme"
+    "wordpress-plugin"
   ],
-  "homepage": "https://github.com/Codeinwp/neve",
+  "homepage": "https://github.com/Codeinwp/templates-patterns-collection",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Codeinwp/neve.git"
+    "url": "git+https://github.com/Codeinwp/templates-patterns-collection.git"
   },
   "bugs": {
-    "url": "https://github.com/Codeinwp/neve/issues"
+    "url": "https://github.com/Codeinwp/templates-patterns-collection/issues"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
