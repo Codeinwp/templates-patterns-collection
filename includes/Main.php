@@ -110,8 +110,8 @@ class Main {
 		);
 		if ( ! $this->should_load() ) {
 			if ( defined( 'WP_CLI' ) && WP_CLI ) {
- 				$this->setup_sites_listing();
- 			}
+				$this->setup_sites_listing();
+			}
 			return;
 		}
 		$this->setup_sites_listing();
