@@ -118,9 +118,10 @@ class Sites_Listing {
 	 * @return array
 	 */
 	private function get_sites() {
-		$response = $this->get_cached_sites();
+		$response  = $this->get_cached_sites();
+		$is_cached = ( $response !== false );
 
-		if ( $response === false ) {
+		if ( ! $is_cached ) {
 			$response = wp_remote_get( esc_url( self::get_api_path() ) );
 
 			if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
@@ -168,14 +169,16 @@ class Sites_Listing {
 			}
 		}
 
-		set_transient(
-			$this->transient_key,
-			array(
-				'fetched_at' => time(),
-				'data'       => $response,
-			),
-			$this->cache_ttl
-		);
+		if ( ! $is_cached ) {
+			set_transient(
+				$this->transient_key,
+				array(
+					'fetched_at' => time(),
+					'data'       => $response,
+				),
+				$this->cache_ttl
+			);
+		}
 
 		return $response;
 	}

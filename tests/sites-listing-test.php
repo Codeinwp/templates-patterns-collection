@@ -125,6 +125,29 @@ class Sites_Listing_Test extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * A fresh cache hit must not rewrite the transient value or reset its expiration.
+	 */
+	public function test_fresh_cache_hit_leaves_transient_and_expiration_unchanged() {
+		$original = array(
+			'fetched_at' => time() - HOUR_IN_SECONDS,
+			'data'       => array( 'gutenberg' => array( 'cached-site' => array() ) ),
+		);
+
+		set_transient( $this->get_transient_key(), $original, 12 * HOUR_IN_SECONDS );
+
+		$timeout_option       = '_transient_timeout_' . $this->get_transient_key();
+		$original_expiration  = get_option( $timeout_option );
+
+		$this->mock_api( array( 'gutenberg' => array( 'fresh-site' => array() ) ) );
+
+		$this->get_sites();
+
+		$this->assertSame( 0, $this->remote_calls );
+		$this->assertSame( $original, get_transient( $this->get_transient_key() ), 'Cache-hit response must not rewrite the wrapped transient payload.' );
+		$this->assertSame( $original_expiration, get_option( $timeout_option ), 'Cache-hit response must not reset the transient expiration.' );
+	}
+
+	/**
 	 * An orphaned-timeout transient (value present but our own fetched_at is
 	 * past the TTL) must trigger a re-fetch instead of being served forever.
 	 */
