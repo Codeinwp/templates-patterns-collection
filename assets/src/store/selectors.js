@@ -1,3 +1,5 @@
+import { isTemplatesCloudTier } from '../../../shared/utils';
+
 export default {
 	getSites: ( state ) => state.sites,
 	getMigrationData: ( state ) => state.migrationData,
@@ -15,28 +17,10 @@ export default {
 	getTemplateModal: ( state ) => state.templateModal,
 	getSearchQuery: ( state ) => state.searchQuery,
 	getUserStatus: ( state ) => {
-		const acceptedTiers = [
-			6,
-			17,
-			23,
-			5,
-			9,
-			14,
-			20,
-			1,
-			7,
-			12,
-			18,
-			3,
-			8,
-			13,
-			19,
-		];
-
 		return (
 			state.license &&
 			state.license.tier &&
-			acceptedTiers.includes( state.license.tier )
+			isTemplatesCloudTier( state.license.tier )
 		);
 	},
 	getLicense: ( state ) => {

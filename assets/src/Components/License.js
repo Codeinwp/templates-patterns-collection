@@ -11,7 +11,8 @@ import {
 	Icon,
 } from '@wordpress/components';
 import { models } from '@wordpress/api';
-import { fetchLibrary as licenseCheck } from './CloudLibrary/common';
+import { licenseCheck } from './CloudLibrary/common';
+import { isLicenseValid, isTemplatesCloudTier } from '../../../shared/utils';
 
 const License = ( { setLicense, license } ) => {
 	const keyValue = license?.key !== '' && license?.key !== 'free' ? license?.key : '';
@@ -19,8 +20,7 @@ const License = ( { setLicense, license } ) => {
 	const [ loading, setLoading ] = useState( false );
 	const [ resultMsg, setResultMsg ] = useState( {} );
 
-
-	const isValid = 'valid' === license?.valid || 'valid' === license?.license;
+	const isValid = isLicenseValid( license ) && isTemplatesCloudTier( license?.tier );
 
 	const delay = (time) => new Promise(resolve => setTimeout(resolve, time));
 
@@ -61,10 +61,10 @@ const License = ( { setLicense, license } ) => {
 			return;
 		}
 
-		const { success, templates } = await licenseCheck( false, { license_id: data.key, license_check: 1 } );
+		const { success, status, license: licenseData } = await licenseCheck( data.key );
 
 		if ( success ) {
-			setLicense( templates );
+			setLicense( licenseData );
 			await updateKey( data.key );
 		} else {
 			createNotice(
