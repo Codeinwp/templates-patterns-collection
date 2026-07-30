@@ -71,8 +71,10 @@ add_action(
 					// order) so the next request reflects the new mode.
 					delete_option( 'templates_patterns_collection_license_data' );
 					delete_transient( 'templates_patterns_collection_license_check' );
-					foreach ( array( 'gutenberg', 'elementor' ) as $builder ) {
-						delete_transient( 'tpc_starter_order_v2_' . $builder );
+					foreach ( array( 'v2', 'v3' ) as $version ) {
+						foreach ( array( 'gutenberg', 'elementor' ) as $builder ) {
+							delete_transient( 'tpc_starter_order_' . $version . '_' . $builder );
+						}
 					}
 					return rest_ensure_response( array( 'success' => true ) );
 				},
