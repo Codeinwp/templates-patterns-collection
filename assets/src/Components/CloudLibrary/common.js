@@ -7,6 +7,7 @@ import { models, loadPromise } from '@wordpress/api';
 import { cleanTemplateContent } from '../../../../shared/utils';
 import {
 	isLicenseValid,
+	isTemplatesCloudTier,
 } from '../../../../shared/utils';
 
 export const changeOption = ( option, value ) => {
@@ -96,7 +97,7 @@ export const licenseCheck = async ( licenseKey ) => {
 			license_check: 1,
 		} ) ) || {};
 
-	if ( ! success || ! isLicenseValid( license ) ) {
+	if ( ! success || ! isLicenseValid( license ) || ! isTemplatesCloudTier( license?.tier ) ) {
 		return {
 			success: false,
 			status: 'invalid',

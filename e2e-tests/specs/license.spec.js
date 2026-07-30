@@ -43,7 +43,7 @@ test.describe('License activation', () => {
         await setLegacyTc(requestUtils, false);
     });
 
-    test('not activating a personal plan', async ({
+    test('not activating personal plan', async ({
         page,
         admin,
     }) => {
