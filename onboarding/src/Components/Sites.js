@@ -7,13 +7,13 @@ import { matchesCategory, searchCatalog } from '../utils/search';
 
 /**
  * @typedef {Object} Site
- * @property {string}   url
- * @property {string}   remote_url
- * @property {string}   screenshot
- * @property {string}   title
- * @property {string[]} keywords
- * @property {boolean}  isNew
- * @property {string}   slug
+ * @property {string}   url        Local preview URL.
+ * @property {string}   remote_url Remote demo URL.
+ * @property {string}   screenshot Starter-site screenshot URL.
+ * @property {string}   title      Display title.
+ * @property {string[]} keywords   Search keywords.
+ * @property {boolean}  isNew      Whether the starter site is newly added.
+ * @property {string}   slug       Unique starter-site slug.
  */
 
 const Sites = ( {
@@ -147,15 +147,21 @@ const Sites = ( {
 			return items;
 		}
 
+		const localMatches = searchCatalog( items, searchQuery );
+
 		if ( Array.isArray( searchOrder ) && searchOrder.length ) {
-			return pickBySlugs( items, searchOrder ).picked;
+			const { picked, placed } = pickBySlugs( items, searchOrder );
+			localMatches.forEach( ( site ) => {
+				if ( site?.slug && ! placed[ site.slug ] ) {
+					placed[ site.slug ] = true;
+					picked.push( site );
+				}
+			} );
+
+			return picked;
 		}
 
-		if ( searchFailed ) {
-			return searchCatalog( items, searchQuery );
-		}
-
-		return [];
+		return localMatches;
 	};
 
 	const filterByCategory = ( items, cat ) => {

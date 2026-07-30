@@ -18,7 +18,7 @@ const { onboarding } = tiobDash;
 
 // Debounce the search so it stays off the network while typing: only fire after the
 // field is idle for SEARCH_DEBOUNCE_MS and the query is at least SEARCH_MIN_CHARS.
-const SEARCH_DEBOUNCE_MS = 700;
+const SEARCH_DEBOUNCE_MS = 1500;
 const SEARCH_MIN_CHARS = 3;
 
 // Guards tracking-session init against firing twice while the first request is in flight.
@@ -49,6 +49,10 @@ const SiteList = ( {
 					href={ tiobDash.onboardingUpsell.upgradeToast }
 					target="_blank"
 					rel="noopener noreferrer"
+					aria-label={ __(
+						'View Neve Business plans',
+						'templates-patterns-collection'
+					) }
 				/>
 			),
 		}
