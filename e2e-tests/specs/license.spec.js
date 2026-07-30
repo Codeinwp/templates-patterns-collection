@@ -54,9 +54,7 @@ test.describe('License activation', () => {
         await page.getByRole('button', { name: 'Activate' }).click();
 
         await expect(
-            page.locator('.components-notice__content').filter({
-                hasText: 'Can not activate this license!'
-            })
+            page.locator('#tpc-app').getByText('Can not activate this license!', { exact: true })
         ).toBeVisible();
     });
 

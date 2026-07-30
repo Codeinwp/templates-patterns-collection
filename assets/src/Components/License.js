@@ -61,7 +61,7 @@ const License = ( { setLicense, license } ) => {
 			return;
 		}
 
-		const { success, status, license: licenseData } = await licenseCheck( data.key );
+		const { success, license: licenseData } = await licenseCheck( data.key );
 
 		if ( success ) {
 			setLicense( licenseData );
