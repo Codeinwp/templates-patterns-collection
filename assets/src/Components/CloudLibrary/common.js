@@ -4,11 +4,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 import { models, loadPromise } from '@wordpress/api';
-import { cleanTemplateContent } from '../../../../shared/utils';
-import {
-	isLicenseValid,
-	isTemplatesCloudTier,
-} from '../../../../shared/utils';
+import { cleanTemplateContent, hasTemplatesCloudAccess } from '../../../../shared/utils';
 
 export const changeOption = ( option, value ) => {
 	const model = new models.Settings( {
@@ -97,7 +93,7 @@ export const licenseCheck = async ( licenseKey ) => {
 			license_check: 1,
 		} ) ) || {};
 
-	if ( ! success || ! isLicenseValid( license ) || ! isTemplatesCloudTier( license?.tier ) ) {
+	if ( ! success || ! hasTemplatesCloudAccess( license ) ) {
 		return {
 			success: false,
 			status: 'invalid',

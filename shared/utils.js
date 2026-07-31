@@ -65,3 +65,12 @@ export const isTemplatesCloudTier = ( tier ) => {
  */
 export const isLicenseValid = ( license ) =>
 	'valid' === license?.valid || 'valid' === license?.license;
+
+/**
+ * Check if the license grants access to Templates Cloud.
+ *
+ * @param {Object} license The license data.
+ * @return {boolean} Whether the license is valid and includes Templates Cloud.
+ */
+export const hasTemplatesCloudAccess = ( license ) =>
+	isLicenseValid( license ) && isTemplatesCloudTier( license?.tier );

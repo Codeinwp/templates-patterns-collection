@@ -62,7 +62,7 @@ add_action(
 				'args'                => array(
 					'mode' => array(
 						'type' => 'string',
-						'enum' => array( '', 'down', 'invalid' ),
+						'enum' => array( '', 'down', 'invalid', 'personal' ),
 					),
 				),
 				'callback'            => function ( $request ) {
@@ -110,9 +110,11 @@ add_filter(
 		$is_themeisle_api = false !== strpos( $url, 'api.themeisle.com' ) || false !== strpos( $url, 'ai.themeisle.com' );
 
 		// Scenario modes (Otter pattern), set per spec via tpc-e2e/v1/api-mode:
-		// 'down'    => ThemeIsle APIs unreachable.
-		// 'invalid' => license check rejects the key (a code/message body is
-		//              what License::check_license treats as invalid).
+		// 'down'     => ThemeIsle APIs unreachable.
+		// 'invalid'  => license check rejects the key (a code/message body is
+		//               what License::check_license treats as invalid).
+		// 'personal' => the key is accepted, on a tier that does not include
+		//               Templates Cloud.
 		$mode = get_option( 'tpc_e2e_api_mode', '' );
 
 		if ( 'down' === $mode && $is_themeisle_api ) {
@@ -125,6 +127,21 @@ add_filter(
 					array(
 						'code'    => 'invalid_license',
 						'message' => 'TPC E2E: invalid license.',
+					)
+				)
+			);
+		}
+
+		// A valid license on a tier that does not include Templates Cloud.
+		// Must match PERSONAL_LICENSE in config/mocks.js.
+		if ( 'personal' === $mode && false !== strpos( $url, 'api.themeisle.com/templates-cloud/' ) ) {
+			return tpc_e2e_response(
+				wp_json_encode(
+					array(
+						'license' => 'valid',
+						'key'     => 'tpc-e2e-personal-key',
+						'tier'    => 2,
+						'expires' => 'lifetime',
 					)
 				)
 			);
