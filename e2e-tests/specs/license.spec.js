@@ -71,3 +71,43 @@ test.describe('License activation', () => {
         await expect(page.getByRole('button', { name: 'Deactivate' })).toBeVisible();
     });
 });
+
+// The 'personal' API mode is the state inherit_license_from_neve() stores for a
+// Neve Personal key: the license is valid, its tier is not eligible. The panel
+// has to treat it as a stored license and still say why Templates Cloud is locked.
+test.describe('A stored license on an ineligible plan', () => {
+    const SETTINGS_URL = 'admin.php?page=tiob-plugin#settings';
+
+    test.beforeEach(async ({ requestUtils, admin }) => {
+        await setLegacyTc(requestUtils, true);
+        await setApiMode(requestUtils, 'personal');
+        await admin.visitAdminPage(SETTINGS_URL);
+    });
+
+    test.afterEach(async ({ requestUtils }) => {
+        await setApiMode(requestUtils, '');
+        await setLegacyTc(requestUtils, false);
+    });
+
+    test('can be deactivated', async ({ page }) => {
+        await expect(page.getByRole('button', { name: 'Deactivate' })).toBeVisible();
+    });
+
+    test('is masked in the license field', async ({ page }) => {
+        await expect(page.getByLabel('License Key')).toHaveValue(
+            '******************************l-key',
+        );
+    });
+
+    test('is not reported as verified', async ({ page }) => {
+        await expect(page.getByText('Verified - Expires at')).toBeHidden();
+    });
+
+    test('explains that the plan does not include Templates Cloud', async ({ page }) => {
+        await expect(
+            page.getByText(
+                'Your license is valid, but Templates Cloud is not included in your plan.',
+            ),
+        ).toBeVisible();
+    });
+});
