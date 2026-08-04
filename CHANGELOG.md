@@ -1,3 +1,8 @@
+##### [Version 1.4.3](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.2...v1.4.3) (2026-08-04)
+
+- Fixed an issue where the starter sites list rewrote its cache during routine requests instead of reusing it, adding unnecessary work on page loads.
+- Improved the starter site search so results appear more responsively and better match what you type.
+
 ##### [Version 1.4.2](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.1...v1.4.2) (2026-07-22)
 
 - Fixed a fatal error that could occur during site import when the import file was missing or empty; a clear error message is now shown instead.
