@@ -79,6 +79,43 @@ yarn run ci:e2e
 
 `yarn run ci:e2e` reinstalls `e2e-tests` dependencies, starts the wp-env test environment, installs Playwright Chromium, and runs the browser suite.
 
+### E2E suite (Playwright)
+
+Local iteration (needs Docker and Node >= 20; the root repo can stay on an older Node):
+
+```bash
+cd e2e-tests
+npm install
+npm run wp-env start
+npm run test:playwright                                # full suite
+npm run test:playwright -- specs/onboarding.spec.js    # one spec
+```
+
+How the suite works — read this before adding specs:
+
+- **No live ThemeIsle APIs.** All external calls are mocked at two layers:
+  - Server-side PHP fetches (sites feed, license check, starter ranking, demo content XML, import attachments) are short-circuited by the test-only mu-plugin `e2e-tests/mu-plugins/tpc-e2e.php` via `pre_http_request`, mounted through `.wp-env.json` and gated by the `TPC_E2E` constant. Fixtures: `e2e-tests/mu-plugins/fixtures/sites.json` (starter-sites feed) and the shared PHPUnit fixtures in `tests/fixtures/`.
+  - Browser-side fetches (`ti-demo-data`, Templates Cloud list/import, tracking) are mocked with `page.route` installers from `e2e-tests/config/mocks.js`. Cross-origin mocks must echo the request origin (credentialed CORS) — reuse the helpers there instead of hand-rolling `route.fulfill`.
+- **Only wordpress.org traffic is real** (Neve theme + plugin installs during the import test) — that install path is itself under test.
+- **Site state is toggled per spec** via the mu-plugin's `tpc-e2e/v1` REST namespace, called with `requestUtils.rest()`:
+  - `POST /legacy-tc { enabled }` — the Templates Cloud dashboard (`admin.php?page=tiob-plugin`) and the editor integration only exist in "legacy TC" mode; the onboarding surface behaves differently there. Mutually exclusive states: always reset in `afterAll`/`afterEach`.
+  - `POST /api-mode { mode: '' | 'down' | 'invalid' }` — ThemeIsle API failure scenarios (see `specs/error-states.spec.js`). Switching flushes cached license/ranking data.
+- **Assertions derive from fixtures or independent literals** — never recompute an expected value the same way the mock computes its response. Site/font counts come from the fixture inputs; hardcoded counts belong to remote data and will rot.
+- `workers: 1` is required, not incidental: the state toggles above are site-global options and parallel workers would race on them.
+
+Known gaps (deferred, see `e2e-tests/README.md`): Elementor/Beaver template libraries, the dashboard starter-sites grid (needs the Neve theme installed), the Zelle migration flow, and the editor header "Templates Cloud" button (its portal target `.edit-post-header__center` no longer exists in current WordPress).
+
+### Testing practices (TDD)
+
+When adding or changing tests in this repo, follow these rules:
+
+- **Red before green.** Write one failing test first, then only enough code to pass it. One seam, one test, one minimal implementation per cycle — don't write all tests up front and then all implementation (bulk-written tests verify imagined behavior and go stale).
+- **Test at seams (public interfaces), never internals.** Here the seams are: admin pages and the editor canvas (via Playwright locators), the `ti-sites-lib/v1` REST endpoints (via `requestUtils.rest()`), and PHP class public methods (PHPUnit). A good test survives an internal refactor; if it breaks when behavior didn't change, it's coupled to implementation.
+- **Prefer role/text locators** (`getByRole`, `getByText`) over CSS classes; use classes only where the UI offers no accessible handle (existing `.ss-card-wrap`-style locators are the ceiling, not the target).
+- **No tautological assertions.** The expected value must come from an independent source (a literal, the fixture *input*, the spec) — never recomputed the same way the code or mock computes it. Example in this repo: `starter_order` asserts literal slugs, not `Object.keys(fixture)`.
+- **Mock only at system boundaries** — external HTTP (ThemeIsle APIs), never the plugin's own classes/modules or internal collaborators. Don't assert on call counts or internal wiring; assert observable behavior (content in the canvas, a page created, an option's effect in the UI).
+- **One logical assertion per test**, name tests as WHAT-statements ("importing a template inserts its blocks into the post"), not HOW.
+
 ## Architecture
 
 ### Bootstrap & Runtime

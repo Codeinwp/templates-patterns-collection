@@ -1,6 +1,7 @@
 .git
 .github
 cypress
+e2e-tests
 .distignore
 .gitignore
 .travis.yml

@@ -1,0 +1,39 @@
+{
+	"gutenberg": {
+		"neve-charity": {
+			"slug": "neve-charity",
+			"title": "Charity",
+			"url": "https://demo.themeisle.com/neve-charity/",
+			"remote_url": "https://demo.themeisle.com/neve-charity/",
+			"screenshot": "https://demo.themeisle.com/neve-charity/screenshot.png",
+			"keywords": [ "nonprofit", "business" ]
+		},
+		"neve-web-agency": {
+			"slug": "neve-web-agency",
+			"title": "Web Agency",
+			"url": "https://demo.themeisle.com/neve-charity/",
+			"remote_url": "https://demo.themeisle.com/neve-charity/",
+			"screenshot": "https://demo.themeisle.com/neve-charity/screenshot.png",
+			"keywords": [ "business", "portfolio" ]
+		},
+		"neve-restaurant": {
+			"slug": "neve-restaurant",
+			"title": "Restaurant",
+			"url": "https://demo.themeisle.com/neve-charity/",
+			"remote_url": "https://demo.themeisle.com/neve-charity/",
+			"screenshot": "https://demo.themeisle.com/neve-charity/screenshot.png",
+			"keywords": [ "business" ],
+			"upsell": true
+		}
+	},
+	"elementor": {
+		"neve-charity-el": {
+			"slug": "neve-charity-el",
+			"title": "Charity Elementor",
+			"url": "https://demo.themeisle.com/neve-charity/",
+			"remote_url": "https://demo.themeisle.com/neve-charity/",
+			"screenshot": "https://demo.themeisle.com/neve-charity/screenshot.png",
+			"keywords": [ "nonprofit" ]
+		}
+	}
+}
