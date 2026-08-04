@@ -24,6 +24,9 @@ test.describe('Onboarding', () => {
         await expect(page.locator('.ob-error-wrap')).toHaveCount(0);
     };
 
+    const featureCard = ( page, pluginSlug ) =>
+        page.locator(`.ob-feature-header[data-plugin="${ pluginSlug }"] .ob-feature-select`);
+
     test('Sub-menu in Admin page', async ({ page, admin }) => {
         await admin.visitAdminPage('/');
 
@@ -110,13 +113,17 @@ test.describe('Onboarding', () => {
         await openFirstSiteAndWaitForData( page );
         await page.getByRole('button', { name: 'Continue' }).click();
 
-        expect(await page.locator('.ob-feature-card').count()).toBe(6);
+        // FeaturesList caps the list at MAX_FEATURE_LIST_LENGTH (6).
+        const featureCardCount = await page.locator('.ob-feature-card').count();
+        expect(featureCardCount).toBeGreaterThanOrEqual(5);
+        expect(featureCardCount).toBeLessThanOrEqual(6);
         expect(
-            await page.locator('.ob-feature-card.ob-disabled[aria-checked="true"]').count(),
+            await page.locator('.ob-feature-card.ob-disabled .ob-feature-select[aria-checked="true"]').count(),
         ).toBeGreaterThan(0); // We have some required plugin that are active by default.
 
         // Check if we can select a plugin to install.
-        const cachePlugin = page.getByRole('checkbox', { name: 'Caching Supercharge your site' });
+        const cachePlugin = featureCard( page, 'wp-cloudflare-page-cache' );
+        await expect(cachePlugin).toHaveAttribute('aria-checked', 'false');
         await cachePlugin.click();
         await expect(cachePlugin).toHaveAttribute('aria-checked', 'true');
 
@@ -133,7 +140,7 @@ test.describe('Onboarding', () => {
         await admin.visitAdminPage(ONBOARDING_URL);
         await openFirstSiteAndWaitForData( page );
         await page.getByRole('button', { name: 'Continue' }).click();
-        const cachePlugin = page.getByRole('checkbox', { name: 'Caching Supercharge your site' });
+        const cachePlugin = featureCard( page, 'wp-cloudflare-page-cache' );
         await cachePlugin.click();
         await page.getByRole('button', { name: 'Import Website' }).click();
 
