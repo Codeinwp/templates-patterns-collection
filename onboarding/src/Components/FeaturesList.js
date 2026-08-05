@@ -1,4 +1,4 @@
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useLayoutEffect, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { decodeHtmlEntities } from '../utils/common';
 
@@ -12,13 +12,7 @@ const featuredPluginCollection = [
         id: 'pageBuilder',
         pluginSlug: 'otter-blocks',
         label: __('Site Builder', 'templates-patterns-collection'),
-        description: __('Build beautiful pages with a simple drag-and-drop page builder.', 'templates-patterns-collection')
-    },
-    { 
-        id: 'contactForm',
-        pluginSlug: 'otter-blocks',
-        label: __('Contact Form', 'templates-patterns-collection'),
-        description: __('Create forms to capture leads and feedback.', 'templates-patterns-collection')
+        description: __('Build pages and forms with Otter.', 'templates-patterns-collection')
     },
     {
         id: 'imageOpt',
@@ -123,7 +117,6 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
 
     const [selectedFeatures, setSelectedFeatures] = useState({
         pageBuilder: false,
-        contactForm: false,
         eCommerce: false,
         donations: false,
         automation: false,
@@ -133,6 +126,19 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
     });
 
     const [lockedPluginSlugs, setLockedPluginSlugs] = useState([]);
+    const [expandedFeatures, setExpandedFeatures] = useState({});
+
+    const gridRef = useRef(null);
+    const autoFitApplied = useRef(false);
+
+    const toggleExpanded = (feature) => {
+        // Any manual toggle takes over from the automatic fit.
+        autoFitApplied.current = true;
+        setExpandedFeatures((prev) => ({
+            ...prev,
+            [feature]: !prev[feature],
+        }));
+    };
 
     const toggleFeature = (feature, pluginSlug) => {
         if (lockedPluginSlugs.includes(pluginSlug)) {
@@ -198,41 +204,105 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
 
         setFeatureList(orderedFeatures);
         setLockedPluginSlugs(requiredPluginSlugs);
+        setExpandedFeatures(
+            Object.fromEntries(orderedFeatures.map(({ id }) => [id, true]))
+        );
+        autoFitApplied.current = false;
     }, [requiredPlugins]);
+
+    // Descriptions start open and collapse only if the list would run past the footer.
+    // Selected features give up their description first, since unselected ones still need the pitch.
+    useLayoutEffect(() => {
+        if (autoFitApplied.current || !gridRef.current || 0 === featureList.length) {
+            return;
+        }
+        autoFitApplied.current = true;
+
+        const footer = document.querySelector('.ob-settings-bottom');
+        const limit = window.innerHeight - (footer ? footer.offsetHeight : 0);
+        const overflow = gridRef.current.getBoundingClientRect().bottom - limit;
+
+        if (overflow <= 0) {
+            return;
+        }
+
+        const heightOf = (id) => {
+            const description = gridRef.current.querySelector(`#ob-feature-desc-${id}`);
+            if (!description || description.hidden) {
+                return 0;
+            }
+            return description.offsetHeight + parseFloat(window.getComputedStyle(description).marginTop || 0);
+        };
+
+        const isSelected = ({ id, pluginSlug }) => selectedFeatures[id] || lockedPluginSlugs.includes(pluginSlug);
+        const reclaimed = featureList.filter(isSelected).reduce((total, { id }) => total + heightOf(id), 0);
+
+        setExpandedFeatures(
+            reclaimed >= overflow
+                ? Object.fromEntries(featureList.filter((feature) => !isSelected(feature)).map(({ id }) => [id, true]))
+                : {}
+        );
+    }, [featureList]);
 
     return (
         <div className="ob-select-features">
-            <div className="ob-features-grid">
+            <div className="ob-features-grid" ref={gridRef}>
                 {
                     featureList.map((feature) => {
                         const checked = selectedFeatures[feature.id] || lockedPluginSlugs.includes(feature.pluginSlug);
                         const isLocked = lockedPluginSlugs.includes(feature.pluginSlug);
+                        const isExpanded = Boolean(expandedFeatures[feature.id]);
+                        const titleId = `ob-feature-title-${feature.id}`;
+                        const descriptionId = `ob-feature-desc-${feature.id}`;
                         return (
-                            <button
+                            <div
                                 key={feature.id}
                                 className={`ob-feature-card ${
                                     checked ? 'selected' : ''
                                 } ${isLocked ? 'ob-disabled' : ''}`}
-                                onClick={() => toggleFeature(feature.id, feature.pluginSlug)}
-                                onKeyPress={(e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        toggleFeature(feature.id, feature.pluginSlug);
-                                    }
-                                }}
-                                role="checkbox"
-                                aria-checked={checked}
-                                disabled={isLocked}
                             >
                                 <div className="ob-feature-header" data-plugin={feature.pluginSlug}>
-                                    <h4 className="ob-feature-title">{feature.label}</h4>
-                                    <input
-                                        type="checkbox"
-                                        checked={checked}
-                                        readOnly
-                                    />
+                                    <button
+                                        type="button"
+                                        className="ob-feature-select"
+                                        onClick={() => toggleFeature(feature.id, feature.pluginSlug)}
+                                        role="checkbox"
+                                        aria-checked={checked}
+                                        disabled={isLocked}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={checked}
+                                            readOnly
+                                            tabIndex={-1}
+                                        />
+                                        <h4 className="ob-feature-title" id={titleId}>{feature.label}</h4>
+                                    </button>
+                                    {feature.description && (
+                                        <button
+                                            type="button"
+                                            className="ob-feature-expand"
+                                            onClick={() => toggleExpanded(feature.id)}
+                                            aria-expanded={isExpanded}
+                                            aria-controls={descriptionId}
+                                            aria-labelledby={titleId}
+                                        >
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                                                <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                        </button>
+                                    )}
                                 </div>
-                                <div className="ob-feature-description">{feature.description}</div>
-                            </button>
+                                {feature.description && (
+                                    <div
+                                        className="ob-feature-description"
+                                        id={descriptionId}
+                                        hidden={!isExpanded}
+                                    >
+                                        {feature.description}
+                                    </div>
+                                )}
+                            </div>
                         ); 
                     })
                 }

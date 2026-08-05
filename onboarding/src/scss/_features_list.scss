@@ -1,47 +1,67 @@
 .ob-select-features {
     display: flex;
     flex-direction: column;
+    width: 100%;
 
     .ob-features-grid {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 10px;
         width: 100%;
+        min-width: 0;
     }
 
     .ob-feature-card {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        padding: 1rem;
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 12px 14px;
         background-color: #ffffff;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        cursor: pointer;
+        border: 1px solid #e3e8ef;
+        border-radius: 10px;
         transition: box-shadow 0.3s ease, border 0.3s ease;
+        text-align: left;
 
         &:hover:not(.ob-disabled) {
-            border-color: #007cba;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: #9ec3ef;
+            box-shadow: 0 2px 8px rgba(3, 102, 213, 0.08);
         }
 
-        &:focus {
+        &:focus-within {
             outline: none;
-            border-color: #007cba;
-            box-shadow: 0 0 0 4px rgba(0, 124, 186, 0.2);
+            border-color: #0366d5;
+            box-shadow: 0 0 0 3px rgba(3, 102, 213, 0.18);
         }
 
         &.selected {
-            border-color: #007cba;
-            background-color: #e8f4fa;
+            border-color: #8bb6f3;
+            background-color: #eaf3ff;
+
+            .ob-feature-title {
+                color: #0f4fbf;
+            }
         }
 
         &.ob-disabled {
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 1;
+            border-color: #dce3ee;
+            background-color: #f7f9fc;
+
+            .ob-feature-title {
+                color: #7b8697;
+            }
+
+            input[type='checkbox'] {
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
 
             &:hover {
-                border-color: #e0e0e0;
+                border-color: #dce3ee;
                 box-shadow: none;
             }
         }
@@ -49,29 +69,86 @@
         .ob-feature-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 8px;
             width: 100%;
 
-            .ob-feature-title {
-                font-size: 1rem;
-                font-weight: bold;
-                color: #333333;
-                margin: 0;
+            .ob-feature-select {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex: 1;
+                min-width: 0;
+                padding: 0;
+                background: none;
+                border: 0;
+                cursor: pointer;
                 text-align: left;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            .ob-feature-title {
+                font-size: 16px;
+                line-height: 1.2;
+                font-weight: 700;
+                color: #1f2937;
+                margin: 0;
+                flex: 1;
+                text-align: left;
+                min-width: 0;
             }
 
             input[type='checkbox'] {
                 cursor: pointer;
-                accent-color: #007cba;
-                transform: scale(1.2);
+                accent-color: #2b62de;
+                margin: 0;
+                width: 18px;
+                height: 18px;
+                flex-shrink: 0;
+            }
+
+            .ob-feature-expand {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                width: 28px;
+                height: 28px;
+                margin-right: -6px;
+                padding: 0;
+                background: none;
+                border: 0;
+                border-radius: 4px;
+                color: #9aa3b2;
+                cursor: pointer;
+
+                &:hover {
+                    color: #0f4fbf;
+                    background-color: rgba(3, 102, 213, 0.08);
+                }
+
+                svg {
+                    transition: transform 0.2s ease;
+                }
+
+                &[aria-expanded='true'] svg {
+                    transform: rotate(180deg);
+                }
             }
         }
 
         .ob-feature-description {
-            font-size: 0.875rem;
+            font-size: 14px;
+            line-height: 1.35;
             color: #666666;
-            margin-top: 0.5rem;
+            margin-top: 6px;
             text-align: left;
+            overflow-wrap: anywhere;
+
+            // Align with the title rather than the leading checkbox.
+            padding-left: 28px;
         }
     }
 }
