@@ -17,7 +17,6 @@ const TabNavigation = ( {
 	setCurrentTab,
 	currentTab,
 	isFetching,
-	license,
 } ) => {
 	const buttons = {};
 
@@ -33,7 +32,6 @@ const TabNavigation = ( {
 
 	const [ isSyncing, setSyncing ] = useState( false );
 	const { isLicenseOpen, setLicenseOpen } = useContext( LicensePanelContext );
-	const isValid = 'valid' === license?.valid || 'valid' === license?.license;
 
 	const sync = () => {
 		setSyncing( true );
@@ -158,7 +156,6 @@ const Header = ( {
 	cancelOnboarding,
 	setCurrentTab,
 	currentTab,
-	license,
 } ) => {
 	return (
 		<div className="ob-head">
@@ -169,7 +166,6 @@ const Header = ( {
 						<TabNavigation
 							setCurrentTab={ setCurrentTab }
 							currentTab={ currentTab }
-							license={ license }
 						/>
 					</div>
 				</>
@@ -204,13 +200,11 @@ export default compose(
 			getOnboardingStatus,
 			getCurrentTab,
 			getFetching,
-			getLicense,
 		} = select( 'neve-onboarding' );
 		return {
 			isOnboarding: getOnboardingStatus(),
 			currentTab: getCurrentTab(),
 			isFetching: getFetching(),
-			license: getLicense(),
 		};
 	} )
 )( Header );

@@ -1,3 +1,4 @@
+/* global tiobDash */
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { compose } from '@wordpress/compose';
@@ -11,7 +12,11 @@ import {
 	Icon,
 } from '@wordpress/components';
 import { models } from '@wordpress/api';
-import { fetchLibrary as licenseCheck } from './CloudLibrary/common';
+import { licenseCheck } from './CloudLibrary/common';
+import {
+	hasTemplatesCloudAccess,
+	isLicenseValid,
+} from '../../../shared/utils';
 
 const License = ( { setLicense, license } ) => {
 	const keyValue = license?.key !== '' && license?.key !== 'free' ? license?.key : '';
@@ -19,8 +24,13 @@ const License = ( { setLicense, license } ) => {
 	const [ loading, setLoading ] = useState( false );
 	const [ resultMsg, setResultMsg ] = useState( {} );
 
+	const isStored = isLicenseValid( license );
+	const hasAccess = hasTemplatesCloudAccess( license );
 
-	const isValid = 'valid' === license?.valid || 'valid' === license?.license;
+	const notEntitledMsg = __(
+		'Your license is valid, but Templates Cloud is not included in your plan.',
+		'templates-patterns-collection'
+	);
 
 	const delay = (time) => new Promise(resolve => setTimeout(resolve, time));
 
@@ -61,10 +71,10 @@ const License = ( { setLicense, license } ) => {
 			return;
 		}
 
-		const { success, templates } = await licenseCheck( false, { license_id: data.key, license_check: 1 } );
+		const { success, license: licenseData } = await licenseCheck( data.key );
 
 		if ( success ) {
-			setLicense( templates );
+			setLicense( licenseData );
 			await updateKey( data.key );
 		} else {
 			createNotice(
@@ -77,7 +87,7 @@ const License = ( { setLicense, license } ) => {
 
 	const toggleLicense = ( event ) => {
 		onSaveLicense( {
-			action: isValid ? 'deactivate' : 'activate',
+			action: isStored ? 'deactivate' : 'activate',
 			key: licenseKey,
 		} );
 
@@ -85,9 +95,9 @@ const License = ( { setLicense, license } ) => {
 	};
 
 	const futureDate = new Date( new Date().setFullYear( new Date().getFullYear() + 10 ) );
-	const expiration = isValid && license?.expires === 'lifetime' ? futureDate.toDateString() : new Date( license.expires ).toDateString();
+	const expiration = isStored && license?.expires === 'lifetime' ? futureDate.toDateString() : new Date( license.expires ).toDateString();
 
-	const licenseStatusMsg = isValid ? (
+	const licenseStatusMsg = hasAccess ? (
 		<>
 			<Icon size={ 24 } className="verified" icon="yes-alt" />
 			<span>{ 'Verified - Expires at'} { expiration }</span>
@@ -96,6 +106,18 @@ const License = ( { setLicense, license } ) => {
 	) : (
 		''
 	);
+
+	const renderEntitlementMsg =
+		isStored && ! hasAccess ? (
+			<Notice isDismissible={ false } status="warning">
+				{ notEntitledMsg }{ ' ' }
+				<ExternalLink href={ tiobDash.upgradeURLTpc }>
+					{ __( 'Upgrade to PRO', 'templates-patterns-collection' ) }
+				</ExternalLink>
+			</Notice>
+		) : (
+			''
+		);
 
 	const renderResultMsg =
 		Object.keys( resultMsg ).length > 0 ? (
@@ -110,11 +132,11 @@ const License = ( { setLicense, license } ) => {
 		<>
 			<form className="license-form" onSubmit={ toggleLicense }>
 				<TextControl
-					disabled={ isValid }
+					disabled={ isStored }
 					onChange={ setLicenseKey }
 					label={ __( 'License Key', 'templates-patterns-collection' ) }
 					value={
-						isValid
+						isStored
 							? '******************************' +
 							  licenseKey.slice( -5 )
 							: licenseKey
@@ -126,13 +148,14 @@ const License = ( { setLicense, license } ) => {
 					type="submit"
 					variant="primary"
 				>
-					{ isValid
+					{ isStored
 						? __( 'Deactivate', 'templates-patterns-collection' )
 						: __( 'Activate', 'templates-patterns-collection' ) }
 				</Button>
 			</form>
 
 			<div className="info">{ licenseStatusMsg }</div>
+			{ renderEntitlementMsg }
 			{ renderResultMsg }
 		</>
 	);

@@ -23,3 +23,54 @@ export const cleanTemplateContent = ( templateContent, cleanFunc ) => {
 		loopElementorElement( item, cleanFunc );
 	} );
 };
+
+/**
+ * License tiers entitled to Templates Cloud.
+ */
+export const TEMPLATES_CLOUD_TIERS = [
+	6,
+	17,
+	23,
+	5,
+	9,
+	14,
+	20,
+	1,
+	7,
+	12,
+	18,
+	3,
+	8,
+	13,
+	19,
+];
+
+/**
+ * Check if a license tier is entitled to Templates Cloud.
+ *
+ * @param {number|string} tier The tier key returned by the licensing API.
+ * @return {boolean} Whether the tier includes Templates Cloud.
+ */
+export const isTemplatesCloudTier = ( tier ) => {
+	const parsed = Number( tier );
+
+	return Number.isInteger( parsed ) && TEMPLATES_CLOUD_TIERS.includes( parsed );
+};
+
+/**
+ * Check if the license itself is valid, regardless of its tier.
+ *
+ * @param {Object} license The license data.
+ * @return {boolean} Whether the license is valid.
+ */
+export const isLicenseValid = ( license ) =>
+	'valid' === license?.valid || 'valid' === license?.license;
+
+/**
+ * Check if the license grants access to Templates Cloud.
+ *
+ * @param {Object} license The license data.
+ * @return {boolean} Whether the license is valid and includes Templates Cloud.
+ */
+export const hasTemplatesCloudAccess = ( license ) =>
+	isLicenseValid( license ) && isTemplatesCloudTier( license?.tier );

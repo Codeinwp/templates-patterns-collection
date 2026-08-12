@@ -108,6 +108,23 @@ export const MOCK_TEMPLATES = [
     },
 ];
 
+// License payloads returned for a browser-side license check (license_check=1).
+// AGENCY_LICENSE matches the license the mu-plugin seeds; PERSONAL_LICENSE is a
+// valid license on a tier that does not include Templates Cloud.
+export const AGENCY_LICENSE = {
+    license: 'valid',
+    key: 'tpc-e2e-key',
+    tier: 3,
+    expires: 'lifetime',
+};
+
+export const PERSONAL_LICENSE = {
+    license: 'valid',
+    key: 'tpc-e2e-personal-key',
+    tier: 2,
+    expires: 'lifetime',
+};
+
 // apiFetch sends credentialed requests, so the mocked cross-origin responses
 // must echo the exact origin (a wildcard is rejected by the browser).
 const corsHeaders = (route) => ({
@@ -142,9 +159,19 @@ export async function mockOnboardingRoutes(page) {
 export const TEMPLATE_CONTENT_TEXT = 'TPC E2E imported content';
 export const TEMPLATE_CONTENT = `<!-- wp:paragraph --><p>${TEMPLATE_CONTENT_TEXT}</p><!-- /wp:paragraph -->`;
 
-export async function mockTemplatesCloudRoutes(page, templates = MOCK_TEMPLATES) {
+export async function mockTemplatesCloudRoutes(
+    page,
+    templates = MOCK_TEMPLATES,
+    license = AGENCY_LICENSE,
+) {
     await page.route('**/api.themeisle.com/templates-cloud/**', (route) => {
         const url = new URL(route.request().url());
+
+        // license_check=1 returns the license data instead of templates - this
+        // is what the license panel activates against.
+        if (url.searchParams.get('license_check')) {
+            return fulfillJson(route, license);
+        }
 
         // GET templates/{id}/import returns the template's block content.
         if (url.pathname.endsWith('/import')) {

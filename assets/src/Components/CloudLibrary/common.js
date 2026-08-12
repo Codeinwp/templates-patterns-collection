@@ -4,7 +4,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { stringifyUrl } from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
 import { models, loadPromise } from '@wordpress/api';
-import { cleanTemplateContent } from '../../../../shared/utils';
+import { cleanTemplateContent, hasTemplatesCloudAccess } from '../../../../shared/utils';
 
 export const changeOption = ( option, value ) => {
 	const model = new models.Settings( {
@@ -78,6 +78,31 @@ export const fetchLibrary = async (
 			return { success: false, message: error.message };
 		}
 	}
+};
+
+/**
+ * Validate a license key against the licensing API.
+ *
+ * @param {string} licenseKey The license key to check.
+ * @return {Promise<Object>} `{ success, status, license, message }`.
+ */
+export const licenseCheck = async ( licenseKey ) => {
+	const { success, templates: license, message } =
+		( await fetchLibrary( false, {
+			license_id: licenseKey,
+			license_check: 1,
+		} ) ) || {};
+
+	if ( ! success || ! hasTemplatesCloudAccess( license ) ) {
+		return {
+			success: false,
+			status: 'invalid',
+			license,
+			message,
+		};
+	}
+
+	return { success: true, status: 'valid', license };
 };
 
 export const updateTemplate = async ( id, name ) => {
