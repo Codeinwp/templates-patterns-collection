@@ -1,3 +1,7 @@
+##### [Version 1.4.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.3...v1.4.4) (2026-08-12)
+
+- Improved license activation to show a clear notice when a license plan does not include Templates Cloud.
+
 ##### [Version 1.4.3](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.2...v1.4.3) (2026-08-04)
 
 - Fixed an issue where the starter sites list rewrote its cache during routine requests instead of reusing it, adding unnecessary work on page loads.
