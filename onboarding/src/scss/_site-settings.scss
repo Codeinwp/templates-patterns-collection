@@ -97,3 +97,25 @@
   background: #fff;
   box-shadow: 4px 4px 40px 0 rgba(0, 0, 0, 0.10);
 }
+
+.ob-site-settings.is-step-4-features {
+  .ob-settings-description {
+    padding-top: 16px;
+    gap: 8px;
+    margin-bottom: 20px;
+
+    p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+  }
+
+  .ob-settings-top {
+    gap: 16px;
+  }
+
+  .ob-settings-bottom {
+    padding: 14px 20px 16px;
+  }
+}
