@@ -1,6 +1,6 @@
 <?php
 /**
- * Test Admin::get_font_parings() against incompatible Neve settings APIs.
+ * Test the admin font-pair data against incompatible Neve settings APIs.
  *
  * Neve releases before 3.5.0 ship Neve\Core\Settings\Mods but not
  * Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS, so the old guard fataled.
@@ -37,6 +37,7 @@ namespace Neve\Core\Settings {
 namespace {
 
 	use TIOB\Admin;
+	use TIOB\License;
 
 	/**
 	 * Test the Neve font-pair compatibility guard.
@@ -44,32 +45,78 @@ namespace {
 	class Neve_Font_Pairs_Test extends \WP_UnitTestCase {
 
 		/**
-		 * Call the private font-pair collector and return the pairs it stored.
+		 * Data localized to the dashboard script during the last enqueue.
 		 *
-		 * @param Admin $admin Admin instance to read from.
-		 *
-		 * @return array
+		 * @var array
 		 */
-		private function collect_font_pairs( $admin ) {
-			$method = new ReflectionMethod( Admin::class, 'get_font_parings' );
-			$method->setAccessible( true );
-			$method->invoke( $admin );
+		private $dashboard_data = array();
 
-			$property = new ReflectionProperty( Admin::class, 'font_pairs_neve' );
-			$property->setAccessible( true );
+		public function set_up(): void {
+			parent::set_up();
+			$this->dashboard_data = array();
+			wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
 
-			return $property->getValue( $admin );
+			// get_localization() reads the license key off this option.
+			update_option(
+				License::LICENSE_DATA_OPTIONS_KEY,
+				(object) array(
+					'key'     => 'test-key',
+					'license' => 'valid',
+				)
+			);
+		}
+
+		public function tear_down(): void {
+			$this->dashboard_data = array();
+			delete_option( License::LICENSE_DATA_OPTIONS_KEY );
+			unset( $GLOBALS['current_screen'] );
+			parent::tear_down();
 		}
 
 		/**
-		 * A Neve whose Config lacks the font-pair members must not fatal.
+		 * Run the admin bootstrap and return the data it localizes to the dashboard.
+		 *
+		 * @return array
 		 */
-		public function test_incompatible_neve_config_falls_back_to_bundled_pairs() {
+		private function get_dashboard_data() {
+			add_filter(
+				'neve_dashboard_page_data',
+				function ( $data ) {
+					$this->dashboard_data = $data;
+
+					return $data;
+				}
+			);
+
+			$admin = new Admin();
+			$admin->init();
+
+			set_current_screen( 'appearance_page_tiob-starter-sites' );
+			$admin->enqueue();
+
+			return $this->dashboard_data;
+		}
+
+		/**
+		 * A Neve whose Config lacks the font-pair members must not fatal the admin.
+		 */
+		public function test_admin_bootstrap_survives_incompatible_neve_config() {
 			$this->assertTrue( class_exists( '\Neve\Core\Settings\Mods', false ) );
 			$this->assertFalse( defined( '\Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS' ) );
 
-			$pairs = $this->collect_font_pairs( new Admin() );
+			$admin = new Admin();
+			$admin->init();
 
+			$this->assertNotFalse( has_filter( 'neve_dashboard_page_data', array( $admin, 'localize_sites_library' ) ) );
+		}
+
+		/**
+		 * The dashboard falls back to the bundled font pairs on an incompatible Neve.
+		 */
+		public function test_dashboard_data_falls_back_to_bundled_font_pairs() {
+			$data = $this->get_dashboard_data();
+
+			$this->assertArrayHasKey( 'fontParings', $data );
 			$this->assertSame(
 				array(
 					'inter-inter-0',
@@ -79,8 +126,9 @@ namespace {
 					'lato-karla-4',
 					'prata-hankengrotesk-5',
 				),
-				array_keys( $pairs )
+				array_keys( $data['fontParings'] )
 			);
 		}
+
 	}
 }
