@@ -141,33 +141,33 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	 * @return array
 	 */
 	private function get_template_data() {
-		$content = array_fill(
-			0,
-			Zelle_Importer::SECTION_COUNT,
-			array(
-				'settings' => array(),
-				'elements' => array(),
-			)
-		);
+		$content = array_fill( 0, Zelle_Importer::SECTION_COUNT, self::section() );
 
-		$content[2]['elements'] = array(
-			array(
-				'elements' => array(
-					array( 'settings' => array() ),
-					array( 'settings' => array() ),
-				),
-			),
-		);
-
-		$content[6]['elements'] = array(
-			array( 'elements' => array( array( 'settings' => array() ) ) ),
-			array( 'elements' => array( array( 'settings' => array() ) ) ),
-		);
+		$content[6]['elements'][] = self::section()['elements'][0];
 
 		return array(
 			'title'   => 'Zelle Frontpage',
 			'type'    => 'not-supported',
 			'content' => $content,
+		);
+	}
+
+	/**
+	 * One section shaped the way migration/zelle/zelle.json shapes every section.
+	 *
+	 * @return array
+	 */
+	private static function section() {
+		return array(
+			'settings' => array(),
+			'elements' => array(
+				array(
+					'elements' => array(
+						array( 'settings' => array() ),
+						array( 'settings' => array() ),
+					),
+				),
+			),
 		);
 	}
 
@@ -245,6 +245,57 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 		$this->assertEquals( 'page', get_option( 'show_on_front' ) );
 		$this->assertEquals( 'yes', get_theme_mod( 'zelle_frontpage_was_imported' ) );
 		$this->assertEquals( 'yes', get_theme_mod( 'ti_content_imported' ) );
+	}
+
+	/**
+	 * Template payloads the mapping methods cannot index are reported, not dereferenced.
+	 *
+	 * @dataProvider unmappable_template_provider
+	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
+	 *
+	 * @param mixed $data Template payload.
+	 */
+	public function test_unmappable_template_returns_error_code( $data ) {
+		$this->write_template( $data );
+
+		$result = $this->migrate( array( array( 'template_id' => 1 ) ) );
+
+		$this->assertInstanceOf( 'WP_Error', $result );
+		$this->assertEquals( 'ti__ob_zelle_err_3', $result->get_error_code() );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function unmappable_template_provider() {
+		$flat    = array_fill( 0, Zelle_Importer::SECTION_COUNT, array() );
+		$shallow = array_fill(
+			0,
+			Zelle_Importer::SECTION_COUNT,
+			array(
+				'settings' => array(),
+				'elements' => array(),
+			)
+		);
+
+		$ribbon_only            = $shallow;
+		$ribbon_only[2]         = self::section();
+		$ribbon_only[6]         = self::section();
+		$missing_one            = array_fill( 0, Zelle_Importer::SECTION_COUNT, self::section() );
+		$missing_one[4]         = array( 'settings' => array() );
+		$short                  = array_fill( 0, Zelle_Importer::SECTION_COUNT - 1, self::section() );
+
+		return array(
+			'no content key'           => array( array( 'title' => 'Zelle Frontpage' ) ),
+			'content is not an array'  => array( array( 'content' => 'nope' ) ),
+			'content is empty'         => array( array( 'content' => array() ) ),
+			'sections are empty'       => array( array( 'content' => $flat ) ),
+			'sections lack nesting'    => array( array( 'content' => $shallow ) ),
+			'only ribbon sections set' => array( array( 'content' => $ribbon_only ) ),
+			'one section lacks nesting' => array( array( 'content' => $missing_one ) ),
+			'too few sections'         => array( array( 'content' => $short ) ),
+			'section is not an array'  => array( array( 'content' => array_fill( 0, Zelle_Importer::SECTION_COUNT, 'nope' ) ) ),
+		);
 	}
 
 	/**

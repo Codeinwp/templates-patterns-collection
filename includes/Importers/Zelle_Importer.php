@@ -137,6 +137,10 @@ class Zelle_Importer {
 	/**
 	 * Whether the decoded template content is shaped the way the mapping methods index it.
 	 *
+	 * Every map_*_section() method reads its own section as $content[ n ]['elements'][0]['elements'],
+	 * and none of them guard those reads, so a section missing that nesting raises warningsmid-import
+	 * instead of failing cleanly.
+	 *
 	 * @param mixed $content Decoded template content.
 	 *
 	 * @return bool
@@ -148,6 +152,14 @@ class Zelle_Importer {
 
 		for ( $section = 0; $section < self::SECTION_COUNT; $section++ ) {
 			if ( ! isset( $content[ $section ] ) || ! is_array( $content[ $section ] ) ) {
+				return false;
+			}
+
+			if ( ! isset( $content[ $section ]['elements'] ) || ! is_array( $content[ $section ]['elements'] ) ) {
+				return false;
+			}
+
+			if ( ! isset( $content[ $section ]['elements'][0]['elements'] ) || ! is_array( $content[ $section ]['elements'][0]['elements'] ) ) {
 				return false;
 			}
 		}
