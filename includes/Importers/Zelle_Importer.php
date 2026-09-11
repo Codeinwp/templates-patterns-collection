@@ -61,16 +61,17 @@ class Zelle_Importer {
 
 		WP_Filesystem();
 
-		$data                  = json_decode( $wp_filesystem->get_contents( $local_template ), true );
+		$data = json_decode( $wp_filesystem->get_contents( $local_template ), true );
+
+		if ( empty( $data ) || ! isset( $data['content'] ) ) {
+			return new WP_Error( 'ti__ob_zelle_err_3' );
+		}
+
 		$this->default_content = $data['content'];
 		$this->content         = $this->default_content;
 
 		// we don't need a footer for this page
 		unset( $this->content[9] );
-
-		if ( empty( $data ) ) {
-			return new WP_Error( 'ti__ob_zelle_err_3' );
-		}
 
 		$this->map_bigtitle_section();
 		$this->map_our_focus_section();
@@ -100,11 +101,18 @@ class Zelle_Importer {
 
 		$el_template_post = $elementor->import_template( $this->name, $path_to_file );
 
-		if ( empty( $el_template_post ) ) {
+		if ( file_exists( $path_to_file ) ) {
+			unlink( $path_to_file );
+		}
+
+		if ( is_wp_error( $el_template_post ) ) {
+			return new WP_Error( 'ti__ob_zelle_err_4', $el_template_post->get_error_message(), $el_template_post->get_error_data() );
+		}
+
+		if ( empty( $el_template_post ) || ! isset( $el_template_post[0]['template_id'] ) ) {
 			return new WP_Error( 'ti__ob_zelle_err_4' );
 		}
 
-		unlink( $path_to_file );
 		$post_id = $this->insert_page( $el_template_post[0]['template_id'] );
 
 		if ( $post_id ) {
