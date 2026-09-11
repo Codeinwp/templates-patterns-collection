@@ -5,78 +5,83 @@
  * @package templates-patterns-collection
  */
 
+use TIOB\Importers\Zelle_Importer;
 use TIOB\Rest_Server;
 
+require_once dirname( __FILE__ ) . '/../includes/Importers/Zelle_Importer.php';
+
 /**
- * Test the Zelle front page migration REST flow.
+ * Stands in for Elementor's local template source.
+ *
+ * Elementor is not loaded when this suite starts, and a test that runs later
+ * activates the real one, so the importer's Elementor dependency is replaced
+ * wholesale rather than stubbed into the \Elementor namespace.
+ */
+class Zelle_Fake_Elementor_Source {
+	/**
+	 * Value import_template() hands back.
+	 *
+	 * @var mixed
+	 */
+	public $result = array();
+
+	/**
+	 * Import local template.
+	 *
+	 * @param string $name File name.
+	 * @param string $path File path.
+	 *
+	 * @return \WP_Error|array
+	 */
+	public function import_template( $name, $path ) {
+		return $this->result;
+	}
+}
+
+/**
+ * Zelle importer with a controllable Elementor source.
+ */
+class Testable_Zelle_Importer extends Zelle_Importer {
+	/**
+	 * @var Zelle_Fake_Elementor_Source
+	 */
+	public $source;
+
+	protected function get_elementor_source() {
+		return $this->source;
+	}
+}
+
+/**
+ * Test the Zelle front page migration.
  */
 class Zelle_Import_Test extends WP_UnitTestCase {
 	/**
-	 * @var Rest_Server
-	 */
-	private $rest_api;
-
-	/**
-	 * Path of the Zelle template the migration reads.
-	 *
 	 * @var string
 	 */
 	private $template_path;
 
-	/**
-	 * Whether this class declared the Elementor stubs.
-	 *
-	 * @var bool
-	 */
-	private static $stubs_loaded = false;
-
 	public function set_up() {
 		parent::set_up();
 
-		$this->rest_api = new Rest_Server();
-
-		// insert_page() queries this post type; it belongs to Elementor, which is absent here.
+		// insert_page() queries this post type; it belongs to Elementor, which is not active here.
 		register_post_type( 'elementor_library', array( 'public' => false ) );
 
 		set_theme_mod( 'ti_prev_theme', 'zelle' );
 		update_option( 'theme_mods_zelle', $this->get_theme_mods() );
 
 		$this->template_path = get_temp_dir() . 'tiob-zelle-511.json';
-		file_put_contents( $this->template_path, wp_json_encode( $this->get_template_data() ) );
-	}
-
-	/**
-	 * Load the Elementor stubs on demand.
-	 *
-	 * Declared inside the test rather than at file scope: Onboarding_Rest_Test
-	 * activates the real Elementor in the same process, and PHP class
-	 * declarations cannot be undone.
-	 */
-	private function stub_elementor( $import_result ) {
-		if ( ! self::$stubs_loaded && class_exists( '\\Elementor\\TemplateLibrary\\Source_Local', false ) ) {
-			$this->markTestSkipped( 'The real Elementor is loaded in this process, so the import result cannot be controlled.' );
-		}
-
-		require_once __DIR__ . '/stubs/elementor-source-local.php';
-		self::$stubs_loaded = true;
-
-		Elementor_Stub_State::reset();
-		Elementor_Stub_State::$import_result = $import_result;
+		$this->write_template( $this->get_template_data() );
 	}
 
 	public function tear_down() {
-		if ( class_exists( 'Elementor_Stub_State', false ) ) {
-			Elementor_Stub_State::reset();
-		}
-
 		if ( file_exists( $this->template_path ) ) {
 			unlink( $this->template_path );
 		}
 
-		$uploads    = wp_upload_dir();
-		$leftover   = $uploads['basedir'] . '/zelle.json';
-		if ( file_exists( $leftover ) ) {
-			unlink( $leftover );
+		$uploads = wp_upload_dir();
+		if ( file_exists( $uploads['basedir'] . '/zelle.json' ) ) {
+			unlink( $uploads['basedir'] . '/zelle.json' );
 		}
 
 		delete_option( 'theme_mods_zelle' );
@@ -92,26 +97,25 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Build the migration request.
+	 * Run the migration with a controlled Elementor result.
 	 *
-	 * @param string $template Template path.
+	 * @param mixed $import_result What Elementor hands back.
 	 *
-	 * @return WP_REST_Request
+	 * @return bool|int|WP_Error
 	 */
-	private function build_request( $template = null ) {
-		$request = new WP_REST_Request();
-		$request->set_header( 'content-type', 'application/json' );
-		$request->set_method( 'POST' );
-		$request->set_body(
-			wp_json_encode(
-				array(
-					'template'      => null === $template ? $this->template_path : $template,
-					'template_name' => 'Zelle Frontpage',
-				)
-			)
-		);
+	private function migrate( $import_result = array() ) {
+		$importer                 = new Testable_Zelle_Importer();
+		$importer->source         = new Zelle_Fake_Elementor_Source();
+		$importer->source->result = $import_result;
 
-		return $request;
+		return $importer->import_zelle_frontpage( $this->template_path, 'zelle' );
+	}
+
+	/**
+	 * @param mixed $data Template payload.
+	 */
+	private function write_template( $data ) {
+		file_put_contents( $this->template_path, wp_json_encode( $data ) );
 	}
 
 	/**
@@ -137,12 +141,14 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	 * @return array
 	 */
 	private function get_template_data() {
-		$section = array(
-			'settings' => array(),
-			'elements' => array(),
+		$content = array_fill(
+			0,
+			Zelle_Importer::SECTION_COUNT,
+			array(
+				'settings' => array(),
+				'elements' => array(),
+			)
 		);
-
-		$content = array_fill( 0, 10, $section );
 
 		$content[2]['elements'] = array(
 			array(
@@ -171,14 +177,11 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
 	 */
 	public function test_elementor_import_error_returns_handled_failure() {
-		$this->stub_elementor( new WP_Error( 'invalid_template_type', 'Invalid template type.' ) );
+		$result = $this->migrate( new WP_Error( 'invalid_template_type', 'Invalid template type.' ) );
 
-		$response = $this->rest_api->run_front_page_migration( $this->build_request() );
-
-		$this->assertInstanceOf( 'WP_REST_Response', $response );
-		$this->assertEquals( 200, $response->get_status() );
-		$this->assertFalse( $response->get_data()['success'] );
-		$this->assertEquals( 'ti__ob_zelle_err_4', $response->get_data()['data'] );
+		$this->assertInstanceOf( 'WP_Error', $result );
+		$this->assertEquals( 'ti__ob_zelle_err_4', $result->get_error_code() );
+		$this->assertEquals( 'Invalid template type.', $result->get_error_message() );
 		$this->assertFalse( get_theme_mod( 'zelle_frontpage_was_imported', false ) );
 	}
 
@@ -188,12 +191,10 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
 	 */
 	public function test_empty_import_result_returns_error_code() {
-		$this->stub_elementor( array() );
+		$result = $this->migrate( array() );
 
-		$response = $this->rest_api->run_front_page_migration( $this->build_request() );
-
-		$this->assertFalse( $response->get_data()['success'] );
-		$this->assertEquals( 'ti__ob_zelle_err_4', $response->get_data()['data'] );
+		$this->assertInstanceOf( 'WP_Error', $result );
+		$this->assertEquals( 'ti__ob_zelle_err_4', $result->get_error_code() );
 	}
 
 	/**
@@ -202,38 +203,22 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
 	 */
 	public function test_import_result_without_template_id_returns_error_code() {
-		$this->stub_elementor( array( array( 'source' => 'local' ) ) );
+		$result = $this->migrate( array( array( 'source' => 'local' ) ) );
 
-		$response = $this->rest_api->run_front_page_migration( $this->build_request() );
-
-		$this->assertFalse( $response->get_data()['success'] );
-		$this->assertEquals( 'ti__ob_zelle_err_4', $response->get_data()['data'] );
+		$this->assertInstanceOf( 'WP_Error', $result );
+		$this->assertEquals( 'ti__ob_zelle_err_4', $result->get_error_code() );
 	}
 
 	/**
-	 * An unreadable template file is reported before its content is dereferenced.
+	 * The temporary zelle.json is removed on the failure path, not just on success.
 	 *
 	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
 	 */
-	public function test_unreadable_template_returns_error_code() {
-		$response = $this->rest_api->run_front_page_migration( $this->build_request( get_temp_dir() . 'tiob-zelle-511-missing.json' ) );
+	public function test_temporary_file_is_cleaned_up_on_failure() {
+		$this->migrate( new WP_Error( 'file_error', 'Invalid File' ) );
 
-		$this->assertFalse( $response->get_data()['success'] );
-		$this->assertEquals( 'ti__ob_zelle_err_3', $response->get_data()['data'] );
-	}
-
-	/**
-	 * A template file without a content key is reported rather than warning.
-	 *
-	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
-	 */
-	public function test_template_without_content_returns_error_code() {
-		file_put_contents( $this->template_path, wp_json_encode( array( 'title' => 'Zelle Frontpage' ) ) );
-
-		$response = $this->rest_api->run_front_page_migration( $this->build_request() );
-
-		$this->assertFalse( $response->get_data()['success'] );
-		$this->assertEquals( 'ti__ob_zelle_err_3', $response->get_data()['data'] );
+		$uploads = wp_upload_dir();
+		$this->assertFileDoesNotExist( $uploads['basedir'] . '/zelle.json' );
 	}
 
 	/**
@@ -251,13 +236,9 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 			)
 		);
 
-		$this->stub_elementor( array( array( 'template_id' => $template_id ) ) );
+		$page_id = $this->migrate( array( array( 'template_id' => $template_id ) ) );
 
-		$response = $this->rest_api->run_front_page_migration( $this->build_request() );
-
-		$this->assertTrue( $response->get_data()['success'] );
-
-		$page_id = $response->get_data()['data'];
+		$this->assertIsInt( $page_id );
 		$this->assertGreaterThan( 0, $page_id );
 		$this->assertEquals( 'page', get_post_type( $page_id ) );
 		$this->assertEquals( $page_id, get_option( 'page_on_front' ) );
@@ -267,16 +248,46 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The temporary zelle.json is removed on the failure path, not just on success.
+	 * An unreadable template file is reported before its content is dereferenced.
 	 *
 	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
 	 */
-	public function test_temporary_file_is_cleaned_up_on_failure() {
-		$this->stub_elementor( new WP_Error( 'file_error', 'Invalid File' ) );
+	public function test_unreadable_template_returns_error_code() {
+		$importer         = new Testable_Zelle_Importer();
+		$importer->source = new Zelle_Fake_Elementor_Source();
 
-		$this->rest_api->run_front_page_migration( $this->build_request() );
+		$result = $importer->import_zelle_frontpage( get_temp_dir() . 'tiob-zelle-511-missing.json', 'zelle' );
 
-		$uploads = wp_upload_dir();
-		$this->assertFileDoesNotExist( $uploads['basedir'] . '/zelle.json' );
+		$this->assertInstanceOf( 'WP_Error', $result );
+		$this->assertEquals( 'ti__ob_zelle_err_3', $result->get_error_code() );
+	}
+
+	/**
+	 * The REST layer turns the importer's failure into a handled response.
+	 *
+	 * @covers \TIOB\Rest_Server::run_front_page_migration
+	 */
+	public function test_rest_endpoint_reports_failure_without_fatal() {
+		$this->write_template( array( 'title' => 'Zelle Frontpage' ) );
+
+		$request = new WP_REST_Request();
+		$request->set_header( 'content-type', 'application/json' );
+		$request->set_method( 'POST' );
+		$request->set_body(
+			wp_json_encode(
+				array(
+					'template'      => $this->template_path,
+					'template_name' => 'Zelle Frontpage',
+				)
+			)
+		);
+
+		$rest_api = new Rest_Server();
+		$response = $rest_api->run_front_page_migration( $request );
+
+		$this->assertInstanceOf( 'WP_REST_Response', $response );
+		$this->assertEquals( 200, $response->get_status() );
+		$this->assertFalse( $response->get_data()['success'] );
+		$this->assertEquals( 'ti__ob_zelle_err_3', $response->get_data()['data'] );
 	}
 }

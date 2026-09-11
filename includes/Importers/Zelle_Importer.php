@@ -17,6 +17,11 @@ use WP_Error;
 class Zelle_Importer {
 
 	/**
+	 * Number of sections the Zelle front page template is built from.
+	 */
+	const SECTION_COUNT = 10;
+
+	/**
 	 * The page template name.
 	 *
 	 * @var string
@@ -63,7 +68,7 @@ class Zelle_Importer {
 
 		$data = json_decode( $wp_filesystem->get_contents( $local_template ), true );
 
-		if ( empty( $data ) || ! isset( $data['content'] ) ) {
+		if ( empty( $data ) || ! isset( $data['content'] ) || ! $this->is_mappable_content( $data['content'] ) ) {
 			return new WP_Error( 'ti__ob_zelle_err_3' );
 		}
 
@@ -89,15 +94,11 @@ class Zelle_Importer {
 		$uploads      = wp_upload_dir();
 		$path_to_file = $uploads['basedir'] . '/zelle.json';
 
-		// Mime a supported document type.
-		$elementor_plugin = \Elementor\Plugin::$instance;
-		$elementor_plugin->documents->register_document_type( 'not-supported', \Elementor\Modules\Library\Documents\Page::get_class_full_name() );
-
 		$wp_filesystem->put_contents( $path_to_file, json_encode( $data ), 0644 );
 
 		$_FILES['file']['tmp_name'] = $path_to_file;
 
-		$elementor = new \Elementor\TemplateLibrary\Source_Local;
+		$elementor = $this->get_elementor_source();
 
 		$el_template_post = $elementor->import_template( $this->name, $path_to_file );
 
@@ -105,6 +106,7 @@ class Zelle_Importer {
 			unlink( $path_to_file );
 		}
 
+		// Elementor returns WP_Error|array, and a WP_Error is never empty.
 		if ( is_wp_error( $el_template_post ) ) {
 			return new WP_Error( 'ti__ob_zelle_err_4', $el_template_post->get_error_message(), $el_template_post->get_error_data() );
 		}
@@ -130,6 +132,40 @@ class Zelle_Importer {
 
 		return new WP_Error( 'ti__ob_zelle_err_5' );
 
+	}
+
+	/**
+	 * Whether the decoded template content is shaped the way the mapping methods index it.
+	 *
+	 * @param mixed $content Decoded template content.
+	 *
+	 * @return bool
+	 */
+	private function is_mappable_content( $content ) {
+		if ( ! is_array( $content ) ) {
+			return false;
+		}
+
+		for ( $section = 0; $section < self::SECTION_COUNT; $section++ ) {
+			if ( ! isset( $content[ $section ] ) || ! is_array( $content[ $section ] ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Elementor's local template source, with the document type the Zelle template needs.
+	 *
+	 * @return \Elementor\TemplateLibrary\Source_Local
+	 */
+	protected function get_elementor_source() {
+		// Mime a supported document type.
+		$elementor_plugin = \Elementor\Plugin::$instance;
+		$elementor_plugin->documents->register_document_type( 'not-supported', \Elementor\Modules\Library\Documents\Page::get_class_full_name() );
+
+		return new \Elementor\TemplateLibrary\Source_Local;
 	}
 
 	/**
