@@ -33,7 +33,16 @@ class Zelle_Fake_Elementor_Source {
 	 *
 	 * @return \WP_Error|array
 	 */
+	/**
+	 * Template payload the importer handed to Elementor.
+	 *
+	 * @var array|null
+	 */
+	public $imported;
+
 	public function import_template( $name, $path ) {
+		$this->imported = json_decode( file_get_contents( $path ), true );
+
 		return $this->result;
 	}
 }
@@ -60,6 +69,11 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	 * @var string
 	 */
 	private $template_path;
+
+	/**
+	 * @var Zelle_Fake_Elementor_Source
+	 */
+	private $source;
 
 	public function set_up() {
 		parent::set_up();
@@ -108,7 +122,18 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 		$importer->source         = new Zelle_Fake_Elementor_Source();
 		$importer->source->result = $import_result;
 
+		$this->source = $importer->source;
+
 		return $importer->import_zelle_frontpage( $this->template_path, 'zelle' );
+	}
+
+	/**
+	 * Sections the last migration actually handed to Elementor.
+	 *
+	 * @return int
+	 */
+	private function imported_section_count() {
+		return count( $this->source->imported['content'] );
 	}
 
 	/**
@@ -153,19 +178,28 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * One section shaped the way migration/zelle/zelle.json shapes every section.
+	 * One section shaped the way migration/zelle/zelle.json shapes every section:
+	 * deep enough for every nested read the mapping methods perform.
 	 *
 	 * @return array
 	 */
 	private static function section() {
+		$leaf = array( 'settings' => array() );
+		$mid  = array(
+			'settings' => array(),
+			'elements' => array( $leaf, $leaf, $leaf ),
+		);
+		$child = array(
+			'settings' => array(),
+			'elements' => array( $mid, $mid, $mid ),
+		);
+
 		return array(
 			'settings' => array(),
 			'elements' => array(
 				array(
-					'elements' => array(
-						array( 'settings' => array() ),
-						array( 'settings' => array() ),
-					),
+					'settings' => array(),
+					'elements' => array( $child, $child, $child ),
 				),
 			),
 		);
@@ -248,14 +282,14 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Template payloads the mapping methods cannot index are reported, not dereferenced.
+	 * Templates with nothing usable left are still reported.
 	 *
-	 * @dataProvider unmappable_template_provider
+	 * @dataProvider unusable_template_provider
 	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
 	 *
 	 * @param mixed $data Template payload.
 	 */
-	public function test_unmappable_template_returns_error_code( $data ) {
+	public function test_unusable_template_returns_error_code( $data ) {
 		$this->write_template( $data );
 
 		$result = $this->migrate( array( array( 'template_id' => 1 ) ) );
@@ -267,35 +301,105 @@ class Zelle_Import_Test extends WP_UnitTestCase {
 	/**
 	 * @return array
 	 */
-	public function unmappable_template_provider() {
-		$flat    = array_fill( 0, Zelle_Importer::SECTION_COUNT, array() );
-		$shallow = array_fill(
-			0,
-			Zelle_Importer::SECTION_COUNT,
+	public function unusable_template_provider() {
+		return array(
+			'no content key'          => array( array( 'title' => 'Zelle Frontpage' ) ),
+			'content is not an array' => array( array( 'content' => 'nope' ) ),
+			'content is empty'        => array( array( 'content' => array() ) ),
+			'sections are empty'      => array( array( 'content' => array_fill( 0, Zelle_Importer::SECTION_COUNT, array() ) ) ),
+			'sections lack nesting'   => array(
+				array(
+					'content' => array_fill(
+						0,
+						Zelle_Importer::SECTION_COUNT,
+						array(
+							'settings' => array(),
+							'elements' => array(),
+						)
+					),
+				),
+			),
+			'section is not an array' => array( array( 'content' => array_fill( 0, Zelle_Importer::SECTION_COUNT, 'nope' ) ) ),
+		);
+	}
+
+	/**
+	 * A section the mapping methods cannot index is skipped on its own; the rest still imports.
+	 *
+	 * @dataProvider unmappable_section_provider
+	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
+	 *
+	 * @param int   $broken   Section to damage.
+	 * @param mixed $value    What to replace it with.
+	 * @param int   $expected Sections that should survive the import.
+	 */
+	public function test_unmappable_section_is_skipped( $broken, $value, $expected ) {
+		$data                       = $this->get_template_data();
+		$data['content'][ $broken ] = $value;
+		$this->write_template( $data );
+
+		$template_id = self::factory()->post->create(
 			array(
-				'settings' => array(),
-				'elements' => array(),
+				'post_type'   => 'elementor_library',
+				'post_status' => 'publish',
 			)
 		);
 
-		$ribbon_only            = $shallow;
-		$ribbon_only[2]         = self::section();
-		$ribbon_only[6]         = self::section();
-		$missing_one            = array_fill( 0, Zelle_Importer::SECTION_COUNT, self::section() );
-		$missing_one[4]         = array( 'settings' => array() );
-		$short                  = array_fill( 0, Zelle_Importer::SECTION_COUNT - 1, self::section() );
+		$page_id = $this->migrate( array( array( 'template_id' => $template_id ) ) );
+
+		$this->assertIsInt( $page_id, 'the import should still succeed' );
+		$this->assertEquals( $expected, $this->imported_section_count() );
+	}
+
+	/**
+	 * Under get_theme_mods() the mappers for sections 0, 1, 3, 4, 5 and 7 unset their own section,
+	 * so an undamaged import hands Elementor three sections: 2, 6 and 8. Damaging one of the six
+	 * that are dropped anyway leaves the count alone — there the assertion that matters is that
+	 * the import still succeeds instead of warning or fataling.
+	 *
+	 * @return array
+	 */
+	public function unmappable_section_provider() {
+		$shallow = array(
+			'settings' => array(),
+			'elements' => array(),
+		);
 
 		return array(
-			'no content key'           => array( array( 'title' => 'Zelle Frontpage' ) ),
-			'content is not an array'  => array( array( 'content' => 'nope' ) ),
-			'content is empty'         => array( array( 'content' => array() ) ),
-			'sections are empty'       => array( array( 'content' => $flat ) ),
-			'sections lack nesting'    => array( array( 'content' => $shallow ) ),
-			'only ribbon sections set' => array( array( 'content' => $ribbon_only ) ),
-			'one section lacks nesting' => array( array( 'content' => $missing_one ) ),
-			'too few sections'         => array( array( 'content' => $short ) ),
-			'section is not an array'  => array( array( 'content' => array_fill( 0, Zelle_Importer::SECTION_COUNT, 'nope' ) ) ),
+			'bigtitle not an array'   => array( 0, 'nope', 3 ),
+			'our focus lacks nesting' => array( 1, $shallow, 3 ),
+			'about us lacks nesting'  => array( 3, $shallow, 3 ),
+			'latest news is scalar'   => array( 7, 'nope', 3 ),
+			'contact lacks nesting'   => array( 8, $shallow, 2 ),
+			// map_ribbon_section() owns 2 and 6; only the damaged one is dropped, and its
+			// partner survives unmapped because the method cannot run for either.
+			'ribbon lacks nesting'    => array( 2, $shallow, 2 ),
+			'right ribbon is scalar'  => array( 6, 'nope', 2 ),
 		);
+	}
+
+	/**
+	 * A scalar settings value anywhere in a section skips that section rather than fataling.
+	 *
+	 * @covers \TIOB\Importers\Zelle_Importer::import_zelle_frontpage
+	 */
+	public function test_scalar_settings_skips_only_that_section() {
+		// Section 2 is mapped unconditionally, so this is a settings value the mapper would assign into.
+		$data = $this->get_template_data();
+		$data['content'][2]['elements'][0]['elements'][0]['settings'] = 'scalar';
+		$this->write_template( $data );
+
+		$template_id = self::factory()->post->create(
+			array(
+				'post_type'   => 'elementor_library',
+				'post_status' => 'publish',
+			)
+		);
+
+		$page_id = $this->migrate( array( array( 'template_id' => $template_id ) ) );
+
+		$this->assertIsInt( $page_id );
+		$this->assertEquals( 2, $this->imported_section_count() );
 	}
 
 	/**

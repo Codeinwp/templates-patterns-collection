@@ -68,7 +68,7 @@ class Zelle_Importer {
 
 		$data = json_decode( $wp_filesystem->get_contents( $local_template ), true );
 
-		if ( empty( $data ) || ! isset( $data['content'] ) || ! $this->is_mappable_content( $data['content'] ) ) {
+		if ( empty( $data ) || ! isset( $data['content'] ) || ! is_array( $data['content'] ) ) {
 			return new WP_Error( 'ti__ob_zelle_err_3' );
 		}
 
@@ -78,14 +78,12 @@ class Zelle_Importer {
 		// we don't need a footer for this page
 		unset( $this->content[9] );
 
-		$this->map_bigtitle_section();
-		$this->map_our_focus_section();
-		$this->map_about_us_section();
-		$this->map_our_team_section();
-		$this->map_testimonials_section();
-		$this->map_ribbon_section();
-		$this->map_latest_news_section();
-		$this->map_contact_us_section();
+		$this->map_sections();
+
+		// Every section was unusable, so there is nothing left to import.
+		if ( empty( $this->content ) ) {
+			return new WP_Error( 'ti__ob_zelle_err_3' );
+		}
 
 		$data['title']   = $this->name;
 		$data['content'] = array_values( $this->content );
@@ -135,31 +133,160 @@ class Zelle_Importer {
 	}
 
 	/**
-	 * Whether the decoded template content is shaped the way the mapping methods index it.
+	 * Run each mapping method over the sections it owns, dropping any section that is not
+	 * shaped the way that method indexes it.
 	 *
-	 * Every map_*_section() method reads its own section as $content[ n ]['elements'][0]['elements'],
-	 * and none of them guard those reads, so a section missing that nesting raises warningsmid-import
-	 * instead of failing cleanly.
+	 * A malformed section is skipped on its own so the rest of the page still imports; only a
+	 * template with no usable section left fails the import.
+	 */
+	private function map_sections() {
+		foreach ( $this->section_mappers() as $method => $sections ) {
+			$mappable = true;
+
+			foreach ( $sections as $section ) {
+				if ( isset( $this->content[ $section ] ) && $this->is_mappable_section( $this->content[ $section ], $section ) ) {
+					continue;
+				}
+
+				unset( $this->content[ $section ] );
+				$mappable = false;
+			}
+
+			if ( $mappable ) {
+				$this->$method();
+			}
+		}
+	}
+
+	/**
+	 * Mapping methods and the sections each one indexes, in the order they have always run.
 	 *
-	 * @param mixed $content Decoded template content.
+	 * @return array
+	 */
+	private function section_mappers() {
+		return array(
+			'map_bigtitle_section'     => array( 0 ),
+			'map_our_focus_section'    => array( 1 ),
+			'map_about_us_section'     => array( 3 ),
+			'map_our_team_section'     => array( 4 ),
+			'map_testimonials_section' => array( 5 ),
+			'map_ribbon_section'       => array( 2, 6 ),
+			'map_latest_news_section'  => array( 7 ),
+			'map_contact_us_section'   => array( 8 ),
+		);
+	}
+
+	/**
+	 * Whether one section is shaped the way its mapping method indexes it.
+	 *
+	 * None of the map_*_section() methods guard their dereferences, so anything they read has to
+	 * exist and anything they assign into has to be an array.
+	 *
+	 * @param mixed $section Decoded section.
+	 * @param int   $index   Its index in the template content.
 	 *
 	 * @return bool
 	 */
-	private function is_mappable_content( $content ) {
-		if ( ! is_array( $content ) ) {
+	private function is_mappable_section( $section, $index ) {
+		if ( ! is_array( $section ) ) {
 			return false;
 		}
 
-		for ( $section = 0; $section < self::SECTION_COUNT; $section++ ) {
-			if ( ! isset( $content[ $section ] ) || ! is_array( $content[ $section ] ) ) {
+		if ( ! isset( $section['elements'][0]['elements'] ) || ! is_array( $section['elements'][0]['elements'] ) ) {
+			return false;
+		}
+
+		if ( ! $this->has_assignable_nodes( $section ) ) {
+			return false;
+		}
+
+		$reads = $this->mapped_section_reads();
+
+		if ( ! isset( $reads[ $index ] ) ) {
+			return true;
+		}
+
+		foreach ( $reads[ $index ] as $path ) {
+			if ( ! $this->has_path( $section['elements'][0]['elements'], $path ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Nested reads each mapping method performs on its own section, relative to
+	 * $content[ n ]['elements'][0]['elements'].
+	 *
+	 * Sections 2, 6, 7 and 8 are absent on purpose: they only ever assign into their children,
+	 * and assigning to a missing index creates it rather than warning.
+	 *
+	 * @return array
+	 */
+	private function mapped_section_reads() {
+		return array(
+			// map_bigtitle_section(): $data[0] and $data[1]['elements'].
+			0 => array( array( 0 ), array( 1, 'elements' ) ),
+			// map_our_focus_section(): $data[2]['elements'][0].
+			1 => array( array( 2, 'elements', 0 ) ),
+			// map_about_us_section(): $data[0]['elements'][0]['elements'] and $data[1]['elements'][2]['elements'].
+			3 => array( array( 0, 'elements', 0, 'elements' ), array( 1, 'elements', 2, 'elements' ) ),
+			// map_our_team_section(): $data[2]['elements'][0].
+			4 => array( array( 2, 'elements', 0 ) ),
+			// map_testimonials_section(): $data[2]['elements'][0].
+			5 => array( array( 2, 'elements', 0 ) ),
+		);
+	}
+
+	/**
+	 * Whether every key on the given path exists.
+	 *
+	 * @param mixed $node Starting node.
+	 * @param array $path Keys to walk.
+	 *
+	 * @return bool
+	 */
+	private function has_path( $node, $path ) {
+		foreach ( $path as $key ) {
+			if ( ! is_array( $node ) || ! isset( $node[ $key ] ) ) {
 				return false;
 			}
 
-			if ( ! isset( $content[ $section ]['elements'] ) || ! is_array( $content[ $section ]['elements'] ) ) {
+			$node = $node[ $key ];
+		}
+
+		return true;
+	}
+
+	/**
+	 * Whether every node below this one keeps the keys the mappers assign into as arrays.
+	 *
+	 * @param array $node Section or element node.
+	 *
+	 * @return bool
+	 */
+	private function has_assignable_nodes( $node ) {
+		if ( isset( $node['settings'] ) ) {
+			if ( ! is_array( $node['settings'] ) ) {
 				return false;
 			}
 
-			if ( ! isset( $content[ $section ]['elements'][0]['elements'] ) || ! is_array( $content[ $section ]['elements'][0]['elements'] ) ) {
+			if ( isset( $node['settings']['form_fields'] ) && ! is_array( $node['settings']['form_fields'] ) ) {
+				return false;
+			}
+		}
+
+		if ( ! isset( $node['elements'] ) ) {
+			return true;
+		}
+
+		if ( ! is_array( $node['elements'] ) ) {
+			return false;
+		}
+
+		foreach ( $node['elements'] as $child ) {
+			if ( ! is_array( $child ) || ! $this->has_assignable_nodes( $child ) ) {
 				return false;
 			}
 		}
