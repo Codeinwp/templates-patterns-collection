@@ -1107,7 +1107,11 @@ class Admin {
 			),
 		);
 
-		if ( class_exists( '\Neve\Core\Settings\Mods', false ) ) {
+		$has_neve_font_pairs = class_exists( '\Neve\Core\Settings\Mods', false )
+			&& defined( '\Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS' )
+			&& property_exists( '\Neve\Core\Settings\Config', 'typography_default_pairs' );
+
+		if ( $has_neve_font_pairs ) {
 			$font_pair_neve = apply_filters(
 				'neve_font_pairings',
 				\Neve\Core\Settings\Mods::get( \Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS, \Neve\Core\Settings\Config::$typography_default_pairs )
