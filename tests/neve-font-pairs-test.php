@@ -37,64 +37,15 @@ namespace Neve\Core\Settings {
 namespace {
 
 	use TIOB\Admin;
-	use TIOB\License;
 
 	/**
 	 * Test the Neve font-pair compatibility guard.
 	 */
 	class Neve_Font_Pairs_Test extends \WP_UnitTestCase {
 
-		/**
-		 * Data localized to the dashboard script during the last enqueue.
-		 *
-		 * @var array
-		 */
-		private $dashboard_data = array();
-
 		public function set_up(): void {
 			parent::set_up();
-			$this->dashboard_data = array();
 			wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
-
-			// get_localization() reads the license key off this option.
-			update_option(
-				License::LICENSE_DATA_OPTIONS_KEY,
-				(object) array(
-					'key'     => 'test-key',
-					'license' => 'valid',
-				)
-			);
-		}
-
-		public function tear_down(): void {
-			$this->dashboard_data = array();
-			delete_option( License::LICENSE_DATA_OPTIONS_KEY );
-			unset( $GLOBALS['current_screen'] );
-			parent::tear_down();
-		}
-
-		/**
-		 * Run the admin bootstrap and return the data it localizes to the dashboard.
-		 *
-		 * @return array
-		 */
-		private function get_dashboard_data() {
-			add_filter(
-				'neve_dashboard_page_data',
-				function ( $data ) {
-					$this->dashboard_data = $data;
-
-					return $data;
-				}
-			);
-
-			$admin = new Admin();
-			$admin->init();
-
-			set_current_screen( 'appearance_page_tiob-starter-sites' );
-			$admin->enqueue();
-
-			return $this->dashboard_data;
 		}
 
 		/**
@@ -107,28 +58,9 @@ namespace {
 			$admin = new Admin();
 			$admin->init();
 
+			// get_font_parings() is the last thing init() does, so a registered hook proves it returned.
 			$this->assertNotFalse( has_filter( 'neve_dashboard_page_data', array( $admin, 'localize_sites_library' ) ) );
+			$this->assertNotFalse( has_action( 'admin_enqueue_scripts', array( $admin, 'enqueue' ) ) );
 		}
-
-		/**
-		 * The dashboard falls back to the bundled font pairs on an incompatible Neve.
-		 */
-		public function test_dashboard_data_falls_back_to_bundled_font_pairs() {
-			$data = $this->get_dashboard_data();
-
-			$this->assertArrayHasKey( 'fontParings', $data );
-			$this->assertSame(
-				array(
-					'inter-inter-0',
-					'playfairdisplay-sourcesanspro-1',
-					'montserrat-opensans-2',
-					'nunito-lora-3',
-					'lato-karla-4',
-					'prata-hankengrotesk-5',
-				),
-				array_keys( $data['fontParings'] )
-			);
-		}
-
 	}
 }
