@@ -43,6 +43,11 @@ class Starter_Sites {
 	const MAX_LOG_LINES = 500;
 
 	/**
+	 * Import steps, in the order the import modal runs them.
+	 */
+	const IMPORT_STEPS = array( 'plugins', 'content', 'theme_mods', 'widgets' );
+
+	/**
 	 * Hook the registration callbacks.
 	 *
 	 * @return void
@@ -172,7 +177,7 @@ class Starter_Sites {
 				'alias' => 'neve/starter-site-import',
 				'args'  => array(
 					'label'               => __( 'Import a starter site', 'templates-patterns-collection' ),
-					'description'         => __( 'Import a starter site by slug: installs required plugins, imports content, theme settings and widgets. This replaces significant parts of the site. Set confirm=true to proceed, or dry_run=true to inspect the import plan first.', 'templates-patterns-collection' ),
+					'description'         => __( 'Import a starter site by slug: installs required plugins, imports content, theme settings and widgets. This replaces significant parts of the site. Set confirm=true to proceed, or dry_run=true to inspect the import plan first. Each call runs one import step: while done is false, call again with the same input plus the returned cursor.', 'templates-patterns-collection' ),
 					'category'            => self::CATEGORY,
 					'input_schema'        => array(
 						'type'       => 'object',
@@ -202,6 +207,17 @@ class Starter_Sites {
 								'default'     => false,
 								'description' => 'Return the resolved site and import plan without changing the site.',
 							),
+							'cursor'       => array(
+								'type'        => 'string',
+								'description' => 'Cursor returned by the previous call; the import continues from that step. Leave empty to start.',
+							),
+							'time_budget'  => array(
+								'type'        => 'integer',
+								'minimum'     => 1,
+								'maximum'     => 60,
+								'default'     => 20,
+								'description' => 'Seconds to spend per call. An import step cannot be interrupted, so every call runs exactly one step.',
+							),
 						),
 					),
 					'output_schema'       => array(
@@ -225,11 +241,29 @@ class Starter_Sites {
 								'type'                 => 'object',
 								'additionalProperties' => true,
 							),
+							'done'              => array( 'type' => 'boolean' ),
+							'cursor'            => array( 'type' => 'string' ),
+							'progress'          => array(
+								'type'       => 'object',
+								'properties' => array(
+									'current' => array( 'type' => 'integer' ),
+									'total'   => array( 'type' => 'integer' ),
+									'message' => array( 'type' => 'string' ),
+								),
+							),
 						),
 					),
 					'execute_callback'    => array( $this, 'import_site' ),
 					'permission_callback' => array( $this, 'check_permission' ),
-					'meta'                => $this->get_meta( false, true, false ),
+					'meta'                => array_merge(
+						$this->get_meta( false, true, false ),
+						array(
+							'task' => array(
+								'mode'        => 'cursor',
+								'results_key' => 'steps',
+							),
+						)
+					),
 				),
 			),
 			array(
@@ -444,6 +478,15 @@ class Starter_Sites {
 			}
 		}
 
+		$pending = array();
+		foreach ( self::IMPORT_STEPS as $step ) {
+			$key = $step === 'content' ? 'content_file' : $step;
+			if ( $step === 'plugins' ? ! empty( $plugins ) : ! empty( $json[ $key ] ) ) {
+				$pending[] = $step;
+			}
+		}
+		$total = count( $pending );
+
 		if ( ! empty( $input['dry_run'] ) ) {
 			return array(
 				'success'         => true,
@@ -452,11 +495,13 @@ class Starter_Sites {
 				'slug'            => $slug,
 				'builder'         => $found['builder'],
 				'plugins_planned' => array_keys( $plugins ),
-				'steps'           => array(
-					'plugins'    => ! empty( $plugins ),
-					'content'    => ! empty( $json['content_file'] ),
-					'theme_mods' => ! empty( $json['theme_mods'] ),
-					'widgets'    => ! empty( $json['widgets'] ),
+				'steps'           => array_merge( array_fill_keys( self::IMPORT_STEPS, false ), array_fill_keys( $pending, true ) ),
+				'done'            => true,
+				'cursor'          => '',
+				'progress'        => array(
+					'current' => 0,
+					'total'   => $total,
+					'message' => __( 'Dry run, nothing was imported.', 'templates-patterns-collection' ),
 				),
 			);
 		}
@@ -465,26 +510,100 @@ class Starter_Sites {
 			return new WP_Error( 'tpc_ability_confirm_required', __( 'Set confirm=true to import this starter site, or use dry_run=true to inspect the plan.', 'templates-patterns-collection' ), array( 'status' => 400 ) );
 		}
 
-		$source = $this->get_site_url( $site );
-		$editor = isset( $site['editor'] ) ? $site['editor'] : $found['builder'];
-
-		if ( $source !== '' ) {
-			Slug_Mapping::register_source_url( $source );
-		}
-		$this->ensure_active_state();
-
-		$rest              = new Rest_Server();
-		$steps             = array();
-		$plugins_installed = array();
-
-		if ( ! empty( $plugins ) ) {
-			$steps['plugins'] = $this->get_step_result( $rest->run_plugin_importer( $this->build_request( $plugins ) ) );
-			if ( $steps['plugins']['success'] ) {
-				$plugins_installed = array_keys( $plugins );
+		$cursor = isset( $input['cursor'] ) && is_string( $input['cursor'] ) ? $input['cursor'] : '';
+		$index  = 0;
+		if ( $cursor !== '' ) {
+			$index = array_search( $cursor, $pending, true );
+			if ( $index === false ) {
+				return new WP_Error( 'tpc_ability_invalid_cursor', __( 'The cursor is not a pending step of this import.', 'templates-patterns-collection' ), array( 'status' => 400 ) );
 			}
 		}
 
-		if ( ! empty( $json['content_file'] ) ) {
+		$result = array(
+			'success'           => true,
+			'imported'          => false,
+			'slug'              => $slug,
+			'builder'           => $found['builder'],
+			'plugins_installed' => array(),
+			'plugins_planned'   => array_keys( $plugins ),
+			'steps'             => array(),
+			'done'              => false,
+			'cursor'            => '',
+			'progress'          => array(
+				'current' => 0,
+				'total'   => $total,
+				'message' => __( 'Nothing to import.', 'templates-patterns-collection' ),
+			),
+		);
+
+		if ( $total > 0 ) {
+			$step   = $pending[ $index ];
+			$source = $this->get_site_url( $site );
+
+			if ( $source !== '' ) {
+				Slug_Mapping::register_source_url( $source );
+			}
+			$this->ensure_active_state();
+
+			$outcome = $this->run_import_step( $step, $json, $plugins, $slug, isset( $site['editor'] ) ? $site['editor'] : $found['builder'], $source );
+
+			if ( empty( $outcome['success'] ) ) {
+				return new WP_Error(
+					'tpc_ability_import_step_failed',
+					/* translators: 1: import step name, 2: error message. */
+					sprintf( __( 'The "%1$s" import step failed: %2$s', 'templates-patterns-collection' ), $step, $outcome['error'] ),
+					array(
+						'status' => 500,
+						'step'   => $step,
+						'cursor' => $step,
+					)
+				);
+			}
+
+			$result['steps'][ $step ] = $outcome;
+			if ( $step === 'plugins' ) {
+				$result['plugins_installed'] = array_keys( $plugins );
+			}
+
+			++$index;
+			$result['progress']['current'] = $index;
+			/* translators: 1: import step name, 2: finished steps, 3: total steps. */
+			$result['progress']['message'] = sprintf( __( 'Finished the "%1$s" step (%2$d of %3$d).', 'templates-patterns-collection' ), $step, $index, $total );
+		}
+
+		if ( $index < $total ) {
+			$result['cursor'] = $pending[ $index ];
+
+			return $result;
+		}
+
+		$result['done']           = true;
+		$result['imported']       = true;
+		$result['front_page_url'] = home_url( '/' );
+
+		return $result;
+	}
+
+	/**
+	 * Run one import step through the importer the matching REST route uses.
+	 *
+	 * @param string $step    Step name, one of IMPORT_STEPS.
+	 * @param array  $json    Import data of the site.
+	 * @param array  $plugins Plugins to install, as slug => true.
+	 * @param string $slug    Site slug.
+	 * @param string $editor  Site editor.
+	 * @param string $source  Demo site URL.
+	 *
+	 * @return array
+	 */
+	private function run_import_step( $step, $json, $plugins, $slug, $editor, $source ) {
+		$rest = new Rest_Server();
+
+		if ( $step === 'plugins' ) {
+			return $this->get_step_result( $rest->run_plugin_importer( $this->build_request( $plugins ) ) );
+		}
+
+		if ( $step === 'content' ) {
 			$payload = array(
 				'contentFile' => $json['content_file'],
 				'source'      => 'remote',
@@ -502,11 +621,12 @@ class Starter_Sites {
 					$payload[ $payload_key ] = $json[ $json_key ];
 				}
 			}
-			$steps['content'] = $this->get_step_result( $rest->run_xml_importer( $this->build_request( $payload ) ) );
+
+			return $this->get_step_result( $rest->run_xml_importer( $this->build_request( $payload ) ) );
 		}
 
-		if ( ! empty( $json['theme_mods'] ) ) {
-			$steps['theme_mods'] = $this->get_step_result(
+		if ( $step === 'theme_mods' ) {
+			return $this->get_step_result(
 				$rest->run_theme_mods_importer(
 					$this->build_request(
 						array(
@@ -519,35 +639,15 @@ class Starter_Sites {
 			);
 		}
 
-		if ( ! empty( $json['widgets'] ) ) {
-			$steps['widgets'] = $this->get_step_result(
-				$rest->run_widgets_importer(
-					$this->build_request(
-						array(
-							'source_url' => $source,
-							'widgets'    => $json['widgets'],
-						)
+		return $this->get_step_result(
+			$rest->run_widgets_importer(
+				$this->build_request(
+					array(
+						'source_url' => $source,
+						'widgets'    => $json['widgets'],
 					)
 				)
-			);
-		}
-
-		$imported = true;
-		foreach ( $steps as $step ) {
-			if ( empty( $step['success'] ) ) {
-				$imported = false;
-			}
-		}
-
-		return array(
-			'success'           => $imported,
-			'imported'          => $imported,
-			'slug'              => $slug,
-			'builder'           => $found['builder'],
-			'plugins_installed' => $plugins_installed,
-			'plugins_planned'   => array_keys( $plugins ),
-			'front_page_url'    => home_url( '/' ),
-			'steps'             => $steps,
+			)
 		);
 	}
 
