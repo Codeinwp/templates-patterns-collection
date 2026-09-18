@@ -147,7 +147,7 @@ class Starter_Sites {
 					'output_schema'       => array(
 						'type'       => 'object',
 						'properties' => array(
-							'sites' => array(
+							'sites'       => array(
 								'type'  => 'array',
 								'items' => array(
 									'type'       => 'object',
@@ -164,6 +164,10 @@ class Starter_Sites {
 										'locked'           => array( 'type' => 'boolean' ),
 									),
 								),
+							),
+							'upgrade_url' => array(
+								'type'        => 'string',
+								'description' => 'Where to upgrade to unlock the locked sites. Present only when at least one listed site is locked.',
 							),
 						),
 					),
@@ -425,7 +429,14 @@ class Starter_Sites {
 			}
 		}
 
-		return array( 'sites' => $sites );
+		$result = array( 'sites' => $sites );
+
+		// Locked sites need Neve Pro; tell the agent where to get it.
+		if ( in_array( true, array_column( $sites, 'locked' ), true ) ) {
+			$result['upgrade_url'] = $this->get_upgrade_url( 'locked-starter-sites' );
+		}
+
+		return $result;
 	}
 
 	/**
@@ -458,7 +469,21 @@ class Starter_Sites {
 
 		// The catalogue flags premium sites the current license cannot import.
 		if ( isset( $site['upsell'] ) && $site['upsell'] === true ) {
-			return new WP_Error( 'tpc_ability_premium_site', __( 'This starter site requires an active premium license.', 'templates-patterns-collection' ), array( 'status' => 403 ) );
+			$upgrade_url = $this->get_upgrade_url( 'premium-starter-site' );
+
+			return new WP_Error(
+				'tpc_ability_premium_site',
+				sprintf(
+					/* translators: 1: error message, 2: upgrade URL. */
+					__( '%1$s Upgrade: %2$s', 'templates-patterns-collection' ),
+					__( 'This starter site requires an active premium license.', 'templates-patterns-collection' ),
+					$upgrade_url
+				),
+				array(
+					'status'      => 403,
+					'upgrade_url' => $upgrade_url,
+				)
+			);
 		}
 
 		$json = $this->fetch_site_json( $site );
@@ -786,6 +811,17 @@ class Starter_Sites {
 		}
 
 		return array_values( array_unique( $names ) );
+	}
+
+	/**
+	 * Neve Pro upgrade link, the one the starter sites screen uses, tagged for MCP.
+	 *
+	 * @param string $area Gated feature key, used as the campaign.
+	 *
+	 * @return string
+	 */
+	private function get_upgrade_url( $area ) {
+		return tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', $area, 'mcp' ), 'query' );
 	}
 
 	/**
