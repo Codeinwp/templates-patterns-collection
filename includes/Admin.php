@@ -76,6 +76,7 @@ class Admin {
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
 		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
 		add_filter( 'themeisle_sdk_blackfriday_data', array( $this, 'add_black_friday_data' ) );
+		add_filter( 'templates_patterns_collection_ai_connect_metadata', array( $this, 'add_ai_connect_metadata' ) );
 
 		$this->setup_white_label();
 
@@ -755,7 +756,7 @@ class Admin {
 				}
 			}
 
-			do_action( 'themeisle_internal_page', TIOB_BASENAME, 'onboarding' );
+			do_action( 'themeisle_internal_page', 'templates-patterns-collection', 'onboarding' );
 		}
 
 		$is_tiob_page = strpos( $screen->id, '_page_tiob-plugin' ) !== false;
@@ -784,7 +785,7 @@ class Admin {
 
 		wp_set_script_translations( 'tiob', 'templates-patterns-collection' );
 
-		do_action( 'themeisle_internal_page', TIOB_BASENAME, 'onboarding' );
+		do_action( 'themeisle_internal_page', 'templates-patterns-collection', 'onboarding' );
 	}
 
 	/**
@@ -1460,5 +1461,34 @@ class Admin {
 		$configs[ TIOB_BASENAME ] = $config;
 
 		return $configs;
+	}
+
+	/**
+	 * Opt in to the SDK "Connect your AI agent" module.
+	 *
+	 * Importing or reverting a starter site replaces large parts of a site, so
+	 * those abilities are left for the site owner to switch on.
+	 *
+	 * @return array
+	 */
+	public function add_ai_connect_metadata() {
+		return array(
+			'name'         => 'Starter Sites & Templates by Neve',
+			'notice_cases' => array(
+				__( 'find a starter site for your niche', 'templates-patterns-collection' ),
+				__( 'compare the plugins each starter site needs', 'templates-patterns-collection' ),
+				__( 'review your last starter site import', 'templates-patterns-collection' ),
+			),
+			'prompts'      => array(
+				__( 'List the Starter Sites & Templates by Neve starter sites that would suit a restaurant, with the page builder and plugins each one needs.', 'templates-patterns-collection' ),
+				__( 'Which free starter sites are available for Elementor? Give me their preview links.', 'templates-patterns-collection' ),
+				__( 'Check the status of my last starter site import and tell me what it created or changed and whether any errors were logged.', 'templates-patterns-collection' ),
+			),
+			'abilities'    => array(
+				'starter-sites/list',
+				'neve/starter-site-list',
+				'starter-sites/import-status',
+			),
+		);
 	}
 }
