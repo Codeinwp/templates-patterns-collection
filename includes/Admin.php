@@ -743,11 +743,12 @@ class Admin {
 			wp_set_script_translations( 'tiobObd', 'templates-patterns-collection' );
 
 			if ( ! empty( $this->google_fonts ) ) {
-				$font_chunks = array_chunk( $this->google_fonts, absint( count( $this->google_fonts ) / 5 ) );
+				$chunk_length = max( 1, absint( count( $this->google_fonts ) / 5 ) );
+				$font_chunks  = array_chunk( $this->google_fonts, $chunk_length );
 				foreach ( $font_chunks as $index => $fonts_chunk ) {
 					wp_enqueue_style(
 						'tiob-google-fonts-' . $index,
-						'https://fonts.googleapis.com/css?family=' . implode( '|', $fonts_chunk ) . '&display=swap"',
+						'https://fonts.googleapis.com/css?family=' . implode( '|', $fonts_chunk ) . '&display=swap',
 						array(),
 						$onboarding_dependencies['version']
 					);
@@ -1107,7 +1108,11 @@ class Admin {
 			),
 		);
 
-		if ( class_exists( '\Neve\Core\Settings\Mods', false ) ) {
+		$has_neve_font_pairs = class_exists( '\Neve\Core\Settings\Mods', false )
+			&& defined( '\Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS' )
+			&& property_exists( '\Neve\Core\Settings\Config', 'typography_default_pairs' );
+
+		if ( $has_neve_font_pairs ) {
 			$font_pair_neve = apply_filters(
 				'neve_font_pairings',
 				\Neve\Core\Settings\Mods::get( \Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS, \Neve\Core\Settings\Config::$typography_default_pairs )
