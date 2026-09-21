@@ -449,12 +449,28 @@ class Admin {
 	 *
 	 * @return bool
 	 */
-	private function neve_theme_has_support( $feature ) {
+	private static function neve_theme_has_support( $feature ) {
 		if ( defined( 'NEVE_COMPATIBILITY_FEATURES' ) ) {
 			$features = NEVE_COMPATIBILITY_FEATURES;
 			return isset( $features[ $feature ] );
 		}
 		return false;
+	}
+
+	/**
+	 * Capability required to open the starter sites screen.
+	 *
+	 * The screen is a Neve dashboard sub-page when the theme provides the
+	 * dedicated menu, and an Appearance page otherwise.
+	 *
+	 * @return string
+	 */
+	public static function get_starter_sites_capability() {
+		if ( self::neve_theme_has_support( 'theme_dedicated_menu' ) ) {
+			return 'activate_plugins';
+		}
+
+		return 'install_plugins';
 	}
 
 	/**
@@ -482,11 +498,11 @@ class Admin {
 	 */
 	private function add_theme_page_for_tiob( $page_data, $offset = 2 ) {
 
-		if ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ) {
+		if ( self::neve_theme_has_support( 'theme_dedicated_menu' ) ) {
 			global $submenu;
 
 			$theme_page = 'neve-welcome';
-			$capability = 'activate_plugins';
+			$capability = self::get_starter_sites_capability();
 			add_submenu_page(
 				$theme_page,
 				$page_data['page_title'],
@@ -567,7 +583,7 @@ class Admin {
 		$starter_site_data = array(
 			'page_title' => __( 'Starter Sites', 'templates-patterns-collection' ),
 			'menu_title' => $this->get_prefix_for_menu_item() . __( 'Onboarding', 'templates-patterns-collection' ),
-			'capability' => 'install_plugins',
+			'capability' => self::get_starter_sites_capability(),
 			'menu_slug'  => 'neve-onboarding',
 			'callback'   => array(
 				$this,

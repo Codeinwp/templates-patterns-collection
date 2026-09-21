@@ -11,6 +11,7 @@
 
 namespace TIOB\Abilities;
 
+use TIOB\Admin;
 use TIOB\Importers\Cleanup\Active_State;
 use TIOB\Importers\Helpers\Slug_Mapping;
 use TIOB\Logger;
@@ -31,11 +32,6 @@ class Starter_Sites {
 	 * Ability category slug.
 	 */
 	const CATEGORY = 'starter-sites';
-
-	/**
-	 * Capability checked by the starter sites REST routes (see Rest_Server).
-	 */
-	const CAPABILITY = 'manage_options';
 
 	/**
 	 * Maximum number of log lines returned by the import status.
@@ -372,12 +368,16 @@ class Starter_Sites {
 	}
 
 	/**
-	 * Permission callback. Mirrors the `ti-sites-lib/v1` REST routes.
+	 * Permission callback. Same capability the starter sites screen is
+	 * registered with (see Admin::get_starter_sites_capability()), which is
+	 * stricter than the `manage_options` of the `ti-sites-lib/v1` routes:
+	 * on multisite a site administrator has `manage_options` but cannot
+	 * open the screen.
 	 *
 	 * @return bool
 	 */
 	public function check_permission() {
-		return current_user_can( self::CAPABILITY );
+		return current_user_can( Admin::get_starter_sites_capability() );
 	}
 
 	/**
