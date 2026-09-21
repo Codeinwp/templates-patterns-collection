@@ -17,6 +17,11 @@ use WP_Error;
 class Zelle_Importer {
 
 	/**
+	 * Number of sections the Zelle front page template is built from.
+	 */
+	const SECTION_COUNT = 10;
+
+	/**
 	 * The page template name.
 	 *
 	 * @var string
@@ -61,25 +66,24 @@ class Zelle_Importer {
 
 		WP_Filesystem();
 
-		$data                  = json_decode( $wp_filesystem->get_contents( $local_template ), true );
+		$data = json_decode( $wp_filesystem->get_contents( $local_template ), true );
+
+		if ( empty( $data ) || ! isset( $data['content'] ) || ! is_array( $data['content'] ) ) {
+			return new WP_Error( 'ti__ob_zelle_err_3' );
+		}
+
 		$this->default_content = $data['content'];
 		$this->content         = $this->default_content;
 
 		// we don't need a footer for this page
 		unset( $this->content[9] );
 
-		if ( empty( $data ) ) {
+		$this->map_sections();
+
+		// Every section was unusable, so there is nothing left to import.
+		if ( empty( $this->content ) ) {
 			return new WP_Error( 'ti__ob_zelle_err_3' );
 		}
-
-		$this->map_bigtitle_section();
-		$this->map_our_focus_section();
-		$this->map_about_us_section();
-		$this->map_our_team_section();
-		$this->map_testimonials_section();
-		$this->map_ribbon_section();
-		$this->map_latest_news_section();
-		$this->map_contact_us_section();
 
 		$data['title']   = $this->name;
 		$data['content'] = array_values( $this->content );
@@ -88,23 +92,27 @@ class Zelle_Importer {
 		$uploads      = wp_upload_dir();
 		$path_to_file = $uploads['basedir'] . '/zelle.json';
 
-		// Mime a supported document type.
-		$elementor_plugin = \Elementor\Plugin::$instance;
-		$elementor_plugin->documents->register_document_type( 'not-supported', \Elementor\Modules\Library\Documents\Page::get_class_full_name() );
-
 		$wp_filesystem->put_contents( $path_to_file, json_encode( $data ), 0644 );
 
 		$_FILES['file']['tmp_name'] = $path_to_file;
 
-		$elementor = new \Elementor\TemplateLibrary\Source_Local;
+		$elementor = $this->get_elementor_source();
 
 		$el_template_post = $elementor->import_template( $this->name, $path_to_file );
 
-		if ( empty( $el_template_post ) ) {
+		if ( file_exists( $path_to_file ) ) {
+			unlink( $path_to_file );
+		}
+
+		// Elementor returns WP_Error|array, and a WP_Error is never empty.
+		if ( is_wp_error( $el_template_post ) ) {
+			return new WP_Error( 'ti__ob_zelle_err_4', $el_template_post->get_error_message(), $el_template_post->get_error_data() );
+		}
+
+		if ( empty( $el_template_post ) || ! isset( $el_template_post[0]['template_id'] ) ) {
 			return new WP_Error( 'ti__ob_zelle_err_4' );
 		}
 
-		unlink( $path_to_file );
 		$post_id = $this->insert_page( $el_template_post[0]['template_id'] );
 
 		if ( $post_id ) {
@@ -122,6 +130,181 @@ class Zelle_Importer {
 
 		return new WP_Error( 'ti__ob_zelle_err_5' );
 
+	}
+
+	/**
+	 * Run each mapping method over the sections it owns, dropping any section that is not
+	 * shaped the way that method indexes it.
+	 *
+	 * A malformed section is skipped on its own so the rest of the page still imports; only a
+	 * template with no usable section left fails the import.
+	 */
+	private function map_sections() {
+		foreach ( $this->section_mappers() as $method => $sections ) {
+			$mappable = true;
+
+			foreach ( $sections as $section ) {
+				if ( isset( $this->content[ $section ] ) && $this->is_mappable_section( $this->content[ $section ], $section ) ) {
+					continue;
+				}
+
+				unset( $this->content[ $section ] );
+				$mappable = false;
+			}
+
+			if ( $mappable ) {
+				$this->$method();
+			}
+		}
+	}
+
+	/**
+	 * Mapping methods and the sections each one indexes, in the order they have always run.
+	 *
+	 * @return array
+	 */
+	private function section_mappers() {
+		return array(
+			'map_bigtitle_section'     => array( 0 ),
+			'map_our_focus_section'    => array( 1 ),
+			'map_about_us_section'     => array( 3 ),
+			'map_our_team_section'     => array( 4 ),
+			'map_testimonials_section' => array( 5 ),
+			'map_ribbon_section'       => array( 2, 6 ),
+			'map_latest_news_section'  => array( 7 ),
+			'map_contact_us_section'   => array( 8 ),
+		);
+	}
+
+	/**
+	 * Whether one section is shaped the way its mapping method indexes it.
+	 *
+	 * None of the map_*_section() methods guard their dereferences, so anything they read has to
+	 * exist and anything they assign into has to be an array.
+	 *
+	 * @param mixed $section Decoded section.
+	 * @param int   $index   Its index in the template content.
+	 *
+	 * @return bool
+	 */
+	private function is_mappable_section( $section, $index ) {
+		if ( ! is_array( $section ) ) {
+			return false;
+		}
+
+		if ( ! isset( $section['elements'][0]['elements'] ) || ! is_array( $section['elements'][0]['elements'] ) ) {
+			return false;
+		}
+
+		if ( ! $this->has_assignable_nodes( $section ) ) {
+			return false;
+		}
+
+		$reads = $this->mapped_section_reads();
+
+		if ( ! isset( $reads[ $index ] ) ) {
+			return true;
+		}
+
+		foreach ( $reads[ $index ] as $path ) {
+			if ( ! $this->has_path( $section['elements'][0]['elements'], $path ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Nested reads each mapping method performs on its own section, relative to
+	 * $content[ n ]['elements'][0]['elements'].
+	 *
+	 * Sections 2, 6, 7 and 8 are absent on purpose: they only ever assign into their children,
+	 * and assigning to a missing index creates it rather than warning.
+	 *
+	 * @return array
+	 */
+	private function mapped_section_reads() {
+		return array(
+			// map_bigtitle_section(): $data[0] and $data[1]['elements'].
+			0 => array( array( 0 ), array( 1, 'elements' ) ),
+			// map_our_focus_section(): $data[2]['elements'][0].
+			1 => array( array( 2, 'elements', 0 ) ),
+			// map_about_us_section(): $data[0]['elements'][0]['elements'] and $data[1]['elements'][2]['elements'].
+			3 => array( array( 0, 'elements', 0, 'elements' ), array( 1, 'elements', 2, 'elements' ) ),
+			// map_our_team_section(): $data[2]['elements'][0].
+			4 => array( array( 2, 'elements', 0 ) ),
+			// map_testimonials_section(): $data[2]['elements'][0].
+			5 => array( array( 2, 'elements', 0 ) ),
+		);
+	}
+
+	/**
+	 * Whether every key on the given path exists.
+	 *
+	 * @param mixed $node Starting node.
+	 * @param array $path Keys to walk.
+	 *
+	 * @return bool
+	 */
+	private function has_path( $node, $path ) {
+		foreach ( $path as $key ) {
+			if ( ! is_array( $node ) || ! isset( $node[ $key ] ) ) {
+				return false;
+			}
+
+			$node = $node[ $key ];
+		}
+
+		return true;
+	}
+
+	/**
+	 * Whether every node below this one keeps the keys the mappers assign into as arrays.
+	 *
+	 * @param array $node Section or element node.
+	 *
+	 * @return bool
+	 */
+	private function has_assignable_nodes( $node ) {
+		if ( isset( $node['settings'] ) ) {
+			if ( ! is_array( $node['settings'] ) ) {
+				return false;
+			}
+
+			if ( isset( $node['settings']['form_fields'] ) && ! is_array( $node['settings']['form_fields'] ) ) {
+				return false;
+			}
+		}
+
+		if ( ! isset( $node['elements'] ) ) {
+			return true;
+		}
+
+		if ( ! is_array( $node['elements'] ) ) {
+			return false;
+		}
+
+		foreach ( $node['elements'] as $child ) {
+			if ( ! is_array( $child ) || ! $this->has_assignable_nodes( $child ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Elementor's local template source, with the document type the Zelle template needs.
+	 *
+	 * @return \Elementor\TemplateLibrary\Source_Local
+	 */
+	protected function get_elementor_source() {
+		// Mime a supported document type.
+		$elementor_plugin = \Elementor\Plugin::$instance;
+		$elementor_plugin->documents->register_document_type( 'not-supported', \Elementor\Modules\Library\Documents\Page::get_class_full_name() );
+
+		return new \Elementor\TemplateLibrary\Source_Local;
 	}
 
 	/**
