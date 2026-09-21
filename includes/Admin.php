@@ -1473,22 +1473,19 @@ class Admin {
 	 */
 	public function add_ai_connect_metadata() {
 		return array(
-			'name'         => 'Starter Sites & Templates by Neve',
-			'notice_cases' => array(
+			'name'           => 'Starter Sites & Templates by Neve',
+			'notice_cases'   => array(
 				__( 'find a starter site for your niche', 'templates-patterns-collection' ),
 				__( 'compare the plugins each starter site needs', 'templates-patterns-collection' ),
 				__( 'review your last starter site import', 'templates-patterns-collection' ),
 			),
-			'prompts'      => array(
+			'prompts'        => array(
 				__( 'List the Starter Sites & Templates by Neve starter sites that would suit a restaurant, with the page builder and plugins each one needs.', 'templates-patterns-collection' ),
 				__( 'Which free starter sites are available for Elementor? Give me their preview links.', 'templates-patterns-collection' ),
 				__( 'Check the status of my last starter site import and tell me what it created or changed and whether any errors were logged.', 'templates-patterns-collection' ),
 			),
-			'abilities'    => array(
-				'starter-sites/list',
-				'neve/starter-site-list',
-				'starter-sites/import-status',
-			),
+			'ability_prefix' => 'starter-sites',
+			'abilities'      => array( 'neve/starter-site-list' ),
 		);
 	}
 }

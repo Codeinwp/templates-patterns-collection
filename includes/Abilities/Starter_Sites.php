@@ -262,7 +262,8 @@ class Starter_Sites {
 					'meta'                => array_merge(
 						$this->get_meta( false, true, false ),
 						array(
-							'task' => array(
+							'ai_connect' => false,
+							'task'       => array(
 								'mode'        => 'cursor',
 								'results_key' => 'steps',
 							),
@@ -296,7 +297,7 @@ class Starter_Sites {
 					),
 					'execute_callback'    => array( $this, 'cleanup' ),
 					'permission_callback' => array( $this, 'check_permission' ),
-					'meta'                => $this->get_meta( false, true, false ),
+					'meta'                => array_merge( $this->get_meta( false, true, false ), array( 'ai_connect' => false ) ),
 				),
 			),
 			array(
