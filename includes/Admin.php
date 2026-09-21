@@ -1480,9 +1480,9 @@ class Admin {
 				__( 'review your last starter site import', 'templates-patterns-collection' ),
 			),
 			'prompts'        => array(
-				__( 'List the Starter Sites & Templates by Neve starter sites that would suit a restaurant, with the page builder and plugins each one needs.', 'templates-patterns-collection' ),
-				__( 'Which free starter sites are available for Elementor? Give me their preview links.', 'templates-patterns-collection' ),
-				__( 'Check the status of my last starter site import and tell me what it created or changed and whether any errors were logged.', 'templates-patterns-collection' ),
+				__( 'Find a Starter Sites & Templates by Neve starter site for a restaurant, built for Elementor.', 'templates-patterns-collection' ),
+				__( 'Which free starter sites suit a photography portfolio? Give me their previews.', 'templates-patterns-collection' ),
+				__( 'Find me a bakery starter site that works with the block editor and comes with a shop.', 'templates-patterns-collection' ),
 			),
 			'ability_prefix' => 'starter-sites',
 			'abilities'      => array( 'neve/starter-site-list' ),
