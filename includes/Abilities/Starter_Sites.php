@@ -368,16 +368,18 @@ class Starter_Sites {
 	}
 
 	/**
-	 * Permission callback. Same capability the starter sites screen is
-	 * registered with (see Admin::get_starter_sites_capability()), which is
-	 * stricter than the `manage_options` of the `ti-sites-lib/v1` routes:
-	 * on multisite a site administrator has `manage_options` but cannot
-	 * open the screen.
+	 * Permission callback. Both checks the product applies on the way to an
+	 * import or a cleanup: `manage_options`, which every `ti-sites-lib/v1`
+	 * route requires, and the capability the starter sites screen is
+	 * registered with (see Admin::get_starter_sites_capability()). Either
+	 * alone is not enough: on multisite a site administrator has
+	 * `manage_options` but cannot open the screen, and a custom role holding
+	 * `activate_plugins` without `manage_options` is refused by the routes.
 	 *
 	 * @return bool
 	 */
 	public function check_permission() {
-		return current_user_can( Admin::get_starter_sites_capability() );
+		return current_user_can( 'manage_options' ) && current_user_can( Admin::get_starter_sites_capability() );
 	}
 
 	/**

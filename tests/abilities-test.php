@@ -65,4 +65,30 @@ class Abilities_Test extends WP_UnitTestCase {
 
 		$this->assertFalse( $this->abilities->check_permission() );
 	}
+
+	/**
+	 * The screen capability alone is not enough either: the product's own
+	 * import and cleanup routes require `manage_options`.
+	 *
+	 * @covers \TIOB\Abilities\Starter_Sites::check_permission
+	 */
+	public function test_the_screen_capability_without_manage_options_is_denied() {
+		add_role(
+			'tiob_installer',
+			'Installer',
+			array(
+				'read'             => true,
+				'install_plugins'  => true,
+				'activate_plugins' => true,
+			)
+		);
+		$user_id = self::factory()->user->create( array( 'role' => 'tiob_installer' ) );
+		wp_set_current_user( $user_id );
+
+		$this->assertTrue( current_user_can( Admin::get_starter_sites_capability() ) );
+		$this->assertFalse( current_user_can( 'manage_options' ) );
+		$this->assertFalse( $this->abilities->check_permission() );
+
+		remove_role( 'tiob_installer' );
+	}
 }
