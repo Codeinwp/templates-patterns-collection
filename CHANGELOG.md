@@ -1,3 +1,12 @@
+##### [Version 1.4.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.4...v1.4.5) (2026-09-23)
+
+- Fixed admin crashes with older Neve theme versions.
+- Fixed onboarding crashes when Google font lists contain fewer than five families.
+- Fixed Zelle front-page migration when Elementor cannot import the template.
+- Fixed broken layouts and demo-site links in imported Elementor pages.
+- Fixed starter-site imports adding duplicate page links to existing menus.
+- Updated dependencies
+
 ##### [Version 1.4.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.3...v1.4.4) (2026-08-12)
 
 - Improved license activation to show a clear notice when a license plan does not include Templates Cloud.
