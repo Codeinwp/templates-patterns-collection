@@ -585,7 +585,10 @@ class WP_Import extends WP_Importer {
 						if ( $key === '_elementor_data' ) {
 							$this->logger->log( 'Filtering elementor meta...', 'progress' );
 							$meta_handler = new Elementor_Meta_Handler( $value, $this->base_blog_url );
-							$meta_handler->filter_meta();
+							// Rewrite before storing and slash the result: update_post_meta() unslashes its input,
+							// and the sanitize filter the handler used to rely on is skipped once Elementor
+							// (>= 4.2.1) registers a per-post-type sanitize callback for this key.
+							$value = wp_slash( $meta_handler->get_processed_value() );
 							$this->logger->log( 'Filtered elementor meta.', 'success' );
 						} else {
 							$value = Slug_Mapping::rewrite_value( $value );
@@ -700,12 +703,15 @@ class WP_Import extends WP_Importer {
 		);
 		$args     = apply_filters( 'wp_import_nav_menu_item_args', $args, $this->base_blog_url );
 		$existing = wp_get_nav_menu_items( $menu_id );
-		foreach ( $existing as $existing_item ) {
-			if ( $args['menu-item-url'] === $existing_item->url && trim( $args['menu-item-title'] ) === $existing_item->title ) {
-				$this->logger->log( 'Menu item already exists.', 'success' );
-
-				return;
+		foreach ( is_array( $existing ) ? $existing : array() as $existing_item ) {
+			if ( ! $this->is_same_menu_item( $args, $existing_item ) ) {
+				continue;
 			}
+			$this->logger->log( 'Menu item already exists.', 'success' );
+			// Map the source item onto the existing one so its children keep their parent.
+			$this->processed_menu_items[ intval( $item['post_id'] ) ] = (int) $existing_item->ID;
+
+			return;
 		}
 
 		$id = wp_update_nav_menu_item( $menu_id, 0, $args );
@@ -716,6 +722,37 @@ class WP_Import extends WP_Importer {
 			$this->processed_menu_items[ intval( $item['post_id'] ) ] = (int) $id;
 		}
 		$this->logger->log( 'Processed single menu item.', 'success' );
+	}
+
+	/**
+	 * Check whether a menu item equivalent to the one being imported already exists.
+	 *
+	 * Page, post and term backed items carry an empty `_menu_item_url` in the export, while the
+	 * existing menu object exposes the resolved permalink, so those are matched on the linked
+	 * object instead of the URL. Their title is only compared when the export provides one;
+	 * an empty title means the item inherits the linked object's title.
+	 *
+	 * @param array   $args          Arguments prepared for wp_update_nav_menu_item().
+	 * @param WP_Post $existing_item Existing menu item as returned by wp_get_nav_menu_items().
+	 *
+	 * @return bool
+	 */
+	private function is_same_menu_item( $args, $existing_item ) {
+		if ( $args['menu-item-type'] !== $existing_item->type ) {
+			return false;
+		}
+
+		$title = trim( $args['menu-item-title'] );
+
+		if ( in_array( $args['menu-item-type'], array( 'post_type', 'taxonomy', 'post_type_archive' ), true ) ) {
+			if ( '' !== $title && $title !== $existing_item->title ) {
+				return false;
+			}
+
+			return $args['menu-item-object'] === $existing_item->object && intval( $args['menu-item-object-id'] ) === intval( $existing_item->object_id );
+		}
+
+		return $args['menu-item-url'] === $existing_item->url && $title === $existing_item->title;
 	}
 
 	/**

@@ -2,7 +2,8 @@
 /**
  * Elementor Meta import handler.
  *
- * This is needed because by default, the importer breaks our JSON meta.
+ * Rewrites demo URLs inside `_elementor_data` and returns a payload that is safe to store
+ * through update_post_meta() (which unslashes its input before saving).
  *
  * @package    templates-patterns-collection
  */
@@ -54,7 +55,39 @@ class Elementor_Meta_Handler {
 	}
 
 	/**
+	 * Get the processed meta value: valid, unslashed JSON with demo image and link URLs rewritten.
+	 *
+	 * Callers must wp_slash() the result before handing it to update_post_meta(), which
+	 * unslashes its input. Storing through the meta sanitize filter instead is not reliable:
+	 * Elementor >= 4.2.1 registers `_elementor_data` per post type with its own sanitize
+	 * callback, and core then routes sanitization through the subtype filter only, skipping
+	 * the generic `sanitize_post_meta__elementor_data` hook.
+	 *
+	 * @return mixed
+	 */
+	public function get_processed_value() {
+		if ( empty( $this->value ) || ! is_string( $this->value ) ) {
+			return $this->value;
+		}
+
+		// Elementor's importer compatibility layer slashes `_elementor_data` on `wp_import_post_meta`
+		// in admin context. Undo that so the rewrites below operate on plain JSON.
+		if ( ! $this->is_valid_json( $this->value ) && $this->is_valid_json( wp_unslash( $this->value ) ) ) {
+			$this->value = wp_unslash( $this->value );
+		}
+
+		$this->value = $this->replace_image_urls( $this->value );
+		$this->replace_link_urls();
+
+		return $this->value;
+	}
+
+	/**
 	 * Filter the meta to allow escaped JSON values.
+	 *
+	 * Kept for backwards compatibility. The importer now stores the value returned by
+	 * get_processed_value() directly, because this generic sanitize filter is bypassed
+	 * whenever a subtype-specific filter is registered for the key.
 	 */
 	public function filter_meta() {
 		add_filter( 'sanitize_post_meta_' . $this->meta_key, array( $this, 'allow_escaped_json_meta' ), 10, 3 );
@@ -74,10 +107,24 @@ class Elementor_Meta_Handler {
 			return $val;
 		}
 
-		$this->value = $this->replace_image_urls( $this->value );
-		$this->replace_link_urls();
+		return $this->get_processed_value();
+	}
 
-		return $this->value;
+	/**
+	 * Check whether a string is valid JSON.
+	 *
+	 * @param mixed $value value to check.
+	 *
+	 * @return bool
+	 */
+	private function is_valid_json( $value ) {
+		if ( ! is_string( $value ) ) {
+			return false;
+		}
+
+		json_decode( $value );
+
+		return json_last_error() === JSON_ERROR_NONE;
 	}
 
 	/**
