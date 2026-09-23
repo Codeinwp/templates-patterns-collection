@@ -4,7 +4,7 @@ Tags: starter sites, templates, block patterns, neve, gutenberg
 Requires at least: 5.5
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -37,9 +37,14 @@ The plugin contacts ThemeIsle's service to fetch the starter-sites and templates
 
 == Changelog ==
 
-##### [Version 1.4.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.3...v1.4.4) (2026-08-12)
+##### [Version 1.4.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.4...v1.4.5) (2026-09-23)
 
-- Improved license activation to show a clear notice when a license plan does not include Templates Cloud.
+- Fixed admin crashes with older Neve theme versions.
+- Fixed onboarding crashes when Google font lists contain fewer than five families.
+- Fixed Zelle front-page migration when Elementor cannot import the template.
+- Fixed broken layouts and demo-site links in imported Elementor pages.
+- Fixed starter-site imports adding duplicate page links to existing menus.
+- Updated dependencies
 
 
 
