@@ -585,7 +585,10 @@ class WP_Import extends WP_Importer {
 						if ( $key === '_elementor_data' ) {
 							$this->logger->log( 'Filtering elementor meta...', 'progress' );
 							$meta_handler = new Elementor_Meta_Handler( $value, $this->base_blog_url );
-							$meta_handler->filter_meta();
+							// Rewrite before storing and slash the result: update_post_meta() unslashes its input,
+							// and the sanitize filter the handler used to rely on is skipped once Elementor
+							// (>= 4.2.1) registers a per-post-type sanitize callback for this key.
+							$value = wp_slash( $meta_handler->get_processed_value() );
 							$this->logger->log( 'Filtered elementor meta.', 'success' );
 						} else {
 							$value = Slug_Mapping::rewrite_value( $value );
