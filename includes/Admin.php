@@ -76,6 +76,7 @@ class Admin {
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
 		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
 		add_filter( 'themeisle_sdk_blackfriday_data', array( $this, 'add_black_friday_data' ) );
+		add_filter( 'templates_patterns_collection_ai_connect_metadata', array( $this, 'add_ai_connect_metadata' ) );
 
 		$this->setup_white_label();
 
@@ -448,12 +449,28 @@ class Admin {
 	 *
 	 * @return bool
 	 */
-	private function neve_theme_has_support( $feature ) {
+	private static function neve_theme_has_support( $feature ) {
 		if ( defined( 'NEVE_COMPATIBILITY_FEATURES' ) ) {
 			$features = NEVE_COMPATIBILITY_FEATURES;
 			return isset( $features[ $feature ] );
 		}
 		return false;
+	}
+
+	/**
+	 * Capability required to open the starter sites screen.
+	 *
+	 * The screen is a Neve dashboard sub-page when the theme provides the
+	 * dedicated menu, and an Appearance page otherwise.
+	 *
+	 * @return string
+	 */
+	public static function get_starter_sites_capability() {
+		if ( self::neve_theme_has_support( 'theme_dedicated_menu' ) ) {
+			return 'activate_plugins';
+		}
+
+		return 'install_plugins';
 	}
 
 	/**
@@ -481,11 +498,11 @@ class Admin {
 	 */
 	private function add_theme_page_for_tiob( $page_data, $offset = 2 ) {
 
-		if ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ) {
+		if ( self::neve_theme_has_support( 'theme_dedicated_menu' ) ) {
 			global $submenu;
 
 			$theme_page = 'neve-welcome';
-			$capability = 'activate_plugins';
+			$capability = self::get_starter_sites_capability();
 			add_submenu_page(
 				$theme_page,
 				$page_data['page_title'],
@@ -566,7 +583,7 @@ class Admin {
 		$starter_site_data = array(
 			'page_title' => __( 'Starter Sites', 'templates-patterns-collection' ),
 			'menu_title' => $this->get_prefix_for_menu_item() . __( 'Onboarding', 'templates-patterns-collection' ),
-			'capability' => 'install_plugins',
+			'capability' => self::get_starter_sites_capability(),
 			'menu_slug'  => 'neve-onboarding',
 			'callback'   => array(
 				$this,
@@ -755,7 +772,7 @@ class Admin {
 				}
 			}
 
-			do_action( 'themeisle_internal_page', TIOB_BASENAME, 'onboarding' );
+			do_action( 'themeisle_internal_page', 'templates-patterns-collection', 'onboarding' );
 		}
 
 		$is_tiob_page = strpos( $screen->id, '_page_tiob-plugin' ) !== false;
@@ -784,7 +801,7 @@ class Admin {
 
 		wp_set_script_translations( 'tiob', 'templates-patterns-collection' );
 
-		do_action( 'themeisle_internal_page', TIOB_BASENAME, 'onboarding' );
+		do_action( 'themeisle_internal_page', 'templates-patterns-collection', 'onboarding' );
 	}
 
 	/**
@@ -1460,5 +1477,31 @@ class Admin {
 		$configs[ TIOB_BASENAME ] = $config;
 
 		return $configs;
+	}
+
+	/**
+	 * Opt in to the SDK "Connect your AI agent" module.
+	 *
+	 * Importing or reverting a starter site replaces large parts of a site, so
+	 * those abilities are left for the site owner to switch on.
+	 *
+	 * @return array
+	 */
+	public function add_ai_connect_metadata() {
+		return array(
+			'name'           => 'Starter Sites & Templates by Neve',
+			'notice_cases'   => array(
+				__( 'find a starter site for your niche', 'templates-patterns-collection' ),
+				__( 'compare the plugins each starter site needs', 'templates-patterns-collection' ),
+				__( 'review your last starter site import', 'templates-patterns-collection' ),
+			),
+			'prompts'        => array(
+				__( 'Find a Starter Sites & Templates by Neve starter site for a restaurant, built for Elementor.', 'templates-patterns-collection' ),
+				__( 'Which free starter sites suit a photography portfolio? Give me their previews.', 'templates-patterns-collection' ),
+				__( 'Find me a bakery starter site that works with the block editor and comes with a shop.', 'templates-patterns-collection' ),
+			),
+			'ability_prefix' => 'starter-sites',
+			'abilities'      => array( 'neve/starter-site-list' ),
+		);
 	}
 }
