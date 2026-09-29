@@ -8,6 +8,7 @@
 use TIOB\Admin;
 use TIOB\Editor;
 use TIOB\Elementor;
+use TIOB\TI_Beaver;
 
 /**
  * Builder bundles must be linked to the plugin text domain.
@@ -32,13 +33,17 @@ class Script_Translations_Test extends \WP_UnitTestCase {
 		// CI does not build the JS bundles.
 		$this->maybe_stub_asset( 'editor' );
 		$this->maybe_stub_asset( 'elementor' );
+		$this->maybe_stub_asset( 'beaver' );
 	}
 
 	public function tear_down(): void {
 		wp_deregister_script( 'ti-tpc-block' );
 		wp_deregister_script( 'ti-tpc-elementor' );
+		wp_deregister_script( 'ti-tpc-beaver' );
 		wp_deregister_style( 'ti-tpc-block' );
-		unregister_block_type( 'ti-tpc/templates-cloud' );
+		if ( WP_Block_Type_Registry::get_instance()->is_registered( 'ti-tpc/templates-cloud' ) ) {
+			unregister_block_type( 'ti-tpc/templates-cloud' );
+		}
 		set_current_screen( 'front' );
 
 		foreach ( $this->created_files as $file ) {
@@ -81,6 +86,25 @@ class Script_Translations_Test extends \WP_UnitTestCase {
 		( new Elementor() )->register_script();
 
 		$this->assertSame( 'templates-patterns-collection', wp_scripts()->registered['ti-tpc-elementor']->textdomain );
+	}
+
+	/**
+	 * Beaver bundle loads its translations once Beaver enqueues the module.
+	 *
+	 * The FLBuilder* stubs are global, so they get a process of their own.
+	 *
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 *
+	 * @return void
+	 */
+	public function test_beaver_script_has_text_domain(): void {
+		require_once __DIR__ . '/fixtures/beaver-builder-stub.php';
+		wp_deregister_script( 'ti-tpc-beaver' );
+
+		FLBuilder::enqueue_module_layout_styles_scripts( new TI_Beaver() );
+
+		$this->assertSame( 'templates-patterns-collection', wp_scripts()->registered['ti-tpc-beaver']->textdomain );
 	}
 
 	/**
