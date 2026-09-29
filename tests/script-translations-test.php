@@ -64,10 +64,6 @@ class Script_Translations_Test extends \WP_UnitTestCase {
 		if ( ! defined( 'TPC_TEMPLATES_CLOUD_ENDPOINT' ) ) {
 			define( 'TPC_TEMPLATES_CLOUD_ENDPOINT', Admin::get_templates_cloud_endpoint() );
 		}
-		if ( WP_Block_Type_Registry::get_instance()->is_registered( 'ti-tpc/templates-cloud' ) ) {
-			unregister_block_type( 'ti-tpc/templates-cloud' );
-		}
-		wp_deregister_script( 'ti-tpc-block' );
 		set_current_screen( 'post' );
 
 		( new Editor() )->register_block();
@@ -81,8 +77,6 @@ class Script_Translations_Test extends \WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_elementor_script_has_text_domain(): void {
-		wp_deregister_script( 'ti-tpc-elementor' );
-
 		( new Elementor() )->register_script();
 
 		$this->assertSame( 'templates-patterns-collection', wp_scripts()->registered['ti-tpc-elementor']->textdomain );
@@ -100,7 +94,6 @@ class Script_Translations_Test extends \WP_UnitTestCase {
 	 */
 	public function test_beaver_script_has_text_domain(): void {
 		require_once __DIR__ . '/fixtures/beaver-builder-stub.php';
-		wp_deregister_script( 'ti-tpc-beaver' );
 
 		FLBuilder::enqueue_module_layout_styles_scripts( new TI_Beaver() );
 
