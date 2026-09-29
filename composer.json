@@ -49,6 +49,6 @@
     "issues": "https://github.com/Codeinwp/templates-patterns-collection/issues"
   },
   "require": {
-    "codeinwp/themeisle-sdk": "^3.2"
+    "codeinwp/themeisle-sdk": "^3.3.64"
   }
 }
