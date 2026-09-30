@@ -174,6 +174,7 @@ class Plugin_Importer {
 	private function remove_possible_redirects() {
 		delete_transient( '_wc_activation_redirect' );
 		delete_transient( 'wpforms_activation_redirect' );
+		delete_transient( 'easy_mcp_ai_setup_redirect' );
 		update_option( 'themeisle_blocks_settings_redirect', false );
 		update_option( 'masteriyo_first_time_activation_flag', true );
 	}
