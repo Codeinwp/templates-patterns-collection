@@ -63,6 +63,9 @@ $autoload_path = __DIR__ . '/vendor/autoload.php';
 if ( is_file( $autoload_path ) ) {
 	require_once $autoload_path;
 }
+if ( class_exists( '\\TIOB\\Abilities\\Starter_Sites' ) ) {
+	( new \TIOB\Abilities\Starter_Sites() )->init();
+}
 add_action( 'init', 'ti_tpc_run', 999 );
 
 function ti_tpc_run() {
