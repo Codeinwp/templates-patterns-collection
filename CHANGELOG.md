@@ -1,3 +1,7 @@
+##### [Version 1.4.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.5...v1.4.6) (2026-09-30)
+
+- Added AI agent support: let AI assistants browse and import starter sites for you.
+
 ##### [Version 1.4.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.4...v1.4.5) (2026-09-23)
 
 - Fixed admin crashes with older Neve theme versions.
