@@ -45,6 +45,12 @@ const featuredPluginCollection = [
  */
 const pluginCollection = [
     {
+        id: 'manageWithAi',
+        pluginSlug: 'easy-mcp-ai',
+        label: __('Manage with AI', 'templates-patterns-collection'),
+        description: __('Connect Claude or ChatGPT to manage your site with AI.', 'templates-patterns-collection')
+    },
+    {
         id: 'visualizer',
         pluginSlug: 'visualizer',
         label: __('Tables and Chart', 'templates-patterns-collection'),
