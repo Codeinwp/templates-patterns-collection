@@ -212,7 +212,7 @@ const Exporter = () => {
 				if ( res.message ) {
 					let message = res.message;
 					if (
-						message === 'Sorry, you are not allowed to do that.'
+						message === __( 'Sorry, you are not allowed to do that.', 'templates-patterns-collection' )
 					) {
 						message = __(
 							'Could not save template, check that the template is not empty.',
@@ -313,7 +313,7 @@ const Exporter = () => {
 				if ( res.message ) {
 					let message = res.message;
 					if (
-						message === 'Sorry, you are not allowed to do that.'
+						message === __( 'Sorry, you are not allowed to do that.', 'templates-patterns-collection' )
 					) {
 						message = __(
 							'Could not save template, check that the template is not empty.',
