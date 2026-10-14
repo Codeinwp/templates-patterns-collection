@@ -12,6 +12,13 @@ class FLBuilderModule {
 	public $url;
 
 	/**
+	 * Additional JS to enqueue.
+	 *
+	 * @var array<string, array{0: string|null, 1: list<string>|null, 2: string|bool|null, 3: bool|null}> $js
+	 */
+	public $js = array();
+
+	/**
 	 * Module constructor.
 	 *
 	 * @since 1.0
