@@ -71,11 +71,11 @@ class Content_Download_Test extends WP_UnitTestCase {
 	/**
 	 * Answer requests to the demo content file with the queued responses.
 	 *
-	 * @param false|array|WP_Error $preempt The preempted response.
-	 * @param array                $args    The request arguments.
-	 * @param string               $url     The request URL.
+	 * @param false|array<string, mixed>|WP_Error $preempt The preempted response.
+	 * @param array<string, mixed>                $args    The request arguments.
+	 * @param string                              $url     The request URL.
 	 *
-	 * @return false|array|WP_Error
+	 * @return false|array<string, mixed>|WP_Error
 	 */
 	public function fake_content_file_request( $preempt, $args, $url ) {
 		if ( strpos( $url, 'https://content.example.com/' ) !== 0 ) {
@@ -90,16 +90,17 @@ class Content_Download_Test extends WP_UnitTestCase {
 	 * A successful HTTP response.
 	 *
 	 * @param string $body The response body.
+	 * @param int    $code The HTTP status code.
 	 *
 	 * @return array<string, mixed>
 	 */
-	private function http_response( $body ) {
+	private function http_response( $body, $code = 200 ) {
 		return array(
 			'headers'  => array(),
 			'body'     => $body,
 			'response' => array(
-				'code'    => 200,
-				'message' => 'OK',
+				'code'    => $code,
+				'message' => '',
 			),
 			'cookies'  => array(),
 		);
@@ -191,6 +192,25 @@ class Content_Download_Test extends WP_UnitTestCase {
 					'post_status' => 'any',
 				)
 			)
+		);
+	}
+
+	/**
+	 * An HTTP error page is retried and then stops the import instead of being imported.
+	 */
+	public function test_http_error_response_stops_the_import() {
+		$error_page      = $this->http_response( '<html><body>504 Gateway Time-out</body></html>', 504 );
+		$this->responses = array( $error_page, $error_page );
+
+		$response = $this->import_remote_content();
+
+		$this->assertCount( 2, $this->requests );
+		$this->assertSame(
+			array(
+				'data'    => 'ti__ob_remote_err_3',
+				'success' => false,
+			),
+			$response->get_data()
 		);
 	}
 }

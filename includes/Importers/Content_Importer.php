@@ -189,7 +189,7 @@ class Content_Importer {
 	}
 
 	/**
-	 * Download the remote XML file, retrying once when the request fails.
+	 * Download the remote XML file, retrying once when the request fails or answers with a non-2xx status.
 	 *
 	 * The default request timeout (5 seconds) is too short for the larger demo files.
 	 *
@@ -204,6 +204,10 @@ class Content_Importer {
 		$response = null;
 		for ( $attempt = 1; $attempt <= 2; $attempt ++ ) {
 			$response = wp_remote_get( $url, $request_args );
+			$code     = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
+			if ( ! is_wp_error( $response ) && ( $code < 200 || $code > 299 ) ) {
+				$response = new WP_Error( 'ti__ob_content_file_http_error', "The remote file request returned HTTP {$code}." );
+			}
 			if ( ! is_wp_error( $response ) ) {
 				break;
 			}
