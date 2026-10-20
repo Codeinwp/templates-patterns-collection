@@ -87,10 +87,10 @@ class Content_Download_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * A successful HTTP response.
+	 * An HTTP response with the given status code.
 	 *
 	 * @param string $body The response body.
-	 * @param int    $code The HTTP status code.
+	 * @param int    $code The HTTP status code, 200 by default.
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -199,7 +199,8 @@ class Content_Download_Test extends WP_UnitTestCase {
 	 * An HTTP error page is retried and then stops the import instead of being imported.
 	 */
 	public function test_http_error_response_stops_the_import() {
-		$error_page      = $this->http_response( '<html><body>504 Gateway Time-out</body></html>', 504 );
+		// A valid file body, so a missing status check would import it instead of dying on a parse error.
+		$error_page      = $this->http_response( file_get_contents( dirname( __FILE__ ) . '/fixtures/export.xml' ), 504 );
 		$this->responses = array( $error_page, $error_page );
 
 		$response = $this->import_remote_content();
@@ -211,6 +212,14 @@ class Content_Download_Test extends WP_UnitTestCase {
 				'success' => false,
 			),
 			$response->get_data()
+		);
+		$this->assertEmpty(
+			get_posts(
+				array(
+					'post_type'   => 'page',
+					'post_status' => 'any',
+				)
+			)
 		);
 	}
 }
