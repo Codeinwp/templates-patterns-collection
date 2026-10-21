@@ -154,6 +154,25 @@ test.describe('Onboarding', () => {
         await expect(page.getByRole('button', { name: 'Start Import' })).toBeHidden();
     });
 
+    test('a required plugin checkbox stays ticked when clicked', async ({ page, admin }) => {
+        await admin.visitAdminPage(ONBOARDING_URL);
+        await openFirstSiteAndWaitForData(page);
+        await page.getByRole('button', { name: 'Continue' }).click();
+
+        const requiredCheckbox = featureCard( page, 'optimole-wp' ).locator('input[type="checkbox"]');
+        await requiredCheckbox.click({ force: true });
+
+        await expect(requiredCheckbox).toBeChecked();
+    });
+
+    test('a required plugin card is labelled as required', async ({ page, admin }) => {
+        await admin.visitAdminPage(ONBOARDING_URL);
+        await openFirstSiteAndWaitForData(page);
+        await page.getByRole('button', { name: 'Continue' }).click();
+
+        await expect(featureCard( page, 'optimole-wp' )).toContainText('Required');
+    });
+
     test('Site Import Process', async ({ page, admin }) => {
         await admin.visitAdminPage(ONBOARDING_URL);
         await openFirstSiteAndWaitForData(page);

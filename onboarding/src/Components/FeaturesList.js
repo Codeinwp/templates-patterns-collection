@@ -280,9 +280,15 @@ const FeaturesList = ({ requiredPlugins, onToggle }) => {
                                             type="checkbox"
                                             checked={checked}
                                             readOnly
+                                            disabled={isLocked}
                                             tabIndex={-1}
                                         />
                                         <h4 className="ob-feature-title" id={titleId}>{feature.label}</h4>
+                                        {isLocked && (
+                                            <span className="ob-feature-required">
+                                                {__('Required', 'templates-patterns-collection')}
+                                            </span>
+                                        )}
                                     </button>
                                     {feature.description && (
                                         <button
