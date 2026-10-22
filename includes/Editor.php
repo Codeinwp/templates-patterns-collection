@@ -75,6 +75,8 @@ class Editor {
 			$deps['version']
 		);
 
+		wp_set_script_translations( $this->handle, 'templates-patterns-collection' );
+
 		wp_localize_script(
 			$this->handle,
 			'tiTpc',

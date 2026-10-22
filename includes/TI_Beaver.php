@@ -48,6 +48,20 @@ class TI_Beaver extends FLBuilderModule {
 	}
 
 	/**
+	 * Register the module script with its translations.
+	 *
+	 * Beaver calls this right before enqueueing the scripts added with add_js().
+	 *
+	 * @return void
+	 */
+	public function enqueue_scripts() {
+		list( $src, $deps, $ver, $in_footer ) = $this->js['ti-tpc-beaver'];
+
+		wp_register_script( 'ti-tpc-beaver', $src, $deps, $ver, $in_footer );
+		wp_set_script_translations( 'ti-tpc-beaver', 'templates-patterns-collection' );
+	}
+
+	/**
 	 * Get position of node.
 	 */
 	static public function get_position( $node ) {

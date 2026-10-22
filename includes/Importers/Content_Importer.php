@@ -107,12 +107,19 @@ class Content_Importer {
 				$api_src          = defined( 'TPC_API_SRC' ) && ! empty( TPC_API_SRC ) ? TPC_API_SRC : Admin::API;
 				$content_file_url = str_replace( Admin::API, $api_src, $content_file_url );
 			}
-			$response_file = wp_remote_get( add_query_arg( 'key', apply_filters( 'product_neve_license_key', 'free' ), $content_file_url ), $request_args );
+			$content = $this->download_content_file( add_query_arg( 'key', apply_filters( 'product_neve_license_key', 'free' ), $content_file_url ), $request_args );
 
-			if ( is_wp_error( $response_file ) ) {
-				$this->logger->log( "Error saving the remote file:  {$response_file->get_error_message()}.", 'success' );
+			if ( is_wp_error( $content ) ) {
+				$this->logger->log( "Error downloading the remote file: {$content->get_error_message()}." );
+
+				return new WP_REST_Response(
+					array(
+						'data'    => 'ti__ob_remote_err_3',
+						'success' => false,
+					)
+				);
 			}
-			$content_file_path = $this->save_xhr_return_path( wp_remote_retrieve_body( $response_file ) );
+			$content_file_path = $this->save_xhr_return_path( $content );
 			$this->logger->log( "Saved remote XML at path {$content_file_path}.", 'success' );
 		} else {
 			$this->logger->log( 'Using local XML.', 'success' );
@@ -179,6 +186,44 @@ class Content_Importer {
 				'frontpage_id' => $frontpage_id,
 			)
 		);
+	}
+
+	/**
+	 * Download the remote XML file, retrying once when the request fails or answers with a non-2xx status.
+	 *
+	 * The default request timeout (5 seconds) is too short for the larger demo files.
+	 *
+	 * @param string               $url          the content file URL.
+	 * @param array<string, mixed> $request_args the request arguments.
+	 *
+	 * @return string|WP_Error The file content, or the error of the last attempt.
+	 */
+	private function download_content_file( $url, $request_args ) {
+		$request_args['timeout'] = 60;
+
+		$response = null;
+		for ( $attempt = 1; $attempt <= 2; $attempt ++ ) {
+			$response = wp_remote_get( $url, $request_args );
+			$code     = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
+			if ( ! is_wp_error( $response ) && ( $code < 200 || $code > 299 ) ) {
+				$response = new WP_Error( 'ti__ob_content_file_http_error', "The remote file request returned HTTP {$code}." );
+			}
+			if ( ! is_wp_error( $response ) ) {
+				break;
+			}
+			$this->logger->log( "Attempt {$attempt} to download the remote file failed: {$response->get_error_message()}." );
+		}
+
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+
+		$content = wp_remote_retrieve_body( $response );
+		if ( '' === $content ) {
+			return new WP_Error( 'ti__ob_empty_content_file', 'The remote content file is empty.' );
+		}
+
+		return $content;
 	}
 
 	/**

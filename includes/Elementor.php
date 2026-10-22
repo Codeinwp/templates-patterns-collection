@@ -46,6 +46,8 @@ class Elementor {
 			true
 		);
 
+		wp_set_script_translations( 'ti-tpc-elementor', 'templates-patterns-collection' );
+
 		wp_localize_script(
 			'ti-tpc-elementor',
 			'tiTpc',

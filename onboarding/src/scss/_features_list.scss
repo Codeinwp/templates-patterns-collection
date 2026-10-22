@@ -100,6 +100,17 @@
                 min-width: 0;
             }
 
+            .ob-feature-required {
+                flex-shrink: 0;
+                padding: 2px 8px;
+                border-radius: 10px;
+                background-color: #e3e8ef;
+                color: #4b5563;
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 1.4;
+            }
+
             input[type='checkbox'] {
                 cursor: pointer;
                 accent-color: #2b62de;
