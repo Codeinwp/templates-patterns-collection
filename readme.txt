@@ -4,7 +4,7 @@ Tags: starter sites, templates, block patterns, neve, gutenberg
 Requires at least: 5.5
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -37,9 +37,12 @@ The plugin contacts ThemeIsle's service to fetch the starter-sites and templates
 
 == Changelog ==
 
-##### [Version 1.4.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.5...v1.4.6) (2026-09-30)
+##### [Version 1.4.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.6...v1.4.7) (2026-10-22)
 
-- Added AI agent support: let AI assistants browse and import starter sites for you.
+- Fixed untranslated labels in the Gutenberg, Elementor, and Beaver Builder template libraries.
+- Fixed starter site imports failing on slow connections.
+- Fixed required plugin checkboxes staying selected with a Required label.
+- Updated dependencies
 
 
 
