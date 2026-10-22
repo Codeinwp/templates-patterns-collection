@@ -1,3 +1,10 @@
+##### [Version 1.4.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.6...v1.4.7) (2026-10-22)
+
+- Fixed untranslated labels in the Gutenberg, Elementor, and Beaver Builder template libraries.
+- Fixed starter site imports failing on slow connections.
+- Fixed required plugin checkboxes staying selected with a Required label.
+- Updated dependencies
+
 ##### [Version 1.4.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.5...v1.4.6) (2026-09-30)
 
 - Added AI agent support: let AI assistants browse and import starter sites for you.
