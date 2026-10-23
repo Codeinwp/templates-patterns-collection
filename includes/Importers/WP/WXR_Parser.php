@@ -63,7 +63,7 @@ class WXR_Parser {
 		}
 
 		// Attempt to use proper XML parsers first
-		if ( extension_loaded( 'simplexml' ) ) {
+		if ( $this->can_use_simplexml() ) {
 			$parser = new WXR_Parser_SimpleXML();
 			$this->logger->log( 'Using WXR_Parser_SimpleXML...', 'progress' );
 			$result = $parser->parse( $file );
@@ -91,5 +91,14 @@ class WXR_Parser {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Check whether the SimpleXML parser can run; it loads the file through DOMDocument.
+	 *
+	 * @return bool
+	 */
+	protected function can_use_simplexml() {
+		return extension_loaded( 'simplexml' ) && class_exists( 'DOMDocument' );
 	}
 }
