@@ -63,7 +63,7 @@ class WXR_Parser {
 		}
 
 		// Attempt to use proper XML parsers first
-		if ( $this->can_use_simplexml() ) {
+		if ( $this->is_extension_loaded( 'simplexml' ) && $this->is_extension_loaded( 'dom' ) ) {
 			$parser = new WXR_Parser_SimpleXML();
 			$this->logger->log( 'Using WXR_Parser_SimpleXML...', 'progress' );
 			$result = $parser->parse( $file );
@@ -73,7 +73,7 @@ class WXR_Parser {
 
 				return $result;
 			}
-		} elseif ( extension_loaded( 'xml' ) ) {
+		} elseif ( $this->is_extension_loaded( 'xml' ) ) {
 			$this->logger->log( 'Using WXR_Parser_XML...', 'progress' );
 			$parser = new WXR_Parser_XML;
 			$result = $parser->parse( $file );
@@ -85,6 +85,10 @@ class WXR_Parser {
 			}
 		}
 
+		if ( null === $result ) {
+			$result = new \WP_Error( 'WXR_parser_unavailable', 'Importing requires the PHP xml extension, or the simplexml and dom extensions.' );
+		}
+
 		if ( is_wp_error( $result ) ) {
 			$this->logger->log( 'simplexml and xml not active.' );
 			$this->logger->log( "Parse failed with message: {$result->get_error_message()}" );
@@ -94,11 +98,13 @@ class WXR_Parser {
 	}
 
 	/**
-	 * Check whether the SimpleXML parser can run; it loads the file through DOMDocument.
+	 * Check whether a PHP extension is loaded.
+	 *
+	 * @param string $extension extension name.
 	 *
 	 * @return bool
 	 */
-	protected function can_use_simplexml() {
-		return extension_loaded( 'simplexml' ) && class_exists( 'DOMDocument' );
+	protected function is_extension_loaded( $extension ) {
+		return extension_loaded( $extension );
 	}
 }
