@@ -75,7 +75,6 @@ class Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
 		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
-		add_filter( 'themeisle_sdk_blackfriday_data', array( $this, 'add_black_friday_data' ) );
 		add_filter( 'templates_patterns_collection_ai_connect_metadata', array( $this, 'add_ai_connect_metadata' ) );
 
 		$this->setup_white_label();
@@ -1451,32 +1450,6 @@ class Admin {
 		$prefix = defined( 'NEVE_VERSION' ) ? '<span style="' . esc_attr( $style ) . '">&crarr;</span>' : '';
 
 		return $prefix;
-	}
-
-	/**
-	 * Add Black Friday data.
-	 *
-	 * @param array $configs The configuration array for the loaded products.
-	 *
-	 * @return array
-	 */
-	public function add_black_friday_data( $configs ) {
-		$config = $configs['default'];
-
-		// translators: %1$s - plugin name, %2$s - HTML tag, %3$s - discount, %4$s - HTML tag, %5$s - company name.
-		$message_template = __( 'Brought to you by the team behind %1$s— our biggest sale of the year is here: %2$sup to %3$s OFF%4$s on premium products from %5$s! Limited-time only.', 'templates-patterns-collection' );
-
-		$config['message']  = sprintf( $message_template, 'Starter Sites & Templates by Neve', '<strong>', '70%', '</strong>', '<strong>Themeisle</strong>' );
-		$config['sale_url'] = add_query_arg(
-			array(
-				'utm_term' => 'free',
-			),
-			tsdk_translate_link( tsdk_utmify( 'https://themeisle.link/all-bf', 'bfcm', 'templates-patterns-collection' ) )
-		);
-
-		$configs[ TIOB_BASENAME ] = $config;
-
-		return $configs;
 	}
 
 	/**
