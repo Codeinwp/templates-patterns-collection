@@ -1,3 +1,8 @@
+##### [Version 1.4.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.7...v1.4.8) (2026-11-05)
+
+- Fixed starter site import failing when PHP dom extension is missing.
+- Updated dependencies
+
 ##### [Version 1.4.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.6...v1.4.7) (2026-10-22)
 
 - Fixed untranslated labels in the Gutenberg, Elementor, and Beaver Builder template libraries.
