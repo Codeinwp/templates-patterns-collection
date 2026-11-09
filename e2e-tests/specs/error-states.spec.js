@@ -45,6 +45,12 @@ test.describe('API error states', () => {
         await page.locator('.ss-card-wrap').first().click();
 
         await expect(page.locator('.ob-error-wrap')).toBeVisible();
+        await expect(
+            page.locator('.ob-error-wrap').getByRole('link', { name: 'troubleshooting guide' }),
+        ).toHaveAttribute(
+            'href',
+            'https://docs.themeisle.com/neve/starter-sites-library-import-is-not-working?utm_source=wpadmin&utm_medium=starter-sites&utm_campaign=import-error&utm_content=docsnevestarter-sites-library-import-is-not-working',
+        );
     });
 
     test('onboarding lists no sites when the sites feed is down', async ({
