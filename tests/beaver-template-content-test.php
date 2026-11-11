@@ -6,6 +6,7 @@
  */
 
 use TIOB\Admin;
+use TIOB\Rest_Server;
 use TIOB\TI_Beaver;
 
 /**
@@ -93,6 +94,48 @@ class Beaver_Template_Content_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Non-string response bodies are rejected.
+	 *
+	 * @return void
+	 */
+	public function test_rejects_non_string_response_body(): void {
+		$this->mock_template_response( array( 'unexpected' => 'body' ) );
+
+		$result = TI_Beaver::get_template_content( 'template-1' );
+
+		$this->assertFalse( $result );
+	}
+
+	/**
+	 * Serialized arrays are not accepted as Beaver layouts.
+	 *
+	 * @return void
+	 */
+	public function test_rejects_serialized_array_root(): void {
+		$this->mock_template_response( serialize( array( 'nodes' => array() ) ) );
+
+		$result = TI_Beaver::get_template_content( 'template-1' );
+
+		$this->assertFalse( $result );
+	}
+
+	/**
+	 * Valid serialized strings that resemble delimiters remain intact.
+	 *
+	 * @return void
+	 */
+	public function test_preserves_serialized_string_delimiters(): void {
+		$template       = new stdClass();
+		$template->name = 'a";b';
+		$this->mock_template_response( serialize( $template ) );
+
+		$result = TI_Beaver::get_template_content( 'template-1' );
+
+		$this->assertInstanceOf( stdClass::class, $result );
+		$this->assertSame( 'a";b', $result->name );
+	}
+
+	/**
 	 * Unexpected classes are not restored while decoding template data.
 	 *
 	 * @return void
@@ -107,13 +150,41 @@ class Beaver_Template_Content_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Mock the Templates Cloud import response.
-	 *
-	 * @param string $body Serialized template body.
+	 * Invalid Beaver content does not create an empty published page.
 	 *
 	 * @return void
 	 */
-	private function mock_template_response( string $body ): void {
+	public function test_rest_import_stops_for_invalid_beaver_content(): void {
+		$this->mock_template_response( array( 'unexpected' => 'body' ) );
+		$published_before = (int) wp_count_posts( 'page' )->publish;
+		$request          = new WP_REST_Request( 'POST' );
+		$request->set_header( 'content-type', 'application/json' );
+		$request->set_body(
+			wp_json_encode(
+				array(
+					array(
+						'template_id'   => 'template-1',
+						'template_name' => 'Invalid Beaver template',
+						'template_type' => 'beaver',
+					),
+				)
+			)
+		);
+
+		$response = ( new Rest_Server() )->import_templates( $request );
+
+		$this->assertFalse( $response->get_data()['success'] );
+		$this->assertSame( $published_before, (int) wp_count_posts( 'page' )->publish );
+	}
+
+	/**
+	 * Mock the Templates Cloud import response.
+	 *
+	 * @param mixed $body Template response body.
+	 *
+	 * @return void
+	 */
+	private function mock_template_response( $body ): void {
 		add_filter(
 			'pre_http_request',
 			function () use ( $body ) {

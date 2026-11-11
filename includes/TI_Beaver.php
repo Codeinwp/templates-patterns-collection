@@ -148,6 +148,9 @@ class TI_Beaver extends FLBuilderModule {
 
 	/**
 	 * Get template content by ID.
+	 *
+	 * @param string $template_id Template ID.
+	 * @return \stdClass|false Decoded Beaver layout, or false when the data is invalid.
 	 */
 	static public function get_template_content( $template_id ) {
 		$url = add_query_arg(
