@@ -166,9 +166,21 @@ class TI_Beaver extends FLBuilderModule {
 		if ( isset( $response['message'] ) ) {
 			return wp_send_json_error( $response['message'] );
 		}
+		if ( ! is_string( $response ) ) {
+			return false;
+		}
 
 		$response = self::serialize_corrector( $response );
-		$response = unserialize( $response );
+		$response = @unserialize(
+			$response,
+			array(
+				'allowed_classes' => array( 'stdClass' ),
+			)
+		);
+
+		if ( ! $response instanceof \stdClass ) {
+			return false;
+		}
 
 		return $response;
 	}
@@ -178,7 +190,14 @@ class TI_Beaver extends FLBuilderModule {
 	 */
 	static public function serialize_corrector( $serialized_string ) {
 		// at first, check if "fixing" is really needed at all. After that, security checkup.
-		if ( @unserialize( $serialized_string ) !== true && preg_match( '/^[aOs]:/', $serialized_string ) ) {
+		$decoded = @unserialize(
+			$serialized_string,
+			array(
+				'allowed_classes' => false,
+			)
+		);
+
+		if ( false === $decoded && preg_match( '/^[aOs]:/', $serialized_string ) ) {
 			$serialized_string = preg_replace_callback(
 				'/s\:(\d+)\:\"(.*?)\";/s',
 				function ( $matches ) {
