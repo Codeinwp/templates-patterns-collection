@@ -4,7 +4,7 @@ Tags: starter sites, templates, block patterns, neve, gutenberg
 Requires at least: 5.5
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 1.4.8
+Stable tag: 1.4.9
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -37,9 +37,9 @@ The plugin contacts ThemeIsle's service to fetch the starter-sites and templates
 
 == Changelog ==
 
-##### [Version 1.4.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.7...v1.4.8) (2026-11-05)
+##### [Version 1.4.9](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.8...v1.4.9) (2026-11-13)
 
-- Fixed starter site import failing when PHP dom extension is missing.
+- Enhanced security
 - Updated dependencies
 
 

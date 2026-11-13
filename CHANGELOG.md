@@ -1,3 +1,8 @@
+##### [Version 1.4.9](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.8...v1.4.9) (2026-11-13)
+
+- Enhanced security
+- Updated dependencies
+
 ##### [Version 1.4.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.7...v1.4.8) (2026-11-05)
 
 - Fixed starter site import failing when PHP dom extension is missing.
