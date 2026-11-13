@@ -111,3 +111,9 @@ class FLBuilder {
 		}
 	}
 }
+
+/**
+ * Class FLBuilderModel.
+ */
+class FLBuilderModel {
+}

@@ -375,7 +375,6 @@ class Rest_Server {
 		foreach ( $params as $template ) {
 			$id = $this->insert_single_template( $template );
 
-			// @phpstan-ignore-next-line
 			if ( $id instanceof \WP_Error ) {
 				return new WP_REST_Response(
 					array(
@@ -415,7 +414,7 @@ class Rest_Server {
 	 * Insert Single Template
 	 *
 	 * @param $template
-	 * @return int
+	 * @return int|\WP_Error
 	 */
 	private function insert_single_template( $template ) {
 		add_filter(
@@ -450,6 +449,13 @@ class Rest_Server {
 		if ( 'beaver' === $template['template_type'] ) {
 			if ( class_exists( 'FLBuilderModel' ) ) {
 				$response = TI_Beaver::get_template_content( $template['template_id'] );
+
+				if ( ! $response instanceof \stdClass ) {
+					return new \WP_Error(
+						'tiob_invalid_beaver_template',
+						__( 'The Beaver template could not be imported.', 'templates-patterns-collection' )
+					);
+				}
 			}
 
 			$post_id = wp_insert_post(

@@ -514,7 +514,7 @@ const Library = ( {
 							<Button
 								variant="secondary"
 								isSecondary
-								href="https://docs.themeisle.com/article/1354-neve-template-cloud-library?utm_medium=nevedashboard&utm_source=wpadmin&utm_campaign=templatescloud&utm_content=neve"
+								href={ window.tiobDash.templateCloudDocs }
 								target="_blank"
 							>
 								{ __(

@@ -29,6 +29,12 @@ class Admin {
 	const VISITED_LIBRARY_OPT     = 'tiob_library_visited';
 
 	/**
+	 * Docs pages the dashboard links to. Use the final URLs: a redirect drops the UTM parameters.
+	 */
+	const TEMPLATE_CLOUD_DOCS         = 'https://docs.themeisle.com/neve/neve-template-cloud-library';
+	const IMPORT_TROUBLESHOOTING_DOCS = 'https://docs.themeisle.com/neve/starter-sites-library-import-is-not-working';
+
+	/**
 	 * Admin page slug
 	 *
 	 * @var string
@@ -878,6 +884,7 @@ class Admin {
 			'onboardingAllowed'             => $this->should_load_onboarding(),
 			'onboardingRedirect'            => admin_url( 'admin.php?page=neve-onboarding' ),
 			'tiobSettings'                  => admin_url( 'admin.php?page=tiob-plugin#settings' ),
+			'templateCloudDocs'             => tsdk_utmify( self::TEMPLATE_CLOUD_DOCS, 'templatescloud', 'my-library' ),
 			'links'                         => array(
 				array(
 					'label'       => __( 'Support', 'templates-patterns-collection' ),
@@ -896,7 +903,7 @@ class Admin {
 				),
 				array(
 					'label'     => __( 'Documentation', 'templates-patterns-collection' ),
-					'url'       => tsdk_utmify( 'https://docs.themeisle.com/article/1354-neve-template-cloud-library', 'settings_page' ),
+					'url'       => tsdk_utmify( self::TEMPLATE_CLOUD_DOCS, 'settings_page', 'settings' ),
 					'is_button' => true,
 				),
 			),
@@ -1363,7 +1370,7 @@ class Admin {
 			'rest_not_working'            => sprintf(
 			/* translators: 1 - 'here'. */
 				__( 'It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api" target="_blank" rel="external noreferrer noopener">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ) )
+				sprintf( '<a href="%2$s" target="_blank" rel="external noreferrer noopener">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ), esc_url( tsdk_utmify( self::IMPORT_TROUBLESHOOTING_DOCS, 'rest-api', 'starter-sites' ) . '#1-checking-the-sites-library-api' ) )
 			),
 			'error_report'                => sprintf(
 			/* translators: 1 - 'get in touch'. */
@@ -1373,7 +1380,7 @@ class Admin {
 			'troubleshooting'             => sprintf(
 			/* translators: 1 - 'troubleshooting guide'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ) )
+				sprintf( '<a href="%2$s" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ), esc_url( tsdk_utmify( self::IMPORT_TROUBLESHOOTING_DOCS, 'import-error', 'starter-sites' ) ) )
 			),
 			'support'                     => sprintf(
 			/* translators: 1 - 'get in touch'. */
